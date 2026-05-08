@@ -17,7 +17,6 @@ export const QMS_SOP_TEMPLATES = {
     ## 2. SCOPE
     
     Riskbedömning enligt GAMP 5.
-
     `
 },
   SOP_002_DOC_CONTROL: {
@@ -27,7 +26,7 @@ export const QMS_SOP_TEMPLATES = {
     owner: 'QA Manager',
     content: `
     
-    # 1. PUROPSE
+    ## 1. PUROPSE
     Styra granskning och godkännande.
     
     ## 2. SCOPE

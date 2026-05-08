@@ -7,20 +7,20 @@ import { QMS_SOP_TEMPLATES } from './qmsSopData.js';
 export const QMS_DATA = [
    { 
       id: 'step1', 
-      title: 'Steg 1: Grundläggande Systemuppbyggnad', 
-      desc: 'Etablera fundamentet för ditt QMS med fokus på mjukvaruvalidering, dokumentstyrning och dataintegritet.',
+      title: 'Steg 1) Grundläggande Systemuppbyggnad', 
+      desc: 'Etablera fundamentet för ett QMS.',
       checklist: [
         { 
-          t: '1.1 Validering av eQMS (ISO 4.1.6)', 
-          e: 'SOP för validering samt Valideringsrapport (SVR).',
-          sop: QMS_SOP_TEMPLATES.SOP_001_VALIDATION // <--- NU KOMMER KNAPPEN SYNAS
+          t: '1.1) Validera programvaran (eQMS) ', 
+          e: ' (ISO 4.1.6) SOP för validering samt Valideringsrapport (SVR).',
+          sop: QMS_SOP_TEMPLATES.SOP_001_VALIDATION 
         },
         { 
           t: '1.2 Dokument- och registerstyrning (ISO 4.2.3)', 
           e: 'SOP som beskriver workflow för granskning.',
-          sop: QMS_SOP_TEMPLATES.SOP_002_DOC_CONTROL // <--- NU KOMMER KNAPPEN SYNAS
+          sop: QMS_SOP_TEMPLATES.SOP_002_DOC_CONTROL 
         },
-        { t: '1.3 Dataintegritet & Backup (ISO 4.2.5)', e: 'Testprotokoll för återläsning.' }
+        { t: '1.3) Dataintegritet & Backup (ISO 4.2.5)', e: 'Testprotokoll för återläsning.' }
       ]
     }
     
