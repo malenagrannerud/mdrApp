@@ -3,7 +3,6 @@
  * @file mdrData.js
  * @description Regulatoriska steg för MDR-efterlevnad.
  */
-import { QMS_SOP_TEMPLATES } from './qmsSopData';
 
 export const MDR_DATA = [
   {

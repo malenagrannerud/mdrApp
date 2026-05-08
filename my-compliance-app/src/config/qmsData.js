@@ -2,19 +2,29 @@
  * @file qmsData.js
  * @description Central Roadmap-struktur som importerar mallar från qmsSopData.
  */
-import { QMS_SOP_TEMPLATES } from './qmsSopData';
+import { QMS_SOP_TEMPLATES } from './qmsSopData.js';
 
 export const QMS_DATA = [
-    { 
+   { 
       id: 'step1', 
       title: 'Steg 1: Grundläggande Systemuppbyggnad', 
       desc: 'Etablera fundamentet för ditt QMS med fokus på mjukvaruvalidering, dokumentstyrning och dataintegritet.',
       checklist: [
-        { t: '1.1 Validering av eQMS (ISO 4.1.6)', e: 'SOP för validering samt Valideringsrapport (SVR) som bevisar att systemet är säkert.' },
-        { t: '1.2 Dokument- och registerstyrning (ISO 4.2.3)', e: 'SOP som beskriver workflow för granskning och godkännande av kvalitetsdokument.' },
-        { t: '1.3 Dataintegritet & Backup (ISO 4.2.5)', e: 'Testprotokoll som bevisar att backup fungerar och att data kan återläsas.' }
+        { 
+          t: '1.1 Validering av eQMS (ISO 4.1.6)', 
+          e: 'SOP för validering samt Valideringsrapport (SVR).',
+          sop: QMS_SOP_TEMPLATES.SOP_001_VALIDATION // <--- NU KOMMER KNAPPEN SYNAS
+        },
+        { 
+          t: '1.2 Dokument- och registerstyrning (ISO 4.2.3)', 
+          e: 'SOP som beskriver workflow för granskning.',
+          sop: QMS_SOP_TEMPLATES.SOP_002_DOC_CONTROL // <--- NU KOMMER KNAPPEN SYNAS
+        },
+        { t: '1.3 Dataintegritet & Backup (ISO 4.2.5)', e: 'Testprotokoll för återläsning.' }
       ]
-    },
+    }
+    
+    ,
     { 
       id: 'step2', 
       title: 'Steg 2: Kvalitetsmanual & Omfattning', 

@@ -1,59 +1,57 @@
-import React from 'react';
-import { X, Printer, FileText } from 'lucide-react';
 
-/**
- * @component SopTemplate
- * @description En universell komponent för att visa formella SOP-mallar.
- * @param {string} title - Dokumentets namn
- * @param {string} docId - Dokument-ID (t.ex. SOP-001)
- * @param {string} version - Nuvarande version
- * @param {string} owner - Processägare
- * @param {string} content - Dokumentets textinnehåll (Markdown-liknande)
- * @param {function} onClose - Funktion för att stänga vyn
- */
+
+
+import React from 'react';
+import { X, FileText } from 'lucide-react';
+import { THEME } from '../config/theme';
+
 const SopTemplate = ({ title, docId, version, owner, content, onClose }) => {
+  const { labels, styles, borderRadius } = THEME;
+
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4 md:p-10 animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-4xl rounded-[2.5rem] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden border border-slate-200">
+    <div className={styles.sopModalOverlay}>
+      <div className={`${styles.sopContainer} ${borderRadius}`}>
         
         {/* Header */}
-        <div className="p-8 border-b border-slate-100 bg-slate-50 flex justify-between items-start">
+        <div className={`p-6 border-b-2 border-slate-900 ${THEME.colors.headerBg} flex justify-between items-center`}>
           <div>
-            <div className="flex items-center gap-2 text-blue-600 mb-2">
-              <FileText size={20} />
-              <span className="text-xs font-black uppercase tracking-widest">Standard Operating Procedure</span>
+            <div className="flex items-center gap-2 text-slate-900 mb-1">
+              <FileText size={18} />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{labels.qmsHeader}</span>
             </div>
-            <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight">{title}</h2>
+            <h2 className="text-2xl font-black text-slate-900 uppercase">{title}</h2>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-400 hover:text-slate-900">
-            <X size={32} />
+          <button onClick={onClose} className="p-2 border-2 border-slate-900 hover:bg-slate-900 hover:text-white transition-colors">
+            <X size={28} />
           </button>
         </div>
 
         {/* Metadata Bar */}
-        <div className="grid grid-cols-3 gap-4 px-8 py-4 bg-slate-100/50 border-b border-slate-100 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-          <div>ID: <span className="text-slate-900">{docId}</span></div>
-          <div>Version: <span className="text-slate-900">{version}</span></div>
-          <div>Ägare: <span className="text-slate-900">{owner}</span></div>
-        </div>
-
-        {/* Document Body */}
-        <div className="flex-1 overflow-y-auto p-12 bg-white text-slate-700 leading-relaxed">
-          <div className="prose prose-slate max-w-none">
-            {content.split('\n').map((line, i) => {
-              if (line.startsWith('# ')) return <h1 key={i} className="text-2xl font-black mb-6 mt-2 border-b-2 border-slate-100 pb-2">{line.replace('# ', '')}</h1>;
-              if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-bold mb-4 mt-8 text-slate-800">{line.replace('## ', '')}</h2>;
-              if (line.startsWith('- ')) return <li key={i} className="ml-4 mb-1 list-disc">{line.replace('- ', '')}</li>;
-              return <p key={i} className="mb-4">{line}</p>;
-            })}
+        <div className="grid grid-cols-3 gap-0 border-b-2 border-slate-900">
+          <div className={styles.metadataBox}>
+            <span className={styles.metadataLabel}>{labels.docId}</span>
+            <span className="text-sm text-slate-900">{docId}</span>
+          </div>
+          <div className={styles.metadataBox}>
+            <span className={styles.metadataLabel}>{labels.revision}</span>
+            <span className="text-sm text-slate-900">{version}</span>
+          </div>
+          <div className="p-4 bg-white">
+            <span className={styles.metadataLabel}>{labels.processOwner}</span>
+            <span className="text-sm text-slate-900">{owner}</span>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="p-6 bg-slate-50 border-t border-slate-100 flex justify-end">
-          <button onClick={() => window.print()} className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-blue-600 transition-all active:scale-95">
-            <Printer size={18} /> Skriv ut som PDF
-          </button>
+        {/* Innehållshantering */}
+        <div className="flex-1 overflow-y-auto p-12 bg-white">
+          <div className="max-w-none prose">
+            {content && content.split('\n').map((line, i) => {
+              if (line.startsWith('# ')) return <h1 key={i} className={styles.contentHeading1}>{line.replace('# ', '')}</h1>;
+              if (line.startsWith('## ')) return <h2 key={i} className={styles.contentHeading2}>{line.replace('## ', '')}</h2>;
+              if (line.startsWith('- ')) return <li key={i} className="ml-4 mb-2 border-l-4 border-slate-200 pl-4 font-bold italic">{line.replace('- ', '')}</li>;
+              return line.trim() !== '' ? <p key={i} className="mb-4 text-sm font-medium">{line}</p> : <div key={i} className="h-4" />;
+            })}
+          </div>
         </div>
       </div>
     </div>
