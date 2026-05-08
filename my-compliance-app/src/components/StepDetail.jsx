@@ -35,7 +35,7 @@ const StepDetail = ({ selected, onOpenSop }) => {
       </p>
       
       {/* Lista med delsteg */}
-      <div className="space-y-12">
+      <div className="space-y-10">
         {selected.checklist.map((item, i) => (
           <div key={i} className="border-t-2 border-slate-100 pt-8">
             

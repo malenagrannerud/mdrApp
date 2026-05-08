@@ -70,6 +70,7 @@ export default function App() {
           </div>
         ) : (
           <div className="grid grid-cols-12 gap-12">
+          
             {/* Steps List (Left) */}
             <div className="col-span-4 space-y-4">
               {activeSteps.map((step, idx) => (
