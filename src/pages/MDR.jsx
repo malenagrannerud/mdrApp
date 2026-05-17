@@ -6,7 +6,7 @@ import SopTemplate from '../components/SopTemplate';
 import StepDetail from '../components/StepDetail';
 
 export default function MdrPage() {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(MDR_DATA[0]);;
   const [activeSop, setActiveSop] = useState(null);
 
   return (

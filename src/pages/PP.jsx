@@ -13,7 +13,6 @@ import SopTemplate from '../components/SopTemplate';
 import StepDetail from '../components/StepDetail';
 
 export default function PpPage() {
-  // KORRIGERING HÄR: Lägg till [0] så att du väljer det första objektet i arrayen, inte hela listan!
   const [selected, setSelected] = useState(PP_DATA[0]);
   const [activeSop, setActiveSop] = useState(null);
 

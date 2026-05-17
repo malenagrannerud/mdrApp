@@ -10,7 +10,7 @@ import SopTemplate from '../components/SopTemplate';
 import StepDetail from '../components/StepDetail';
 
 export default function QmsPage() {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(QMS_DATA[0]);
   const [activeSop, setActiveSop] = useState(null);
 
   return (
