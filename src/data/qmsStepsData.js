@@ -71,17 +71,37 @@ export const QMS_DATA = [
         { t: '6.2 Quality Agreements (QAA)', e: 'Kvalitetsavtal med kritiska leverantörer (t.ex. molntjänster).' }
       ]
     },
+
     { 
       id: 'step7', 
-      title: 'Steg 7) Mätutrustning & Kalibrering', 
-      desc: 'Säkerställ att alla instrument och verktyg ger korrekta resultat.',
+      title: 'Steg 7) Mätning, Analys & Förbättring (ISO 8)', 
+      desc: 'Processägare: QA Manager',
       checklist: [
-        { t: '7.1 Utrustningsregister (ISO 7.6)', e: 'Lista över all mätutrustning med serienummer och kalibreringsintervall.' }
+        { 
+          t: '7.1) Internrevision & Produktfrisläppning (ISO 8.2.4 & 8.2.6)', 
+          e: 'Skapa SOP för internrevision och rutinen för slutgiltig produktfrisläppning. Upprätta en årlig revisionsplan för kvalitetsledningssystemet samt kontrollplaner och protokoll för slutinspektion.',
+          sop: SOP_TEMPLATES.SOP_013_AUDITS_AND_RELEASE 
+        },
+        { 
+          t: '7.2) Avvikelsehantering, Non-Conformance (NC) & CAPA (ISO 8.3 & 8.5)', 
+          e: 'Skapa SOP för hantering av avvikelser (Non-Conformances) och korrigerande/förebyggande åtgärder (CAPA). Upprätta ett centralt register för att logga, spåra och stänga ärenden, samt utred grundorsaken.',
+          sop: SOP_TEMPLATES.SOP_014_NC_CAPA_MANAGEMENT 
+        },
+        { 
+          t: '7.3) Data Analysis & Trends (ISO 8.4)', 
+          e: 'Skapa SOP för dataanalys (hur KPI:er och felmängder mäts) och sammanställ regelbundna trendrapporter över kvalitetsdata till ledningen.',
+          sop: SOP_TEMPLATES.SOP_015_DATA_ANALYSIS 
+        } 
       ]
     },
+
+
+
+
+
     { 
       id: 'step8', 
-      title: 'Steg 8) Övervakning & Mätning', 
+      title: 'Steg 8)  Post-Market & Vigilance (MDR Art. 83-92)', 
       desc: 'Processer för att kontrollera att produkten och systemet fungerar.',
       checklist: [
         { t: '8.1 Inspection Plans', e: 'Definitioner för vad som kontrolleras vid frisläppning av produkt.' }

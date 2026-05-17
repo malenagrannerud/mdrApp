@@ -1,27 +1,20 @@
+/**
+ * src/components/StepDetail.jsx 
+ */
+
+
+
 import React from 'react';
 import * as Lucide from 'lucide-react';
 import SopLink from './SopLink';
 
-
 /**
  * StepDetail Component
- * Renderar detaljvyn för ett valt steg (ISO/MDR).
+ * Renderar detaljvyn för ett valt steg (ISO/MDR/Pharma).
  */
+// ÄNDRING HÄR: Vi ser till att komponenten tar emot onOpenSop korrekt från föräldern
 const StepDetail = ({ selected, onOpenSop }) => {
 
-  // 1. Inget är valt - Visa placeholder
-  if (!selected) {
-    return (
-      <div className="h-full min-h-[400px] flex flex-col items-center justify-center text-slate-300 border-4 border-dashed border-slate-100 rounded-none">
-        <Lucide.Search size={64} className="opacity-20 mb-6" />
-        <p className="font-black text-lg uppercase tracking-widest opacity-30">
-          Select a step to begin
-        </p>
-      </div>
-    );
-  }
-
-  // 2. Om ett steg är valt - Visa innehållet
   return (
     <div className="bg-white border-4 border-slate-900 p-12 animate-in fade-in duration-500 rounded-none">
       <h3 className="font-black text-slate-800 text-md uppercase leading-tight">{selected.title}</h3>
@@ -38,15 +31,19 @@ const StepDetail = ({ selected, onOpenSop }) => {
             {/* Brödtext*/}
             <p className="section-text">{item.e}</p>
 
-            {/* Dokumentlänk - Visas endast om SOP-objekt finns */}
+            {/* Dokumentlänk - Visas endast om SOP-objekt finns i din array */}
             {item.sop && (
-              
               <SopLink
-                sop={item.sop} 
+                sop={item.sop}
+                /* 
+                  KORRIGERING HÄR: 
+                  Vi skickar vidare onOpenSop-funktionen till SopLink:s onOpen-prop.
+                  Detta gör att klicket i SopLink faktiskt bubblar upp till ditt state!
+                */
                 onOpen={onOpenSop} 
               />
-
             )}
+            
           </div>
         ))}
       </div>

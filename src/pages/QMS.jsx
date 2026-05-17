@@ -31,7 +31,13 @@ export default function QmsPage() {
             ))}
           </div>
           <div className="col-span-8">
-            <StepDetail selected={selected} onOpenSop={(sop) => setActiveSop(sop)} />
+            <StepDetail 
+            selected={selected} 
+            onOpenSop={(sop) => {
+              alert("Klicket fungerar i QMS.jsx! Nu försöker vi öppna: " + sop.title);
+              setActiveSop(sop);
+            }} 
+            />
           </div>
         </div>
       </div>

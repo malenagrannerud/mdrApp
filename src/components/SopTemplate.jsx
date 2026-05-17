@@ -1,12 +1,13 @@
 
 
-
-
+/**
+ * src/components/SopTemplate.jsx 
+ */
 
 import React from 'react';
 import { X, FileText } from 'lucide-react';
 
-const SopTemplate = ({ title, docId, version, owner, content, onClose }) => {
+const SopTemplate = ({ title, id, version, owner, content, onClose }) => {
   return (
     <div className="sop-modal-overlay">
       <div className="sop-container">
@@ -14,8 +15,6 @@ const SopTemplate = ({ title, docId, version, owner, content, onClose }) => {
         {/* Header */}
         <div className="p-6 border-b-2 border-slate-900 bg-slate-50 flex justify-between items-center">
           <div>
-          
-            {/* h2 styrs nu av din globala h2 i CSS eller Tailwind */}
             <h2 className="text-2xl font-black text-slate-900 uppercase">{title}</h2>
           </div>
           <button onClick={onClose} className="p-2 border-2 border-slate-900 hover:bg-slate-900 hover:text-white transition-colors">
@@ -27,7 +26,7 @@ const SopTemplate = ({ title, docId, version, owner, content, onClose }) => {
         <div className="grid grid-cols-3 gap-0 border-b-2 border-slate-900">
           <div className="metadata-box">
             <span className="metadata-label">Document ID</span>
-            <span className="metadata-value">{docId}</span>
+            <span className="metadata-value">{id}</span>
           </div>
           <div className="metadata-box">
             <span className="metadata-label">Revision</span>
@@ -39,22 +38,34 @@ const SopTemplate = ({ title, docId, version, owner, content, onClose }) => {
           </div>
         </div>
 
-        {/* Innehållshantering */}
+        {/* Innehåll */}
         <div className="flex-1 overflow-y-auto p-12 bg-white">
-          <div className="max-w-none prose">
+          <div className="max-w-none">
             {content && content.split('\n').map((line, i) => {
-              const cleanLine = line.trim(); 
+              const cleanLine = line.trim();
 
               if (cleanLine.startsWith('# ')) {
-                return <h1 key={i} className="sop-heading-1">{cleanLine.replace('# ', '')}</h1>;
+                return (
+                  <p key={i} className="sop-h1">
+                    {cleanLine.replace('# ', '')}
+                  </p>
+                );
               }
               if (cleanLine.startsWith('## ')) {
-                return <h2 key={i} className="sop-heading-2">{cleanLine.replace('## ', '')}</h2>;
+                return (
+                  <p key={i} className="sop-h2">
+                    {cleanLine.replace('## ', '')}
+                  </p>
+                );
               }
               if (cleanLine.startsWith('- ')) {
-                return <li key={i} className="sop-list">{cleanLine.replace('- ', '')}</li>;
+                return (
+                  <p key={i} className="sop-list">
+                    {cleanLine.replace('- ', '')}
+                  </p>
+                );
               }
-              
+
               return cleanLine !== '' ? (
                 <p key={i} className="sop-text">{cleanLine}</p>
               ) : (

@@ -2,7 +2,7 @@
 
 
 /**
- * SopLink.jsx Component
+ * src/components/SopLink.jsx 
  * Renderar en länk till ett extern dokument. Har dox emoji
  */
 
