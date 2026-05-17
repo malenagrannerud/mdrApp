@@ -1,8 +1,10 @@
 /**
- * @file qmsSopData.js
+ * @file sopData.js
  * Central lagring av alla SOP-texter.
  */
-export const QMS_SOP_TEMPLATES = {
+
+
+export const SOP_TEMPLATES = {
   
   SOP_001_VALIDATION: {
     id: 'SOP-001', 
@@ -17,6 +19,12 @@ export const QMS_SOP_TEMPLATES = {
     ## 2. SCOPE
     
     Riskbedömning enligt GAMP 5.
+
+    ## 3. SCOPE
+
+
+
+
     `
 },
   SOP_002_DOC_CONTROL: {
