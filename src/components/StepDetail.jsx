@@ -1,5 +1,7 @@
 import React from 'react';
 import * as Lucide from 'lucide-react';
+import SopLink from './SopLink';
+
 
 /**
  * StepDetail Component
@@ -22,13 +24,8 @@ const StepDetail = ({ selected, onOpenSop }) => {
   // 2. Om ett steg är valt - Visa innehållet
   return (
     <div className="bg-white border-4 border-slate-900 p-12 animate-in fade-in duration-500 rounded-none">
-            <h3 className="headingStep">
-        {selected.title}
-      </h3>
-      
-      <h3 className="main-desc">
-        {selected.desc}
-      </h3>
+      <h3 className="font-black text-slate-800 text-md uppercase leading-tight">{selected.title}</h3>
+      <h3 className="main-desc">{selected.desc}</h3>
       
       {/* Lista med delsteg */}
       <div className="space-y-10">
@@ -36,26 +33,18 @@ const StepDetail = ({ selected, onOpenSop }) => {
           <div key={i} className="border-t-2 border-slate-100 pt-8">
             
             {/* Steg X.X) ... */}
-            <h3 className="headingStep">
-              {item.t}
-            </h3>
+            <h4 className="headingSubStep">{item.t}</h4>
             
             {/* Brödtext*/}
-            <p className="section-text">
-              {item.e}
-            </p>
+            <p className="section-text">{item.e}</p>
 
             {/* Dokumentlänk - Visas endast om SOP-objekt finns */}
             {item.sop && (
               
-              <button 
-                onClick={() => onOpenSop(item.sop)}
-                className="link-button"
-              >
-                <Lucide.FileText size={14} />
-                <span className="underline decoration-2 underline-offset-4"> {item.sop.id}: {item.sop.title}
-                </span>
-              </button>
+              <SopLink
+                sop={item.sop} 
+                onOpen={onOpenSop} 
+              />
 
             )}
           </div>

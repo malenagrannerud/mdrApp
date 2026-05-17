@@ -1,5 +1,5 @@
 /**
- * @file qmsData.js
+ * @file qmsStepsData.js
  * @description Central Roadmap-struktur som importerar mallar från qmsSopData.
  */
 import { SOP_TEMPLATES } from './sopData.js';

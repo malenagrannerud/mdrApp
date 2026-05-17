@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* 1. GLOBALA TAGG-STILAR */
+/* 1. TEXTER */
 h1 {
   color: blue;
   text-align: center;
@@ -41,10 +41,9 @@ p {
 /* Steg 1.1) ...*/
 .headingSubStep {
   color: black;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
-
 
 .headingStepCard {
   color: gray;
@@ -54,7 +53,30 @@ p {
 
 
 
+.document-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  color: #1d4ed8 !important;       /* Din länkfärg */
+  font-size: 12px !important;      /* Textstorlek 12px */
+  background: none !important;     /* Tar bort knappbakgrunden */
+  border: none !important;         /* Tar bort ramen */
+  padding: 8px 0 !important;       /* Ger knappen lite höjd så den blir lättare att klicka */
+  cursor: pointer !important;      /* Gör muspekaren till en hand */
+  position: relative !important;   /* Tvingar upp knappen i lager */
+  z-index: 10 !important;          /* Lägger den ovanpå allt annat */
+  text-align: left !important;
+}
 
+.document-link span {
+  text-decoration: underline !important;
+}
+
+
+
+
+
+/* 1. PAGE LAYOUT */
 
 body {
   background-color: white;

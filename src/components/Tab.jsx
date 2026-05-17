@@ -8,7 +8,6 @@ export default function TabBar({ currentPage, onPageChange }) {
   return (
     <div className="tab-bar">
       
-      {/* Flik 1: Home */}
       <button
         onClick={() => onPageChange('start')}
         className={`px-6 py-2 font-black text-xs uppercase tracking-widest border-4 transition-all ${
@@ -18,9 +17,6 @@ export default function TabBar({ currentPage, onPageChange }) {
         Home
       </button>
 
-
-
-        {/* Flik 3: MDR */}
       <button
         onClick={() => onPageChange('mdr')}
         className={`px-6 py-2 font-black text-xs uppercase tracking-widest border-4 transition-all ${
@@ -30,10 +26,6 @@ export default function TabBar({ currentPage, onPageChange }) {
         MDR Path
       </button>
 
-
-
-
-      {/* Flik 2: QMS */}
       <button
         onClick={() => onPageChange('qms')}
         className={`px-6 py-2 font-black text-xs uppercase tracking-widest border-4 transition-all ${
@@ -43,8 +35,14 @@ export default function TabBar({ currentPage, onPageChange }) {
         QMS (ISO 13485)
       </button>
 
-      
-      
+      <button
+        onClick={() => onPageChange('pharma')}
+        className={`px-6 py-2 font-black text-xs uppercase tracking-widest border-4 transition-all ${
+          currentPage === 'pharma' ? 'bg-blue-700 text-white border-blue-700' : 'bg-slate-900 text-slate-400 border-slate-900 hover:border-slate-700'
+        }`}
+      >
+        Pharma Packet
+      </button>
     </div>
   );
 }
