@@ -18,9 +18,9 @@ these activities should be sub-contracted to specialists.
 
 
 ### Step 2.1) The Design and Manufacturing processes (Art. 10.1)
-First obligation of the manufacturer (Article 10.1) is to  design and manufacturer devices in accordance to MDR. This is fulfilled by following ISO 13485:2016 Section 7, Product realisation" requirements. It describes the requirements for both Design and development and for Production and service provision in detail.
+First obligation of the manufacturer (Art. 10.1) is to  design and manufacturer devices in accordance to MDR. This is fulfilled by following ISO 13485:2016 Section 7, Product realisation" requirements. It describes the requirements for both Design and development and for Production and service provision in detail.
 
-### Step 2.2) The Risk Management process (Article 10.2)
+### Step 2.2) The Risk Management process (Art. 10.2)
 Article 10, 2 of the Regulation requires Manufacturers to establish, document, implement and maintain a product safety risk management system. The detailed requirements of the system are listed in the Annex I Chapter I, points 2-9.
 
 In brief, the Regulation requires the following: 
