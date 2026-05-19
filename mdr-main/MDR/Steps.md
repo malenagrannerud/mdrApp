@@ -1,21 +1,11 @@
 # A step by step guide to compliance for manufacturers
+[https://eumdr.com/manufacturers/]
 
 
 
 ## Step 1) Decide the intended use and classification
 
 ## Step 2) Establish the necessary processes and resources
-
-The expertise required by developers of medical devices is significant. 
-In addition to the general design and engineering expertise which is required of 
-any industrial products company. Medical device developers also require risk management, 
-quality management, medical and regulatory compliance expertise. 
-Read through Article 10 and consider whether your company has or can 
-recruit the expertise needed to develop and gain approval for a medical device? 
-Does it also have the capabilities to manufacturer, distribute and support the 
-intended users in multiple countries? Consider whether some or maybe even all of 
-these activities should be sub-contracted to specialists.
-
 
 ### Step 2.1) The Design and Manufacturing processes (Art. 10.1)
 First obligation of the manufacturer (Art. 10.1) is to  design and manufacturer devices in accordance to MDR. This is fulfilled by following ISO 13485:2016 Section 7, Product realisation" requirements. It describes the requirements for both Design and development and for Production and service provision in detail.
