@@ -1,18 +1,5 @@
 # A step by step guide to compliance for manufacturers
 
-#### Step 1: Decide the intended use and classification
-#### Step 2: Establish the necessary processes and resources
-#### Step 3: Minimise risks and fulfil the general requirements
-#### Step 4: Complete the clinical evaluation
-#### Step 5: Complete the technical documentation
-#### Step 6: Make arrangements for distribution
-#### Step 7: Register the device and the manufacturer
-#### Step 8: Complete the conformity assessment
-#### Step 9: Complete the final administrative procedures
-#### Step 10: Fulfil the obligations in the post market phase
-
-
-
 
 
 ## Step 1) Decide the intended use and classification
@@ -72,7 +59,7 @@ MDCG endorsed guidance documents on the subject of clinical evaluation, clinical
 
 ### Step 2.5) The Quality Management System (Article 10.9), 
 
-### Step 2.6) The Post Market Surveillance planning process (Article 10.10), 
+### Step 2.6) The PMS planning process (Article 10.10), 
 
 ### Step 2.7) The labelling development process, including producing language translations (Article 10.11), 
 
