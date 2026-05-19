@@ -5,115 +5,118 @@
  */
 
 export const MDR_DATA = [
-  {
+  {  
     id: 'm1',
-    title: 'Steg 1) Klassificering',
-    desc: 'Definiera produktens avsedda ändamål och riskklass enligt Annex VIII.',
+    title: 'Step 1) Decide the intended use and classification',
     checklist: [
-      { t: 'Intended Purpose Statement', e: 'Klar definition av vad produkten ska göra och för vem.' },
-      { t: 'MDR Klassificeringsrapport', e: 'Motivering av klass (t.ex. IIa enl. Regel 11).' }
+      { t: 'Step 1.1) The rationale for deciding the product is a medical device' },
+      { t: 'Step 1.2) The statement of the intended purpose and users of the device' }, 
+      { t: 'Step 1.3) The device classification rationale' },
+      { t: '--- MDCG Guides ---' },
+      { t: 'MDCG 2021-24: Guidance on classification of medical devices' },
+      { t: 'MDCG 2019-11: Guidance on Qualification and Classification of Software' }
     ]
   },
   {
     id: 'm2',
-    title: 'Steg 2) Processer & resurser ',
-    desc: 'Visa efterlevnad av de allmänna kraven på säkerhet och prestanda.',
+    title: 'Step 2) Processes & resources',
+    desc: 'Demonstrate compliance with the general safety and performance requirements.',
     checklist: [
-      { t: 'GSPR Checklista', e: 'Mappning av varje krav mot bevis och standarder (t.ex. IEC 62304).' }
+      { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
     ]
   },
   {
     id: 'm3',
-    title: 'Steg 3) Följ GSPR',
-    desc: 'Sammanställ den tekniska filen (Technical File) enligt Annex II & III.',
+    title: 'Step 3) Comply with GSPR',
+    desc: 'Compile the technical file according to Annex II & III.',
     checklist: [
-      { t: 'Technical File Index', e: 'Struktur: Device Description, Risk, Clinical Evaluation, Labeling.' }
+      { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
     ]
   }, 
   {
     id: 'm4',
-    title: 'Steg 4) Färdigställ klinisk utvärdering',
-    desc: 'Definiera produktens avsedda ändamål och riskklass enligt Annex VIII.',
+    title: 'Step 4) Finalize clinical evaluation',
+    desc: 'Define the product’s intended purpose and risk class according to Annex VIII.',
     checklist: [
-      { t: 'Intended Purpose Statement', e: 'Klar definition av vad produkten ska göra och för vem.' },
-      { t: 'MDR Klassificeringsrapport', e: 'Motivering av klass (t.ex. IIa enl. Regel 11).' }
+      { t: 'Intended Purpose Statement', e: 'Clear definition of what the product is intended to do and for whom.' },
+      { t: 'MDR Classification Report', e: 'Justification of class (e.g., IIa according to Rule 11).' }
     ]
   },
   {
     id: 'm5',
-    title: 'Steg 5) Färdigställ Teknisk dokumentation ',
-    desc: 'Visa efterlevnad av de allmänna kraven på säkerhet och prestanda.',
+    title: 'Step 5) Finalize Technical Documentation',
+    desc: 'Demonstrate compliance with the general safety and performance requirements.',
     checklist: [
-      { t: 'GSPR Checklista', e: 'Mappning av varje krav mot bevis och standarder (t.ex. IEC 62304).' }
+      { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
     ]
   },
   {
     id: 'm6',
-    title: 'Steg 6) Arrangera distribution',
-    desc: 'Sammanställ den tekniska filen (Technical File) enligt Annex II & III.',
+    title: 'Step 6) Arrange distribution',
+    desc: 'Compile the technical file according to Annex II & III.',
     checklist: [
-      { t: 'Technical File Index', e: 'Struktur: Device Description, Risk, Clinical Evaluation, Labeling.' }
+      { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
     ]
   }, 
   {
     id: 'm7',
-    title: 'Steg 7) Registrera produkten ',
-    desc: 'Definiera produktens avsedda ändamål och riskklass enligt Annex VIII.',
+    title: 'Step 7) Register the product',
+    desc: 'Define the product’s intended purpose and risk class according to Annex VIII.',
     checklist: [
-      { t: 'Intended Purpose Statement', e: 'Klar definition av vad produkten ska göra och för vem.' },
-      { t: 'MDR Klassificeringsrapport', e: 'Motivering av klass (t.ex. IIa enl. Regel 11).' }
+      { t: 'Intended Purpose Statement', e: 'Clear definition of what the product is intended to do and for whom.' },
+      { t: 'MDR Classification Report', e: 'Justification of class (e.g., IIa according to Rule 11).' }
     ]
   },
   {
     id: 'm8',
-    title: 'Steg 8) Färdigställ bedömning av överensstämmelsen ',
-    desc: 'Visa efterlevnad av de allmänna kraven på säkerhet och prestanda.',
+    title: 'Step 8) Finalize conformity assessment',
+    desc: 'Demonstrate compliance with the general safety and performance requirements.',
     checklist: [
-      { t: 'GSPR Checklista', e: 'Mappning av varje krav mot bevis och standarder (t.ex. IEC 62304).' }
+      { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
     ]
   },
   {
     id: 'm9',
-    title: 'Steg 9) Färdigställ det sista administrativa',
-    desc: 'Sammanställ den tekniska filen enligt Annex II & III.',
+    title: 'Step 9) Finalize the last administrative details',
+    desc: 'Compile the technical file according to Annex II & III.',
     checklist: [
-      { t: 'Technical File Index', e: 'Struktur: Device Description, Risk, Clinical Evaluation, Labeling.' }
+      { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
     ]
   }, 
   {
     id: 'm10',
-    title: 'Steg 10) Upprätthåll system för övervakning',
-    desc: 'Visa dokumentation på att:',
+    title: 'Step 10) Maintain surveillance systems',
+    desc: 'Show documentation that:',
     checklist: [
-      { t: '10.1) Nytta-riskbedömningen har granskats ', 
-        e: 'Upprätthåll riskhanteringssystem enligt Annex I, avsnitt 3 (Art. 10.2)' },
+      { t: '10.1) The benefit-risk determination has been reviewed', 
+        e: 'Maintain the risk management system according to Annex I, Section 3 (Art. 10.2)' },
 
-      { t: '10.2) PMCF genomförs och den kliniska utvärderingen uppdateras ', 
-        e: 'Genomför de planerade aktiviteterna för PMCF Annex XIV, del B (Art. 10.3)' },
+      { t: '10.2) PMCF is being performed and the clinical evaluation is being updated', 
+        e: 'Conduct the planned PMCF activities according to Annex XIV, Part B (Art. 10.3)' },
 
-      { t: '10.3) Uppdaterad teknisk dokumentation, inklusive ARs kopia samt ändringshistorik', 
-        e: 'Teknisk dokumentation är uppdaterad enligt Annex II och III (Art. 10.4)' },
+      { t: '10.3) Up-to-date technical documentation, including AR’s copy and history of changes', 
+        e: 'Technical documentation is kept up to date according to Annex II and III (Art. 10.4)' },
 
-      { t: '10.4) QMS omfattar alla nödvändiga processer och att det granskas och uppdateras', 
-        e: 'QMS hålls uppdaterat och kontinuerligt förbättra det; (a) för att säkerställa att den tillverkade produkten fortsätter att överensstämma med kraven, inklusive eventuella ändringar i harmoniserade standarder, och (b) att de flertal procedurer och system som krävs enligt förordningen (listade a till m) förblir effektiva och efterlever kraven (artikel 10.9)' },
+      { t: '10.4) The QMS covers all required processes and is being reviewed and updated', 
+        e: 'Keep the QMS updated and continuously improve it; (a) to ensure that the manufactured product continues to comply with the requirements, including any changes in harmonized standards, and (b) that the multiple procedures and systems required by the Regulation (listed a to m) remain effective and compliant (Article 10.9)' },
 
-      { t: '10.5) PMS aktiviteter sker med nödvändig omfattning', 
-        e: 'Upprätthåll aktiviteterna för PMS enligt Art. 83, med särskild uppmärksamhet på de gränssnitt som listas i punkt 3 a–h (Art. 10.10)' },
+      { t: '10.5) PMS activities are taking place with the required scope', 
+        e: 'Maintain PMS activities according to Art. 83, with particular attention to the interfaces listed in paragraph 3 a–h (Art. 10.10)' },
 
-      { t: '10.6) Avvikelser och klagomål utreds och att korrigerande åtgärder vidtas för att hantera bristande överensstämmelse, samt att berörda parter informeras', 
-        e: 'Vidta korrigerande åtgärder för produkter som inte uppfyller kraven, samt informera distributörer, AR och importören. Informera omedelbart behöriga myndigheterna och NB om produkter som utgör en allvarlig risk (Art. 10.12)' },
+      { t: '10.6) Deviations and complaints are investigated, corrective actions are taken to address nonconformities, and appropriate parties are informed', 
+        e: 'Take corrective actions for non-compliant products, and inform distributors, the AR, and the importer. Immediately inform competent authorities and the NB about products presenting a serious risk (Art. 10.12)' },
 
-      { t: '10.7) Incidenter utreds och allvarliga incidenter rapporteras inom föreskriven tid', 
+      { t: '10.7) Incidents are investigated and serious incidents are reported within the required time', 
         e: '...' },
       
-      { t: '10.8) PRRC utför sina uppgifter ', 
-        e: 'Rapportera alla allvarliga tillbud till myndigheterna, senast 15 dagar efter att man fått kännedom om dem. Rapportera alla korrigerande säkerhetsåtgärder på marknaden (FSCA), helst innan åtgärden vidtas, samt förändringar i trender för andra tillbud, allt enligt beskrivningen i artiklarna 87 och 88 (artikel 10.13).' },
+      { t: '10.8) The PRRC is carrying out their duties', 
+        e: 'Report all serious incidents to the authorities no later than 15 days after becoming aware of them. Report all field safety corrective actions (FSCA), preferably before the action is taken, as well as changes in trends for other incidents, all as described in Articles 87 and 88 (Article 10.13).' },
       
-      { t: '10.9) Leveransspårbarhet', 
-        e: 'Upprätthålla register över spårbarhet för alla produkter som tagits emot eller levererats till andra ekonomiska aktörer (t.ex. importörer eller distributörer) eller som levererats till hälso- och sjukvårdsinstitutioner eller personal (Art. 25.2)' },
+      { t: '10.9) Traceability of supply', 
+        e: 'Maintain traceability records for all products received or supplied to other economic operators (e.g., importers or distributors) or supplied to health institutions or healthcare professionals (Art. 25.2)' },
       
-      { t: '10.10) Uppdatering eller bekräftelse av registreringsuppgifter', 
-        e: 'Uppdatera EUDAMED inom en vecka efter eventuella ändringar i registreringsuppgifterna och återbekräfta uppgifternas korrekthet vartannat år (Art. 31.4 och 31.5)' },
+      { t: '10.10) Updating or confirming registration data', 
+        e: 'Update EUDAMED within one week of any changes to the registration data and reconfirm the accuracy of the data every second year (Art. 31.4 and 31.5)' },
     ]
   } 
 ];

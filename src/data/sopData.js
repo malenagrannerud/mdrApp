@@ -22,7 +22,6 @@ export const SOP_TEMPLATES = {
 
     ## 3. DEFINITIONS
     - Validering: Dokumenterad process som bekräftar att mjukvaran konsekvent producerar förväntade resultat
-    - Software Validation Report (SVR): Sammanställning av alla valideringsaktiviteter och resultat
     - Installation/Operational/Performance Qualification (IQ/OQ/PQ): Standardiserade testfaser för att verifiera korrekt installation, funktion och prestanda 
 
     ## 4. RESPONSIBILITY
@@ -88,19 +87,19 @@ export const SOP_TEMPLATES = {
 - Revisionsplanering, genomförande, rapportering och uppföljning av korrigerande åtgärder
 
     ## 5. PROCEDURE 
-    ### 5.1 ÅRLIG REVISIONSPLANERING
+  5.1 ÅRLIG REVISIONSPLANERING
 - QA Manager upprättar en årlig revisionsplan senast 15 december för kommande kalenderår
 - Revisionsplanen ska omfatta samtliga QMS-processer minst en gång per år
 - Kritiska processer (t.ex. designkontroll, riskhantering, CAPA) kan schemaläggas för tätare intervall baserat på riskbedömning och tidigare revisionsresultat
 - Revisionsplanen godkänns av ledningens representant och distribueras till alla processägare
 
-### 5.2 FÖRBEREDELSE AV REVISION
+5.2 FÖRBEREDELSE AV REVISION
 - Lead Auditor meddelar processägaren minst 2 veckor före planerad revision
 - Revisionsagenda och omfattning kommuniceras skriftligt
 - Revisorer granskar tidigare revisionsrapporter, CAPA-status och relevant dokumentation innan revisionen
 - Revisorer måste vara oberoende från den process som revideras
 
-### 5.3 GENOMFÖRANDE AV REVISION
+5.3 GENOMFÖRANDE AV REVISION
 - Öppningsmöte hålls med processägaren för att bekräfta omfattning och agenda
 - Intervjuer genomförs med relevant personal
 - Processer, dokumentation och arbetssätt granskas mot gällande krav (ISO 13485, MDR, interna procedurer)
@@ -108,7 +107,7 @@ export const SOP_TEMPLATES = {
 - Observationer och avvikelser dokumenteras löpande
 - Avslutande möte hålls där preliminära fynd presenteras för processägaren
 
-### 5.4 RAPPORTERING
+5.4 RAPPORTERING
 - Lead Auditor sammanställer en formell revisionsrapport inom 10 arbetsdagar
 - Rapporten ska innehålla:
   - Revisionens omfattning och datum
@@ -117,14 +116,14 @@ export const SOP_TEMPLATES = {
   - Sammanfattande bedömning av processens efterlevnad
 - Rapporten distribueras till processägaren, QA Manager och ledningens representant
 
-### 5.5 UPPFÖLJNING AV AVVIKELSER
+5.5 UPPFÖLJNING AV AVVIKELSER
 - Processägaren ansvarar för att initiera CAPA inom 14 dagar efter mottagen revisionsrapport
 - Grundorsaksanalys ska genomföras för samtliga avvikelser
 - Korrigerande åtgärder med tidsplan ska dokumenteras i CAPA-systemet
 - Lead Auditor verifierar effekten av vidtagna åtgärder inom 30 dagar
 - Samtliga avvikelser ska vara stängda inom 90 dagar om inte särskilda skäl föreligger och godkänns av QA Manager
 
-### 5.6 PRODUKTFRISLÄPPNING
+5.6 PRODUKTFRISLÄPPNING
 - Slutinspektion genomförs enligt produktspecifikation och kontrollplan
 - Följande dokumentation ska vara komplett och godkänd innan frisläppning:
   - Tillverkningsdokumentation (batch record / DHR)
@@ -136,7 +135,7 @@ export const SOP_TEMPLATES = {
 - Frisläppt produkt märks och överförs till färdigvarulager
 - Dokumentation arkiveras i enlighet med gällande krav (minst 10 år för medicintekniska produkter)
 
-### 5.7 MANAGEMENT REVIEW INPUT
+5.7 MANAGEMENT REVIEW INPUT
 - QA sammanställer kvartalsvis revisionsresultat till ledningens genomgång
 - Trender i avvikelser, återkommande fynd och status för öppna CAPA presenteras
 
@@ -157,9 +156,7 @@ export const SOP_TEMPLATES = {
 ## 8. REVISION HISTORY
 - Version 1.0: Initial release
 
-    ## 6. REFERENCES 
-    ## 7. APPENDICES 
-    ## 8. REVISION HISTORY
+
     
     
     `.trim()
