@@ -1,10 +1,13 @@
 # ISO 13485 Headlines and short description
+[https://www.iso.org/standard/59752.html]
+
+
 
 ## 1 Scope 
 
 This Standard specifies requirements for a quality management system (QMS) where an organization needs to demonstrate its ability to provide medical devices (MD) and related services that consistently meet customer and applicable regulatory requirements.
 
-Such organizations can be involved in one or more stages of the life-cycle, including design and development, production, storage and distribution, installation, or servicing of a MD and design and development or provision of associated activities (e.g. technical support). **Du kan certifiera dig oavsett om du bara designar, bara tillverkar eller gör allt**
+Such organizations can be involved in one or more stages of the life-cycle, including design and development, production, storage and distribution, installation, or servicing of a MD and design and development or provision of associated activities (e.g. technical support). ***Du kan certifiera dig oavsett om du bara designar eller tillverkar eller gör allt***
 
 
 This Standard can also be used by suppliers or external parties that provide product, including QMS related services to such organizations. Requirements of this Standard are applicable to organizations regardless of size and type except where explicitly stated. Wherever requirements are specified as applying to medical devices, the requirements apply equally to associated services as supplied by the organization. 
@@ -28,7 +31,6 @@ ISO 9000:2015, Quality management systems — Fundamentals and vocabulary
 For the purposes of this document, the terms and definitions given in ISO 9000:2015 and the following apply.
 
 # Terms and Definitions - ISO 13485:2016
-
 This document lists the terms and definitions as defined in **Clause 3 of ISO 13485:2016**. These definitions apply to the entire Quality Management System (QMS).
 
 
@@ -91,7 +93,6 @@ The specific approach and activities associated with software validation and rev
 
 ### 4.2 Documentation requirements 
 #### 4.2.1 General (Allmänt)
-
 #### 4.2.2 Quality manual (QM)
 The organization shall document a QM that includes:
 - a) the scope of the QMS, including details of and justification for any exclusion and/or non-application;
@@ -140,55 +141,81 @@ The organization shall document a QM that includes:
 #### 7.3.2 Design and development planning 
 #### 7.3.3 Design and development inputs 
 #### 7.3.4 Design and development outputs 
-#### 7.3.5 Design and development review (Genomgång av design och utveckling)
-#### 7.3.6 Design and development verification (Verifiering av design och utveckling)
-#### 7.3.7 Design and development validation (Validering av design och utveckling)
-#### 7.3.8 Design and development transfer (Överföring av design och utveckling)
-#### 7.3.9 Control of design and development changes (Styrning av ändringar i design och utveckling)
-#### 7.3.10 Design and development files (Design- och utvecklingsfiler)
+#### 7.3.5 Design and development review 
+#### 7.3.6 Design and development verification 
+#### 7.3.7 Design and development validation 
+#### 7.3.8 Design and development transfer 
+#### 7.3.9 Control of design and development changes 
+#### 7.3.10 Design and development files 
 
-### 7.4 Purchasing (Inköp)
-#### 7.4.1 Purchasing process (Inköpsprocess)
-#### 7.4.2 Purchasing information (Inköpsinformation)
-#### 7.4.3 Verification of purchased product (Verifiering av inköpt produkt)
+### 7.4 Purchasing 
+#### 7.4.1 Purchasing process 
+#### 7.4.2 Purchasing information 
+#### 7.4.3 Verification of purchased product 
 
-## 7.5 Production and service provision (Produktion och tillhandahållande av tjänster)
-#### 7.5.1 Control of production and service provision (Styrning av produktion och tjänster)
-#### 7.5.2 Cleanliness of product (Produktens renhet)
-#### 7.5.3 Installation activities (Installationsaktiviteter)
-#### 7.5.4 Servicing activities (Serviceaktiviteter)
-#### 7.5.5 Particular requirements for sterile medical devices (Särskilda krav för sterila produkter)
-#### 7.5.6 Validation of processes for production and service provision (Validering av processer)
-#### 7.5.7 Particular requirements for validation of processes for sterilization and sterile barrier systems (Särskilda krav för sterilisering)
-#### 7.5.8 Identification (Identifiering)
-#### 7.5.9 Traceability (Spårbarhet)
-#### 7.5.10 Customer property (Kundens egendom)
-#### 7.5.11 Preservation of product (Bevarande av produkt)
+## 7.5 Production and service provision 
+#### 7.5.1 Control of production and service provision 
+#### 7.5.2 Cleanliness of product 
+#### 7.5.3 Installation activities 
+#### 7.5.4 Servicing activities 
+#### 7.5.5 Particular requirements for sterile medical devices 
+#### 7.5.6 Validation of processes for production and service provision 
+#### 7.5.7 Particular requirements for validation of processes for sterilization and sterile barrier systems 
+#### 7.5.8 Identification 
+#### 7.5.9 Traceability 
+#### 7.5.10 Customer property 
+#### 7.5.11 Preservation of product 
 
-### 7.6 Control of monitoring and measuring equipment (Styrning av övervaknings- och mätutrustning)
+### 7.6 Control of monitoring and measuring equipment 
 
-## 8 Measurement, analysis and improvement (Mätning, analys och förbättring)
+## 8 Measurement, analysis and improvement 
 ### 8.1 General
 ### 8.2 Monitoring and measurement 
-#### 8.2.1 Feedback (Återkoppling)
-#### 8.2.2 Complaint handling (Klagomålshantering)
-#### 8.2.3 Reporting to regulatory authorities (Rapportering till myndigheter)
-#### 8.2.4 Internal audit (Internrevision)
-#### 8.2.5 Monitoring and measurement of processes (Övervakning och mätning av processer)
-#### 8.2.6 Monitoring and measurement of product (Övervakning och mätning av produkt)
+#### 8.2.1 Feedback 
+#### 8.2.2 Complaint handling 
+#### 8.2.3 Reporting to regulatory authorities 
+#### 8.2.4 Internal audit 
+#### 8.2.5 Monitoring and measurement of processes 
+#### 8.2.6 Monitoring and measurement of product 
 
-### 8.3 Control of nonconforming product (Styrning av produkt som inte överensstämmer med kraven)
+### 8.3 Control of nonconforming product 
 #### 8.3.1 General 
 #### 8.3.2 Actions in response to nonconforming product detected before delivery 
 #### 8.3.3 Actions in response to nonconforming product detected after delivery 
-#### 8.3.4 Rework (Omarbete)
+#### 8.3.4 Rework 
 
-### 8.4 Analysis of data (Analys av data)
+### 8.4 Analysis of data 
 
-### 8.5 Improvement (Förbättring)
-#### 8.5.1 General (Allmänt)
+### 8.5 Improvement 
+#### 8.5.1 General 
 #### 8.5.2 Corrective action 
 #### 8.5.3 Preventive action 
+
+## Annex A Comparison of content between ISO 13485:2003 and ISO 13485:2016
+## Annex B Correspondence between ISO 13485:2016 and ISO 9001:2015
+## Bibliography
+[1]	ISO 9001:2015^3, Quality management systems — Requirements
+[2]	ISO 10012, Measurement management systems — Requirements for measurement processes and measuring equipment
+[3]	ISO 11607-1:2006, Packaging for terminally sterilized medical devices — Part 1: Requirements for materials, sterile barrier systems and packaging systems
+[4]	ISO 11607-2, Packaging for terminally sterilized medical devices — Part 2: Validation requirements for forming, sealing and assembly processes
+[5]	ISO 14644 (all parts), Cleanrooms and associated controlled environments
+[6]	ISO 14698 (all parts), Cleanrooms and associated controlled environments — Biocontamination control
+[7]	ISO 14971:2007, Medical devices — Application of risk management to medical devices
+[8]	ISO 19011, Guidelines for auditing management systems
+[9]	IEC 62366-1, Medical devices — Part 1: Application of usability engineering to medical devices
+[10]	GHTF/SG1/N055:20094^4, Definition of the Terms “Manufacturer”, “Authorised Representative”, “Distributor” and “Importer”
+[11]	GHTF/SG5/N4:20105^5, Post-Market Clinical Follow-Up Studies
+[12]	GHTF/SG1/N70:20116^6, Label and Instructions for Use for Medical Devices
+[13]	GHTF/SG1/N071:20127^7, Definition of the Terms “Medical Device” and “In Vitro Diagnostic (IVD) Medical Device”
+
+1 Supersedes ISO 9000:2005.
+2 Superseded by ISO 9000:2015.
+3 Supersedes ISO 9001:2008.
+4 Available from website: http://www.imdrf.org/documents/doc-ghtf-sg1.asp
+5 Available from website: http://www.imdrf.org/documents/doc-ghtf-sg5.asp
+6 Available from website: http://www.imdrf.org/documents/doc-ghtf-sg1.asp
+7 Available from website: http://www.imdrf.org/documents/doc-ghtf-sg1.asp
+
 
 
 
