@@ -1,16 +1,36 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# MDR STEPS - READ ONLY 
 
-Currently, two official plugins are available:
+## SE STEGEN
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+  1) Gå in i mappen `mdr-main`
+  2) I mappen **QMS** - se stegen för att bygga & underhålla ett QMS enligt ISO 13485
+  3) I mappen **MDR** - se stegen för att sätta en medicinteknisk produkt på marknaden
 
-## React Compiler
+## SYFTE
+Jag byggde detta repo för att demonstrera min förmåga att omsätta regulatoriska krav i praktisk dokumentation. 
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Viktigt att veta
 
-## Expanding the ESLint configuration
+**Allt innehåll i detta repo är fiktivt.** Produkten, företaget och all klinisk data är påhittade och används enbart i utbildnings- och portfoliosyfte för att demonstrera regulatorisk metodik.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+
+# MDR STEPS - THE WEB APP
+## SE APPEN
+
+1) Klicka på den gröna knappen "Code" uppe till höger i repot.
+2) Välj fliken "Codespaces".
+3) Klicka på den blå knappen "Create codespace on main".
+4) När editorn har laddats i webbläsaren, öppna terminalen längst ner och skriv startkommandot
+    ```bash
+   npm run dev
+   ```
+6) En pop-up ruta dyker upp i det nedre högra hörnet. Klicka på **"Open in Browser"** för att se appen live.
+
+
+---
+*Skapat av Malena Grannerud, april 2026*
+
+
