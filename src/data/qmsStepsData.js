@@ -76,19 +76,19 @@ export const QMS_DATA = [
         },
         { 
           t: '5.2) Risk Management (ISO 14971)',
-          e: 'Create SOP for risk management throughout product lifecycle.',
+          e: 'Create a SOP for risk management throughout product lifecycle.',
           sop: SOP_DATA.SOP_007_RISK_MANAGEMENT,
           checklist: [
-            { t: 'Establish Risk Management File per product (Risk Plan, FMEA)' },
+            { t: 'Establish a Risk Management File per product (Risk Plan, FMEA)' },
             { t: 'Perform risk analysis and risk evaluation' },
             { t: 'Implement risk control measures' },
             { t: 'Document residual risk and benefit-risk analysis' },
-            { t: 'Produce Risk Management Report' }
+            { t: 'Produce a Risk Management Report' }
           ]
         },
         { 
           t: '5.3) Purchasing & Supplier Management (ISO 7.4)',
-          e: 'Create SOP for purchasing controls and supplier evaluation.',
+          e: 'Create a SOP for purchasing controls and supplier evaluation.',
           sop: SOP_DATA.SOP_008_SUPPLIER_MANAGEMENT,
           checklist: [
             { t: 'Establish Approved Supplier List (ASL) → REG-009' },
@@ -100,14 +100,14 @@ export const QMS_DATA = [
           t: '5.4) Clinical Evaluation & Change Control',
           checklist: [
             { 
-              t: 'Create SOP for clinical evaluation', 
+              t: 'Create a SOP for clinical evaluation', 
               sop: SOP_DATA.SOP_009_CLINICAL_EVALUATION 
             },
-            { t: 'Create Clinical Evaluation Plan (CEP) per product' },
-            { t: 'Conduct literature review and clinical data collection' },
-            { t: 'Produce Clinical Evaluation Report (CER)' },
+            { t: 'Create a Clinical Evaluation Plan (CEP) per product' },
+            { t: 'Conduct a literature review and clinical data collection' },
+            { t: 'Produce a Clinical Evaluation Report (CER)' },
             { 
-              t: 'Create SOP for change control post-launch', 
+              t: 'Create a SOP for change control post-launch', 
               sop: SOP_DATA.SOP_010_CHANGE_CONTROL 
             }
           ]
