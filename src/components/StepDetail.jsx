@@ -45,6 +45,9 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg }) => {
                   <div key={j}>
                     {subItem.t && <h4 className="headingSubStep text-sm">{subItem.t}</h4>}
                     {subItem.e && <p className="section-text text-xs">{subItem.e}</p>}
+                    {subItem.sop && (
+                      <SopLink sop={subItem.sop} onOpen={onOpenSop} />
+                    )}
                     {subItem.mdcg && (
                       <MdcgLink mdcg={subItem.mdcg} onOpen={onOpenMdcg} />
                     )}

@@ -5,6 +5,9 @@
 import { SOP_DATA } from './sopData.js';
 
 export const QMS_DATA = [
+
+  /******************* STEP 1 -  *******************/
+
    { 
       id: 'step1', 
       title: 'Steg 1) Grundläggande Systemuppbyggnad', 
@@ -55,16 +58,17 @@ export const QMS_DATA = [
     },
 
 
-
-     { 
+/******************* STEP 5 - PRODUCT REALISATION & DESIGN *******************/
+      { 
       id: 'step5', 
       title: 'Step 5) Product Realisation & Design', 
       desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7 + MDR.',
       checklist: [
         { 
           t: '5.1) Design Control & Planning (ISO 7.1-7.3)',
+          e: 'Create SOP for product development and establish DHF structure.',
+          sop: SOP_DATA.SOP_006_DESIGN_CONTROL,
           checklist: [
-            { t: 'Create SOP for product development (Design Controls) → 📄 SOP-006_Design_Control.pdf', sop: SOP_DATA.SOP_006_DESIGN_CONTROL },
             { t: 'Document User Requirements (URS) and technical product specifications → SPEC-001' },
             { t: 'Plan and document verification and validation → PLN-003' },
             { t: 'Establish Design History File (DHF) structure per product' }
@@ -72,8 +76,9 @@ export const QMS_DATA = [
         },
         { 
           t: '5.2) Risk Management (ISO 14971)',
+          e: 'Create SOP for risk management throughout product lifecycle.',
+          sop: SOP_DATA.SOP_007_RISK_MANAGEMENT,
           checklist: [
-            { t: 'Create SOP for risk management throughout product lifecycle → SOP-007' },
             { t: 'Establish Risk Management File per product (Risk Plan, FMEA)' },
             { t: 'Perform risk analysis and risk evaluation' },
             { t: 'Implement risk control measures' },
@@ -83,8 +88,9 @@ export const QMS_DATA = [
         },
         { 
           t: '5.3) Purchasing & Supplier Management (ISO 7.4)',
+          e: 'Create SOP for purchasing controls and supplier evaluation.',
+          sop: SOP_DATA.SOP_008_SUPPLIER_MANAGEMENT,
           checklist: [
-            { t: 'Create SOP for purchasing controls and supplier evaluation → SOP-008' },
             { t: 'Establish Approved Supplier List (ASL) → REG-009' },
             { t: 'Create Quality Assurance Agreement (QAA) template → TMP-001' },
             { t: 'Evaluate and approve critical suppliers' }
@@ -93,16 +99,24 @@ export const QMS_DATA = [
         { 
           t: '5.4) Clinical Evaluation & Change Control',
           checklist: [
-            { t: 'Create SOP for clinical evaluation → SOP-009' },
+            { 
+              t: 'Create SOP for clinical evaluation', 
+              sop: SOP_DATA.SOP_009_CLINICAL_EVALUATION 
+            },
             { t: 'Create Clinical Evaluation Plan (CEP) per product' },
             { t: 'Conduct literature review and clinical data collection' },
             { t: 'Produce Clinical Evaluation Report (CER)' },
-            { t: 'Create SOP for change control post-launch → SOP-010' }
+            { 
+              t: 'Create SOP for change control post-launch', 
+              sop: SOP_DATA.SOP_010_CHANGE_CONTROL 
+            }
           ]
         }
       ]
     },
 
+
+    /******************* STEP 6 - Supplier Management & Procurement *******************/
 
     { 
       id: 'step6', 
