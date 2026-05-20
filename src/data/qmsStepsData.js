@@ -114,9 +114,10 @@ export const QMS_DATA = [
         }
       ]
     },
+/******************* END STEP 5 - PRODUCT REALISATION & DESIGN *******************/
 
 
-    /******************* STEP 6 - Supplier Management & Procurement *******************/
+/******************* STEP 6 - Supplier Management & Procurement *******************/
 
     { 
       id: 'step6', 
