@@ -1,15 +1,11 @@
 /**
  * src/components/StepDetail.jsx 
  *
- * 
  * StepDetail Component
  * Renderar detaljvyn för ett valt steg 
  */
 
-
-
 import React from 'react';
-import * as Lucide from 'lucide-react';
 import SopLink from './SopLink';
 import MdcgLink from './MdcgLink';
 
@@ -26,25 +22,35 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg }) => {
           <div key={i} className="border-t-2 border-slate-100 pt-8">
             
             {/* Steg X.X) ... */}
-            <h4 className="headingSubStep">{item.t}</h4>
-            <h4 className="headingSubStepOrange">{item.o}</h4>
+            {item.t && <h4 className="headingSubStep">{item.t}</h4>}
+            {item.o && <h4 className="headingSubStepOrange">{item.o}</h4>}
+            
             {/* Brödtext*/}
-            <p className="section-text">{item.e}</p>
+            {item.e && <p className="section-text">{item.e}</p>}
 
-            {/* Dokumentlänk - Visas endast om SOP-objekt finns i din array */}
+            {/* Dokumentlänk - Visas endast om SOP-objekt finns */}
             {item.sop && (
-              <SopLink
-                sop={item.sop}
-                onOpen={onOpenSop} 
-              />
+              <SopLink sop={item.sop} onOpen={onOpenSop} />
             )}
 
-            {/* MDCG-länk - Visas endast om summary-objekt finns */}
+            {/* MDCG-länk - Visas endast om mdcg-objekt finns */}
             {item.mdcg && (
-              <MdcgLink
-                mdcg={item.mdcg}
-                onOpen={onOpenMdcg} 
-              />
+              <MdcgLink mdcg={item.mdcg} onOpen={onOpenMdcg} />
+            )}
+
+            {/* Nästlad checklista */}
+            {item.checklist && (
+              <div className="ml-4 mt-3 space-y-2">
+                {item.checklist.map((subItem, j) => (
+                  <div key={j}>
+                    {subItem.t && <h4 className="headingSubStep text-sm">{subItem.t}</h4>}
+                    {subItem.e && <p className="section-text text-xs">{subItem.e}</p>}
+                    {subItem.mdcg && (
+                      <MdcgLink mdcg={subItem.mdcg} onOpen={onOpenMdcg} />
+                    )}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         ))}
