@@ -12,11 +12,20 @@ export const MDR_DATA = [
       { t: 'Step 1.1) The rationale for deciding the product is a medical device' },
       { t: 'Step 1.2) The statement of the intended purpose and users of the device' }, 
       { t: 'Step 1.3) The device classification rationale' },
-      { t: '--- MDCG Guides ---' },
-      { t: 'MDCG 2021-24: Guidance on classification of medical devices' },
-      { t: 'MDCG 2019-11: Guidance on Qualification and Classification of Software' }
+      { t: '' },
+      { o: 'Manual on borderline and classification under 2017/745 and 2017/746 v3' },
+      { o: 'MDCG 2022-5 Rev1: Borderline between MD and medicinal products under MDR on MD' },
+      { o: 'MDCG 2021-24 Guidance on classification of medical devices' },
+      { e: '💡 If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.' }, 
+      { o: 'Infographic: Is your software a MD?' },
+      { o: 'MDCG 2025-6 FAQ on Interplay between MDR & IVDR and the AI Act (AIA)' },
+      { o: 'MDCG 2023-4 Medical Device Software (MDSW)- Hardware combinations Guidance on MDSW intended to work in combination with hardware or hardware components' },
+      { o: 'MDCG 2019-11 Rev.1 Qualification and classification of software - MDR & IVDR' },
+
     ]
   },
+
+
   {
     id: 'm2',
     title: 'Step 2) Processes & resources',

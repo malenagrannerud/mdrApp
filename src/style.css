@@ -42,7 +42,13 @@ p {
 .headingSubStep {
   color: black;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
+}
+
+.headingSubStepOrange {
+  color: #f97316; /* Oransje färg */
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .headingStepCard {
