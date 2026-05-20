@@ -10,7 +10,7 @@ export const MDR_DATA = [
 
 
   /*******STEP 1 ****************/
-     {  
+        {  
       id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
       checklist: [
@@ -18,18 +18,18 @@ export const MDR_DATA = [
         { t: 'Step 1.2) The statement of the intended purpose and users of the device' }, 
         { 
           t: 'Step 1.3) The device classification rationale', 
-          e: 'If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.'
+          e: '💡 If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.'
         },
         { t: '' },
-        { t: 'MDCG 2021-24 Guidance on classification of MD', mdcg: MDCG_DATA.MDCG_2021_24 },
-        { t: 'MDCG 2019-11 Rev.1 Qualification and classification of software', mdcg: MDCG_DATA.MDCG_2019_11_REV1 },
-        { t: 'Manual on borderline and classification v3', mdcg: MDCG_DATA.MANUAL_BORDERLINE },
+        { mdcg: MDCG_DATA.MDCG_2021_24 },
+        { mdcg: MDCG_DATA.MDCG_2019_11_REV1 },
+        { mdcg: MDCG_DATA.MANUAL_BORDERLINE },
         { t: '' },
-        { t: 'MDCG 2022-5 Rev.1 Borderline between MD and medicinal products', mdcg: MDCG_DATA.MDCG_2022_5_REV1 },
-        { t: 'MDCG 2025-6 FAQ on Interplay between MDR & IVDR and the AI Act', mdcg: MDCG_DATA.MDCG_2025_6 },
-        { t: 'MDCG 2023-4 MDSW - Hardware combinations', mdcg: MDCG_DATA.MDCG_2023_4 },
-        { t: 'MDCG on classification of SAMD and interplay with AI Act', mdcg: MDCG_DATA.MDCG_SAMD_AI },
-        { t: 'Helsinki Procedure for borderline and classification', mdcg: MDCG_DATA.HELSINKI_PROCEDURE }
+        { mdcg: MDCG_DATA.MDCG_2022_5_REV1 },
+        { mdcg: MDCG_DATA.MDCG_2025_6 },
+        { mdcg: MDCG_DATA.MDCG_2023_4 },
+        { mdcg: MDCG_DATA.MDCG_SAMD_AI },
+        { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }
       ]
     },
 
@@ -48,12 +48,12 @@ export const MDR_DATA = [
       { t: 'Step 2.1) Set up the Design and Manufacturing processes (Art. 10, 1)' },
       { t: 'Step 2.2) Set up the Risk Management process (Article 10, 2)' },
       { 
-        t: 'Step 2.3) Set up the Clinical Evaluation process (Art.10.3)',
-        e: 'Art.10.3 requires a documented clinical evaluation process, detailed in Annex XIV and Art.61.',
+        t: 'Step 2.3) Set up the Clinical Evaluation Process (CEP) (Art.10.3)',
+        e: 'Art.10.3 requires a documented CEP, detailed in Annex XIV and Art.61.',
         checklist: [
           { e: 'A CEP template --> Later: An approved and filled CEP to put in the technical file' },
           { e: 'A CER template --> Later: An approved and filled CER to put in the technical file' },
-          { e: 'A Post-Market Clinical Follow-up (PMCF) plan' },
+          { e: 'A PMCF plan template' },
           { e: 'Connection to other requirements:' },
           
           { e: 'Results feed into Risk Management (Article 10(2))' },
