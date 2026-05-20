@@ -18,12 +18,8 @@ export const MDR_DATA = [
         t:'',
         mdcg: MDCG_DATA.INFOGRAPHIC
       },
-
-
-
       { t: 'Step 1.2) The statement of the intended purpose and users of the device' }, 
       { t: 'Step 1.3) The device classification rationale', 
-        
         e: '💡 If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.',
       
 
@@ -50,10 +46,59 @@ export const MDR_DATA = [
 
   {
     id: 'm2',
-    title: 'Step 2) Processes & resources',
-    desc: 'Demonstrate compliance with the general safety and performance requirements.',
+    title: 'Step 2) Establish the necessary processes and resources',
+    desc: 'This step centers around Art. 10 - General obligations of manufacturers. How will the QMS be organized to manufacture safe and efficient medical device, before continuing with a safe and efficient product? ',
     checklist: [
-      { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
+      { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' },
+      { t: 'Step 2.1) Set up the Design and Manufacturing processes (Art. 10, 1)' },
+      { t: 'Step 2.2) Set up the Risk Management process (Article 10, 2)' },
+      { t: 'Step 2.3) Set up the Clinical Evaluation process (Art.10.3)'},
+      {e: 'Art.10.3 requires a process for CEV, which is detailed in Annex XIV and Art.61.   '},
+      { t: 'Step 2.4) Set up the processes for development and maintenance of technical documentation, UDI and the EU declaration of conformity (Article 10, 4-8)' },
+      { t: 'Step 2.5) Set up the QMS (Article 10, 9)' },
+      { t: 'Step 2.6) Set up the PMS planning process (Article 10, 10)' },
+      { t: 'Step 2.7) Set up the labelling development process, including producing language translations (Article 10, 11)' },
+      { t: 'Step 2.8) Set up the corrective action and recall process (Article 10, 12)' },
+      { t: 'Step 2.9) Set up the Vigilance process, including reporting of serious incidents and field safety corrective actions (Article 10, 13)' },
+      { t: 'Step 2.10) Set up the regulatory authority interaction process (Article 10, 14)' },
+      { t: 'Step 2.11) Set up the legal liability and damage compensation process (Article 10, 16)' },
+      { t: 'Step 2.12) Appoint one or more persons overseeing the regulatory compliance (Article 15)' },
+      { t: 'Step 2.13) Ensure access to technical, safety (risk), clinical, quality and regulatory expertise' },
+    
+    
+    
+      {e: '💡 For guidance on clinical evaluation - go to Step 4)'},
+
+          // UDI
+      { t: UDI },
+      { mdcg: MDCG_DATA.MDCG_2022_7 },
+      { mdcg: MDCG_DATA.MDCG_2021_19 },
+      { mdcg: MDCG_DATA.MDCG_2021_10 },
+      { mdcg: MDCG_DATA.MDCG_2021_9 },
+      { mdcg: MDCG_DATA.MDCG_2018_1_REV4 },
+      { mdcg: MDCG_DATA.MDCG_2020_18 },
+      { mdcg: MDCG_DATA.MDCG_2019_2 },
+      { mdcg: MDCG_DATA.MDCG_2019_1 },
+      { mdcg: MDCG_DATA.MDCG_2018_7 },
+      { mdcg: MDCG_DATA.MDCG_2018_6 },
+      { mdcg: MDCG_DATA.MDCG_2018_5 },
+      { mdcg: MDCG_DATA.MDCG_2018_4 },
+      { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
+
+      { t: PMS },
+      { mdcg: MDCG_DATA.MDCG_2025_10 },
+      { mdcg: MDCG_DATA.MDCG_2022_21 },
+
+      { t: VIGILANCE },
+      { mdcg: MDCG_DATA.MDCG_2024_1 },
+      { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
+
+      { t: PRRC },
+      { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
+    
+    
+    
+    
     ]
   },
   {
