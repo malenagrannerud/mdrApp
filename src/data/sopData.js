@@ -3,7 +3,8 @@
  * Central lagring av alla SOPer.
  */
 
-export const SOP_TEMPLATES = {
+export const SOP_DATA = {
+  
   SOP_001_VALIDATION: {
     id: 'SOP-001', 
     title: 'Software Validation Process', 

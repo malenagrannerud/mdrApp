@@ -1,13 +1,13 @@
 
 
 /**
- * src/components/DocTemplate.jsx 
+ * src/components/MdcgTemplate.jsx 
  */
 
 import React from 'react';
 import { X, FileText } from 'lucide-react';
 
-const DocTemplate = ({ title, content, onClose }) => {
+const MdcgTemplate = ({ title, content, onClose }) => {
   return (
     <div className="sop-modal-overlay">
       <div className="sop-container">
@@ -103,4 +103,4 @@ const DocTemplate = ({ title, content, onClose }) => {
   );
 };
 
-export default DocTemplate;
+export default MdcgTemplate;

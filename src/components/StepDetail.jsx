@@ -1,5 +1,9 @@
 /**
  * src/components/StepDetail.jsx 
+ *
+ * 
+ * StepDetail Component
+ * Renderar detaljvyn för ett valt steg 
  */
 
 
@@ -7,13 +11,9 @@
 import React from 'react';
 import * as Lucide from 'lucide-react';
 import SopLink from './SopLink';
+import MdcgLink from './MdcgLink';
 
-/**
- * StepDetail Component
- * Renderar detaljvyn för ett valt steg (ISO/MDR/Pharma).
- */
-// ÄNDRING HÄR: Vi ser till att komponenten tar emot onOpenSop korrekt från föräldern
-const StepDetail = ({ selected, onOpenSop }) => {
+const StepDetail = ({ selected, onOpenSop, onOpenMdcg }) => {
 
   return (
     <div className="bg-white border-4 border-slate-900 p-12 animate-in fade-in duration-500 rounded-none">
@@ -21,13 +21,13 @@ const StepDetail = ({ selected, onOpenSop }) => {
       <h3 className="main-desc">{selected.desc}</h3>
       
       {/* Lista med delsteg */}
-      <div className="space-y-10">
+      <div className="space-y-4">
         {selected.checklist.map((item, i) => (
           <div key={i} className="border-t-2 border-slate-100 pt-8">
             
             {/* Steg X.X) ... */}
             <h4 className="headingSubStep">{item.t}</h4>
-            
+            <h4 className="headingSubStepOrange">{item.o}</h4>
             {/* Brödtext*/}
             <p className="section-text">{item.e}</p>
 
@@ -35,15 +35,17 @@ const StepDetail = ({ selected, onOpenSop }) => {
             {item.sop && (
               <SopLink
                 sop={item.sop}
-                /* 
-                  KORRIGERING HÄR: 
-                  Vi skickar vidare onOpenSop-funktionen till SopLink:s onOpen-prop.
-                  Detta gör att klicket i SopLink faktiskt bubblar upp till ditt state!
-                */
                 onOpen={onOpenSop} 
               />
             )}
-            
+
+            {/* MDCG-länk - Visas endast om summary-objekt finns */}
+            {item.mdcg && (
+              <MdcgLink
+                mdcg={item.mdcg}
+                onOpen={onOpenMdcg} 
+              />
+            )}
           </div>
         ))}
       </div>

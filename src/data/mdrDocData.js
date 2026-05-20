@@ -1,6 +1,0 @@
-/**
- * 
- * @file mdrDocData.js
- */
-
-

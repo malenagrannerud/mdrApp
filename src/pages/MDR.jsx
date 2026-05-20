@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react';
 import { MDR_DATA } from '../data/mdrStepsData';
-import SopTemplate from '../components/SopTemplate';
+import MdcgTemplate from '../components/MdcgTemplate';
 import StepDetail from '../components/StepDetail';
 
 export default function MdrPage() {
   const [selected, setSelected] = useState(MDR_DATA[0]);;
-  const [activeSop, setActiveSop] = useState(null);
+  const [activeMdcg, setActiveMdcg] = useState(null);
 
   return (
     <>
@@ -27,14 +27,17 @@ export default function MdrPage() {
             ))}
           </div>
           <div className="col-span-8">
-            <StepDetail selected={selected} onOpenSop={(sop) => setActiveSop(sop)} />
+            <StepDetail selected={selected} 
+            onOpenMdcg={(mdcg) => setActiveMdcg(mdcg)} 
+            />
           </div>
         </div>
       </div>
 
       {/* 2. POP-UPEN: Ligger nu UTANFÖR page-layout så den lägger sig fritt överst på skärmen! */}
-      {activeSop && (
-        <SopTemplate {...activeSop} onClose={() => setActiveSop(null)} />
+      
+      {activeMdcg && (
+        <MdcgTemplate {...activeMdcg} onClose={() => setActiveMdcg(null)} />
       )}
     </>
   );

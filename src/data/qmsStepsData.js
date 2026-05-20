@@ -2,7 +2,7 @@
  * @file qmsStepsData.js
  * @description Central Roadmap-struktur som importerar mallar från qmsSopData.
  */
-import { SOP_TEMPLATES } from './sopData.js';
+import { SOP_DATA } from './sopData.js';
 
 export const QMS_DATA = [
    { 
@@ -13,12 +13,12 @@ export const QMS_DATA = [
         { 
           t: '1.1) Validera programvaran ', 
           e: ' (ISO 4.1.6) SOP för validering samt Valideringsrapport (SVR).',
-          sop: SOP_TEMPLATES.SOP_001_VALIDATION 
+          sop: SOP_DATA.SOP_001_VALIDATION 
         },
         { 
           t: '1.2) Dokument- och registerstyrning (ISO 4.2.3)', 
           e: 'SOP som beskriver workflow för granskning.',
-          sop: SOP_TEMPLATES.SOP_002_DOC_CONTROL 
+          sop: SOP_DATA.SOP_002_DOC_CONTROL 
         },
         { t: '1.3) Dataintegritet & Backup (ISO 4.2.5)', e: 'Testprotokoll för återläsning.' }
       ]
@@ -80,17 +80,17 @@ export const QMS_DATA = [
         { 
           t: '7.1) Internrevision & Produktfrisläppning (ISO 8.2.4 & 8.2.6)', 
           e: 'Skapa SOP för internrevision och rutinen för slutgiltig produktfrisläppning. Upprätta en årlig revisionsplan för kvalitetsledningssystemet samt kontrollplaner och protokoll för slutinspektion.',
-          sop: SOP_TEMPLATES.SOP_013_AUDITS_AND_RELEASE 
+          sop: SOP_DATA.SOP_013_AUDITS_AND_RELEASE 
         },
         { 
           t: '7.2) Avvikelsehantering, Non-Conformance (NC) & CAPA (ISO 8.3 & 8.5)', 
           e: 'Skapa SOP för hantering av avvikelser (Non-Conformances) och korrigerande/förebyggande åtgärder (CAPA). Upprätta ett centralt register för att logga, spåra och stänga ärenden, samt utred grundorsaken.',
-          sop: SOP_TEMPLATES.SOP_014_NC_CAPA_MANAGEMENT 
+          sop: SOP_DATA.SOP_014_NC_CAPA_MANAGEMENT 
         },
         { 
           t: '7.3) Data Analysis & Trends (ISO 8.4)', 
           e: 'Skapa SOP för dataanalys (hur KPI:er och felmängder mäts) och sammanställ regelbundna trendrapporter över kvalitetsdata till ledningen.',
-          sop: SOP_TEMPLATES.SOP_015_DATA_ANALYSIS 
+          sop: SOP_DATA.SOP_015_DATA_ANALYSIS 
         } 
       ]
     },
