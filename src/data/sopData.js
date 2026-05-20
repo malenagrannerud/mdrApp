@@ -51,6 +51,128 @@ export const SOP_DATA = {
 
 
 
+
+
+SOP_006_DESIGN_CONTROL: {
+    id: 'SOP-006', 
+    title: 'Design Control Procedure', 
+    version: '1.0', 
+    owner: 'CTO / R&D Manager',
+    content: `
+## 1. PURPOSE
+Define how design and development of medical devices is planned, controlled and documented to meet ISO 13485 Section 7.3 and MDR requirements.
+
+## 2. SCOPE
+Applies to all new product development and significant design changes to existing medical devices.
+
+## 3. DEFINITIONS
+- URS: User Requirements Specification – what the user needs
+- DHF: Design History File – all records proving design was controlled
+- Design Review: Formal check that design meets requirements at each phase
+- Design Transfer: Moving design from R&D to production
+- Verification: Did we build it right? (Testing against specifications)
+- Validation: Did we build the right thing? (Testing with intended users)
+
+## 4. RESPONSIBILITY
+- R&D Manager: Overall design control, plan approvals, design reviews
+- R&D Engineer: Execute design, produce outputs, perform verification
+- Product Manager: User needs, URS
+- QA Manager: Approve plans, review verification/validation results
+- Clinical team: Validation (clinical evaluation, usability)
+- Production Manager: Design transfer, work instructions
+- RA Manager: NB notifications, significant change assessment
+
+## 5. PROCEDURE
+
+### 5.1 Design & Development Planning
+- Step 1: Create Design & Development Plan (phases, reviews, deliverables, responsibilities)
+- Step 2: Assign responsibilities per phase
+- Step 3: QA Manager approves the plan
+
+### 5.2 Design Input
+- Step 1: Collect user needs (interviews, surveys, clinical input)
+- Step 2: Document User Requirements Specification (URS)
+- Step 3: Include: intended use, safety, performance, regulatory, usability requirements
+- Step 4: Review and approve URS
+
+### 5.3 Design Output
+- Step 1: Produce design outputs (drawings, specifications, BOM, code)
+- Step 2: Verify each output against its input requirement
+- Step 3: Document in Design History File (DHF)
+
+### 5.4 Design Review
+- Step 1: Hold formal design review at each phase end
+- Step 2: Verify: inputs met? Issues resolved? Ready for next phase?
+- Step 3: Document decisions and action items in Design Review Record
+
+### 5.5 Design Verification
+- Step 1: Create Verification Plan (tests, methods, acceptance criteria)
+- Step 2: Execute tests and document results
+- Step 3: QA Manager approves verification results
+
+### 5.6 Design Validation
+- Step 1: Create Validation Plan (clinical, usability, performance)
+- Step 2: Execute validation under real or simulated use conditions
+- Step 3: Document results
+- Step 4: QA Manager and PRRC approve validation results
+
+### 5.7 Design Transfer
+- Step 1: Create production specifications from design outputs
+- Step 2: Create work instructions
+- Step 3: Train production staff
+- Step 4: Perform first article inspection
+- Step 5: Approve transfer to production
+
+### 5.8 Design Changes
+- Step 1: Initiate Change Request (CR)
+- Step 2: Assess impact (design, risk, regulatory, suppliers)
+- Step 3: QA Manager approves or rejects change
+- Step 4: Implement change and update documents
+- Step 5: Verify/validate the change
+- Step 6: Update DHF and Technical Documentation
+- Step 7: Notify Notified Body if significant change
+
+## 6. DESIGN HISTORY FILE (DHF)
+Each product shall have a DHF containing:
+- Design & Development Plan
+- User Requirements Specification (URS)
+- Technical specifications
+- Design outputs (drawings, BOM, schematics, code)
+- Design review records
+- Verification records (plans, protocols, reports)
+- Validation records
+- Risk management file references
+- Change records
+
+## 7. REFERENCES
+- ISO 13485:2016, Section 7.3
+- MDR 2017/745, Annex II, Annex IX, Annex X
+- SOP-007 Risk Management
+- SOP-009 Clinical Evaluation
+- SOP-010 Change Control
+
+## 8. APPENDICES
+- TMP-DHF-Index: DHF contents checklist
+- TMP-Design-Review: Design Review Record template
+- TMP-Change-Request: Change Request form
+
+## 9. REVISION HISTORY
+Version 1.0: Initial release
+    `.trim()
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
   SOP_013_AUDITS_AND_RELEASE: {
     id: 'SOP-013',
     title: 'Internal Audits & Product Release Process',

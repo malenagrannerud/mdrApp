@@ -53,15 +53,57 @@ export const QMS_DATA = [
         { t: '4.2) Infrastruktur & IT-miljö (ISO 6.3)', e: 'SOP för underhåll av IT-system och säkerhetsuppdateringar.' }
       ]
     },
-    { 
+
+
+
+     { 
       id: 'step5', 
-      title: 'Steg 5) Produktrealisering & Design', 
-      desc: 'Styr utvecklingen från idé till färdig produkt med full spårbarhet.',
+      title: 'Step 5) Product Realisation & Design', 
+      desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7 + MDR.',
       checklist: [
-        { t: '5.1) Design Control (ISO 7.3)', e: 'Design & Development Plan samt Design History File (DHF).' },
-        { t: '5.2) Risk Management (ISO 14971)', e: 'Riskhanteringsfil med riskanalys och kontrollåtgärder.' }
+        { 
+          t: '5.1) Design Control & Planning (ISO 7.1-7.3)',
+          checklist: [
+            { t: 'Create SOP for product development (Design Controls) → 📄 SOP-006_Design_Control.pdf', sop: SOP_DATA.SOP_006_DESIGN_CONTROL },
+            { t: 'Document User Requirements (URS) and technical product specifications → SPEC-001' },
+            { t: 'Plan and document verification and validation → PLN-003' },
+            { t: 'Establish Design History File (DHF) structure per product' }
+          ]
+        },
+        { 
+          t: '5.2) Risk Management (ISO 14971)',
+          checklist: [
+            { t: 'Create SOP for risk management throughout product lifecycle → SOP-007' },
+            { t: 'Establish Risk Management File per product (Risk Plan, FMEA)' },
+            { t: 'Perform risk analysis and risk evaluation' },
+            { t: 'Implement risk control measures' },
+            { t: 'Document residual risk and benefit-risk analysis' },
+            { t: 'Produce Risk Management Report' }
+          ]
+        },
+        { 
+          t: '5.3) Purchasing & Supplier Management (ISO 7.4)',
+          checklist: [
+            { t: 'Create SOP for purchasing controls and supplier evaluation → SOP-008' },
+            { t: 'Establish Approved Supplier List (ASL) → REG-009' },
+            { t: 'Create Quality Assurance Agreement (QAA) template → TMP-001' },
+            { t: 'Evaluate and approve critical suppliers' }
+          ]
+        },
+        { 
+          t: '5.4) Clinical Evaluation & Change Control',
+          checklist: [
+            { t: 'Create SOP for clinical evaluation → SOP-009' },
+            { t: 'Create Clinical Evaluation Plan (CEP) per product' },
+            { t: 'Conduct literature review and clinical data collection' },
+            { t: 'Produce Clinical Evaluation Report (CER)' },
+            { t: 'Create SOP for change control post-launch → SOP-010' }
+          ]
+        }
       ]
     },
+
+
     { 
       id: 'step6', 
       title: 'Steg 6) Leverantörsstyrning & Inköp', 
