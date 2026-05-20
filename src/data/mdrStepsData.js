@@ -10,34 +10,28 @@ export const MDR_DATA = [
 
 
   /*******STEP 1 ****************/
-  {  
-    id: 'm1',
-    title: 'Step 1) Decide the intended use and classification',
-    checklist: [
-      { t: 'Step 1.1) The rationale for deciding the product is a medical device', 
-        t:'',
-        mdcg: MDCG_DATA.INFOGRAPHIC
-      },
-      { t: 'Step 1.2) The statement of the intended purpose and users of the device' }, 
-      { t: 'Step 1.3) The device classification rationale', 
-        e: '💡 If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.',
-      
-
-      },
-      { t: '' },
-      
-      { mdcg: MDCG_DATA.MDCG_2021_24 },
-      { mdcg: MDCG_DATA.MDCG_2019_11_REV1 },
-      { mdcg: MDCG_DATA.MANUAL_BORDERLINE},
-      { t: '' },
-      { mdcg: MDCG_DATA.MDCG_2022_5_REV1},
-      { mdcg: MDCG_DATA.MDCG_2025_6  },
-      { mdcg: MDCG_DATA.MDCG_2023_4},
-      { mdcg: MDCG_DATA.MDCG_SAMD_AI},
-      { mdcg: MDCG_DATA.HELSINKI_PROCEDURE}
-    ]
-  },
-
+     {  
+      id: 'm1',
+      title: 'Step 1) Decide the intended use and classification',
+      checklist: [
+        { t: 'Step 1.1) The rationale for deciding if the product is a medical device', mdcg: MDCG_DATA.INFOGRAPHIC },
+        { t: 'Step 1.2) The statement of the intended purpose and users of the device' }, 
+        { 
+          t: 'Step 1.3) The device classification rationale', 
+          e: 'If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.'
+        },
+        { t: '' },
+        { t: 'MDCG 2021-24 Guidance on classification of MD', mdcg: MDCG_DATA.MDCG_2021_24 },
+        { t: 'MDCG 2019-11 Rev.1 Qualification and classification of software', mdcg: MDCG_DATA.MDCG_2019_11_REV1 },
+        { t: 'Manual on borderline and classification v3', mdcg: MDCG_DATA.MANUAL_BORDERLINE },
+        { t: '' },
+        { t: 'MDCG 2022-5 Rev.1 Borderline between MD and medicinal products', mdcg: MDCG_DATA.MDCG_2022_5_REV1 },
+        { t: 'MDCG 2025-6 FAQ on Interplay between MDR & IVDR and the AI Act', mdcg: MDCG_DATA.MDCG_2025_6 },
+        { t: 'MDCG 2023-4 MDSW - Hardware combinations', mdcg: MDCG_DATA.MDCG_2023_4 },
+        { t: 'MDCG on classification of SAMD and interplay with AI Act', mdcg: MDCG_DATA.MDCG_SAMD_AI },
+        { t: 'Helsinki Procedure for borderline and classification', mdcg: MDCG_DATA.HELSINKI_PROCEDURE }
+      ]
+    },
 
 
 
