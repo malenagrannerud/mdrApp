@@ -295,7 +295,10 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 | 5. CLOSURE | Run full regression testing. Update DHF and RMF. QA reviews evidence and closes the CR. | R&D & QA Manager | Closed CR & Updated DHF / RMF |
 [TABLE_END]
 
-## 6. REFERENCES ISO 13485:2016, Section 7.3.7  MDR Annex IX §4.10  MDR Annex X §5.2
+## 6. REFERENCES 
+ISO 13485:2016, Section 7.3.7  
+MDR Annex IX §4.10  
+MDR Annex X §5.2
 
 ## 7. APPENDICES
 TMP-Change-Request: CR form
