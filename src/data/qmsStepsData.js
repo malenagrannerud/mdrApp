@@ -60,86 +60,116 @@ export const QMS_DATA = [
     },
 
 
-/******************* STEP 5 - PRODUCT REALISATION & DESIGN *******************/
-      { 
+/******************* STEP 5 - PRODUCT REALISATION & DESIGN (ISO 7.1 - 7.3) *******************/
+    { 
       id: 'step5', 
-      title: 'Step 5) Product Realisation & Design', 
-      desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7 + MDR.',
+      title: 'Step 5) Product Realisation & Design (ISO 7.1-7.3)', 
+      desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7.1-7.3 + MDR.',
       checklist: [
         { 
-          t: '5.1) Design Control & Planning (ISO 7.1-7.3)',
+          t: '5.1) Design Control & Planning (ISO 7.3.2 - 7.3.4)',
           e: 'Create a SOP for product development and establish a DHF structure → ',
           sop: SOP_DATA5.SOP_006_DESIGN_CONTROL,
           checklist: [
-            { e: 'Document User Requirements (URS) and technical product specifications → SPEC-001' },
-            { e: 'Plan and document verification and validation → PLN-003' },
-            { e: 'Establish Design History File (DHF) structure per product' }
+          { e: 'Document User Requirements (URS) and technical product specifications (ISO 7.3.3) → SPEC-001' },
+          { e: 'Plan and document verification and validation (ISO 7.3.6 & 7.3.7) → PLN-003' },
+          { e: 'Establish Design History File (DHF) structure per product (ISO 7.3.10)' }
           ]
         },
         { 
-          t: '5.2) Risk Management (ISO 14971)',
+          t: '5.2) Risk Management throughout Lifecycle (ISO 7.1 & ISO 14971)',
           e: 'Create a SOP for risk management throughout product lifecycle → ',
           sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT,
           checklist: [
             { e: 'Establish a Risk Management File per product (Risk Plan, FMEA)' },
-            { e: 'Perform risk analysis and risk evaluation' },
-            { e: 'Implement risk control measures' },
-            { e: 'Document residual risk and benefit-risk analysis' },
-            { e: 'Produce a Risk Management Report' }
+            { e: 'Perform risk analysis and risk evaluation (ISO 14971 §5 & §6)' },
+            { e: 'Implement and verify risk control measures (ISO 14971 §7)' },
+            { e: 'Document residual risk and benefit-risk analysis (ISO 14971 §8)' },
+            { e: 'Produce a Risk Management Report (ISO 14971 §9)' }
           ]
         },
         { 
-          t: '5.3) Purchasing & Supplier Management (ISO 7.4)',
-          e: 'Create a SOP for purchasing controls and supplier evaluation → ',
-          sop: SOP_DATA5.SOP_008_SUPPLIER_MANAGEMENT,
-          checklist: [
-            { e: 'Establish Approved Supplier List (ASL) → REG-009' },
-            { e: 'Create Quality Assurance Agreement (QAA) template → TMP-001' },
-            { e: 'Evaluate and approve critical suppliers' }
-          ]
-        },
-        { 
-          t: '5.4) Clinical Evaluation & Change Control',
+          t: '5.3) Clinical Evaluation & Device Validation (ISO 7.3.7 / MDR Art. 61)',
           checklist: [
             { 
               e: 'Create a SOP for clinical evaluation → ', 
               sop: SOP_DATA5.SOP_009_CLINICAL_EVALUATION 
             },
-            { e: 'Create a Clinical Evaluation Plan (CEP) per product' },
-            { e: 'Conduct a literature review and clinical data collection' },
-            { e: 'Produce a Clinical Evaluation Report (CER)' },
-            
+            { e: 'Create a Clinical Evaluation Plan (CEP) per product (MDR Annex XIV Part A)' },
+            { e: 'Conduct a literature review and clinical data collection (MDR Art. 61)' },
+            { e: 'Produce a Clinical Evaluation Report (CER) (MDR Annex XIV)' }
           ]
         },
         { 
-          t: '5.5) Change Contol',
+          t: '5.4) Design Change Control (ISO 7.3.9 / MDR Annex IX §4.10)',
           checklist: [  
             { 
-              e: 'Create a SOP for change control post-launch → ', 
+              e: 'Create a SOP for design change control post-launch → ', 
               sop: SOP_DATA5.SOP_010_CHANGE_CONTROL 
             }
           ]
         }
       ]
     },
-
-/******************* END STEP 5 - PRODUCT REALISATION & DESIGN *******************/
-
+/******************* END STEP 5 *******************/
 
 
+/******************* STEP 6 - OPERATIONS, PROCUREMENT & TRACEABILITY (ISO 7.4 - 7.6) *******************/
 
 
-/******************* STEP 6 - Supplier Management & Procurement *******************/
-
-    { 
+{ 
       id: 'step6', 
-      title: 'Steg 6) Leverantörsstyrning & Inköp', 
-      desc: 'Kraven på kontroll över de tjänster och komponenter ni köper in.',
+      title: 'Steg 6) Driftsättning, Inköp & Spårbarhet (ISO 7.4 - 7.6)', 
+      desc: 'Säkra kontroll över leverantörer, produktleverans, kundkrav och mätverktyg. ISO 13485 Section 7.4-7.6.',
       checklist: [
-        { t: '6.1) Approved Supplier List (ASL)', e: 'Register över utvärderade och godkända leverantörer.' },
-        { t: '6.2) Quality Agreements (QAA)', e: 'Kvalitetsavtal med kritiska leverantörer (t.ex. molntjänster).' }
+        { 
+          t: '6.1) Inköp & Leverantörsstyrning (ISO 7.4.1 - 7.4.3)',
+          e: 'Create a SOP for purchasing controls and supplier evaluation → ',
+          sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT,
+          checklist: [
+            { e: 'Establish Approved Supplier List (ASL) (ISO 7.4.1.1) → REG-009' },
+            { e: 'Create Quality Assurance Agreement (QAA) template (ISO 7.4.2) → TMP-001' },
+            { e: 'Evaluate, monitor, and re-approve critical suppliers (ISO 7.4.1.1)' }
+          ]
+        },
+        { 
+          t: '6.2) Kundprocesser & Marknadsfeedback (ISO 7.2.2, 7.2.3 & 8.2.1)',
+          checklist: [
+            { 
+              e: 'Create a SOP for handling customer requirements and post-market feedback (ISO 7.2.2) → ',
+              sop: SOP_DATA6.SOP_011_CUSTOMER_PROCESSES 
+            },
+            { e: 'Establish a register to log and evaluate customer complaints and market feedback (ISO 7.2.3) → REG-010' }
+          ]
+        },
+        { 
+          t: '6.3) Produktion, Servicing & UDI-Spårbarhet (ISO 7.5.1, 7.5.8, 7.5.9 & 7.6)',
+          checklist: [
+            { 
+              e: 'Create a SOP for product release, deployment pipelines, and unique device tracking (ISO 7.5.1 & 7.5.4) → ',
+              sop: SOP_DATA6.SOP_012_PRODUCTION_AND_TRACEABILITY 
+            },
+            { e: 'Create a SOP for the qualification and validation of automated test software (ISO 7.5.6 & 7.6) → SOP-013' },
+            { e: 'Establish a register for allocated UDI codes and device release versions (ISO 7.5.8 & 7.5.9) → REG-011' }
+          ]
+        }
       ]
     },
+
+
+/******************* END STEP 6 *******************/
+
+
+
+
+
+
+
+
+
+
+
+
 
     { 
       id: 'step7', 
