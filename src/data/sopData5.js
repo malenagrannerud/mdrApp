@@ -39,13 +39,13 @@ Validation: Evaluation confirming that the device meets user needs and its inten
 [TABLE_START]
 
 | Phase | Actions | Responsible | Evidence |
-| 1. PLANNING ⬇️ | Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | CTO / R&D Manager | Approved Design Plan |
-| 2. INPUT ⬇️ | Compile user inputs, safety requirements, and applicable regulations into a formal URS. | Product Manager | Approved URS |
-| 3. OUTPUT ⬇️ | Generate drawings and technical specifications. Verify that outputs match input criteria. | Technical Engineer | Verified Specs / DHF Index |
-| 4. REVIEW ⬇️ | Conduct formal milestones to evaluate design compliance and resolve open issues. | CTO & QA Manager | Signed Design Review Record |
-| 5. VERIFICATION ⬇️ | Generate protocols, execute engineering tests or inspections, and document compliance data. | Technical Engineer | Approved Verification Report |
-| 6. VALIDATION ⬇️ | Conduct usability, performance, or clinical testing with representative users under real use conditions. | Clinical Team & PRRC | Approved Validation Report |
-| 7. TRANSFER ⬇️ | Translate design outputs into definitive production specifications and work instructions. Train staff. | Production Manager | Approved Production Spec / Training Records |
+| 1. PLANNING | Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | CTO / R&D Manager | Approved Design Plan |
+| 2. INPUT | Compile user inputs, safety requirements, and applicable regulations into a formal URS. | Product Manager | Approved URS |
+| 3. OUTPUT | Generate drawings and technical specifications. Verify that outputs match input criteria. | Technical Engineer | Verified Specs / DHF Index |
+| 4. REVIEW | Conduct formal milestones to evaluate design compliance and resolve open issues. | CTO & QA Manager | Signed Design Review Record |
+| 5. VERIFICATION | Generate protocols, execute engineering tests or inspections, and document compliance data. | Technical Engineer | Approved Verification Report |
+| 6. VALIDATION | Conduct usability, performance, or clinical testing with representative users under real use conditions. | Clinical Team & PRRC | Approved Validation Report |
+| 7. TRANSFER | Translate design outputs into definitive production specifications and work instructions. Train staff. | Production Manager | Approved Production Spec / Training Records |
 | 8. CHANGES | Evaluate, track, and execute design modifications according to established change parameters. | CTO / R&D Manager | Logged CR File |
 [TABLE_END]
 
@@ -67,9 +67,11 @@ The DHF shall be maintained for each product lifecycle and contain: Design Plan,
 ## 8. REFERENCES ISO 13485:2016, Section 7.3 - Design and Development MDR Annex I - General Safety and Performance Requirements (GSPR) MDR Annex II §3 - Technical Documentation – Design and Manufacturing Information MDR Article 10(1), 10(4), 10(9) - General Obligations of Manufacturers MDR Annex IX §4.10 - Changes to Approved Design (NB Notification) MDR Annex X §5.2 - Changes to Approved Design (Type Examination)
 
 ## 9. APPENDICES
-TMP-DHF-Index: DHF contents checklist
-TMP-Design-Review: Design Review Record template
-TMP-URS: User Requirements Specification template
+
+TMP-Design-Plan.pdf: Design and Development Plan template
+TMP-Product-Requirements.pdf: User Requirements (URS) & Product Specification layout
+TMP-V&V-Protocol-Report.pdf: Verification & Validation Protocol and Test Report template
+TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
 
 ## 10. REVISION HISTORY
 [TABLE_START]
