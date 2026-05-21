@@ -100,18 +100,22 @@ export const QMS_DATA = [
           t: '5.4) Clinical Evaluation & Change Control',
           checklist: [
             { 
-              t: 'Create a SOP for clinical evaluation', 
+              encodeURI: 'Create a SOP for clinical evaluation', 
               sop: SOP_DATA.SOP_009_CLINICAL_EVALUATION 
             },
-            { t: 'Create a Clinical Evaluation Plan (CEP) per product' },
-            { t: 'Conduct a literature review and clinical data collection' },
-            { t: 'Produce a Clinical Evaluation Report (CER)' },
-            { 
+            { e: 'Create a Clinical Evaluation Plan (CEP) per product' },
+            { e: 'Conduct a literature review and clinical data collection' },
+            { e: 'Produce a Clinical Evaluation Report (CER)' },
+            
+          ]
+        },
+        { 
+          t: '5.5) Change Contol',
+          checklist: [  
+        { 
               t: 'Create a SOP for change control post-launch', 
               sop: SOP_DATA.SOP_010_CHANGE_CONTROL 
             }
-          ]
-        }
       ]
     },
 /******************* END STEP 5 - PRODUCT REALISATION & DESIGN *******************/
@@ -154,9 +158,6 @@ export const QMS_DATA = [
         } 
       ]
     },
-
-
-
 
 
     { 
