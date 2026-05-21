@@ -1,13 +1,12 @@
-
-
 /**
  * src/components/SopTemplate.jsx 
  */
 
 import React from 'react';
-import { X, FileText } from 'lucide-react';
+import { X } from 'lucide-react';
+import SopRenderer from './SopRenderer'; // Importera ditt nya bibliotek!
 
-const SopTemplate = ({ title, id, version, owner, content, onClose }) => {
+const SopTemplate = ({ title, id, version, owner, content, image, onClose }) => {
   return (
     <div className="sop-modal-overlay">
       <div className="sop-container">
@@ -40,39 +39,8 @@ const SopTemplate = ({ title, id, version, owner, content, onClose }) => {
 
         {/* Innehåll */}
         <div className="flex-1 overflow-y-auto p-12 bg-white">
-          <div className="max-w-none">
-            {content && content.split('\n').map((line, i) => {
-              const cleanLine = line.trim();
-
-              if (cleanLine.startsWith('# ')) {
-                return (
-                  <p key={i} className="sop-h1">
-                    {cleanLine.replace('# ', '')}
-                  </p>
-                );
-              }
-              if (cleanLine.startsWith('## ')) {
-                return (
-                  <p key={i} className="sop-h2">
-                    {cleanLine.replace('## ', '')}
-                  </p>
-                );
-              }
-              if (cleanLine.startsWith('- ')) {
-                return (
-                  <p key={i} className="sop-list">
-                    {cleanLine.replace('- ', '')}
-                  </p>
-                );
-              }
-
-              return cleanLine !== '' ? (
-                <p key={i} className="sop-text">{cleanLine}</p>
-              ) : (
-                <div key={i} className="h-4" />
-              );
-            })}
-          </div>
+          {/* Använd biblioteket här för att rendera texten och placera bilden rätt */}
+          <SopRenderer content={content} image={image} title={title} />
         </div>
 
       </div>

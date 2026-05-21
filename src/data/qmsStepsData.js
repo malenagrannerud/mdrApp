@@ -3,6 +3,8 @@
  * @description Central Roadmap-struktur som importerar mallar från qmsSopData.
  */
 import { SOP_DATA } from './sopData.js';
+import { SOP_DATA5 } from './sopData5.js';
+
 
 export const QMS_DATA = [
 
@@ -66,42 +68,42 @@ export const QMS_DATA = [
       checklist: [
         { 
           t: '5.1) Design Control & Planning (ISO 7.1-7.3)',
-          e: 'Create SOP for product development and establish DHF structure.',
-          sop: SOP_DATA.SOP_006_DESIGN_CONTROL,
+          e: 'Create a SOP for product development and establish a DHF structure → ',
+          sop: SOP_DATA5.SOP_006_DESIGN_CONTROL,
           checklist: [
-            { t: 'Document User Requirements (URS) and technical product specifications → SPEC-001' },
-            { t: 'Plan and document verification and validation → PLN-003' },
-            { t: 'Establish Design History File (DHF) structure per product' }
+            { e: 'Document User Requirements (URS) and technical product specifications → SPEC-001' },
+            { e: 'Plan and document verification and validation → PLN-003' },
+            { e: 'Establish Design History File (DHF) structure per product' }
           ]
         },
         { 
           t: '5.2) Risk Management (ISO 14971)',
-          e: 'Create a SOP for risk management throughout product lifecycle.',
-          sop: SOP_DATA.SOP_007_RISK_MANAGEMENT,
+          e: 'Create a SOP for risk management throughout product lifecycle → ',
+          sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT,
           checklist: [
-            { t: 'Establish a Risk Management File per product (Risk Plan, FMEA)' },
-            { t: 'Perform risk analysis and risk evaluation' },
-            { t: 'Implement risk control measures' },
-            { t: 'Document residual risk and benefit-risk analysis' },
-            { t: 'Produce a Risk Management Report' }
+            { e: 'Establish a Risk Management File per product (Risk Plan, FMEA)' },
+            { e: 'Perform risk analysis and risk evaluation' },
+            { e: 'Implement risk control measures' },
+            { e: 'Document residual risk and benefit-risk analysis' },
+            { e: 'Produce a Risk Management Report' }
           ]
         },
         { 
           t: '5.3) Purchasing & Supplier Management (ISO 7.4)',
-          e: 'Create a SOP for purchasing controls and supplier evaluation.',
-          sop: SOP_DATA.SOP_008_SUPPLIER_MANAGEMENT,
+          e: 'Create a SOP for purchasing controls and supplier evaluation → ',
+          sop: SOP_DATA5.SOP_008_SUPPLIER_MANAGEMENT,
           checklist: [
-            { t: 'Establish Approved Supplier List (ASL) → REG-009' },
-            { t: 'Create Quality Assurance Agreement (QAA) template → TMP-001' },
-            { t: 'Evaluate and approve critical suppliers' }
+            { e: 'Establish Approved Supplier List (ASL) → REG-009' },
+            { e: 'Create Quality Assurance Agreement (QAA) template → TMP-001' },
+            { e: 'Evaluate and approve critical suppliers' }
           ]
         },
         { 
           t: '5.4) Clinical Evaluation & Change Control',
           checklist: [
             { 
-              encodeURI: 'Create a SOP for clinical evaluation', 
-              sop: SOP_DATA.SOP_009_CLINICAL_EVALUATION 
+              e: 'Create a SOP for clinical evaluation → ', 
+              sop: SOP_DATA5.SOP_009_CLINICAL_EVALUATION 
             },
             { e: 'Create a Clinical Evaluation Plan (CEP) per product' },
             { e: 'Conduct a literature review and clinical data collection' },
@@ -113,8 +115,8 @@ export const QMS_DATA = [
           t: '5.5) Change Contol',
           checklist: [  
             { 
-              t: 'Create a SOP for change control post-launch', 
-              sop: SOP_DATA.SOP_010_CHANGE_CONTROL 
+              e: 'Create a SOP for change control post-launch → ', 
+              sop: SOP_DATA5.SOP_010_CHANGE_CONTROL 
             }
           ]
         }
@@ -187,5 +189,4 @@ export const QMS_DATA = [
         { t: '10.1) Internrevisionsrapport (ISO 8.2.2)', e: 'Fullständig genomgång av QMS:et för att säkra att ni är redo för NB.' }
       ]
     }
-
-],
+]

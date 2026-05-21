@@ -34,7 +34,6 @@ export default function QmsPage() {
             <StepDetail 
             selected={selected} 
             onOpenSop={(sop) => {
-              alert("Klicket fungerar i QMS.jsx! Nu försöker vi öppna: " + sop.title);
               setActiveSop(sop);
             }} 
             />

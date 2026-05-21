@@ -1,0 +1,110 @@
+/**
+ * src/components/SopRenderer.jsx
+ * Komplett bibliotek med stöd för bilder och helt dynamiska tabeller.
+ */
+import React from 'react';
+
+const SopRenderer = ({ content, image, title }) => {
+  if (!content) return null;
+
+  const renderedElements = [];
+  const lines = content.split('\n');
+  
+  let inTable = false;
+  let currentTableRows = [];
+
+  // Funktion för att rendera ut den sparade tabellen när den stängs
+  const renderAccumulatedTable = (tableKey) => {
+    if (currentTableRows.length === 0) return null;
+
+    return (
+      <div key={`table-${tableKey}`} className="my-6 overflow-x-auto border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+        <table className="w-full text-left border-collapse bg-white text-[12px]">
+          <thead>
+            <tr className="bg-slate-100 border-b-2 border-slate-900">
+              {currentTableRows[0].map((cell, idx) => (
+                <th key={idx} className="p-3 font-black text-slate-900 uppercase tracking-wider border-r border-slate-300 last:border-0">
+                  {cell}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {currentTableRows.slice(1).map((row, rowIdx) => (
+              <tr key={rowIdx} className="border-b border-slate-200 hover:bg-slate-50 transition-colors last:border-0">
+                {row.map((cell, cellIdx) => (
+                  <td key={cellIdx} className="p-3 text-slate-700 font-medium border-r border-slate-200 last:border-0">
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  // Loopa igenom alla rader i texten
+  for (let i = 0; i < lines.length; i++) {
+    const cleanLine = lines[i].trim();
+
+    // 📊 STARTA TABELL
+    if (cleanLine === '[TABLE_START]') {
+      inTable = true;
+      currentTableRows = [];
+      continue;
+    }
+
+    // 📊 AVSLUTA TABELL
+    if (cleanLine === '[TABLE_END]') {
+      inTable = false;
+      renderedElements.push(renderAccumulatedTable(i));
+      continue;
+    }
+
+    // 📊 SAMLA RADER INUTI TABELL
+    if (inTable) {
+      if (cleanLine.startsWith('|')) {
+        const cells = cleanLine.split('|').map(c => c.trim()).filter(c => c !== '');
+        if (cells.length > 0) {
+          currentTableRows.push(cells);
+        }
+      }
+      continue;
+    }
+
+    // 🖼️ BILD-PLATSHÅLLARE
+    if (cleanLine === '[IMAGE]') {
+      if (image) {
+        renderedElements.push(
+          <div key={i} className="my-8 flex justify-center">
+            <img 
+              src={image} 
+              alt={title ? `${title} diagram` : 'SOP Diagram'} 
+              className="max-w-full h-auto border-4 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]"
+            />
+          </div>
+        );
+      }
+      continue;
+    }
+
+    // RUBRIKER OCH LISTOR (Dina existerande klasser)
+    if (cleanLine.startsWith('# ')) {
+      renderedElements.push(<p key={i} className="sop-h1">{cleanLine.replace('# ', '')}</p>);
+    } else if (cleanLine.startsWith('## ')) {
+      renderedElements.push(<p key={i} className="sop-h2">{cleanLine.replace('## ', '')}</p>);
+    } else if (cleanLine.startsWith('- ')) {
+      renderedElements.push(<p key={i} className="sop-list">{cleanLine.replace('- ', '')}</p>);
+    } else if (cleanLine !== '') {
+      renderedElements.push(<p key={i} className="sop-text">{cleanLine}</p>);
+    } else {
+      renderedElements.push(<div key={i} className="h-4" />);
+    }
+  }
+
+  return <div className="sop-content-wrapper">{renderedElements}</div>;
+};
+
+export default SopRenderer;
