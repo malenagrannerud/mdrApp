@@ -112,12 +112,15 @@ export const QMS_DATA = [
         { 
           t: '5.5) Change Contol',
           checklist: [  
-        { 
+            { 
               t: 'Create a SOP for change control post-launch', 
               sop: SOP_DATA.SOP_010_CHANGE_CONTROL 
             }
+          ]
+        }
       ]
     },
+
 /******************* END STEP 5 - PRODUCT REALISATION & DESIGN *******************/
 
 
@@ -185,4 +188,4 @@ export const QMS_DATA = [
       ]
     }
 
-];
+],
