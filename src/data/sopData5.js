@@ -22,7 +22,7 @@ Design History File (DHF): Compilation of records proving the design was control
 Design Review: Formal milestone to evaluate design compliance before proceeding
 Design Transfer: Process of translating development outputs into final manufacturing specifications
 Verification: Evaluation confirming that design outputs meet the specified design input requirements
-Validation: Evaluation confirming that the device meets user needs and its intended use
+Validation: Evaluation confirming that the device meets user needs and its intended use. Conducted  with test persons under real use conditions
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
@@ -36,23 +36,31 @@ Validation: Evaluation confirming that the device meets user needs and its inten
 [TABLE_END]
 
 ## 5. PROCEDURE
+
+The phases of designing and devoping a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 [TABLE_START]
 
-| Phase | Actions | Responsible | Evidence |
+| Phase | Actions | Process Owner | Records |
 | 1. PLANNING | Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | CTO / R&D Manager | Approved Design Plan |
 | 2. INPUT | Compile user inputs, safety requirements, and applicable regulations into a formal URS. | Product Manager | Approved URS |
-| 3. OUTPUT | Generate drawings and technical specifications. Verify that outputs match input criteria. | Technical Engineer | Verified Specs / DHF Index |
-| 4. REVIEW | Conduct formal milestones to evaluate design compliance and resolve open issues. | CTO & QA Manager | Signed Design Review Record |
+| 3. OUTPUT | Generate drawings and technical specifications. Verify that outputs match input criteria. | Technical Engineer | DHF Index |
+| 4. REVIEW | Conduct formal milestones to evaluate design compliance and resolve open issues. | ALL | Signed Design Review Record |
 | 5. VERIFICATION | Generate protocols, execute engineering tests or inspections, and document compliance data. | Technical Engineer | Approved Verification Report |
-| 6. VALIDATION | Conduct usability, performance, or clinical testing with representative users under real use conditions. | Clinical Team & PRRC | Approved Validation Report |
-| 7. TRANSFER | Translate design outputs into definitive production specifications and work instructions. Train staff. | Production Manager | Approved Production Spec / Training Records |
-| 8. CHANGES | Evaluate, track, and execute design modifications according to established change parameters. | CTO / R&D Manager | Logged CR File |
+| 6. VALIDATION | Conduct testing with test users under real use conditions. | Clinical Team & PRRC | Approved Validation Report |
+| 7. DESIGN TRANSFER | Translate design outputs into definitive production specifications and WI's. Train staff. | Production Manager | Approved Production Spec / Training Records |
+| 8. DESIGN CHANGES | Evaluate, track, and execute design modifications according to established change parameters. | CTO / R&D Manager | Logged CR File |
 [TABLE_END]
 
-## 6. DESIGN HISTORY FILE (DHF)
-The DHF shall be maintained for each product lifecycle and contain: Design Plan, URS, Technical Specifications, Design Review Records, Verification Plans & Reports, Validation Plans & Reports, Risk Files, Change Logs, and the GSPR Checklist.
 
-## 7. MDR COMPLIANCE SUMMARY
+## DESIGN REVIEW
+
+
+
+
+
+
+
+## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
 
 | MDR Requirement | Covered By |
@@ -64,16 +72,16 @@ The DHF shall be maintained for each product lifecycle and contain: Design Plan,
 | Annex IX §4.10 / Annex X §5.2 | Changes phase |
 [TABLE_END]
 
-## 8. REFERENCES ISO 13485:2016, Section 7.3 - Design and Development MDR Annex I - General Safety and Performance Requirements (GSPR) MDR Annex II §3 - Technical Documentation – Design and Manufacturing Information MDR Article 10(1), 10(4), 10(9) - General Obligations of Manufacturers MDR Annex IX §4.10 - Changes to Approved Design (NB Notification) MDR Annex X §5.2 - Changes to Approved Design (Type Examination)
+## 7. REFERENCES ISO 13485:2016, Section 7.3 - Design and Development MDR Annex I - General Safety and Performance Requirements (GSPR) MDR Annex II §3 - Technical Documentation – Design and Manufacturing Information MDR Article 10(1), 10(4), 10(9) - General Obligations of Manufacturers MDR Annex IX §4.10 - Changes to Approved Design (NB Notification) MDR Annex X §5.2 - Changes to Approved Design (Type Examination)
 
-## 9. APPENDICES
+## 8. APPENDICES
 
 TMP-Design-Plan.pdf: Design and Development Plan template
 TMP-Product-Requirements.pdf: User Requirements (URS) & Product Specification layout
 TMP-V&V-Protocol-Report.pdf: Verification & Validation Protocol and Test Report template
 TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
 
-## 10. REVISION HISTORY
+## 9. REVISION HISTORY
 [TABLE_START]
 
 | Rev. | Date | Description of Change | Author |
