@@ -39,8 +39,8 @@ Validation: Evaluation confirming that the device meets user needs and its inten
 The phases of designing and devoping a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 [TABLE_START]
 
-| Phase | Actions | Process Owner | Records |
-| 1. PLANNING | Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | R&D | Approved Design Plan |
+| Phase | Actions | Responsibility | Records |
+| 1. PLAN| Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | R&D | Approved Design Plan |
 | 2. INPUT | Compile user inputs, safety requirements, and applicable regulations into a formal URS. | Product Manager | Approved URS |
 | 3. OUTPUT | Generate drawings and technical specifications. Verify that outputs match input criteria. | Technical Engineer | DHF Index |
 | 4. REVIEW | Conduct formal milestones to evaluate design compliance and resolve open issues. | ALL | Signed Design Review Record |
@@ -92,7 +92,7 @@ MDR Annex X §5.2 - Changes to Approved Design
 
 
   
-📁 Design History File (DHF)
+📁 DHF
 ├── 📁 01_Design_and_Development_Plan
 │   ├── 📄 Design_Plan_PLN-001.pdf
 │   ├── 📄 Project_Timeline.xlsx
