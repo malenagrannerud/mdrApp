@@ -81,11 +81,88 @@ MDR Annex X §5.2 - Changes to Approved Design
 
 ## 8. APPENDICES
 
-📄 TMP-Design-Plan.pdf: Design and Development Plan template
-📄 TMP-Product-Requirements.pdf: User Requirements (URS) & Product Specification layout
-📄 TMP-V&V-Protocol-Report.pdf: Verification & Validation Protocol and Test Report template
-📄 TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
+📁QMS 
+  📁07_03_D&D
+    📁DHF
+      📄 TMP-Design-Plan.pdf: Design and Development Plan template
+      📄 TMP-Product-Requirements.pdf: User Requirements (URS) & Product Specification layout
+      📄 TMP-V&V-Protocol-Report.pdf: Verification & Validation Protocol and Test Report template
+      📄 TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
 
+
+
+  
+📁 Design History File (DHF)
+├── 📁 01_Design_and_Development_Plan
+│   ├── 📄 Design_Plan_PLN-001.pdf
+│   ├── 📄 Project_Timeline.xlsx
+│   └── 📄 Resource_Allocation.pdf
+│
+├── 📁 02_Design_Inputs
+│   ├── 📁 User_Needs
+│   │   └── 📄 User_Requirements_URS-001.pdf
+│   ├── 📁 Regulatory_Requirements
+│   │   └── 📄 Standards_Checklist.pdf
+│   └── 📁 Technical_Requirements
+│       └── 📄 Technical_Specification_TS-001.pdf
+│
+├── 📁 03_Design_Outputs
+│   ├── 📁 Drawings_and_Schematics
+│   │   ├── 📄 Assembly_Drawing_DWG-001.pdf
+│   │   └── 📄 PCB_Layout_DWG-002.pdf
+│   ├── 📁 Software
+│   │   ├── 📄 Source_Code_v1.0.zip
+│   │   └── 📄 Software_Architecture.pdf
+│   ├── 📁 Labeling
+│   │   ├── 📄 Product_Label_LBL-001.pdf
+│   │   └── 📄 IFU_Instructions_for_Use.pdf
+│   └── 📁 Bill_of_Materials
+│       └── 📄 BOM_Master_List.xlsx
+│
+├── 📁 04_Risk_Management
+│   ├── 📄 Risk_Management_Plan_RMP-001.pdf
+│   ├── 📄 FMEA_Matrix.xlsx
+│   ├── 📄 Hazard_Analysis_HA-001.pdf
+│   └── 📄 Risk_Management_Report_RMR-001.pdf
+│
+├── 📁 05_Verification_and_Validation
+│   ├── 📁 Verification
+│   │   ├── 📄 Test_Protocol_TP-001.pdf
+│   │   ├── 📄 Test_Report_TR-001.pdf
+│   │   └── 📄 Verification_Traceability_Matrix.xlsx
+│   ├── 📁 Validation
+│   │   ├── 📄 Usability_Test_Protocol.pdf
+│   │   ├── 📄 Clinical_Validation_Report.pdf
+│   │   └── 📄 Summative_Evaluation_Report.pdf
+│   └── 📁 Software_VnV
+│       ├── 📄 Unit_Test_Results.pdf
+│       └── 📄 Integration_Test_Report.pdf
+│
+├── 📁 06_Design_Reviews
+│   ├── 📄 Phase_1_Review_Minutes.pdf
+│   ├── 📄 Phase_2_Review_Minutes.pdf
+│   ├── 📄 Design_Freeze_Approval.pdf
+│   └── 📄 Final_Design_Review_Signoff.pdf
+│
+├── 📁 07_Design_Transfer
+│   ├── 📄 Transfer_Checklist.pdf
+│   ├── 📄 Production_Specifications.pdf
+│   ├── 📄 Training_Records.pdf
+│   └── 📄 Supplier_Agreements.pdf
+│
+├── 📁 08_Design_Changes
+│   ├── 📄 Change_Request_CR-001.pdf
+│   ├── 📄 Change_Request_CR-002.pdf
+│   ├── 📄 Change_Log.xlsx
+│   └── 📄 Impact_Assessments.pdf
+│
+└── 📁 09_Regulatory_Submission
+    ├── 📄 Essential_Requirements_Checklist.pdf
+    ├── 📄 Declaration_of_Conformity.pdf
+    └── 📄 Notified_Body_Correspondence.pdf
+
+
+export default DHF_STRUCTURE;
 ## 9. REVISION HISTORY
 [TABLE_START]
 
