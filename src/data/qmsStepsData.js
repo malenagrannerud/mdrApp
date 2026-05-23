@@ -4,7 +4,7 @@
  */
 import { SOP_DATA } from './sopData.js';
 import { SOP_DATA5 } from './sopData5.js';
-
+import { SOP_DATA6 } from './sopData6.js';
 
 export const QMS_DATA = [
 
@@ -27,9 +27,11 @@ export const QMS_DATA = [
         },
         { t: '1.3) Dataintegritet & Backup (ISO 4.2.5)', e: 'Testprotokoll för återläsning.' }
       ]
-    }
-    
-    ,
+    },
+
+  /******************* STEP 2 -  *******************/
+
+
     { 
       id: 'step2', 
       title: 'Steg 2) Kvalitetsmanual & Omfattning', 
@@ -39,6 +41,9 @@ export const QMS_DATA = [
         { t: '2.2) QMS Scope & Exclusions', e: 'Dokumentation av vad QMS täcker och vilka delar av ISO 13485 som inte är tillämpliga.' }
       ]
     },
+
+      /******************* STEP 3 -  *******************/
+
     { 
       id: 'step3', 
       title: 'Steg 3) Ledningens Ansvar & Planering', 
@@ -49,6 +54,8 @@ export const QMS_DATA = [
         { t: '3.3) GAP-analys & Roadmap', e: 'Checklista som visar skillnad mellan nuläge och full efterlevnad.' }
       ]
     },
+      /******************* STEP 4 -  *******************/
+
     { 
       id: 'step4', 
       title: 'Steg 4) Resurshantering', 

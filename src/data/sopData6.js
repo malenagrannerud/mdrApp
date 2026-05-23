@@ -8,7 +8,7 @@
  * 
  */
 
-export const SOP_DATA5 = {
+export const SOP_DATA6 = {
 
 /*******************  SOP 008 - SUPPLIER MANAGEMENT (6.1) *******************/
   SOP_008_SUPPLIER_MANAGEMENT: {
@@ -16,7 +16,6 @@ export const SOP_DATA5 = {
     title: 'SOP-008_Supplier_Management.pdf', 
     version: '1.0', 
     owner: 'Operations Manager',
-    image: swAsmdImage,
     content: `
 ## 1. PURPOSE
 The purpose of this SOP is to establish a controlled system for the evaluation, approval, qualification, and continuous monitoring of suppliers to meet and.
@@ -70,7 +69,6 @@ REG-ASL-Index: Approved Supplier List master register
     title: 'SOP-011_Customer_Processes.pdf', 
     version: '1.0', 
     owner: 'Product Manager',
-    image: swAsmdImage,
     content: `
 ## 1. PURPOSE
 This SOP defines how customer requirements are reviewed and how post-market feedback and complaints are systematically collected, evaluated, and logged to meet, and.
@@ -123,7 +121,6 @@ REG-010-Feedback-Log: Central register for market feedback
     title: 'SOP-012_Production_and_Traceability.pdf', 
     version: '1.0', 
     owner: 'Operations Manager',
-    image: swAsmdImage,
     content: `
 ## 1. PURPOSE
 This SOP defines the methods for product manufacturing or configuration, final release approval, deployment pipelines, unique device tracing (UDI), and automated validation parameters to meet,,, and.

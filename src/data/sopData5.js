@@ -8,7 +8,6 @@ export const SOP_DATA5 = {
     title: 'SOP-006_Design_Control.pdf', 
     version: '1.0', 
     owner: 'CTO / R&D Manager',
-    image: swAsmdImage,
     content: `
 ## 1. PURPOSE
 The purpose of this SOP is to establish, document, and maintain a controlled system for the design and development of medical devices to meet, and.
@@ -90,6 +89,8 @@ TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
     `.trim()
   },
 
+
+  
 /*******************  SOP 007 - RISK MANAGEMENT (5.2) *******************/
   SOP_007_RISK_MANAGEMENT: {
     id: 'SOP-007', 
@@ -151,60 +152,7 @@ TMP-Risk-Report: Risk Management Report template
     `.trim()
   },
 
-/*******************  SOP 008 - SUPPLIER MANAGEMENT (5.3) *******************/
-  SOP_008_SUPPLIER_MANAGEMENT: {
-    id: 'SOP-008', 
-    title: 'SOP-008_Supplier_Management.pdf', 
-    version: '1.0', 
-    owner: 'Operations Manager',
-    image: swAsmdImage,
-    content: `
-## 1. PURPOSE
-The purpose of this SOP is to establish a controlled process for the evaluation, approval, qualification, and monitoring of suppliers to meet and.
 
-## 2. SCOPE
-Applies to all procurement of critical components, materials, or services that directly impact medical device quality or QMS compliance status.
-
-## 3. DEFINITIONS & ABBREVIATIONS
-Approved Supplier List (ASL): Official register of suppliers authorized to provide critical assets
-Quality Assurance Agreement (QAA): Contract defining specific quality obligations between parties
-Critical Supplier: A supplier providing items that affect product safety, performance, or legal conformity
-
-## 4. RESPONSIBILITY
-[TABLE_START]
-
-| Role | Responsibility | Regulatory Compliance |
-| Procurement | Conduct market research, handle initial contact, and manage purchasing logs | ISO 13485 §7.4.1 |
-| Operations Manager | Evaluate technical capability, review capacity, and coordinate active workflows | ISO 13485 §7.4.2 |
-| QA Manager | Execute quality audits, review certifications, approve QAAs, and maintain the ASL | ISO 13485 §4.1.3 |
-[TABLE_END]
-
-## 5. PROCEDURE
-[TABLE_START]
-
-| Phase | Actions | Responsible | Evidence |
-| 1. EVALUATION ⬇️ | Screen prospective suppliers via questionnaires, quality audits, or certificate reviews. | Procurement & QA | Completed Evaluation Form |
-| 2. APPROVAL ⬇️ | Establish a formal Quality Assurance Agreement (QAA) mapping compliance expectations. | QA Manager | Signed QAA Contract |
-| 3. REGISTER ⬇️ | Log the qualified entity into the controlled Master Register of authorized suppliers. | QA Manager | Updated ASL Record |
-| 4. EXECUTION ⬇️ | Place orders exclusively with active, approved suppliers using approved procurement logs. | Procurement Team | Authorized Purchase Order |
-| 5. MONITORING | Conduct annual reviews of delivery accuracy, item conformity, and certificate validity. | Operations & QA | Supplier Audit Report |
-[TABLE_END]
-
-## 6. REFERENCES ISO 13485:2016, Section 7.4 - Purchasing Control MDR Article 10(9) - Quality Management System structure
-
-## 7. APPENDICES
-TMP-Supplier-Audit: Evaluation questionnaire layout
-TMP-QAA-Template: Quality Assurance Agreement baseline
-REG-ASL-Index: Approved Supplier List master template
-
-## 8. REVISION HISTORY
-[TABLE_START]
-
-| Rev. | Date | Description of Change | Author |
-| 1.0 | 2026-05-21 | Initial release of this SOP | QA |
-[TABLE_END]
-    `.trim()
-  },
 
 /*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
   SOP_009_CLINICAL_EVALUATION: {
