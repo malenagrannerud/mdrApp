@@ -67,21 +67,17 @@ export const QMS_DATA = [
     },
 
 
-/******************* STEP 5 - PRODUCT REALISATION & DESIGN (ISO 7.1 - 7.3) *******************/
+/************************************************** STEP 5 ********************************************/
     { 
       id: 'step5', 
-      title: 'Step 5) Product Realisation & Design (ISO 7.1-7.3)', 
+      title: 'Step 5) Product Realisation & Design', 
       desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7.1-7.3 + MDR.',
       checklist: [
         { 
           t: '5.1) Design Control & Planning (ISO 7.3.2 - 7.3.4)',
           e: 'Create a SOP for product development and establish a DHF structure → ',
           sop: SOP_DATA5.SOP_006_DESIGN_CONTROL,
-          checklist: [
-          { e: 'Document User Requirements (URS) and technical product specifications (ISO 7.3.3) → SPEC-001' },
-          { e: 'Plan and document verification and validation (ISO 7.3.6 & 7.3.7) → PLN-003' },
-          { e: 'Establish Design History File (DHF) structure per product (ISO 7.3.10)' }
-          ]
+          
         },
         { 
           t: '5.2) Risk Management throughout Lifecycle (ISO 7.1 & ISO 14971)',
@@ -118,7 +114,7 @@ export const QMS_DATA = [
         }
       ]
     },
-/******************* END STEP 5 *******************/
+
 
 
 /******************* STEP 6 - OPERATIONS, PROCUREMENT & TRACEABILITY (ISO 7.4 - 7.6) *******************/

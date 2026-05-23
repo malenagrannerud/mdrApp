@@ -2,12 +2,12 @@ import swAsmdImage from '../assets/sw_asmd.png';
 
 export const SOP_DATA5 = {
 
-/*******************  SOP 006 - DESIGN CONTROL (5.1) *******************/
+/*******************************  SOP 006 - ***********************************/
   SOP_006_DESIGN_CONTROL: {
     id: 'SOP-006', 
     title: 'SOP-006_Design_Control.pdf', 
     version: '1.0', 
-    owner: 'CTO / R&D Manager',
+    owner: 'R&D',
     content: `
 ## 1. PURPOSE
 The purpose of this SOP is to establish, document, and maintain a controlled system for the design and development of medical devices to meet, and.
@@ -29,8 +29,8 @@ Validation: Evaluation confirming that the device meets user needs and its inten
 | Role | Responsibility | Regulatory Compliance |
 | Product Manager | Gather user needs, safety inputs, and establish the URS | MDR Annex I (GSPR) |
 | Technical Engineer | Generate technical outputs, execute protocols, and compile DHF assets | ISO 13485 §7.3.4 |
-| CTO / R&D Manager | Authorize design plans, chair formal reviews, and oversee development phases | ISO 13485 §7.3.1 |
-| QA Manager | Maintain design control compliance, approve protocols, and release DHF records | ISO 13485 §4.2.4 |
+| R&D | Authorize design plans, chair formal reviews, and oversee development phases | ISO 13485 §7.3.1 |
+| QA  | Maintain design control compliance, approve protocols, and release DHF records | ISO 13485 §4.2.4 |
 | PRRC | Verify that validation testing meets safety and compliance benchmarks before launch | MDR Article 15 |
 [TABLE_END]
 
@@ -40,14 +40,14 @@ The phases of designing and devoping a MD are described in the table below. Reco
 [TABLE_START]
 
 | Phase | Actions | Process Owner | Records |
-| 1. PLANNING | Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | CTO / R&D Manager | Approved Design Plan |
+| 1. PLANNING | Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | R&D | Approved Design Plan |
 | 2. INPUT | Compile user inputs, safety requirements, and applicable regulations into a formal URS. | Product Manager | Approved URS |
 | 3. OUTPUT | Generate drawings and technical specifications. Verify that outputs match input criteria. | Technical Engineer | DHF Index |
 | 4. REVIEW | Conduct formal milestones to evaluate design compliance and resolve open issues. | ALL | Signed Design Review Record |
 | 5. VERIFICATION | Generate protocols, execute engineering tests or inspections, and document compliance data. | Technical Engineer | Approved Verification Report |
 | 6. VALIDATION | Conduct testing with test users under real use conditions. | Clinical Team & PRRC | Approved Validation Report |
 | 7. DESIGN TRANSFER | Translate design outputs into definitive production specifications and WI's. Train staff. | Production Manager | Approved Production Spec / Training Records |
-| 8. DESIGN CHANGES | Evaluate, track, and execute design modifications according to established change parameters. | CTO / R&D Manager | Logged CR File |
+| 8. DESIGN CHANGES | Evaluate, track, and execute design modifications according to established change parameters. | R&D | Logged CR File |
 [TABLE_END]
 
 
@@ -71,14 +71,20 @@ The phases of designing and devoping a MD are described in the table below. Reco
 | Annex IX §4.10 / Annex X §5.2 | Changes phase |
 [TABLE_END]
 
-## 7. REFERENCES ISO 13485:2016, Section 7.3 - Design and Development MDR Annex I - General Safety and Performance Requirements (GSPR) MDR Annex II §3 - Technical Documentation – Design and Manufacturing Information MDR Article 10(1), 10(4), 10(9) - General Obligations of Manufacturers MDR Annex IX §4.10 - Changes to Approved Design (NB Notification) MDR Annex X §5.2 - Changes to Approved Design (Type Examination)
+## 7. REFERENCES 
+ISO 13485:2016, Section 7.3 - Design and Development 
+MDR Annex I - GSPR 
+MDR Annex II §3 - Technical Documentation – Design and Manufacturing Information 
+MDR Article 10(1), 10(4), 10(9) - General Obligations of Manufacturers 
+MDR Annex IX §4.10 - Changes to Approved Design (NB Notification) 
+MDR Annex X §5.2 - Changes to Approved Design 
 
 ## 8. APPENDICES
 
-TMP-Design-Plan.pdf: Design and Development Plan template
-TMP-Product-Requirements.pdf: User Requirements (URS) & Product Specification layout
-TMP-V&V-Protocol-Report.pdf: Verification & Validation Protocol and Test Report template
-TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
+📄 TMP-Design-Plan.pdf: Design and Development Plan template
+📄 TMP-Product-Requirements.pdf: User Requirements (URS) & Product Specification layout
+📄 TMP-V&V-Protocol-Report.pdf: Verification & Validation Protocol and Test Report template
+📄 TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
 
 ## 9. REVISION HISTORY
 [TABLE_START]
@@ -91,7 +97,7 @@ TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
 
 
   
-/*******************  SOP 007 - RISK MANAGEMENT (5.2) *******************/
+/*******************  SOP 007 - RISK MANAGEMENT *******************/
   SOP_007_RISK_MANAGEMENT: {
     id: 'SOP-007', 
     title: 'SOP-007_Risk_Management.pdf', 
