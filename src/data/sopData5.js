@@ -77,7 +77,7 @@ MDR Annex X §5.2 - Changes to Approved Design
 
   
 📁 DHF
-├── 📁 01_Design_and_Development_Plan
+├── 📁 D_&_D_Plan
 │   ├── 📄 Design_Plan_PLN-001.pdf
 │   ├── 📄 Project_Timeline.xlsx
 │   └── 📄 Resource_Allocation.pdf
@@ -99,16 +99,11 @@ MDR Annex X §5.2 - Changes to Approved Design
 │   │   └── 📄 Software_Architecture.pdf
 │   ├── 📁 Labeling
 │   │   ├── 📄 Product_Label_LBL-001.pdf
-│   │   └── 📄 IFU_Instructions_for_Use.pdf
+│   │   └── 📄 IFU.pdf
 │   └── 📁 Bill_of_Materials
 │       └── 📄 BOM_Master_List.xlsx
 │
 ├── 📁 04_Risk_Management
-│   ├── 📄 Risk_Management_Plan_RMP-001.pdf
-│   ├── 📄 FMEA_Matrix.xlsx
-│   ├── 📄 Hazard_Analysis_HA-001.pdf
-│   └── 📄 Risk_Management_Report_RMR-001.pdf
-│
 ├── 📁 05_Verification_and_Validation
 │   ├── 📁 Verification
 │   │   ├── 📄 Test_Protocol_TP-001.pdf
