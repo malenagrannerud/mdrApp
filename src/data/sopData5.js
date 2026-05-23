@@ -5,7 +5,7 @@ export const SOP_DATA5 = {
 /*******************************  SOP 006 - ***********************************/
   SOP_006_DESIGN_CONTROL: {
     id: 'SOP-006', 
-    title: 'SOP-006_Design_Control.pdf', 
+    title: 'Design_Control.pdf', 
     version: '1.0', 
     owner: 'R&D',
     content: `
@@ -16,12 +16,10 @@ The purpose of this SOP is to establish, document, and maintain a controlled sys
 Applies to all new product development and design changes conducted by the organization.
 
 ## 3. DEFINITIONS & ABBREVIATIONS
-User Requirements Specification (URS): Document defining what the user needs from the device
-Design History File (DHF): Compilation of records proving the design was controlled and verified
+User Requirements Specification (URS)
+Design History File (DHF)
 Design Review: Formal milestone to evaluate design compliance before proceeding
 Design Transfer: Process of translating development outputs into final manufacturing specifications
-Verification: Evaluation confirming that design outputs meet the specified design input requirements
-Validation: Evaluation confirming that the device meets user needs and its intended use. Conducted  with test persons under real use conditions
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
@@ -51,14 +49,6 @@ The phases of designing and devoping a MD are described in the table below. Reco
 [TABLE_END]
 
 
-## DESIGN REVIEW
-
-
-
-
-
-
-
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
 
@@ -82,14 +72,8 @@ MDR Annex X §5.2 - Changes to Approved Design
 ## 8. APPENDICES
 
 📁QMS 
-  📁07_03_D&D
-    📁DHF
-      📄 TMP-Design-Plan.pdf: Design and Development Plan template
-      📄 TMP-Product-Requirements.pdf: User Requirements (URS) & Product Specification layout
-      📄 TMP-V&V-Protocol-Report.pdf: Verification & Validation Protocol and Test Report template
-      📄 TMP-Phase-Gate-Approval.pdf: Design Review, Transfer Record and DHF Checklist
-
-
+...📁07_03_D&D
+......📁DHF
 
   
 📁 DHF
@@ -159,10 +143,9 @@ MDR Annex X §5.2 - Changes to Approved Design
 └── 📁 09_Regulatory_Submission
     ├── 📄 Essential_Requirements_Checklist.pdf
     ├── 📄 Declaration_of_Conformity.pdf
-    └── 📄 Notified_Body_Correspondence.pdf
 
 
-export default DHF_STRUCTURE;
+
 ## 9. REVISION HISTORY
 [TABLE_START]
 
@@ -177,7 +160,7 @@ export default DHF_STRUCTURE;
 /*******************  SOP 007 - RISK MANAGEMENT *******************/
   SOP_007_RISK_MANAGEMENT: {
     id: 'SOP-007', 
-    title: 'SOP-007_Risk_Management.pdf', 
+    title: 'Risk_Management.pdf', 
     version: '1.0', 
     owner: 'CTO / R&D Manager',
     image: swAsmdImage,
@@ -211,11 +194,11 @@ Risk Control: Process in which decisions are made and measures implemented to re
 [TABLE_START]
 
 | Phase | Actions | Responsible | Evidence |
-| 1. PLANNING ⬇️ | Create a Risk Management Plan defining the scope, responsibilities, and criteria for risk acceptability. | CTO & QA Manager | Approved Risk Plan |
-| 2. ANALYSIS ⬇️ | Identify known and predictable hazards under normal and fault conditions. Document in FMEA. | Risk Team | Active FMEA Matrix |
-| 3. EVALUATION ⬇️ | Score each hazard based on severity and probability to determine if risk control is required. | Risk Team | Evaluated FMEA Record |
-| 4. CONTROL ⬇️ | Implement risk mitigation measures (design safety, protective measures, or safety information). | Technical Engineer | Verified Risk Controls |
-| 5. RESIDUAL RISK ⬇️ | Evaluate overall residual risk profile. Ensure all individual risks are within acceptable criteria. | Risk Team & PRRC | Residual Risk Review |
+| 1. PLANNING | Create a Risk Management Plan defining the scope, responsibilities, and criteria for risk acceptability. | CTO & QA Manager | Approved Risk Plan |
+| 2. ANALYSIS | Identify known and predictable hazards under normal and fault conditions. Document in FMEA. | Risk Team | Active FMEA Matrix |
+| 3. EVALUATION | Score each hazard based on severity and probability to determine if risk control is required. | Risk Team | Evaluated FMEA Record |
+| 4. CONTROL | Implement risk mitigation measures (design safety, protective measures, or safety information). | Technical Engineer | Verified Risk Controls |
+| 5. RESIDUAL RISK | Evaluate overall residual risk profile. Ensure all individual risks are within acceptable criteria. | Risk Team & PRRC | Residual Risk Review |
 | 6. CLOSURE | Compile and sign the Risk Management Report confirming plan objectives are achieved. | QA Manager | Approved Risk Report / RMF |
 [TABLE_END]
 
@@ -240,7 +223,7 @@ TMP-Risk-Report: Risk Management Report template
 /*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
   SOP_009_CLINICAL_EVALUATION: {
     id: 'SOP-009', 
-    title: 'SOP-009_Clinical_Evaluation.pdf', 
+    title: 'Clinical_Evaluation.pdf', 
     version: '1.0', 
     owner: 'RA Manager',
     image: swAsmdImage,
@@ -271,10 +254,10 @@ Clinical Data: Information concerning safety or performance generated from actua
 [TABLE_START]
 
 | Phase | Actions | Responsible | Evidence |
-| 1. STRATEGY ⬇️ | Establish a Clinical Evaluation Plan (CEP) defining scope, benchmarks, and data search criteria. | RA Manager | Approved CEP Document |
-| 2. SEARCH ⬇️ | Conduct systematic literature reviews, clinical database searches, and screen clinical field logs. | Medical Expert | Logged Search Queries |
-| 3. APPRAISAL ⬇️ | Evaluate retrieved data packages for methodological soundness, scientific weight, and relevance. | Medical Expert | Signed Data Appraisal Sheet |
-| 4. ANALYSIS ⬇️ | Analyze data against criteria to prove device safety, clinical performance, and benefit-risk ratios. | Medical Expert & RA | Formulated CER Draft |
+| 1. STRATEGY | Establish a Clinical Evaluation Plan (CEP) defining scope, benchmarks, and data search criteria. | RA Manager | Approved CEP Document |
+| 2. SEARCH | Conduct systematic literature reviews, clinical database searches, and screen clinical field logs. | Medical Expert | Logged Search Queries |
+| 3. APPRAISAL | Evaluate retrieved data packages for methodological soundness, scientific weight, and relevance. | Medical Expert | Signed Data Appraisal Sheet |
+| 4. ANALYSIS | Analyze data against criteria to prove device safety, clinical performance, and benefit-risk ratios. | Medical Expert & RA | Formulated CER Draft |
 | 5. RELEASING | Cross-functional review of the CER. Final sign-off by the PRRC and structural archiving. | PRRC & QA Manager | Approved CER / TD Update |
 [TABLE_END]
 
@@ -296,7 +279,7 @@ TMP-CER-Report: Clinical Evaluation Report master template
 /*******************  SOP 010 - CHANGE CONTROL (5.5) *******************/
   SOP_010_CHANGE_CONTROL: {
     id: 'SOP-010', 
-    title: 'SOP-010_Change_Control.pdf', 
+    title: 'Change_Control.pdf', 
     version: '1.0', 
     owner: 'QA Manager',
     image: swAsmdImage,
@@ -329,10 +312,10 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 [TABLE_START]
 
 | Phase | Actions | Responsible | Evidence |
-| 1. INITIATION ⬇️ | Complete the CR form. | Change Initiator | Submitted CR Form |
-| 2. ASSESSMENT ⬇️ | Evaluate impact and classify change significance using risk criteria. Assess regulatory and QMS impacts. | R&D & RA Manager | Approved Impact Assessment |
-| 3. APPROVAL ⬇️ | Conduct cross-functional review of the assessment. PRRC signs off on MDR compliance status. QA formally approves or rejects the CR. | PRRC & QA | QA Approval / NB Record (if Significant) |
-| 4. EXECUTION ⬇️ | Execute change. Update TD. Train affected personnel on the new version. | R&D & Production | Updated TD & Training Records |
+| 1. INITIATION | Complete the CR form. | Change Initiator | Submitted CR Form |
+| 2. ASSESSMENT | Evaluate impact and classify change significance using risk criteria. Assess regulatory and QMS impacts. | R&D & RA Manager | Approved Impact Assessment |
+| 3. APPROVAL | Conduct cross-functional review of the assessment. PRRC signs off on MDR compliance status. QA formally approves or rejects the CR. | PRRC & QA | QA Approval / NB Record (if Significant) |
+| 4. EXECUTION | Execute change. Update TD. Train affected personnel on the new version. | R&D & Production | Updated TD & Training Records |
 | 5. CLOSURE | Run full regression testing. Update DHF and RMF. QA reviews evidence and closes the CR. | R&D & QA Manager | Closed CR & Updated DHF / RMF |
 [TABLE_END]
 

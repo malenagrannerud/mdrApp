@@ -104,7 +104,8 @@ const SopRenderer = ({ content, image, title }) => {
     }
   }
 
-  return <div className="sop-content-wrapper">{renderedElements}</div>;
+return <div className="sop-content-wrapper">{renderedElements}</div>;
+
 };
 
 export default SopRenderer;

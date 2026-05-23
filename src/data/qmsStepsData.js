@@ -73,23 +73,13 @@ export const QMS_DATA = [
       title: 'Step 5) Product Realisation & Design', 
       desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7.1-7.3 + MDR.',
       checklist: [
-        { 
-          t: '5.1) Design Control & Planning (ISO 7.3.2 - 7.3.4)',
+        { t: '5.1) Design Control & Planning ',
           e: 'Create a SOP for product development and establish a DHF structure → ',
-          sop: SOP_DATA5.SOP_006_DESIGN_CONTROL,
-          
-        },
+          sop: SOP_DATA5.SOP_006_DESIGN_CONTROL },
         { 
           t: '5.2) Risk Management throughout Lifecycle (ISO 7.1 & ISO 14971)',
           e: 'Create a SOP for risk management throughout product lifecycle → ',
-          sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT,
-          checklist: [
-            { e: 'Establish a Risk Management File per product (Risk Plan, FMEA)' },
-            { e: 'Perform risk analysis and risk evaluation (ISO 14971 §5 & §6)' },
-            { e: 'Implement and verify risk control measures (ISO 14971 §7)' },
-            { e: 'Document residual risk and benefit-risk analysis (ISO 14971 §8)' },
-            { e: 'Produce a Risk Management Report (ISO 14971 §9)' }
-          ]
+          sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT
         },
         { 
           t: '5.3) Clinical Evaluation & Device Validation (ISO 7.3.7 / MDR Art. 61)',
