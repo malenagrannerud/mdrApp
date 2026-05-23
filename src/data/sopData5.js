@@ -71,11 +71,6 @@ MDR Annex X §5.2 - Changes to Approved Design
 
 ## 8. APPENDICES
 
-📁QMS 
-...📁07_03_D&D
-......📁DHF
-
-  
 📁 DHF
 ├── 📁 D_&_D_Plan
 │   ├── 📄 Design_Plan_PLN-001.pdf
