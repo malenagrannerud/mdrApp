@@ -87,20 +87,13 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         e: '\nThis step is translated by following ISO 13485:2016 Chapter 7 - Product Realization. '},
 
       { t: '2.2) Implement a Risk Management process',
-        r: '\nArt. 10.2: "Mfrs shall establish, document, implement and maintain a system for risk management as described in Annex I-Section 3.."',
+        r: '\nArt. 10.2: "Mfrs shall establish, document, implement and maintain a system for risk management as described in Section 3 of Annex I."',
+        e: '...' },
 
-        e: 'Art. 10, 2' },
-      { 
-        t: '2.3) Establish a Clinical Evaluation process',
-        e: 'Art. 10, 3 - Documented CEP required, detailed in Annex XIV and Art. 61.',
-        checklist: [
-          { e: 'Create CEP template → Approved CEP for technical file' },
-          { e: 'Create CER template → Approved CER for technical file' },
-          { e: 'Create PMCF plan template' },
-          { e: 'Feed results into Risk Management (Art. 10(2))' },
-          { e: 'Feed results into Technical Documentation (Annex II)' }
-        ]
-      },
+      { t: '2.3) Establish a Clinical Evaluation process',
+        r: '\nArt. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
+        doc: DOC_DATA.ART_61 },
+      
 
       { t: '2.4) Develop and maintain TD, UDI and DoC processes',
         e: 'Art. 10, 4-8' },
@@ -227,7 +220,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   }, 
   {
     id: 'm10',
-    title: 'Step 10) Maintain surveillance systems',
+    title: 'Step 10) Maintain a PMS system',
     desc: 'Show documentation that:',
     checklist: [
       { t: '10.1) The benefit-risk determination has been reviewed', 

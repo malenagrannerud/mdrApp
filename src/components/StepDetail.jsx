@@ -21,14 +21,19 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
       <div className="space-y-0">
         {selected.checklist.map((item, i) => (
           <div key={i} className={item.t ? 'pt-8' : 'pt-0'}>
-
             
             {/* Steg X.X) ... */}
             {item.t && <h4 className="headingSubStep">{item.t}</h4>}
             
-            {/* Brödtext */}
+            {/* Artikelreferens */}
             {item.r && <p className="article-ref">{item.r}</p>}
-            {item.e && (<p className={item.e && item.e.includes('📁') ? 'tree-structure' : 'section-text'}>{item.e}</p>)}
+            
+            {/* Brödtext */}
+            {item.e && (
+              <p className={item.e && item.e.includes('📁') ? 'tree-structure' : 'section-text'}>
+                {item.e}
+              </p>
+            )}
 
             {/* SOP-länk */}
             {item.sop && (
@@ -51,6 +56,7 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
                 {item.checklist.map((subItem, j) => (
                   <div key={j}>
                     {subItem.t && <h4 className="headingSubStep text-sm">{subItem.t}</h4>}
+                    {subItem.r && <p className="article-ref text-xs">{subItem.r}</p>}
                     {subItem.e && <p className="section-text text-xs">{subItem.e}</p>}
                     {subItem.sop && (
                       <SopLink sop={subItem.sop} onOpen={onOpenSop} />
