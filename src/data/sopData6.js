@@ -13,7 +13,7 @@ export const SOP_DATA6 = {
 /*******************  SOP 008 - SUPPLIER MANAGEMENT (6.1) *******************/
   SOP_008_SUPPLIER_MANAGEMENT: {
     id: 'SOP-008', 
-    title: 'SOP-008_Supplier_Management.pdf', 
+    title: 'Supplier_Management.pdf', 
     version: '1.0', 
     owner: 'Operations Manager',
     content: `
@@ -66,7 +66,7 @@ REG-ASL-Index: Approved Supplier List master register
 /*******************  SOP 011 - CUSTOMER PROCESSES & FEEDBACK (6.2) *******************/
   SOP_011_CUSTOMER_PROCESSES: {
     id: 'SOP-011', 
-    title: 'SOP-011_Customer_Processes.pdf', 
+    title: 'Customer_Processes.pdf', 
     version: '1.0', 
     owner: 'Product Manager',
     content: `
@@ -118,7 +118,7 @@ REG-010-Feedback-Log: Central register for market feedback
 /*******************  SOP 012 - PRODUCTION, RELEASE & TRACEABILITY (6.3) *******************/
   SOP_012_PRODUCTION_AND_TRACEABILITY: {
     id: 'SOP-012', 
-    title: 'SOP-012_Production_and_Traceability.pdf', 
+    title: 'Production_and_Traceability.pdf', 
     version: '1.0', 
     owner: 'Operations Manager',
     content: `

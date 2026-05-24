@@ -77,7 +77,7 @@ export const QMS_DATA = [
           e: 'Create a SOP for product development and establish a DHF structure → ',
           sop: SOP_DATA5.SOP_006_DESIGN_CONTROL },
         { 
-          t: '5.2) Risk Management throughout Lifecycle (ISO 7.1 & ISO 14971)',
+          t: '5.2) Risk Management throughout Lifecycle - ISO 14971',
           e: 'Create a SOP for risk management throughout product lifecycle → ',
           sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT
         },

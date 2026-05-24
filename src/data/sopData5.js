@@ -37,16 +37,23 @@ Design Transfer: Process of translating development outputs into final manufactu
 The phases of designing and devoping a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 [TABLE_START]
 
-| Phase | Actions | Responsibility | Records |
-| 1. PLAN| Establish a Design Plan defining phases, reviews, milestones, and regulatory benchmarks. | R&D | Approved Design Plan |
-| 2. INPUT | Compile user inputs, safety requirements, and applicable regulations into a formal URS. | Product Manager | Approved URS |
-| 3. OUTPUT | Generate drawings and technical specifications. Verify that outputs match input criteria. | Technical Engineer | DHF Index |
-| 4. REVIEW | Conduct formal milestones to evaluate design compliance and resolve open issues. | ALL | Signed Design Review Record |
-| 5. VERIFICATION | Generate protocols, execute engineering tests or inspections, and document compliance data. | Technical Engineer | Approved Verification Report |
-| 6. VALIDATION | Conduct testing with test users under real use conditions. | Clinical Team & PRRC | Approved Validation Report |
-| 7. DESIGN TRANSFER | Translate design outputs into definitive production specifications and WI's. Train staff. | Production Manager | Approved Production Spec / Training Records |
-| 8. DESIGN CHANGES | Evaluate, track, and execute design modifications according to established change parameters. | R&D | Logged CR File |
+| Phase | Purpose | Activities | Responsible | Approver  | Output (Progression check) |
+|---------------------|---------|----------------|----------------------------------|--------------------------------------|--------------------|
+| Feasibility | Assess technical, clinical, and regulatory viability | Market analysis, PoC, high-level risk assessment | Product Manager | R&D | Feasibility Report, RMF |
+| Design Planning | Define development structure and controls | Design planning, milestones, V&V strategy, resource allocation | R&D | QA | Design Plan, Development Timeline |
+| Design Input | Define product requirements | URS creation, regulatory, clinical & cybersecurity requirements | Product Manager | PRRC | Design Input Spec (DIS), SRS |
+| Design Output | Translate requirements into technical solution | Software/hardware design, implementation, documentation | Technical Engineer | R&D | Source code, architecture docs, IFU, BOM |
+| Device Risk / Usability | Identify and control risks and usability issues | ISO 14971 analysis, FMEA, usability engineering | Technical Engineer | QA | RMF, Usability Engineering File |
+| Design Review | Ensure readiness before phase progression | Formal review meetings, gap analysis | R&D | QA | Review minutes, sign-offs, action logs |
+| Design Verification | Confirm outputs meet inputs | Unit/integration/system testing, static analysis | Technical Engineer | QA | Test protocols, verification reports, traceability matrix |
+| Design Validation | Confirm user needs and intended use are met | Clinical validation, usability testing | Product Manager | PRRC | Validation reports, CER, summative usability report |
+| Design Release | Approve product for market release | Final DHF review, compliance check | QA | PRRC | Design freeze, release approval, DoC |
+| Design Transfer | Move design into production environment | Manufacturing specs, supplier onboarding | Technical Engineer | R&D | Transfer checklist, production documentation |
+| Design Changes | Control post-release modifications | Change requests, impact analysis | Technical Engineer | QA | Change log, updated DHF, updated risk file |
+| Design Maintenance | Maintain post-market compliance | PMS, CAPA, complaint handling | Product Manager | PRRC | PMS reports, CAPA logs, updated risk files |
+
 [TABLE_END]
+
 
 
 ## 6. MDR COMPLIANCE SUMMARY
@@ -72,68 +79,18 @@ MDR Annex X §5.2 - Changes to Approved Design
 ## 8. APPENDICES
 
 📁 DHF
-├── 📁 D_&_D_Plan
-│   ├── 📄 Design_Plan_PLN-001.pdf
-│   ├── 📄 Project_Timeline.xlsx
-│   └── 📄 Resource_Allocation.pdf
-│
-├── 📁 02_Design_Inputs
-│   ├── 📁 User_Needs
-│   │   └── 📄 User_Requirements_URS-001.pdf
-│   ├── 📁 Regulatory_Requirements
-│   │   └── 📄 Standards_Checklist.pdf
-│   └── 📁 Technical_Requirements
-│       └── 📄 Technical_Specification_TS-001.pdf
-│
-├── 📁 03_Design_Outputs
-│   ├── 📁 Drawings_and_Schematics
-│   │   ├── 📄 Assembly_Drawing_DWG-001.pdf
-│   │   └── 📄 PCB_Layout_DWG-002.pdf
-│   ├── 📁 Software
-│   │   ├── 📄 Source_Code_v1.0.zip
-│   │   └── 📄 Software_Architecture.pdf
-│   ├── 📁 Labeling
-│   │   ├── 📄 Product_Label_LBL-001.pdf
-│   │   └── 📄 IFU.pdf
-│   └── 📁 Bill_of_Materials
-│       └── 📄 BOM_Master_List.xlsx
-│
-├── 📁 04_Risk_Management
-├── 📁 05_Verification_and_Validation
-│   ├── 📁 Verification
-│   │   ├── 📄 Test_Protocol_TP-001.pdf
-│   │   ├── 📄 Test_Report_TR-001.pdf
-│   │   └── 📄 Verification_Traceability_Matrix.xlsx
-│   ├── 📁 Validation
-│   │   ├── 📄 Usability_Test_Protocol.pdf
-│   │   ├── 📄 Clinical_Validation_Report.pdf
-│   │   └── 📄 Summative_Evaluation_Report.pdf
-│   └── 📁 Software_VnV
-│       ├── 📄 Unit_Test_Results.pdf
-│       └── 📄 Integration_Test_Report.pdf
-│
-├── 📁 06_Design_Reviews
-│   ├── 📄 Phase_1_Review_Minutes.pdf
-│   ├── 📄 Phase_2_Review_Minutes.pdf
-│   ├── 📄 Design_Freeze_Approval.pdf
-│   └── 📄 Final_Design_Review_Signoff.pdf
-│
-├── 📁 07_Design_Transfer
-│   ├── 📄 Transfer_Checklist.pdf
-│   ├── 📄 Production_Specifications.pdf
-│   ├── 📄 Training_Records.pdf
-│   └── 📄 Supplier_Agreements.pdf
-│
-├── 📁 08_Design_Changes
-│   ├── 📄 Change_Request_CR-001.pdf
-│   ├── 📄 Change_Request_CR-002.pdf
-│   ├── 📄 Change_Log.xlsx
-│   └── 📄 Impact_Assessments.pdf
-│
-└── 📁 09_Regulatory_Submission
-    ├── 📄 Essential_Requirements_Checklist.pdf
-    ├── 📄 Declaration_of_Conformity.pdf
-
+├── 📁 Feasibility
+├── 📁 Design Planning
+├── 📁 Design Input
+├── 📁 Design Output
+├── 📁 Device Risk/Usability
+├── 📁 Design Review
+├── 📁 Design Verification
+├── 📁 Design Release
+├── 📁 Design Validation
+├── 📁 Design Changes
+├── 📁 Design Transfer
+├── 📁 Design Maintenance
 
 
 ## 9. REVISION HISTORY
@@ -152,8 +109,7 @@ MDR Annex X §5.2 - Changes to Approved Design
     id: 'SOP-007', 
     title: 'Risk_Management.pdf', 
     version: '1.0', 
-    owner: 'CTO / R&D Manager',
-    image: swAsmdImage,
+    owner: 'R&D',
     content: `
 ## 1. PURPOSE
 The purpose of this SOP is to establish, document, and maintain a continuous risk management system throughout the product lifecycle to meet,, and.
@@ -303,10 +259,10 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 
 | Phase | Actions | Responsible | Evidence |
 | 1. INITIATION | Complete the CR form. | Change Initiator | Submitted CR Form |
-| 2. ASSESSMENT | Evaluate impact and classify change significance using risk criteria. Assess regulatory and QMS impacts. | R&D & RA Manager | Approved Impact Assessment |
+| 2. ASSESSMENT | Evaluate impact and classify change significance using risk criteria. Assess regulatory and QMS impacts. | R&D & RA | Approved Impact Assessment |
 | 3. APPROVAL | Conduct cross-functional review of the assessment. PRRC signs off on MDR compliance status. QA formally approves or rejects the CR. | PRRC & QA | QA Approval / NB Record (if Significant) |
 | 4. EXECUTION | Execute change. Update TD. Train affected personnel on the new version. | R&D & Production | Updated TD & Training Records |
-| 5. CLOSURE | Run full regression testing. Update DHF and RMF. QA reviews evidence and closes the CR. | R&D & QA Manager | Closed CR & Updated DHF / RMF |
+| 5. CLOSURE | Run full regression testing. Update DHF and RMF. QA reviews evidence and closes the CR. | R&D & QA | Closed CR & Updated DHF / RMF |
 [TABLE_END]
 
 ## 6. REFERENCES 

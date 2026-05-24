@@ -33,6 +33,11 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg }) => {
               <SopLink sop={item.sop} onOpen={onOpenSop} />
             )}
 
+            {/* mdr-länk - Visas endast om mdr-objekt finns */}
+            {item.mdr && (
+              <MdcgLink mdcg={item.mdr} onOpen={onOpenMdcg} />
+            )}
+
             {/* MDCG-länk - Visas endast om mdcg-objekt finns */}
             {item.mdcg && (
               <MdcgLink mdcg={item.mdcg} onOpen={onOpenMdcg} />
