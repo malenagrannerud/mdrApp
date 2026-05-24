@@ -7,14 +7,20 @@ export const MDCG_DATA = {
 
   /*****   STEP 1  ********/ 
 
-  TECH_FILE: {
-    id: 'Tech file',
+  TD: {
+    id: 'TD',
     title: 'Tech file',
     content: `
 # Content
 
+- Part 1 - 6  of the TD
+*Records* of the pre-market phase
 
-📁 TECHNICAL FILE 
+- Part 7 of the TD
+*Plans* for the PMS phase
+
+
+📁 TECHNICAL FILE PRODUCT A
 ├── 📁 01_Device_Description_and_Specification
 │   ├── 📄 Device_Description.pdf
 │   ├── 📄 Product_Variants_and_Configurations.xlsx
@@ -40,7 +46,7 @@ export const MDCG_DATA = {
 │
 ├── 📁 03_Risk_Management_and_Usability
 │   ├── 📁 RMF
-│   │   ├── 📄 Risk_Management_Plan_RMP.pdf
+│   │   ├── 📄 Risk_Management_Plan.pdf
 │   │   ├── 📄 Hazard_Analysis.xlsx
 │   │   ├── 📄 FMEA_System_and_Software.xlsx
 │   │   ├── 📄 Risk_Control_Measures.pdf
@@ -51,7 +57,7 @@ export const MDCG_DATA = {
 │   │   ├── 📄 Formative_Studies.pdf
 │   │   └── 📄 Summative_Usability_Report.pdf
 │
-├── 📁 04_Verification_and_Validation
+├── 📁 04_V&V
 │   ├── 📁 Verification
 │   │   ├── 📄 Verification_Plan.pdf
 │   │   ├── 📄 Unit_Test_Reports.pdf
@@ -101,7 +107,7 @@ export const MDCG_DATA = {
 │   └── 📄 Design_Update_History.pdf
 │
 └── 📁 11_Regulatory_and_Compliance
-    ├── 📄 EU_MDR_Annex_II_Compliance_Checklist.xlsx
+    ├── 📄 GSPR_Checklist.xlsx    // From DHF
     ├── 📄 DoC.pdf
     ├── 📄 ISO_13485_Certification.pdf
     ├── 📄 Risk_Management_Compliance_ISO14971.pdf
