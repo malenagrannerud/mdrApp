@@ -9,23 +9,30 @@ import { DOC_DATA } from './docData.js';
 
 export const MDR_DATA = [
 
+
+/************************  STEP 0 ****************************************/
 {  
     id: 'm0',
     title: 'Introduction',
-    desc: 'Understand the structure and requirements of the Technical Documentation according to Annex II & III.',
+    desc: 'A Step by Step Roadmap to Implementing MDR for Manufacturers',
     checklist: [
       { 
-        t: 'Technical Documentation Structure',
-        e: `PART 1-6: Pre-market records
+        t: 'MDR Steps Overview',
+        e: `
 
-📁 TECHNICAL DOCUMENTATION
-  📁 1. DEVICE DESCRIPTION AND SPECIFICATION
-  📁 2. INFORMATION SUPPLIED BY MANUFACTURER
-  📁 3. DESIGN AND MANUFACTURING INFORMATION
-  📁 4. GSPR 
-  📁 5. RISK MANAGEMENT 
-  📁 6. VERIFICATION AND VALIDATION
-  📁 7. POST-MARKET SURVEILLANCE`,
+Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities. 
+This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
+
+📁 DEVICE A
+  📁 TECHNICAL DOCUMENTATION
+    📁 1-DEVICE DESCRIPTION 
+    📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+    📁 3-DESIGN & MANUFACTURING INFO
+    📁 4-GSPR 
+    📁 5-RISK MANAGEMENT 
+    📁 6-V&V
+    📁 7-PMS
+  `,
         style: { whiteSpace: 'pre-line', lineHeight: '1.2' }
       }
     ]
@@ -33,7 +40,7 @@ export const MDR_DATA = [
 
 
 
-  /*******STEP 1 ****************/
+  /**********************  STEP 1 ****************************************/
         {  
       id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
@@ -53,7 +60,22 @@ export const MDR_DATA = [
         { mdcg: MDCG_DATA.MDCG_2025_6 },
         { mdcg: MDCG_DATA.MDCG_2023_4 },
         { mdcg: MDCG_DATA.MDCG_SAMD_AI },
-        { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }
+        { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }, 
+        {e: `
+
+📁 DEVICE A
+  📁 TECHNICAL DOCUMENTATION
+    📁 1-DEVICE DESCRIPTION
+
+    📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+    📁 3-DESIGN & MANUFACTURING INFO
+    📁 4-GSPR 
+    📁 5-RISK MANAGEMENT 
+    📁 6-V&V
+    📁 7-PMS
+  `,
+        style: { whiteSpace: 'pre-line', lineHeight: '1.2' }
+      }
       ]
     },
 

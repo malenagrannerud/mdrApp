@@ -6,9 +6,9 @@
 
 export const SOP_DATA = {
   
-  SOP_001_VALIDATION: {
+  SOP_001: {
     id: 'SOP-001', 
-    title: 'SOP-001_Software_Validation_Process.pdf', 
+    title: 'Software_Validation_Process.pdf', 
     version: '1.0', 
     owner: 'QA Manager',
     content: `

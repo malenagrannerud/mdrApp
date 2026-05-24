@@ -103,21 +103,29 @@ p {
 
 /***************** END SOP Texter *******/
 
-
 .document-link {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  color: #1d4ed8 !important;       /* Din länkfärg */
-  font-size: 12px !important;      /* Textstorlek 12px */
-  background: none !important;     /* Tar bort knappbakgrunden */
-  border: none !important;         /* Tar bort ramen */
-  padding: 8px 0 !important;       /* Ger knappen lite höjd så den blir lättare att klicka */
-  cursor: pointer !important;      /* Gör muspekaren till en hand */
-  position: relative !important;   /* Tvingar upp knappen i lager */
-  z-index: 10 !important;          /* Lägger den ovanpå allt annat */
+  color: #1d4ed8 !important;
+  font-size: 12px !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 0 0 0 !important;
+  margin-left: 20px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 10 !important;
   text-align: left !important;
+  line-height: 1.2 !important;
 }
+
+
+.document-link span {
+  text-decoration: underline !important;
+}
+
+
 
 .document-link span {
   text-decoration: underline !important;
