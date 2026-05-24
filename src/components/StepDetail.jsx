@@ -8,8 +8,9 @@
 import React from 'react';
 import SopLink from './SopLink';
 import MdcgLink from './MdcgLink';
+import DocLink from './DocLink';
 
-const StepDetail = ({ selected, onOpenSop, onOpenMdcg }) => {
+const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
 
   return (
     <div className="bg-white border-4 border-slate-900 p-12 animate-in fade-in duration-500 rounded-none">
@@ -25,20 +26,26 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg }) => {
             {item.t && <h4 className="headingSubStep">{item.t}</h4>}
             {item.o && <h4 className="headingSubStepOrange">{item.o}</h4>}
             
-            {/* Brödtext*/}
-            {item.e && <p className="section-text">{item.e}</p>}
+           
+            
+{/* Brödtext */}
+{item.e && (
+  <p className={item.e && item.e.includes('📁') ? 'tree-structure' : 'section-text'}>
+    {item.e}
+  </p>
+)}
 
-            {/* Dokumentlänk - Visas endast om SOP-objekt finns */}
+            {/* SOP-länk */}
             {item.sop && (
               <SopLink sop={item.sop} onOpen={onOpenSop} />
             )}
 
-            {/* mdr-länk - Visas endast om mdr-objekt finns */}
-            {item.mdr && (
-              <MdcgLink mdcg={item.mdr} onOpen={onOpenMdcg} />
-            )}
+            {/* DOC-länk - Nu med rätt callback! */}
+            {item.doc && (
+              <DocLink doc={item.doc} onOpen={onOpenDoc} />
+            )}  
 
-            {/* MDCG-länk - Visas endast om mdcg-objekt finns */}
+            {/* MDCG-länk */}
             {item.mdcg && (
               <MdcgLink mdcg={item.mdcg} onOpen={onOpenMdcg} />
             )}
@@ -52,6 +59,9 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg }) => {
                     {subItem.e && <p className="section-text text-xs">{subItem.e}</p>}
                     {subItem.sop && (
                       <SopLink sop={subItem.sop} onOpen={onOpenSop} />
+                    )}
+                    {subItem.doc && (
+                      <DocLink doc={subItem.doc} onOpen={onOpenDoc} />
                     )}
                     {subItem.mdcg && (
                       <MdcgLink mdcg={subItem.mdcg} onOpen={onOpenMdcg} />

@@ -5,7 +5,31 @@
  */
 
 import { MDCG_DATA } from './mdcgData.js';
+import { DOC_DATA } from './docData.js';
+
 export const MDR_DATA = [
+
+{  
+    id: 'm0',
+    title: 'Introduction',
+    desc: 'Understand the structure and requirements of the Technical Documentation according to Annex II & III.',
+    checklist: [
+      { 
+        t: 'Technical Documentation Structure',
+        e: `PART 1-6: Pre-market records
+
+📁 TECHNICAL DOCUMENTATION
+  📁 1. DEVICE DESCRIPTION AND SPECIFICATION
+  📁 2. INFORMATION SUPPLIED BY MANUFACTURER
+  📁 3. DESIGN AND MANUFACTURING INFORMATION
+  📁 4. GSPR 
+  📁 5. RISK MANAGEMENT 
+  📁 6. VERIFICATION AND VALIDATION
+  📁 7. POST-MARKET SURVEILLANCE`,
+        style: { whiteSpace: 'pre-line', lineHeight: '1.2' }
+      }
+    ]
+  },
 
 
 

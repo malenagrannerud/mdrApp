@@ -201,3 +201,13 @@ body {
   background-color: #020617;  /* Samma som bg-slate-950 */
   border-bottom: 4px solid #0f172a; /* Samma som border-b-4 border-slate-900 */
 }
+
+
+
+
+
+
+.tree-structure {
+  white-space: pre-wrap;
+  line-height: 1.2;
+}
