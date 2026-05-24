@@ -18,7 +18,7 @@ export default function MdcgLink({ mdcg, onOpen }) {
       }} 
       className="document-link"
     >
-      <Lucide.Info size={14} />
+      <Lucide.Info size={10} />
       <span>
         {mdcg.id}: {mdcg.title}
       </span>

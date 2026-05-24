@@ -45,10 +45,14 @@ p {
   font-weight: 600;
 }
 
-.headingSubStepOrange {
-  color: #f97316; /* Oransje färg */
-  font-size: 14px;
+.article-ref {
+  font-size: 12px;
+  font-style: italic;
   font-weight: 600;
+  color: #5d50d2;
+  margin: 0;
+  padding: 0;
+  line-height: 1.3;
 }
 
 .headingStepCard {
@@ -111,21 +115,12 @@ p {
   font-size: 12px !important;
   background: none !important;
   border: none !important;
-  padding: 0 0 0 0 !important;
-  margin-left: 20px !important;
+  padding: 0 !important;
+  margin: 0 !important;
   cursor: pointer !important;
-  position: relative !important;
-  z-index: 10 !important;
   text-align: left !important;
   line-height: 1.2 !important;
 }
-
-
-.document-link span {
-  text-decoration: underline !important;
-}
-
-
 
 .document-link span {
   text-decoration: underline !important;

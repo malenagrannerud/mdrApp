@@ -18,10 +18,8 @@ export const MDR_DATA = [
     checklist: [
       { 
         t: 'MDR Steps Overview',
-        e: `
-
+        e: `This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
 Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities. 
-This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
 
 📁 DEVICE A
   📁 TECHNICAL DOCUMENTATION
@@ -41,88 +39,94 @@ This introduction step will provide an empty file structure, to be be filled wit
 
 
   /**********************  STEP 1 ****************************************/
-        {  
+    {  
       id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
       checklist: [
-        { t: 'Step 1.1) The rationale for deciding if the product is a medical device', mdcg: MDCG_DATA.INFOGRAPHIC },
-        { t: 'Step 1.2) The statement of the intended purpose and users of the device' }, 
+        { t: 'Step 1.1) Compile the rationale for deciding if the product is a medical device' },
+        { t: 'Step 1.2) Compile the statement of the intended purpose and users of the device' }, 
         { 
           t: 'Step 1.3) The device classification rationale', 
           e: '💡 If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.'
         },
-        { t: '' },
+        { t: 'Guidance Documents from the MDCG' },
+        { mdcg: MDCG_DATA.INFOGRAPHIC },
         { mdcg: MDCG_DATA.MDCG_2021_24 },
         { mdcg: MDCG_DATA.MDCG_2019_11_REV1 },
-        { mdcg: MDCG_DATA.MANUAL_BORDERLINE },
-        { t: '' },
+        { mdcg: MDCG_DATA.Manual },
         { mdcg: MDCG_DATA.MDCG_2022_5_REV1 },
         { mdcg: MDCG_DATA.MDCG_2025_6 },
         { mdcg: MDCG_DATA.MDCG_2023_4 },
         { mdcg: MDCG_DATA.MDCG_SAMD_AI },
         { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }, 
-        {e: `
-
-📁 DEVICE A
+        
+        {t: 'Resulting File Structure' }, 
+        {e: `📁 DEVICE A
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION
-
     📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
     📁 3-DESIGN & MANUFACTURING INFO
     📁 4-GSPR 
     📁 5-RISK MANAGEMENT 
     📁 6-V&V
-    📁 7-PMS
-  `,
-        style: { whiteSpace: 'pre-line', lineHeight: '1.2' }
+    📁 7-PMS `,
       }
       ]
     },
 
+  /**********************  STEP 2 ****************************************/
 
-
-
-    /*******STEP 2 ****************/
-
-  {
+{
     id: 'm2',
     title: 'Step 2) Establish the necessary processes and resources',
-    desc: 'This step centers around Art. 10 - General obligations of manufacturers. How will the QMS be organized to manufacture safe and efficient medical device, before continuing with a safe and efficient medical device? ',
-
+    desc: 'Read Art. 10 - General obligations of manufacturers. Consider if your company has or can recruit the expertise needed.',
     checklist: [
-      
-      { t: 'Step 2.1) Set up the Design and Manufacturing processes (Art. 10, 1)' },
-      { t: 'Step 2.2) Set up the Risk Management process (Article 10, 2)' },
+
+      { t: '2.1) Set up the Design and Manufacturing processes',
+        r: '\nArt. 10.1: "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
+        e: '\nThis step is translated by following ISO 13485:2016 Chapter 7 - Product Realization. '},
+
+      { t: '2.2) Implement a Risk Management process',
+        r: '\nArt. 10.2: "Mfrs shall establish, document, implement and maintain a system for risk management as described in Annex I-Section 3.."',
+
+        e: 'Art. 10, 2' },
       { 
-        t: 'Step 2.3) Set up the Clinical Evaluation Process (CEP) (Art.10.3)',
-        e: 'Art.10.3 requires a documented CEP, detailed in Annex XIV and Art.61.',
+        t: '2.3) Establish a Clinical Evaluation process',
+        e: 'Art. 10, 3 - Documented CEP required, detailed in Annex XIV and Art. 61.',
         checklist: [
-          { e: 'A CEP template --> Later: An approved and filled CEP to put in the technical file' },
-          { e: 'A CER template --> Later: An approved and filled CER to put in the technical file' },
-          { e: 'A PMCF plan template' },
-          { e: 'Connection to other requirements:' },
-          
-          { e: 'Results feed into Risk Management (Article 10(2))' },
-          { e: 'Results feed into Technical Documentation (Annex II)' }
+          { e: 'Create CEP template → Approved CEP for technical file' },
+          { e: 'Create CER template → Approved CER for technical file' },
+          { e: 'Create PMCF plan template' },
+          { e: 'Feed results into Risk Management (Art. 10(2))' },
+          { e: 'Feed results into Technical Documentation (Annex II)' }
         ]
       },
-      { t: 'Step 2.4) Set up the processes for development and maintenance of TD, UDI and the EU declaration of conformity (Article 10, 4-8)' },
-      { t: 'Step 2.5) Set up the QMS (Article 10, 9)' },
-      { t: 'Step 2.6) Set up the PMS planning process (Article 10, 10)' },
-      { t: 'Step 2.7) Set up the labelling development process, including producing language translations (Article 10, 11)' },
-      { t: 'Step 2.8) Set up the corrective action and recall process (Article 10, 12)' },
-      { t: 'Step 2.9) Set up the Vigilance process, including reporting of serious incidents and field safety corrective actions (Article 10, 13)' },
-      { t: 'Step 2.10) Set up the regulatory authority interaction process (Article 10, 14)' },
-      { t: 'Step 2.11) Set up the legal liability and damage compensation process (Article 10, 16)' },
-      { t: 'Step 2.12) Appoint one or more persons overseeing the regulatory compliance (Article 15)' },
-      { t: 'Step 2.13) Ensure access to technical, safety (risk), clinical, quality and regulatory expertise' },
-    
-    
-    
-      {e: '💡 For guidance on clinical evaluation - go to Step 4)'},
 
-          // UDI
-      { t: 'UDI' },
+      { t: '2.4) Develop and maintain TD, UDI and DoC processes',
+        e: 'Art. 10, 4-8' },
+
+      { t: '2.5) Build Quality Management System',
+        e: 'Art. 10, 9' },
+
+      { t: '2.6) Plan Post Market Surveillance activities',
+        e: 'Art. 10, 10' },
+      { t: '2.7) Create labelling development process, including translations',
+        e: 'Art. 10, 11' },
+      { t: '2.8) Establish corrective action and recall process',
+        e: 'Art. 10, 12' },
+      { t: '2.9) Set up Vigilance process, including serious incident reporting',
+        e: 'Art. 10, 13' },
+      { t: '2.10) Define regulatory authority interaction process',
+        e: 'Art. 10, 14' },
+      { t: '2.11) Arrange legal liability and damage compensation',
+        e: 'Art. 10, 16' },
+      { t: '2.12) Appoint PRRC to oversee regulatory compliance',
+        e: 'Art. 15' },
+      { t: '2.13) Secure access to technical, safety, clinical, quality and regulatory expertise' },
+      
+      { e: '💡 For guidance on clinical evaluation - go to Step 4' },
+
+      { t: 'UDI Guidance' },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
       { mdcg: MDCG_DATA.MDCG_2021_19 },
       { mdcg: MDCG_DATA.MDCG_2021_10 },
@@ -137,22 +141,30 @@ This introduction step will provide an empty file structure, to be be filled wit
       { mdcg: MDCG_DATA.MDCG_2018_4 },
       { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
 
-      { t: 'PMS' },
+      { t: 'PMS Guidance' },
       { mdcg: MDCG_DATA.MDCG_2025_10 },
       { mdcg: MDCG_DATA.MDCG_2022_21 },
 
-      { t: 'VIGILANCE' },
+      { t: 'VIGILANCE Guidance' },
       { mdcg: MDCG_DATA.MDCG_2024_1 },
       { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
 
-      { t: 'PRRC' },
+      { t: 'PRRC Guidance' },
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
-    
-    
-    
-    
     ]
   },
+
+
+
+
+
+
+
+
+
+
+  /**********************  STEP 3 ****************************************/
+
   {
     id: 'm3',
     title: 'Step 3) Comply with GSPR',
@@ -161,6 +173,8 @@ This introduction step will provide an empty file structure, to be be filled wit
       { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
     ]
   }, 
+
+
   {
     id: 'm4',
     title: 'Step 4) Finalize clinical evaluation',

@@ -18,20 +18,17 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
       <h3 className="main-desc">{selected.desc}</h3>
       
       {/* Lista med delsteg */}
-      <div className="space-y-1">
+      <div className="space-y-0">
         {selected.checklist.map((item, i) => (
-          <div key={i} className="pt-0">  
+          <div key={i} className={item.t ? 'pt-8' : 'pt-0'}>
+
             
             {/* Steg X.X) ... */}
             {item.t && <h4 className="headingSubStep">{item.t}</h4>}
             
-                   
             {/* Brödtext */}
-            {item.e && (
-              <p className={item.e && item.e.includes('📁') ? 'tree-structure' : 'section-text'}>
-                {item.e}
-              </p>
-            )}
+            {item.r && <p className="article-ref">{item.r}</p>}
+            {item.e && (<p className={item.e && item.e.includes('📁') ? 'tree-structure' : 'section-text'}>{item.e}</p>)}
 
             {/* SOP-länk */}
             {item.sop && (
@@ -50,7 +47,7 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
 
             {/* Nästlad checklista */}
             {item.checklist && (
-              <div className="ml-4 mt-3 space-y-2">
+              <div className="space-y-0">
                 {item.checklist.map((subItem, j) => (
                   <div key={j}>
                     {subItem.t && <h4 className="headingSubStep text-sm">{subItem.t}</h4>}
