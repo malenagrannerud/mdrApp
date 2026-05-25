@@ -110,10 +110,12 @@ Applies to all lifecycle stages of medical devices managed by the organization, 
 ## 3. DEFINITIONS & ABBREVIATIONS
 As Low As Reasonably Practicable (ALARP)
 Failure Mode and Effects Analysis (FMEA)
-Risk Management File (RMF): Systematic compilation of risk records for a specific device
 Hazard: Potential source of harm to patient, user, or environment
+Risk Management File (RMF): Systematic compilation of risk records for a specific device
 Risk Evaluation: Comparison of estimated risk against given risk acceptability criteria
 Risk Control: Process in which decisions are made and measures implemented to reduce risks
+Risk Team: A multi-disciplinary team of R&D, QA/RA, and clinical experts responsible for identifying software hazards, evaluating clinical severity, and assessing residual risks.
+
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
@@ -121,7 +123,7 @@ Risk Control: Process in which decisions are made and measures implemented to re
 | Role | Responsibility | Regulatory Compliance |
 | Top Management | Define risk acceptability policy and provide adequate resources | ISO 14971 §4.2 |
 | R&D | Identify technical hazards, implement controls, and execute testing | ISO 14971 §7.1 |
-| Risk Team | Conduct multi-disciplinary risk evaluations and maintain the FMEA matrix | ISO 14971 §4.4 |
+| Risk Team | Conduct risk evaluations and maintain the FMEA matrix | ISO 14971 §4.4 |
 | PRRC | Verify that the overall residual risk profile is acceptable under MDR | MDR Article 15 |
 | QA  | Audit the risk process, approve plans, and release the final Risk Report | ISO 13485 §4.1.3 |
 [TABLE_END]
