@@ -4,7 +4,7 @@ export const SOP_DATA5 = {
 
 /*******************************  SOP 006 - ***********************************/
   SOP_006_DESIGN_CONTROL: {
-    id: 'SOP-006', 
+    id: 'SOP', 
     title: 'Design_Control.pdf', 
     version: '1.0', 
     owner: 'R&D',
@@ -51,9 +51,7 @@ The phases of designing and devoping a MD are described in the table below. Reco
 | Design Transfer | Move design into production environment | Manufacturing specs, supplier onboarding | Technical Engineer | R&D | Transfer checklist, production documentation |
 | Design Changes | Control post-release modifications | Change requests, impact analysis | Technical Engineer | QA | Change log, updated DHF, updated risk file |
 | Design Maintenance | Maintain post-market compliance | PMS, CAPA, complaint handling | Product Manager | PRRC | PMS reports, CAPA logs, updated risk files |
-
 [TABLE_END]
-
 
 
 ## 6. MDR COMPLIANCE SUMMARY
@@ -68,15 +66,7 @@ The phases of designing and devoping a MD are described in the table below. Reco
 | Annex IX §4.10 / Annex X §5.2 | Changes phase |
 [TABLE_END]
 
-## 7. REFERENCES 
-ISO 13485:2016, Section 7.3 - Design and Development 
-MDR Annex I - GSPR 
-MDR Annex II §3 - Technical Documentation – Design and Manufacturing Information 
-MDR Article 10(1), 10(4), 10(9) - General Obligations of Manufacturers 
-MDR Annex IX §4.10 - Changes to Approved Design (NB Notification) 
-MDR Annex X §5.2 - Changes to Approved Design 
-
-## 8. APPENDICES
+## 7. APPENDICES
 
 📁 DHF
 ├── 📁 Feasibility
@@ -93,7 +83,7 @@ MDR Annex X §5.2 - Changes to Approved Design
 ├── 📁 Design Maintenance
 
 
-## 9. REVISION HISTORY
+## 8. REVISION HISTORY
 [TABLE_START]
 
 | Rev. | Date | Description of Change | Author |
@@ -106,7 +96,7 @@ MDR Annex X §5.2 - Changes to Approved Design
   
 /*******************  SOP 007 - RISK MANAGEMENT *******************/
   SOP_007_RISK_MANAGEMENT: {
-    id: 'SOP-007', 
+    id: 'SOP', 
     title: 'Risk_Management.pdf', 
     version: '1.0', 
     owner: 'R&D',
@@ -140,18 +130,22 @@ Risk Control: Process in which decisions are made and measures implemented to re
 [TABLE_START]
 
 | Phase | Actions | Responsible | Evidence |
-| 1. PLANNING | Create a Risk Management Plan defining the scope, responsibilities, and criteria for risk acceptability. | CTO & QA Manager | Approved Risk Plan |
+| 1. PLANNING | Create a Risk Management Plan defining the scope, responsibilities, and criteria for risk acceptability. | CTO & QA | Approved Risk Plan |
 | 2. ANALYSIS | Identify known and predictable hazards under normal and fault conditions. Document in FMEA. | Risk Team | Active FMEA Matrix |
 | 3. EVALUATION | Score each hazard based on severity and probability to determine if risk control is required. | Risk Team | Evaluated FMEA Record |
 | 4. CONTROL | Implement risk mitigation measures (design safety, protective measures, or safety information). | Technical Engineer | Verified Risk Controls |
 | 5. RESIDUAL RISK | Evaluate overall residual risk profile. Ensure all individual risks are within acceptable criteria. | Risk Team & PRRC | Residual Risk Review |
-| 6. CLOSURE | Compile and sign the Risk Management Report confirming plan objectives are achieved. | QA Manager | Approved Risk Report / RMF |
+| 6. CLOSURE | Compile and sign the Risk Management Report confirming plan objectives are achieved. | QA | Approved Risk Report / RMF |
 [TABLE_END]
 
-## 6. REFERENCES ISO 14971:2019 - Application of Risk Management to Medical Devices MDR Annex I (GSPR 1-9) - General Safety and Performance Requirements MDR Article 10(2) - General Obligations (Risk Management System) EN 62366-1:2015 - Application of Usability Engineering to Medical Devices
+## 6. MDR COMPLIANCE SUMMARY
+ISO 14971:2019 - Application of Risk Management to Medical Devices 
+MDR Annex I (GSPR 1-9) - General Safety and Performance Requirements 
+MDR Article 10(2) - General Obligations (Risk Management System) 
+EN 62366-1:2015 - Application of Usability Engineering to Medical Devices
 
 ## 7. APPENDICES
-TMP-Risk-Plan: Risk Management Plan template
+TMP-Risk-Plan
 TMP-FMEA-Matrix: Risk Analysis spreadsheet layout
 TMP-Risk-Report: Risk Management Report template
 
@@ -168,10 +162,10 @@ TMP-Risk-Report: Risk Management Report template
 
 /*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
   SOP_009_CLINICAL_EVALUATION: {
-    id: 'SOP-009', 
+    id: 'SOP', 
     title: 'Clinical_Evaluation.pdf', 
     version: '1.0', 
-    owner: 'RA Manager',
+    owner: 'RA',
     image: swAsmdImage,
     content: `
 ## 1. PURPOSE
@@ -181,26 +175,23 @@ The purpose of this SOP is to define the process for conducting and documenting 
 Applies to the continuous assessment of clinical data for all medical devices manufactured by the organization across their entire lifecycle.
 
 ## 3. DEFINITIONS & ABBREVIATIONS
-Clinical Evaluation Plan (CEP): Document outlining the strategy, criteria, and methods for clinical evaluation
-Clinical Evaluation Report (CER): Document compiling clinical data and evaluation results proving conformity
-Equivalent Device: A device that shares identical intended use, technical criteria, and biological components
-Clinical Data: Information concerning safety or performance generated from actual clinical use of a device
+See List of Abbreviations in the SOP-Documentation.pdf.
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
 | Role | Responsibility | Regulatory Compliance |
 | Medical Expert | Analyze clinical studies, evaluate literature profiles, and write appraisal text | MDR Annex XIV Part A |
-| RA Manager | Compile regulatory inputs, define equivalent baselines, and author the CEP | MDR Article 10(1) |
+| RA  | Compile regulatory inputs, define equivalent baselines, and author the CEP | MDR Article 10(1) |
 | PRRC | Review evaluation findings and verify compliance metrics prior to release | MDR Article 15 |
-| QA Manager | Release the finalized CER into the Technical Documentation architecture | ISO 13485 §4.2.4 |
+| QA  | Release the finalized CER into the TD architecture | ISO 13485 §4.2.4 |
 [TABLE_END]
 
 ## 5. PROCEDURE
 [TABLE_START]
 
 | Phase | Actions | Responsible | Evidence |
-| 1. STRATEGY | Establish a Clinical Evaluation Plan (CEP) defining scope, benchmarks, and data search criteria. | RA Manager | Approved CEP Document |
+| 1. STRATEGY | Establish a CEP defining scope, benchmarks, and data search criteria. | RA | Approved CEP Document |
 | 2. SEARCH | Conduct systematic literature reviews, clinical database searches, and screen clinical field logs. | Medical Expert | Logged Search Queries |
 | 3. APPRAISAL | Evaluate retrieved data packages for methodological soundness, scientific weight, and relevance. | Medical Expert | Signed Data Appraisal Sheet |
 | 4. ANALYSIS | Analyze data against criteria to prove device safety, clinical performance, and benefit-risk ratios. | Medical Expert & RA | Formulated CER Draft |
@@ -210,8 +201,8 @@ Clinical Data: Information concerning safety or performance generated from actua
 ## 6. REFERENCES MDR Article 61 - Clinical Evaluation MDR Annex XIV Part A - Clinical Evaluation Plan and Report MEDDEV 2.7/1 Rev. 4 - Clinical Evaluation Guide for Manufacturers ISO 14155:2020 - Clinical Investigation of Medical Devices
 
 ## 7. APPENDICES
-TMP-CEP-Layout: Clinical Evaluation Plan framework
-TMP-CER-Report: Clinical Evaluation Report master template
+TMP-CEP-Layout
+TMP-CER-Report
 
 ## 8. REVISION HISTORY
 [TABLE_START]
@@ -224,10 +215,10 @@ TMP-CER-Report: Clinical Evaluation Report master template
 
 /*******************  SOP 010 - CHANGE CONTROL (5.5) *******************/
   SOP_010_CHANGE_CONTROL: {
-    id: 'SOP-010', 
+    id: 'SOP', 
     title: 'Change_Control.pdf', 
     version: '1.0', 
-    owner: 'QA Manager',
+    owner: 'QA ',
     image: swAsmdImage,
     content: `
 ## 1. PURPOSE

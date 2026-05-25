@@ -76,8 +76,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
   /**********************  STEP 2 ****************************************/
 
-{
-    id: 'm2',
+{   id: 'm2',
     title: 'Step 2) Establish the necessary processes and resources',
     desc: 'Read Art. 10 - General obligations of manufacturers. Consider if your company has or can recruit the expertise needed.',
     checklist: [
@@ -91,8 +90,11 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         e: '...' },
 
       { t: '2.3) Establish a Clinical Evaluation process',
-        r: '\nArt. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
-        doc: DOC_DATA.ART_61 },
+        r: '\nArt. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."'},
+        {doc: DOC_DATA.ART_61},
+        {doc:DOC_DATA.AX_I},  
+        {doc:DOC_DATA.AX_III}, 
+        {doc: DOC_DATA.AX_XIV},
       
 
       { t: '2.4) Develop and maintain TD, UDI and DoC processes',
@@ -144,8 +146,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       { t: 'PRRC Guidance' },
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
-    ]
-  },
+    ]  
+},
+  
 
 
 

@@ -4,33 +4,38 @@
  */
 
 export const DOC_DATA = {
-ART_61: {
-    id: 'ART_61',
-    title: 'Clinical evaluation',
-    content: `
 
 
-# ABBREVIATIONS
+
+
+
+
+
+
+
+
+
+
+  ART_61: {
+    title: 'ART. 61 - CLINICAL EVALUATION',
+    content: `# ABBREVIATIONS
+
+Benefit-risk-ratio (BRR)
 Clinical evaluation plan (CEP)
 Clinical evaluation report (CER)
-Post-market clinical follow-up (PMCF)
-General safety and performance requirements (GSPR)
-Conformity assessment (CA)
-Notified body (NB)
 Clinical investigation (CI)
-Clinical data (CD)
-Well-established technologies (WET)
+General safety and performance requirements (GSPR)
+Post-market clinical follow-up (PMCF)
 
-# CHAPTER I - CLINICAL EVALUATION
+
+# CHAPTER 1 - CLINICAL EVALUATION
 
 ## 1.   
 Confirmation of 
-- conformity with GSPR in Annex I under normal conditions of intended use, and the 
-- evaluation of undesirable side-effects and of 
-- the acceptability of the benefit-risk- ratio referred to in Sections 1 and 8 of Annex I, 
-shall be based on 
-- clinical data providing sufficient clinical evidence, 
-- including where applicable relevant data as referred to in Annex III.
+1) conformity with GSPR (Annex 1) under normal conditions of intended use, and the 
+2) evaluation of undesirable side-effects and of 
+3) the acceptability of the BRR in Annex 1.1 and 1.8, 
+shall be based on clinical data providing sufficient clinical evidence, and relevant data as in Annex 3.
 
 The mfr shall specify and justify the level of clinical evidence necessary to demonstrate conformity with relevant GSPR. 
 That level of clinical evidence shall be appropriate in view of the characteristics of the device and its intended purpose.
@@ -39,43 +44,39 @@ To that end, mfrs shall
 - plan, 
 - conduct and 
 - document 
-a clinical evaluation in accordance with this Article and Part A of Annex XIV.
+a clinical evaluation in this Art. and Annex XIV.A.
 
 ## 2.   
-For class III and IIb devices referred to in point (b) of Article 54(1), the mfr may, 
-prior to its clinical evaluation and/or investigation, consult an expert panel as referred to in Article 106, 
-with the aim of reviewing the mfrs intended clinical development strategy and proposals for clinical investigation. 
-The mfr shall give due consideration to the views expressed by the expert panel. 
-Such consideration shall be documented in the CER referred to in paragraph 12 of this Article.
+For class III and IIb devices referred to in Art. 54.1.(b), the mfr may, prior to its clinical evaluation and/or investigation, consult an expert panel (see Art. 106), 
+to review the mfrs intended clinical development strategy and proposals for CI. The mfr shall consider the panels views and document them in the CER referred to in §12 of this Art.
 
 The mfr may not invoke any rights to the views expressed by the expert panel with regard to any future conformity assessment procedure.
 
 ## 3.   
-A clinical evaluation shall follow a defined and methodologically sound procedure based on the following:
-
-(a) a critical evaluation of the relevant scientific literature currently available relating to the safety, 
-performance, design characteristics and intended purpose of the device, where the following conditions are satisfied:
-— it is demonstrated that the device subject to clinical evaluation for the intended purpose is equivalent to the device to which the data relate,
- in accordance with Section 3 of Annex XIV, and
-— the data adequately demonstrate compliance with the relevant general safety and performance requirements;
-
-(b) a critical evaluation of the results of all available clinical investigations, taking duly into consideration whether the investigations were performed under Articles 62 to 80, 
-any acts adopted pursuant to Article 81, and Annex XV; and
-(c) a consideration of currently available alternative treatment options for that purpose, if any.
-
+A clinical evaluation shall follow a defined and methodologically sound procedure based on (a), (b) and (c):
+(a) a critical evaluation of the relevant scientific literature currently available relating to the 
+  - safety, 
+  - performance, 
+  - design characteristics and 
+  - intended purpose of the device, 
+  where the following conditions are satisfied:
+  — it is demonstrated that the intended purpose is equivalent to the device to which the data relate according to Section 3 of Annex XIV, and
+  — the data adequately demonstrate compliance with the relevant GSPR;
+(b) a critical evaluation of the results of all available CIs, taking duly into consideration whether the investigations were performed under Art. 62 to 80, 
+any acts adopted pursuant to Art. 81, and Annex XV; and
+(c) a consideration of available alternative options for that purpose, if any.
 
 ## 4. 
-In the case of implantable devices and class III devices, clinical investigations shall be performed, except if:
-
-— the device has been designed by modifications of a device already marketed by the same manufacturer,
-— the modified device has been demonstrated by the manufacturer to be equivalent to the marketed device, in accordance with Section 3 of Annex XIV and this demonstration has been endorsed by the notified body, and
-—the clinical evaluation of the marketed device is sufficient to demonstrate conformity of the modified device with the relevant safety and performance requirements.
+In the case of implantable devices and class III devices, CIs shall be performed, except if:
+— the device has been designed by modifications of a device already marketed by the same mfr,
+— the modified device has been demonstrated by the mfr to be equivalent to the marketed device, in accordance with Annex XIV.3 and this demonstration has been endorsed by the NB, and
+— the clinical evaluation of the marketed device is sufficient to demonstrate conformity of the modified device with the relevant safety and performance requirements.
 
 In this case, the notified body shall check that the PMCF plan is appropriate and includes post market studies to demonstrate the safety and performance of the device.
-In addition, clinical investigations need not be performed in the cases referred to in paragraph 6.
+In addition, clinical investigations need not be performed in the cases referred to in §6.
 
 ## 5.   
-A manufacturer of a device demonstrated to be equivalent to an already marketed device not manufactured by him, may also rely on paragraph 4 in order not to perform a clinical investigation provided that the following conditions are fulfilled in addition to what is required in that paragraph:
+A mfr of a device demonstrated to be equivalent to an already marketed device not mfred by him, may also rely on §4 in order not to perform a clinical investigation provided that the following conditions are fulfilled in addition to what is required in that §:
 
 — the two manufacturers have a contract in place that explicitly allows the manufacturer of the second device full access to the technical documentation on an ongoing basis, and
 — the original clinical evaluation has been performed in compliance with the requirements of this Regulation,
@@ -83,7 +84,7 @@ A manufacturer of a device demonstrated to be equivalent to an already marketed 
 and the mfr of the second device provides clear evidence thereof to the notified body.
 
 ## 6.   
-The requirement to perform clinical investigations pursuant to paragraph 4 shall not apply to implantable devices and class III devices:
+The requirement to perform CIs pursuant to §4 shall not apply to implantable devices and class III devices:
 
 (a) which have been lawfully placed on the market or put into service in accordance with Directive 90/385/EEC or Directive 93/42/EEC and for which the clinical evaluation:
 
@@ -126,65 +127,177 @@ Where necessary to ensure the uniform application of Annex XIV, the Commission m
 
  
 
-  /*****   GSPR CHECKLIST  ********/ 
+  /**************************************************************************************************/ 
+  AX_I: {
+    title: 'ANNEX 1 - GENERAL SAFETY AND PERFORMANCE REQUIREMENTS',
+    content: `# ABBREVIATIONS
+Risk management system (RMS)
+Risk management plan (RMP)
 
-  GSPR_CHECKLIST: {
-    id: 'GSPR',
-    title: 'General Safety and Performance Requirements',
-    content: `
-# GSPR Checklist (Annex I)
+# CHAPTER I - GENERAL REQUIREMENTS
 
-## Chapter I - General Requirements
+## 1.   
+Devices shall achieve the performance intended by their manufacturer and shall be designed and manufactured in such a way that, during normal conditions of use, they are suitable for their intended purpose. They shall be safe and effective and shall not compromise the clinical condition or the safety of patients, or the safety and health of users or, where applicable, other persons, provided that any risks which may be associated with their use constitute acceptable risks when weighed against the benefits to the patient and are compatible with a high level of protection of health and safety, taking into account the generally acknowledged state of the art.
 
-- GSPR 1: Risk management and benefit-risk ratio
-- GSPR 2: Risk control and information for safety
-- GSPR 3: Characteristics and performances
-- GSPR 4: Undesirable side-effects
-- GSPR 5: Acceptable benefit-risk ratio
-- GSPR 6: Clinical evaluation
-- GSPR 7: Chemical, physical and biological properties
-- GSPR 8: Infection and microbial contamination
-- GSPR 9: Construction and environmental properties
 
-## Chapter II - Requirements Regarding Design and Manufacture
+## 3.
+Mfrs shall establish, implement, document and maintain a RMS, a continuous iterative process throughout the lifecycle of a device, requiring regular systematic updating. In carrying out risk management mfrs shall:
 
-- GSPR 10: Measuring function
-- GSPR 11: Radiation
-- GSPR 12: Medical devices connected to or equipped with an energy source
-- GSPR 13: Software
-- GSPR 14: Active implantable devices
-- GSPR 15: Protection against mechanical and thermal risks
-- GSPR 16: Protection against the risks posed to the patient or user by devices supplying energy or substances
-- GSPR 17: Information supplied with the device
+(a) establish and document a RMP for each device;
+(b) identify and analyse the known and foreseeable hazards associated with each device;
+(c) estimate and evaluate the risks associated with, and occurring during, the intended use and during reasonably foreseeable misuse;
+(d) eliminate or control the risks referred to in point (c) in accordance with the requirements of Section 4;
+(e) evaluate the impact of information from the production phase and, in particular, from the post-market surveillance system, on hazards and the frequency of occurrence thereof, on estimates of their associated risks, as well as on the overall risk, benefit-risk ratio and risk acceptability; and
+(f) based on the evaluation of the impact of the information in point (e), if necessary amend control measures in line with the requirements of Section 4.
+
+
+
+
+## 8.   
+All 
+- known and foreseeable risks and any 
+- undesirable side-effects
+shall be minimised and acceptable when weighed against benefits to the patient/user arising from the achieved performance of the device during normal conditions of use.
+
+
+
+
+
+# CHAPTER II - REQUIREMENTS REGARDING DESIGN AND MANUFACTURE
+
+
+
+
+
+
+
+
+
+
+
     `.trim()
   },
 
-  /*****   UDI SYSTEM  ********/ 
+  /**********************************************************************************************/ 
 
-  UDI_SYSTEM: {
-    id: 'UDI',
-    title: 'Unique Device Identification System',
-    content: `
-# UDI System Requirements
+ AX_III: {
+    title:'ANNEX III - TECHNICAL DOCUMENTATION ON POST-MARKET SURVEILLANCE',
+    content: `The TD on PMS to be drawn up by the mfr in Art. 83 to 86 shall be presented in a 
+- clear, 
+- organised, 
+- readily searchable and unambiguous manner and 
+- shall include in particular the elements described in this Annex.
 
-## Basic UDI-DI
-- Assigned per device group
-- Listed on EUDAMED and certificates
+## 1.1. The PMS plan drawn up in accordance with Article 84.
+The mfr shall prove in a PMS plan that it complies with the obligation in Article 83.
 
-## UDI-DI (Device Identifier)
-- Specific to each device model
-- Appears on labels and packaging
+(a) The PMS plan shall address the collection and utilization of available information, in particular:
+— information concerning serious incidents, including information from PSURs, and field safety corrective actions;
+— records referring to non-serious incidents and data on any undesirable side-effects;
+— information from trend reporting;
+— relevant specialist or technical literature, databases and/or registers;
+— information, including feedbacks and complaints, provided by users, distributors and importers; and
+— publicly available information about similar medical devices.
 
-## UDI-PI (Production Identifier)
-- Lot/batch number
-- Serial number
-- Expiration date
-- Manufacturing date
+(b) The PMS plan shall cover at least:
+— a proactive and systematic process to collect any information in (a). The process shall allow a correct characterisation of the performance of the devices and shall also allow a comparison to be made between the device and similar products available on the market
+— effective and appropriate methods and processes to assess the collected data;
+— suitable indicators and threshold values that shall be used in the continuous reassessment of the benefit-risk analysis and of the risk management as referred to in Section 3 of Annex I;
+— effective and appropriate methods and tools to investigate complaints and analyse market-related experience collected in the field;
+— methods and protocols to manage the events subject to the trend report as provided for in Article 88, including the methods and protocols to be used to establish any statistically significant increase in the frequency or severity of incidents as well as the observation period;
+— methods and protocols to communicate effectively with competent authorities, notified bodies, economic operators and users;
+— reference to procedures to fulfil the manufacturers obligations laid down in Articles 83, 84 and 86;
+— systematic procedures to identify and initiate appropriate measures including corrective actions;
+— effective tools to trace and identify devices for which corrective actions might be necessary; and
+— a PMCF plan as referred to in Part B of Annex XIV, or a justification as to why a PMCF is not applicable.
 
-## UDI Carrier
-- AIDC (Automatic Identification and Data Capture)
-- HRI (Human Readable Interpretation)
-- Placed on label or device itself
-    `.trim()
+## 1.2. 
+The PSUR in Article 86 and the post-market surveillance report referred to in Article 85.
+`.trim()
+  },
+
+
+
+  AX_XIV: {
+    title: 'ANNEX XIV - CLINICAL EVALUATION AND PMCF',
+    content: `# PART A - CLINICAL EVALUATION
+1.   
+To plan, continuously conduct and document a clinical evaluation, manufacturers shall:
+(a) establish and update a CEP, which shall include at least:
+- an identification of the GSPR that require support from relevant clinical data;
+— a specification of the intended purpose of the device;
+— a clear specification of intended target groups with clear indications and contra-indications;
+— a detailed description of intended clinical benefits to patients with relevant and specified clinical outcome parameters;
+— a specification of methods to be used for examination of qualitative and quantitative aspects of clinical safety with clear reference to the determination of residual risks and side-effects;
+— an indicative list and specification of parameters to be used to determine, based on the state of the art in medicine, the acceptability of the benefit-risk ratio for the various indications and for the intended purpose or purposes of the device;
+— an indication how benefit-risk issues relating to specific components such as use of pharmaceutical, non-viable animal or human tissues, are to be addressed; and
+— a clinical development plan indicating progression from exploratory investigations, such as first-in-man studies, feasibility and pilot studies, to confirmatory investigations, such as pivotal clinical investigations, and a PMCF as in Part B of this Annex with an indication of milestones and a description of potential acceptance criteria;
+
+(b) identify available clinical data relevant to the device and its intended purpose and any gaps in clinical evidence through a systematic scientific literature review;
+(c) appraise all relevant clinical data by evaluating their suitability for establishing the safety and performance of the device;
+(d) generate, through properly designed CIs in accordance with the clinical development plan, any new or additional clinical data necessary to address outstanding issues; and
+(e) analyse all relevant clinical data in order to reach conclusions about the safety and clinical performance of the device including its clinical benefits.
+
+2.   
+The clinical evaluation shall be 
+- thorough and objective, and 
+- take into account both favourable and unfavourable data. 
+Its depth and extent shall be proportionate and appropriate to the 
+- nature, 
+- classification, 
+- intended purpose and 
+- risks 
+of the device in question, as well as to the manufacturer's claims in respect of the device.
+
+3.   
+A clinical evaluation may be based on clinical data relating to a device for which equivalence to the device in question can be demonstrated. The following technical, biological and clinical characteristics shall be taken into consideration for the demonstration of equivalence:
+
+— Technical: the device is of similar design; is used under similar conditions of use; has similar specifications and properties including physicochemical properties such as intensity of energy, tensile strength, viscosity, surface characteristics, wavelength and software algorithms; uses similar deployment methods, where relevant; has similar principles of operation and critical performance requirements;
+— Biological: the device uses the same materials or substances in contact with the same human tissues or body fluids for a similar kind and duration of contact and similar release characteristics of substances, including degradation products and leachables;
+— Clinical: the device is used for the same clinical condition or purpose, including similar severity and stage of disease, at the same site in the body, in a similar population, including as regards age, anatomy and physiology; has the same kind of user; has similar relevant critical performance in view of the expected clinical effect for a specific intended purpose.
+The characteristics listed in the first paragraph shall be similar to the extent that there would be no clinically significant difference in the safety and clinical performance of the device. Considerations of equivalence shall be based on proper scientific justification. It shall be clearly demonstrated that manufacturers have sufficient levels of access to the data relating to devices with which they are claiming equivalence in order to justify their claims of equivalence.
+
+4.   The results of the clinical evaluation and the clinical evidence on which it is based shall be documented in a clinical evaluation report which shall support the assessment of the conformity of the device.
+The clinical evidence together with non-clinical data generated from non-clinical testing methods and other relevant documentation shall allow the manufacturer to demonstrate conformity with the general safety and performance requirements and shall be part of the technical documentation for the device in question.
+Both favourable and unfavourable data considered in the clinical evaluation shall be included in the technical documentation.
+
+# PART B - POST-MARKET CLINICAL FOLLOW-UP
+
+5.   
+PMCF shall be understood to be a continuous process that updates the clinical evaluation referred to in Article 61 and Part A of this Annex and shall be addressed in the manufacturer's post-market surveillance plan. When conducting PMCF, the manufacturer shall proactively collect and evaluate clinical data from the use in or on humans of a device which bears the CE marking and is placed on the market or put into service within its intended purpose as referred to in the relevant conformity assessment procedure, with the aim of confirming the safety and performance throughout the expected lifetime of the device, of ensuring the continued acceptability of identified risks and of detecting emerging risks on the basis of factual evidence.
+
+6.   
+PMCF shall be performed pursuant to a documented method laid down in a PMCF plan.
+
+6.1. 
+The PMCF plan shall specify the methods and procedures for proactively collecting and evaluating clinical data with the aim of:
+
+(a) confirming the safety and performance of the device throughout its expected lifetime,
+(b) identifying previously unknown side-effects and monitoring the identified side-effects and contraindications,
+(c) identifying and analysing emergent risks on the basis of factual evidence,
+(d) ensuring the continued acceptability of the benefit-risk ratio referred to in Sections 1 and 9 of Annex I, and
+(e) identifying possible systematic misuse or off-label use of the device, with a view to verifying that the intended purpose is correct.
+
+6.2.   The PMCF plan shall include at least:
+(a) the general methods and procedures of the PMCF to be applied, such as gathering of clinical experience gained, feedback from users, screening of scientific literature and of other sources of clinical data;
+(b) the specific methods and procedures of PMCF to be applied, such as evaluation of suitable registers or PMCF studies;
+(c) a rationale for the appropriateness of the methods and procedures referred to in points (a) and (b);
+(d) a reference to the relevant parts of the clinical evaluation report referred to in Section 4 and to the risk management referred to in Section 3 of Annex I;
+(e) the specific objectives to be addressed by the PMCF;
+(f) an evaluation of the clinical data relating to equivalent or similar devices;
+(g) reference to any relevant CS, harmonised standards when used by the manufacturer, and relevant guidance on PMCF; and
+(h) a detailed and adequately justified time schedule for PMCF activities (e.g. analysis of PMCF data and reporting) to be undertaken by the manufacturer.
+
+## 7.   
+The mfr shall analyse the findings of the PMCF and document the results in a PMCF evaluation report that shall be part of the CER and the TD.
+
+## 8.   
+The conclusions of the PMCF evaluation report shall be taken into account for the clinical evaluation in Art. 61 and Part A of this Annex and in the risk management referred to in Section 3 of Annex I. If, through the PMCF, the need for preventive and/or corrective measures has been identified, the manufacturer shall implement them.
+
+
+
+
+
+`.trim()
   }
 };

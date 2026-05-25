@@ -9,61 +9,59 @@ import { SOP_DATA6 } from './sopData6.js';
 export const QMS_DATA = [
 
 /************************************************** STEP 0 ********************************************/
- {  
+{  
     id: 'q0',
     title: 'Introduction',
     desc: 'A Step by Step Roadmap to Implementing a QMS for Manufacturers',
     checklist: [
       { 
         t: 'QMS Steps Overview',
-        e: `The headings are structured accprding to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.
+        e: `The headings are structured according to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.
 
 📁 QMS
-    📁 1-SCOPE OF QMS
-    📁 2-NORMATIVE REFERENCES
-    📁 3-TERMS & DEFINITIONS
-    📁 4-QMS
-    📁 5-MANAGEMENT RESPONSIBILITY
-    📁 6-RESOURCE MANAGEMENT
-    📁 7-PRODUCT REALIZATION
-    📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
- 
-
-📁 MDR ADDITIONS
-    📁 UDI
-    📁 PMS
-    📁 Vigilance
-    📁 Clinical Evaluation
-📁 REGULATORY COMPLIANCE
-    📁 EUDAMED
-    📁 DoC
-    📁 NB Communication
-    
-  `,
-        style: { whiteSpace: 'pre-line', lineHeight: '1.2' }
+  📁 1-SCOPE OF QMS
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+        files: {
+          '1-SCOPE OF QMS': [
+            { sop: SOP_DATA.SOP_001, label: 'SOP: Software Validation' }
+          ]
+        }
       }
     ]
-  },
+},
+
  
 /************************************************** STEP 1 ********************************************/
-   {  id: 'step1', 
-   title: 'Steg 1) Grundläggande Systemuppbyggnad', 
-   desc: 'Etablera fundamentet för ett QMS.',
-   checklist: [
-     { t: '...', 
-       e: `
-📁 QMS
-        📁 1-SCOPE OF QMS` },
-{ sop: SOP_DATA.SOP_001, style: { marginLeft: '20px' } },
-{ e: `  📁 2-NORMATIVE REFERENCES` },
-{ sop: SOP_DATA.SOP_002_DOC_CONTROL, style: { marginLeft: '20px' } },
-{ e: `  📁 3-TERMS & DEFINITIONS` },
-{ e: `  📁 4-QMS` },
-{ e: `  📁 5-MANAGEMENT RESPONSIBILITY` },
-{ e: `  📁 6-RESOURCE MANAGEMENT` },
-{ e: `  📁 7-PRODUCT REALIZATION` },
-{ e: `  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT` }
-   ]
+{   
+    id: 'step1', 
+    title: 'Steg 1) Grundläggande Systemuppbyggnad', 
+    desc: 'Etablera fundamentet för ett QMS.',
+    checklist: [
+      { 
+        t: '1.1) Create a SOP for Software Validation', 
+        e: `📁 QMS
+  📁 1-SCOPE OF QMS
+  
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+        files: {
+          '1-SCOPE OF QMS': [
+            { sop: SOP_DATA.SOP_001 }
+          ]
+        }
+      }
+    ]
 },
 
 /************************************************** STEP 2 ********************************************/
