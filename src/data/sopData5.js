@@ -2,7 +2,7 @@ import swAsmdImage from '../assets/sw_asmd.png';
 
 export const SOP_DATA5 = {
 
-/***********************************************  SOP 006 - *****************************************************/
+/***********************************************  SOP 006  *****************************************************/
   SOP_006_DESIGN_CONTROL: {
     id: 'SOP', 
     title: '📄 SOP-Design_Control.pdf', 
@@ -33,26 +33,26 @@ Design Transfer: Process of translating development outputs into final manufactu
 [TABLE_END]
 
 ## 5. PROCEDURE
+The phases of designing and developing a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 
-The phases of designing and devoping a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
+## 5. PROCEDURE
+The phases of designing and developing a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 [TABLE_START]
 
-| Phase | Purpose | Activities | Responsible | Approver  | Output (Progression check) |
-|---------------------|---------|----------------|----------------------------------|--------------------------------------|--------------------|
-| Feasibility | Assess technical, clinical, and regulatory viability | Market analysis, PoC, high-level risk assessment | Product Manager | R&D | Feasibility Report, RMF |
-| Design Planning | Define development structure and controls | Design planning, milestones, V&V strategy, resource allocation | R&D | QA | Design Plan, Development Timeline |
-| Design Input | Define product requirements | URS creation, regulatory, clinical & cybersecurity requirements | Product Manager | PRRC | Design Input Spec (DIS), SRS |
-| Design Output | Translate requirements into technical solution | Software/hardware design, implementation, documentation | Technical Engineer | R&D | Source code, architecture docs, IFU, BOM |
-| Device Risk / Usability | Identify and control risks and usability issues | ISO 14971 analysis, FMEA, usability engineering | Technical Engineer | QA | RMF, Usability Engineering File |
-| Design Review | Ensure readiness before phase progression | Formal review meetings, gap analysis | R&D | QA | Review minutes, sign-offs, action logs |
-| Design Verification | Confirm outputs meet inputs | Unit/integration/system testing, static analysis | Technical Engineer | QA | Test protocols, verification reports, traceability matrix |
-| Design Validation | Confirm user needs and intended use are met | Clinical validation, usability testing | Product Manager | PRRC | Validation reports, CER, summative usability report |
-| Design Release | Approve product for market release | Final DHF review, compliance check | QA | PRRC | Design freeze, release approval, DoC |
-| Design Transfer | Move design into production environment | Manufacturing specs, supplier onboarding | Technical Engineer | R&D | Transfer checklist, production documentation |
-| Design Changes | Control post-release modifications | Change requests, impact analysis | Technical Engineer | QA | Change log, updated DHF, updated risk file |
-| Design Maintenance | Maintain post-market compliance | PMS, CAPA, complaint handling | Product Manager | PRRC | PMS reports, CAPA logs, updated risk files |
+| Phase | Actions | Responsible | Record |
+| Feasibility | Conduct market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
+| Design Planning | Define development structure, milestones, and V&V strategy. | R&D | Design_Plan.pdf |
+| Design Input | Create URS and define regulatory, clinical, and cybersecurity requirements. | Product Manager | Design Input Spec |
+| Design Output | Implement software/hardware code and write TD. | Technical Engineer | Software Architecture Document |
+| Device Risk / Usability | Execute ISO 14971 hazard analysis and FMEA matrix. | Technical Engineer | RMF |
+| Design Review | Conduct formal review meetings and execute gap analysis. | R&D | Review Minutes |
+| Design Verification | Perform unit, integration, and system testing. | Technical Engineer | Traceability Matrix |
+| Design Validation | Execute clinical validation and summative usability testing. | Product Manager | CER |
+| Design Release | Conduct final DHF review and compliance check. | QA | Declaration of Conformity |
+| Design Transfer | Deploy code into production and onboard critical suppliers. | Technical Engineer | Transfer Checklist |
+| Design Changes | Process change requests and execute impact analysis. | Technical Engineer | Change Log |
+| Design Maintenance | Handle PMS, CAPA, and customer complaint tracking. | Product Manager | PMS Report |
 [TABLE_END]
-
 
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
@@ -68,19 +68,7 @@ The phases of designing and devoping a MD are described in the table below. Reco
 
 ## 7. APPENDICES
 
-📁 DHF
-📁 Feasibility
-📁 Design Planning
-📁 Design Input
-📁 Design Output
-📁 Device Risk/Usability
-📁 Design Review
-📁 Design Verification
-📁 Design Release
-📁 Design Validation
-📁 Design Changes
-📁 Design Transfer
-📁 Design Maintenance
+
 
 
 ## 8. REVISION HISTORY
