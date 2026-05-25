@@ -100,8 +100,7 @@ The phases of designing and devoping a MD are described in the table below. Reco
     title: '📄 SOP-Risk_Management.pdf', 
     version: '1.0', 
     owner: 'Risk Team, QA',
-    content: `
-## 1. PURPOSE
+    content: `## 1. PURPOSE
 The purpose of this SOP is to establish, document, and maintain a continuous risk management system throughout the product lifecycle to meet EU MDR 2017/745, ISO 14971, and ISO 13485 requirements.
 
 ## 2. SCOPE
@@ -111,11 +110,10 @@ Applies to all lifecycle stages of medical devices managed by the organization, 
 As Low As Reasonably Practicable (ALARP)
 Failure Mode and Effects Analysis (FMEA)
 Hazard: Potential source of harm to patient, user, or environment
-Risk Management File (RMF): Systematic compilation of risk records for a specific device
+Risk Management File (RMF): Compilation of risk records for a specific device
 Risk Evaluation: Comparison of estimated risk against given risk acceptability criteria
 Risk Control: Process in which decisions are made and measures implemented to reduce risks
 Risk Team: A multi-disciplinary team of R&D, QA/RA, and clinical experts responsible for identifying software hazards, evaluating clinical severity, and assessing residual risks.
-
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
@@ -160,34 +158,28 @@ TMP-Risk_Report.docx
     `.trim()
   },
 
-
-
+  /***********************************************  RISK PLAN  *****************************************************/
     TMP_RISK_PLAN: {
     id: 'TMP', 
     title: '📝 TMP-Risk_Management_Plan.docx', 
     version: '1.0', 
     owner: 'QA, CTO',
-    content: `
-# RISK MANAGEMENT PLAN 
-
-## 1. PRODUCT SCOPE & LIFECYCLE TRACK
+    content: `## 1. PRODUCT SCOPE & LIFECYCLE TRACK
 This plan defines the risk acceptability criteria and risk management activities for Tandem Health AI platform software.
 
 ## 2. RISK TEAM ALLOCATION & COMPETENCE
 [TABLE_START]
 
-
 | Role | Assigned Department / Person | Competence Verification |
-| Risk Chair | Head of Quality Assurance | Certified ISO 14971 Lead |
+| Risk Chair | Head of QA | Certified ISO 14971 Lead |
 | Clinical Expert | Chief Medical Officer | MD with 10 years clinical practice |
-| Software Expert | Chief Technology Officer | MSc Biomedical Engineering / AI |
+| Software Expert | CTO | MSc Biomedical Engineering / AI |
 [TABLE_END]
 
-## 3. RISK ACCEPTABILITY CRITERIA (ISO 14971 MATRIX)
+## 3. RISK MATRIX
 Risk Matrix is based on Severity (1 to 5) multiplied by Probability (1 to 5). Total Score ranges from 1 to 25.
 
 [TABLE_START]
-
 
 | Score Range | Risk Region | Required Action |
 | 1 to 6 | Acceptable | Risk is negligible. No further design controls required. |
@@ -201,14 +193,12 @@ Residual risk evaluation must be frozen in Ketryx prior to any production branch
 ## 5. SIGN-OFF & REVISION HISTORY
 [TABLE_START]
 
-
 | Rev. | Date | Description of Plan | Author | Approver |
 | 1.0 | 2026-05-25 | Initial Risk Plan for release track | QA Team | CTO, QA Manager |
 [TABLE_END]
     `.trim()
   },
-
-
+  /***********************************************  RISK PLAN  *****************************************************/
   TMP_FMEA_MATRIX: {
     id: 'TMP-QA-022', 
     title: '📝 TMP-FMEA_Matrix_Template.xlsx', 
@@ -222,7 +212,6 @@ Instructions: Identify the failure mode, assign Severity (1-5) and Probability (
 
 [TABLE_START]
 
-
 | System/Feature ID | Potential Failure Mode | Potential Effect of Failure | Severity (S) | Potential Cause of Failure | Probability (P) | Initial Risk Score (S x P) | Risk Acceptability |
 | REQ-SAMD-___ | [Enter software failure or AI error] | [Enter consequence for patient or clinician] | _ | [Enter root cause or bug trigger] | _ | __ | [Acceptable / Unacceptable] |
 [TABLE_END]
@@ -230,9 +219,7 @@ Instructions: Identify the failure mode, assign Severity (1-5) and Probability (
 ## 2. RISK CONTROL INTEGRATION (PHASE 4)
 Instructions: If Initial Risk Score is 8 or higher, you must define and code design controls to mitigate the hazard.
 
-[TABLE_START]
-
-
+[TABLE_START}
 | System/Feature ID | Identified Hazard | Risk Mitigation Strategy (Design Control) | Software Branch / Code Commit Reference | Verification Test Protocol Reference | Test Status |
 | REQ-SAMD-___ | [Reference from Table 1] | [Enter code validator, UI warning, or logic constraint] | ://github.com___ | TEST-SAMD-___ | [Passed / Failed / Pending] |
 [TABLE_END]
@@ -241,23 +228,18 @@ Instructions: If Initial Risk Score is 8 or higher, you must define and code des
 Instructions: Evaluate the final risk profile after the mitigation code has been verified and tested.
 
 [TABLE_START]
-
-
 | System/Feature ID | Post-Control Severity (S) | Post-Control Probability (P) | Residual Risk Score (S x P) | Final Acceptability | Ketryx Traceability Matrix ID |
 | REQ-SAMD-___ | _ | _ | __ | [Acceptable / STOP RELEASE] | TRACE-________________________ |
 [TABLE_END]
 
 ## 4. TEMPLATE CONTROL & APPROVAL
 [TABLE_START]
-
-
 | Rev. | Date | Description of Template Structure | Author | Approver |
 | 1.0 | 2026-05-21 | Initial release of the automated FMEA layout | QA Team | QA Manager, CTO |
 [TABLE_END]
     `.trim()
   },
-
-
+  /***********************************************  RISK REPORT  *****************************************************/
     TMP_RISK_REPORT: {
     id: 'TMP-QA-023', 
     title: '📝 TMP-Risk_Management_Report.docx', 
