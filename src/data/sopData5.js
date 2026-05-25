@@ -24,7 +24,6 @@ Design Transfer: Process of translating development outputs into final manufactu
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
-
 | Role | Responsibility | Regulatory Compliance |
 | Product Manager | Gather user needs, safety inputs, and establish the URS | MDR Annex I (GSPR) |
 | Technical Engineer | Generate technical outputs, execute protocols, and compile DHF assets | ISO 13485 §7.3.4 |
@@ -37,7 +36,6 @@ Design Transfer: Process of translating development outputs into final manufactu
 The phases of designing and developing a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 [TABLE_START]
 
-
 | Phase | Actions | Responsible | Record |
 | Feasibility | Conduct market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
 | Design Planning | Define development structure, milestones, and V&V strategy. | R&D | Design_Plan.pdf |
@@ -47,15 +45,14 @@ The phases of designing and developing a MD are described in the table below. Re
 | Design Review | Conduct formal review meetings and execute gap analysis. | R&D | Review Minutes |
 | Design Verification | Perform unit, integration, and system testing. | Technical Engineer | Traceability Matrix |
 | Design Validation | Execute clinical validation and summative usability testing. | Product Manager | CER |
-| Design Release | Conduct final DHF review and compliance check. | QA | Declaration of Conformity |
+| Design Release | Conduct final DHF review and compliance check. | QA | DoC.pdf |
 | Design Transfer | Deploy code into production and onboard critical suppliers. | Technical Engineer | Transfer Checklist |
-| Design Changes | Process change requests and execute impact analysis. | Technical Engineer | Change Log |
+| Design Changes | Process change requests and execute impact analysis. | Technical Engineer | SOP-Change_Control.pdf |
 | Design Maintenance | Handle PMS, CAPA, and customer complaint tracking. | Product Manager | PMS Report |
 [TABLE_END]
 
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
-
 
 | MDR Requirement | Covered By |
 | Annex I GSPR 1-9 | Input, Verification, and Validation phases |
@@ -74,16 +71,20 @@ SOP-Risk_Management.pdf
 SOP-Change_Control.pdf
 
 Associated Templates and Forms to be executed:
-TMP-URS.docx
-TMP-QA-012: Software Architecture Design Specification Template
-TMP-QA-021: Risk Management Plan Template (via SOP??)
-TMP-QA-022: FMEA Matrix Template (via SOP??)
-TMP-QA-023: Risk Management Report Template (via SOP??)
-Form-QA-012: Change Classification and Impact Assessment (via SOP??)
-TMP-QA-031: Design Review Minutes Template
-TMP-QA-041: Verification Protocol and Report Template
-TMP-Validation_Protocol_&_Report.docx
-TMP-QA-051: Design Transfer Checklist
+📝 TMP-Feasibility_Report.docx
+📝 TMP-Design_Plan.docx
+📝 TMP-URS.docx
+📝 TMP-Software_Architecture_Specification.docx
+📝 TMP-Risk_Management_Plan.docx
+📝 TMP-FMEA_Matrix.docx
+📝 TMP-Risk_Management_Report.docx
+📝 TMP-Design_Review_Minutes.docx
+📝 TMP-Verification_Traceability_Matrix.docx
+📝 TMP-Validation_Protocol_&_Report.docx
+📝 DoC.pdf
+📝 TMP-Design_Transfer_Checklist.docx
+SOP-Change_Control.pdf
+📝 TMP-PMS_Plan.docx
 
 ## 8. REVISION HISTORY
 [TABLE_START]
@@ -151,7 +152,7 @@ EN 62366-1:2015 - Application of Usability Engineering to Medical Devices
 ## 7. APPENDICES
 TMP-Risk_Plan.docx
 TMP-FMEA_Matrix.docx
-TMP-Risk_Report.docx
+TMP-Risk_Report.docx --> Put in TD/RMF
 
 ## 8. REVISION HISTORY
 [TABLE_START]
@@ -301,7 +302,7 @@ By signing below, the organization confirms that the Risk Management File is com
 
 
 /*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
-  SOP_009_CLINICAL_EVALUATION: {
+  SOP_CLINICAL_EVALUATION: {
     id: 'SOP', 
     title: '📄 SOP-Clinical_Evaluation.pdf', 
     version: '1.0', 
