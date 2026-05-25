@@ -132,12 +132,12 @@ Risk Team: A multi-disciplinary team of R&D, QA/RA, and clinical experts respons
 [TABLE_START]
 
 | Phase | Actions | Responsible | Evidence |
-| 1. PLANNING | Create a Risk Management Plan defining the scope, responsibilities, and criteria for risk acceptability. | CTO & QA | Risk_Plan_Approved.pdf |
-| 2. ANALYSIS | Identify known and predictable hazards under normal and fault conditions. Document in FMEA. | R&D | Active FMEA_Matrix.pdf |
-| 3. EVALUATION | Score each hazard based on severity and probability to determine if risk control is required. | R&D | Evaluated FMEA Record |
-| 4. CONTROL | Implement risk mitigation measures (design safety, protective measures, or safety information). | R&D | Verified Risk Controls |
-| 5. RESIDUAL RISK | Evaluate overall residual risk profile. Ensure all individual risks are within acceptable criteria. | R&D & PRRC | Residual Risk Review |
-| 6. CLOSURE | Compile and sign the Risk Management Report confirming plan objectives are achieved. | QA | Approved Risk Report / RMF |
+| 1. PLANNING | Define scope, responsibilities, and criteria for risk acceptability. | CTO & QA | TMP_RM_Plan_Approved.pdf |
+| 2. ANALYSIS | Identify known and predictable hazards under normal and fault conditions.| Risk Team | Active FMEA_Matrix.docx |
+| 3. EVALUATION | Score each hazard in FMEA_Matrix.doxc to determine if risk control is required. | R&D | Uppdated FMEA_Matrix.docx |
+| 4. CONTROL | Implement risk mitigation measures | R&D | Verified_Risk_Controls_Ketryx_Logs.pdf |
+| 5. RESIDUAL RISK | Evaluate overall residual risk profile. Ensure individual risks are within acceptable criteria. | R&D & PRRC | Residual_Risk_Review_Sign_off.pdf |
+| 6. CLOSURE | Compile and sign the Risk Management Report confirming plan objectives are achieved. | QA | TMP_RM_Report.docx |
 [TABLE_END]
 
 ## 6. MDR COMPLIANCE SUMMARY
