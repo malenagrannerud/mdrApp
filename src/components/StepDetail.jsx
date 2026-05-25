@@ -3,40 +3,18 @@
  *
  * StepDetail Component
  * Renderar detaljvyn för ett valt steg.
- * Använder den rekursiva ChecklistItem för att stödja nästlade checklistor
- * och inbäddade dokument (SOP, DOC, MDCG) i filstrukturen.
  */
 
 import React from 'react';
 import Link from './Link';
 
-/**
- * Extraherar mappnamn från en rad i filstrukturen.
- * T.ex. "📁 5-RISK MANAGEMENT" -> "5-RISK MANAGEMENT"
- * @param {string} line - En rad från filstruktur-texten
- * @returns {string|null} Mappnamnet utan emoji, eller null
- */
 const extractFolderName = (line) => {
   const match = line.match(/📁\s+(.+)/);
   return match ? match[1].trim() : null;
 };
 
-/**
- * ChecklistItem – Rekursiv komponent som hanterar ett checklist-objekt.
- */
 const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
 
-  /**
-   * Bygger upp en visuell filstruktur med inbäddade dokumentlänkar.
-   * 
-   * HUR INDENTEN FUNGERAR:
-   * Tidigare lade vi indent-mellanrum i en separat <span> eller som text före <Link />.
-   * Men <Link /> renderar en <a>-tagg (inline), och whitespace före inline-element
-   * kollapsar i HTML. Därför syntes aldrig indenten.
-   * 
-   * LÖSNING: Vi skickar in indenten som prefix i label-prop,
-   * så att mellanrummen hamnar INUTI <a>-taggen där whitespace bevaras.
-   */
   const renderTreeStructure = (text, files) => {
     if (!text) return null;
     
@@ -51,50 +29,27 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
           
           return (
             <div key={i}>
-              {/* Själva mapp-raden */}
               <div>{line}</div>
-              
-              {/* Dokument som hör till denna mapp */}
               {hasFiles && fileMap[folderName].map((file, j) => {
-                // Räkna ut indentering: mapp-radens mellanrum + 2 extra
-                const leadingSpaces = line.match(/^(\s*)/)[1];
-                const indent = leadingSpaces + '  ';
-                
-                // Bygg label med indent som prefix – 
-                // detta är nyckeln: indenten hamnar INUTI länken
-                const indentedLabel = indent + (file.label || '');
+                const indent = file.indent || '  ';
+                const label = file.label || file.sop?.title || file.doc?.title || file.mdcg?.title || '';
                 
                 return (
-                  <div key={j}>
+                  <div key={j} style={{ whiteSpace: 'pre' }}>
                     {file.sop && (
-                      <Link 
-                        type="sop" 
-                        data={file.sop} 
-                        label={indentedLabel}
-                        onOpenSop={onOpenSop} 
-                        onOpenDoc={onOpenDoc} 
-                        onOpenMdcg={onOpenMdcg} 
-                      />
+                      <a href="#" onClick={(e) => { e.preventDefault(); onOpenSop(file.sop); }}>
+                        {indent}{label}
+                      </a>
                     )}
                     {file.doc && (
-                      <Link 
-                        type="doc" 
-                        data={file.doc} 
-                        label={indentedLabel}
-                        onOpenSop={onOpenSop} 
-                        onOpenDoc={onOpenDoc} 
-                        onOpenMdcg={onOpenMdcg} 
-                      />
+                      <a href="#" onClick={(e) => { e.preventDefault(); onOpenDoc(file.doc); }}>
+                        {indent}{label}
+                      </a>
                     )}
                     {file.mdcg && (
-                      <Link 
-                        type="mdcg" 
-                        data={file.mdcg} 
-                        label={indentedLabel}
-                        onOpenSop={onOpenSop} 
-                        onOpenDoc={onOpenDoc} 
-                        onOpenMdcg={onOpenMdcg} 
-                      />
+                      <a href="#" onClick={(e) => { e.preventDefault(); onOpenMdcg(file.mdcg); }}>
+                        {indent}{label}
+                      </a>
                     )}
                   </div>
                 );
@@ -109,13 +64,9 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
   return (
     <div className={item.t ? 'pt-8' : 'pt-0'}>
       
-      {/* Steg-rubrik */}
       {item.t && <h4 className="headingSubStep">{item.t}</h4>}
-      
-      {/* Artikelreferens */}
       {item.r && <p className="article-ref">{item.r}</p>}
       
-      {/* Brödtext */}
       {item.e && (
         item.e.includes('📁') && item.files ? (
           renderTreeStructure(item.e, item.files)
@@ -126,7 +77,6 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
         )
       )}
 
-      {/* SOP-länk */}
       {item.sop && (
         Array.isArray(item.sop) ? (
           item.sop.map((s, idx) => (
@@ -137,7 +87,6 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
         )
       )}
 
-      {/* DOC-länk */}
       {item.doc && (
         Array.isArray(item.doc) ? (
           item.doc.map((d, idx) => (
@@ -148,7 +97,6 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
         )
       )}  
 
-      {/* MDCG-länk */}
       {item.mdcg && (
         Array.isArray(item.mdcg) ? (
           item.mdcg.map((m, idx) => (
@@ -159,7 +107,6 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
         )
       )}
 
-      {/* Nästlad checklista */}
       {item.checklist && (
         <div className="space-y-0 ml-4 border-l-2 border-slate-200 pl-4">
           {item.checklist.map((subItem, j) => (
@@ -177,9 +124,6 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
   );
 };
 
-// ==================================================================
-// StegDetail – Huvudkomponenten
-// ==================================================================
 const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
 
   return (

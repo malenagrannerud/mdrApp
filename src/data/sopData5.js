@@ -5,7 +5,7 @@ export const SOP_DATA5 = {
 /*******************************  SOP 006 - ***********************************/
   SOP_006_DESIGN_CONTROL: {
     id: 'SOP', 
-    title: 'Design_Control.pdf', 
+    title: '📄 SOP-Design_Control.pdf', 
     version: '1.0', 
     owner: 'R&D',
     content: `
@@ -69,18 +69,18 @@ The phases of designing and devoping a MD are described in the table below. Reco
 ## 7. APPENDICES
 
 📁 DHF
-├── 📁 Feasibility
-├── 📁 Design Planning
-├── 📁 Design Input
-├── 📁 Design Output
-├── 📁 Device Risk/Usability
-├── 📁 Design Review
-├── 📁 Design Verification
-├── 📁 Design Release
-├── 📁 Design Validation
-├── 📁 Design Changes
-├── 📁 Design Transfer
-├── 📁 Design Maintenance
+📁 Feasibility
+📁 Design Planning
+📁 Design Input
+📁 Design Output
+📁 Device Risk/Usability
+📁 Design Review
+📁 Design Verification
+📁 Design Release
+📁 Design Validation
+📁 Design Changes
+📁 Design Transfer
+📁 Design Maintenance
 
 
 ## 8. REVISION HISTORY
@@ -97,7 +97,7 @@ The phases of designing and devoping a MD are described in the table below. Reco
 /*******************  SOP 007 - RISK MANAGEMENT *******************/
   SOP_007_RISK_MANAGEMENT: {
     id: 'SOP', 
-    title: 'Risk_Management.pdf', 
+    title: '📄 SOP-Risk_Management.pdf', 
     version: '1.0', 
     owner: 'R&D',
     content: `
@@ -163,7 +163,7 @@ TMP-Risk-Report: Risk Management Report template
 /*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
   SOP_009_CLINICAL_EVALUATION: {
     id: 'SOP', 
-    title: 'Clinical_Evaluation.pdf', 
+    title: '📄 SOP-Clinical_Evaluation.pdf', 
     version: '1.0', 
     owner: 'RA',
     image: swAsmdImage,
@@ -213,23 +213,26 @@ TMP-CER-Report
     `.trim()
   },
 
-/*******************  SOP 010 - CHANGE CONTROL (5.5) *******************/
-  SOP_010_CHANGE_CONTROL: {
+/*******************  CHANGE CONTROL (5.5) *******************/
+  SOP_CHANGE_CONTROL: {
     id: 'SOP', 
-    title: 'Change_Control.pdf', 
+    title: '📄 SOP-Change_Control.pdf', 
     version: '1.0', 
     owner: 'QA ',
     image: swAsmdImage,
     content: `
 ## 1. PURPOSE
-This SOP defines how changes to products, processes, and QMS are initiated, assessed, approved, implemented and verified to meet, and.
+This SOP defines how changes to products, processes, and QMS are initiated, assessed, approved, implemented and verified.
 
 ## 2. SCOPE
-Applies to all changes affecting: Product design or specifications, Manufacturing processes, 
-Suppliers of critical materials, Software (device or QMS), QMS processes and documentation
+Applies to all changes affecting: 
+- Product design or specifications, 
+- Manufacturing processes, 
+- Suppliers of critical materials, 
+- Software (device or QMS), 
+- QMS processes and documentation
 
 ## 3. DEFINITIONS & ABBREVIATIONS
-EU Medical Device Regulation 2017/745 (MDR)
 Change Request (CR): Formal document to propose a change
 Change Initiator: Any employee who identifies the need for change and submits CR
 Impact Assessment: Evaluation of how proposed change affects design, risk, regulatory status, suppliers, QMS
@@ -239,16 +242,16 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 
 | Role | Responsibility | Regulatory Compliance |
 | Change Initiator | Identify issue and submit CR | ISO 13485 §4.2.4 |
-| R&D Manager | Assess technical impact on product design, source code and architecture | ISO 13485 §7.3.7 |
-| RA Manager | Evaluate regulatory impact and determine if change is significant | MDR Annex IX §4.10 |
-| QA Manager | Review impact assessment, final approval of CR and verify implementation | ISO 13485 §4.2.4 |
+| R&D  | Assess technical impact on product design, source code and architecture | ISO 13485 §7.3.7 |
+| RA | Evaluate regulatory impact and determine if change is significant | MDR Annex IX §4.10 |
+| QA  | Review impact assessment, final approval of CR and verify implementation | ISO 13485 §4.2.4 |
 | PRRC | Ensure change maintains compliance with MDR before release | MDR Article 15 |
 [TABLE_END]
 
 ## 5. PROCEDURE
 [TABLE_START]
 
-| Phase | Actions | Responsible | Evidence |
+| Phase | Actions | Responsible | Record |
 | 1. INITIATION | Complete the CR form. | Change Initiator | Submitted CR Form |
 | 2. ASSESSMENT | Evaluate impact and classify change significance using risk criteria. Assess regulatory and QMS impacts. | R&D & RA | Approved Impact Assessment |
 | 3. APPROVAL | Conduct cross-functional review of the assessment. PRRC signs off on MDR compliance status. QA formally approves or rejects the CR. | PRRC & QA | QA Approval / NB Record (if Significant) |
@@ -256,10 +259,53 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 | 5. CLOSURE | Run full regression testing. Update DHF and RMF. QA reviews evidence and closes the CR. | R&D & QA | Closed CR & Updated DHF / RMF |
 [TABLE_END]
 
+5.1. INITIATION 
+A CR ticket in  Linear/eQMS is created by the change initiator. 
+The CR must contain:
+- Description of the current state vs. proposed change.
+- Rationale for the change (Ex; bug fix, feature enhancement, AI model optimization).
+- Identification of all affected software modules, dependencies, and APIs.
+
+
+5.2 Regulatory and Clinical Impact Assessment
+QA/RA must assess the regulatory impact using the Change Classification Matrix (Form-QA-012).
+The change shall be classified as:
+
+- Minor (Non-Significant): 
+No impact on clinical intent, diagnosis, or core algorithm performance. 
+The cange can be reviewed, verified, and approved internally without external notification.
+
+- Major (Significant per MDCG 2020-3)
+Alters the intended purpose, changes the AI algorithm's clinical logic, or introduces new clinical risks. 
+Requires NB notification prior to release.
+QA/RA evaluates if the CER requires updating based on new clinical data.
+
+5.3 Risk Management Update
+The Change Initiatorand QA/RA must review the existing Hazard Analysis and Risk Register.
+If new hazards are identified, they must be logged according to SOP-Risk Management.
+Risk control measures (mitigations) must be defined, tracked, and verified.
+
+5.4 Implementation, Verification, and Traceability
+Engineers implement the code in a separate branch.
+Software verification (unit tests, integration tests) must be executed.
+All requirements, risks, code commits, and test protocols must be linked in Ketryx to maintain full end-to-end traceability.
+
+5.5 Technical Documentation Review
+Before release, QA/RA must update all affected parts of the TD (Annex II/III), including:
+1) Software Architecture Design Specification
+2) IFU / User Manual (if workflow changes)
+3) DoC version log
+
+5.6 Final Review, Approval, and Release
+A formal Release Review must be conducted in the eQMS.
+Electronic signatures from both Engineering (Technical Release) and QA/RA (Regulatory Release) are mandatory.
+The software branch is merged and deployed to production only after all electronic signatures are obtained.
+
 ## 6. REFERENCES 
-ISO 13485:2016, Section 7.3.7  
-MDR Annex IX §4.10  
-MDR Annex X §5.2
+MDR 2017/745: Annex II and III (Technical Documentation)
+MDCG 2020-3: Guidance on significant changes regarding the transitional provisions for MDR
+EN ISO 14971: Application of risk management to medical devices
+IEC 62304: Medical device software – Software life cycle processes
 
 ## 7. APPENDICES
 TMP-Change-Request: CR form

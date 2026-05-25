@@ -5,11 +5,10 @@
 
 
 export const SOP_DATA = {
-  
 
- 
   SOP_001: {
-    title: 'SOP-Software_Validation_Process.pdf', 
+    id: 'SOP',
+    title: '📄 SOP-Software_Validation_Process.pdf', 
     version: '1.0', 
     owner: 'QA',
     content: `
@@ -51,7 +50,7 @@ Version 1.0: Initial release (2024-01-15)
   },
 
   SOP_002_DOC_CONTROL: {
-    title: 'SOP-Document_Control.pdf',
+    title: '📄 SOP-Document_Control.pdf',
     version: '1.0',
     owner: 'QA Manager',
     content: 'Document control procedure...'

@@ -16,7 +16,8 @@ export const QMS_DATA = [
     checklist: [
       { 
         t: 'QMS Steps Overview',
-        e: `The headings are structured according to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.
+        e: `
+The headings are structured according to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.
 
 📁 QMS
   📁 1-SCOPE OF QMS
@@ -27,11 +28,8 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-        files: {
-          '1-SCOPE OF QMS': [
-            { sop: SOP_DATA.SOP_001, label: 'SOP: Software Validation' }
-          ]
-        }
+  files: {}
+      
       }
     ]
 },
@@ -47,7 +45,6 @@ export const QMS_DATA = [
         t: '1.1) Create a SOP for Software Validation', 
         e: `📁 QMS
   📁 1-SCOPE OF QMS
-  
   📁 2-NORMATIVE REFERENCES
   📁 3-TERMS & DEFINITIONS
   📁 4-QMS
@@ -55,9 +52,10 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-        files: {
+        
+  files: {
           '1-SCOPE OF QMS': [
-            { sop: SOP_DATA.SOP_001 }
+            { sop: SOP_DATA.SOP_001, indent: '           ' }
           ]
         }
       }
@@ -101,42 +99,82 @@ export const QMS_DATA = [
 
 
 /************************************************** STEP 5 ********************************************/
+{ 
+  id: 'step5', 
+  title: 'Step 5) Product Realisation & Design', 
+  desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7.1-7.3 + MDR.',
+  checklist: [
     { 
-      id: 'step5', 
-      title: 'Step 5) Product Realisation & Design', 
-      desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7.1-7.3 + MDR.',
+      t: '5.1) Design Control & Planning',
+      e: 'Create a SOP for product development and establish a DHF structure → ',
+      sop: SOP_DATA5.SOP_006_DESIGN_CONTROL 
+    },
+    { 
+      t: '5.2) Risk Management throughout Lifecycle ',
+      e: 'Create a SOP for risk management throughout product lifecycle - ISO 14971 → ',
+      sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT
+    },
+
+    { 
+      t: '5.3) Clinical Evaluation & Device Validation ',
       checklist: [
-        { t: '5.1) Design Control & Planning ',
-          e: 'Create a SOP for product development and establish a DHF structure → ',
-          sop: SOP_DATA5.SOP_006_DESIGN_CONTROL },
         { 
-          t: '5.2) Risk Management throughout Lifecycle - ISO 14971',
-          e: 'Create a SOP for risk management throughout product lifecycle → ',
-          sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT
+          e: 'Create a SOP for clinical evaluation → ', 
+          sop: SOP_DATA5.SOP_009_CLINICAL_EVALUATION 
         },
+        { e: 'Create a Clinical Evaluation Plan (CEP) per product (MDR Annex XIV Part A)' },
+        { e: 'Conduct a literature review and clinical data collection (MDR Art. 61)' },
+        { e: 'Produce a Clinical Evaluation Report (CER) (MDR Annex XIV)' }
+      ]
+    },
+    { 
+      t: '5.4) Design Change Control ',
+      checklist: [  
         { 
-          t: '5.3) Clinical Evaluation & Device Validation (ISO 7.3.7 / MDR Art. 61)',
-          checklist: [
-            { 
-              e: 'Create a SOP for clinical evaluation → ', 
-              sop: SOP_DATA5.SOP_009_CLINICAL_EVALUATION 
-            },
-            { e: 'Create a Clinical Evaluation Plan (CEP) per product (MDR Annex XIV Part A)' },
-            { e: 'Conduct a literature review and clinical data collection (MDR Art. 61)' },
-            { e: 'Produce a Clinical Evaluation Report (CER) (MDR Annex XIV)' }
-          ]
-        },
-        { 
-          t: '5.4) Design Change Control (ISO 7.3.9 / MDR Annex IX §4.10)',
-          checklist: [  
-            { 
-              e: 'Create a SOP for design change control post-launch → ', 
-              sop: SOP_DATA5.SOP_010_CHANGE_CONTROL 
-            }
-          ]
+          e: 'Create a SOP for design change control post-launch → ', 
+          sop: SOP_DATA5.SOP_CHANGE_CONTROL 
         }
       ]
     },
+    { 
+      t: 'Resulting File Structure',
+      e: `
+  
+📁 QMS
+  📁 1-SCOPE 
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+    📁 7-DHF
+        📁 Feasibility
+        📁 Design Planning
+        📁 Design Input
+        📁 Design Output
+        📁 Device Risk/Usability
+        📁 Design Review
+        📁 Design Verification
+        📁 Design Release
+        📁 Design Validation
+        📁 Design Changes
+        📁 Design Transfer
+        📁 Design Maintenance
+    📁 Risk Management
+    📁 Clinical Evaluation
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+      
+  files: {
+        '7-DHF': [{ sop: SOP_DATA5.SOP_006_DESIGN_CONTROL, indent: '    ', label: 'SOP-Design_Control.pdf ⬅ ' }],
+        'Risk Management': [{ sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT, indent: '          ' }],
+        'Design Validation': [{ sop: SOP_DATA5.SOP_009_CLINICAL_EVALUATION, indent: '          ' }],
+        'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent: '          ' }],
+
+      }
+    }
+  ]
+},
 
 
 

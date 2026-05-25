@@ -1,21 +1,13 @@
 /**
  * src/components/Link.jsx 
- * Renderar en klickbar dokumentlänk med emoji.
- * Typ avgör emoji och vilken onOpen som anropas.
+ * Renderar en klickbar dokumentlänk.
+ * Typ avgör vilken onOpen som anropas.
  */
 
 import React from 'react';
 
-const EMOJI_MAP = {
-  sop: '📄',
-  doc: '📋',
-  mdcg: '🔗'
-};
-
 export default function Link({ type, data, label, onOpenSop, onOpenDoc, onOpenMdcg }) {
   if (!data) return null;
-
-  const emoji = EMOJI_MAP[type] || '📎';
   
   const handleClick = (e) => {
     e.preventDefault();
@@ -26,8 +18,7 @@ export default function Link({ type, data, label, onOpenSop, onOpenDoc, onOpenMd
 
   return (
     <a href="#" onClick={handleClick} className="document-link">
-      <span>{emoji}</span>
-      <span>{label || data.title}</span>
+      {label || data.title}
     </a>
   );
 }
