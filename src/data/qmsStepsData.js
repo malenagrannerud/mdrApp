@@ -132,7 +132,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
       checklist: [  
         { 
           e: 'Create a SOP for design change control post-launch → ', 
-          sop: SOP_DATA5.SOP_CHANGE_CONTROL 
+          sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]
         }
       ]
     },

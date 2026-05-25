@@ -213,7 +213,7 @@ TMP-CER-Report
     `.trim()
   },
 
-/*******************  CHANGE CONTROL (5.5) *******************/
+/**************************************  CHANGE CONTROL (5.5) ****************************************************/
   SOP_CHANGE_CONTROL: {
     id: 'SOP', 
     title: '📄 SOP-Change_Control.pdf', 
@@ -233,6 +233,7 @@ Applies to all changes affecting:
 - QMS processes and documentation
 
 ## 3. DEFINITIONS & ABBREVIATIONS
+Change Control Board (CCB) 
 Change Request (CR): Formal document to propose a change
 Change Initiator: Any employee who identifies the need for change and submits CR
 Impact Assessment: Evaluation of how proposed change affects design, risk, regulatory status, suppliers, QMS
@@ -251,55 +252,44 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 ## 5. PROCEDURE
 [TABLE_START]
 
+
 | Phase | Actions | Responsible | Record |
+| :--- | :--- | :--- | :--- |
 | 1. INITIATION | Complete the CR form. | Change Initiator | Submitted CR Form |
 | 2. ASSESSMENT | Evaluate impact and classify change significance using risk criteria. Assess regulatory and QMS impacts. | R&D & RA | Approved Impact Assessment |
-| 3. APPROVAL | Conduct cross-functional review of the assessment. PRRC signs off on MDR compliance status. QA formally approves or rejects the CR. | PRRC & QA | QA Approval / NB Record (if Significant) |
+| 3. APPROVAL | CCB meeting. Conduct cross-functional review of the assessment. PRRC signs off on MDR compliance status. QA formally approves or rejects the CR. | PRRC & QA | QA Approval / NB Record (if Significant) |
 | 4. EXECUTION | Execute change. Update TD. Train affected personnel on the new version. | R&D & Production | Updated TD & Training Records |
 | 5. CLOSURE | Run full regression testing. Update DHF and RMF. QA reviews evidence and closes the CR. | R&D & QA | Closed CR & Updated DHF / RMF |
 [TABLE_END]
 
 5.1. INITIATION 
-A CR ticket in  Linear/eQMS is created by the change initiator. 
+A CR ticket in Linear/eQMS is created by the change initiator. 
 The CR must contain:
 - Description of the current state vs. proposed change.
 - Rationale for the change (Ex; bug fix, feature enhancement, AI model optimization).
 - Identification of all affected software modules, dependencies, and APIs.
 
+5.2. ASSESSMENT
+QA/RA and R&D must evaluate the technical and regulatory impact of the change: Change Classification Matrix.docs.
+- Regulatory Classification: The change must be classified as Minor (Non-Significant) or Major (Significant per MDCG 2020-3). If Major, plans for Notified Body (NB) notification must be initiated.
+- Risk Assessment: The existing Hazard Analysis and FMEA must be reviewed. Any newly introduced hazards (like AI output errors) must be logged and mitigated according to the Risk Management SOP.
 
-5.2 Regulatory and Clinical Impact Assessment
-QA/RA must assess the regulatory impact using the Change Classification Matrix (Form-QA-012).
-The change shall be classified as:
+5.3. APPROVAL 
+A formal Change Control Board (CCB) meeting must be convened to conduct a cross-functional review of the Impact Assessment and risk data.
+- MDR Compliance Sign-off: The PRRC must review the assessment and formally sign off to confirm that the change maintains absolute compliance with EU MDR 2017/745.
+- Final Authorization: Based on the CCB consensus, QA formally approves or rejects the CR within the eQMS. No code deployment to production is permitted without this active authorization.
 
-- Minor (Non-Significant): 
-No impact on clinical intent, diagnosis, or core algorithm performance. 
-The cange can be reviewed, verified, and approved internally without external notification.
+5.4. EXECUTION 
+Once approved, the R&D team executes the software change in an isolated development branch.
+- Documentation Updates: QA/RA must update all affected components of the Technical Documentation (TD) under MDR Annex II/III, including Software Specifications, Architecture diagrams, and the Instructions for Use (IFU) if workflows are altered.
+- Training: Affected personnel (like clinical specialists and support teams) must be trained on the updated software version, and training logs must be recorded before release.
 
-- Major (Significant per MDCG 2020-3)
-Alters the intended purpose, changes the AI algorithm's clinical logic, or introduces new clinical risks. 
-Requires NB notification prior to release.
-QA/RA evaluates if the CER requires updating based on new clinical data.
+5.5. CLOSURE
+Before closing the change, R&D must run full automated and manual regression testing to verify that the change did not adversely affect existing features.
+- Traceability Matrix: All verification records, test protocols, code commits, and requirements must be linked and frozen inside Ketryx.
+- File Update & Release: The Design History File (DHF) and Risk Management File (RMF) are officially updated with the new revision data. QA conducts a final review of the collected evidence, signs off, and closes the CR ticket, allowing the code to be merged into production.
 
-5.3 Risk Management Update
-The Change Initiatorand QA/RA must review the existing Hazard Analysis and Risk Register.
-If new hazards are identified, they must be logged according to SOP-Risk Management.
-Risk control measures (mitigations) must be defined, tracked, and verified.
 
-5.4 Implementation, Verification, and Traceability
-Engineers implement the code in a separate branch.
-Software verification (unit tests, integration tests) must be executed.
-All requirements, risks, code commits, and test protocols must be linked in Ketryx to maintain full end-to-end traceability.
-
-5.5 Technical Documentation Review
-Before release, QA/RA must update all affected parts of the TD (Annex II/III), including:
-1) Software Architecture Design Specification
-2) IFU / User Manual (if workflow changes)
-3) DoC version log
-
-5.6 Final Review, Approval, and Release
-A formal Release Review must be conducted in the eQMS.
-Electronic signatures from both Engineering (Technical Release) and QA/RA (Regulatory Release) are mandatory.
-The software branch is merged and deployed to production only after all electronic signatures are obtained.
 
 ## 6. REFERENCES 
 MDR 2017/745: Annex II and III (Technical Documentation)
@@ -310,13 +300,113 @@ IEC 62304: Medical device software – Software life cycle processes
 ## 7. APPENDICES
 TMP-Change-Request: CR form
 TMP-Change-Log: Change history log
+📝 TMP-Change_Classification_&_Impact_Assessment.docx
 
 ## 8. REVISION HISTORY
 [TABLE_START]
 
-| Rev. | Date | Description of Change | Author |
-| 1.0 | 2026-05-21 | Initial release of this SOP | QA |
+| Rev. | Date | Description of Change | Author | Approver |
+| 1.0 | 2026-05-21 | Initial release of this SOP | QA | PRRC |
 [TABLE_END]
     `.trim()
-  }
+  },
+
+
+
+
+
+
+
+  CHANGE_MATRIX: {
+    id: 'SOP', 
+    title: '📝 TMP-Change_Classification_&_Impact_Assessment.docx', 
+    version: '1.0', 
+    owner: 'QA/RA',
+    content: `
+# CHANGE CLASSIFICATION & IMPACT ASSESSMENT 
+
+## 1. GENERAL INFORMATION
+[TABLE_START]
+
+
+| Field |  Input |
+| Change Request ID: | CR-________________________ (Linked to Linear ticket) |
+| Date of Assessment: | 2026-05-25 |
+| Change Initiator: | __________________________________________________ |
+| Software Version Affected: | Baseline Version: _________ -> Target Version: _________ |
+[TABLE_END]
+
+## 2. CHANGE DESCRIPTION & RATIONALE
+
+  Proposed Change: [Describe what code, architecture, or workflow is being modified]
+  __________________________________________________________________________________________________
+
+  
+  Rationale: [Why is this change necessary? Bug fix, LLM optimization, security patch, feature request?]
+  __________________________________________________________________________________________________
+
+## 3. REGULATORY CLASSIFICATION MATRIX (MDCG 2020-3)
+QA/RA must check todetermine if the change is Significant (Major).
+
+[TABLE_START]
+
+| # | Classification Question / Criteria | YES | NO |
+| 1 | Intended Purpose: Does the change alter the medical indications, clinical intent, or target patient population? | [ ] | [ ] |
+| 2 | Clinical Logic: Does the change modify the core AI model architecture, diagnostic algorithm, or clinical decision thresholds? | [ ] | [ ] |
+| 3 | User Interface: Does the change alter how critical clinical data or risk warnings are displayed to the clinician? | [ ] | [ ] |
+| 4 | Operating Environment: Does the change involve a complete migration of the cloud infrastructure or deployment pipeline? | [ ] | [ ] |
+| 5 | Risk Profile: Does the change introduce any new clinical hazards or increase the probability of an existing failure mode? | [ ] | [ ] |
+[TABLE_END]
+
+### FINAL CLASSIFICATION DECISION:
+- [ ] MINOR (Non-Significant Change): If all answers are NO --> The change has no clinical or regulatory impact. Internal approval and verification are sufficient.
+- [ ] MAJOR (Significant Change): At least one answer is YES --> STOP RELEASE. Formal NB notification and approval are required prior to production deployment.
+
+## 4. CROSS-FUNCTIONAL IMPACT CHECKLIST
+[TABLE_START]
+
+| Department | Impact Evaluation | Action Required / Reference |
+| :--- | :--- | :--- |
+| Risk Management | Does this require an update to the FMEA/Risk Register? | [ ] Yes (Update Hazard Log)  [ ] No |
+| Technical File | Does this alter Software Architecture Design (SDS)? | [ ] Yes (Update TD Annex II) [ ] No |
+| Clinical Report | Does this require updating the CER? | [ ] Yes (Contact Clinical)    [ ] No |
+| User Labeling | Does this require updates to the IFU? | [ ] Yes (Update Manual)       [ ] No |
+[TABLE_END]
+
+## 5. VERIFICATION & TRACEABILITY EVIDENCE (Ketryx)
+- Ketryx Traceability Matrix ID: TRACE-________________________
+- Automated Regression Test Run: [ ] Passed  [ ] Failed  [ ] N/A
+- Code Review Sign-off Link: __________________________________________________
+
+## 6. REGULATORY SIGN-OFF & APPROVAL
+
+## 8. REVISION HISTORY
+[TABLE_START]
+
+| Rev. | Date | Description of Change | Author | Approver |
+| 1.0 | 2026-05-21 | Initial release of this SOP | R&D, QA | PRRC, QA, CTO |
+[TABLE_END]
+    `.trim()
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
