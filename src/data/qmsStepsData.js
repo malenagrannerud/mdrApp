@@ -107,12 +107,12 @@ The headings are structured according to ISO 13485 sections, with a focus on the
     { 
       t: '5.1) Design Control & Planning',
       e: 'Create a SOP for product development and establish a DHF structure → ',
-      sop: SOP_DATA5.SOP_006_DESIGN_CONTROL 
+      sop: SOP_DATA5.SOP_DESIGN_CONTROL 
     },
     { 
       t: '5.2) Risk Management throughout Lifecycle ',
       e: 'Create a SOP for risk management throughout product lifecycle - ISO 14971 → ',
-      sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT
+      sop: SOP_DATA5.SOP_RISK_MANAGEMENT
     },
 
     { 
@@ -120,7 +120,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
       checklist: [
         { 
           e: 'Create a SOP for clinical evaluation → ', 
-          sop: SOP_DATA5.SOP_009_CLINICAL_EVALUATION 
+          sop: SOP_DATA5.SOP_CLINICAL_EVALUATION 
         },
         { e: 'Create a Clinical Evaluation Plan (CEP) per product (MDR Annex XIV Part A)' },
         { e: 'Conduct a literature review and clinical data collection (MDR Art. 61)' },
@@ -166,9 +166,9 @@ The headings are structured according to ISO 13485 sections, with a focus on the
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
       
   files: {
-        '7-DHF': [{ sop: SOP_DATA5.SOP_006_DESIGN_CONTROL, indent: '    ', label: 'SOP-Design_Control.pdf ⬅ ' }],
-        'Risk Management': [{ sop: SOP_DATA5.SOP_007_RISK_MANAGEMENT, indent: '          ' }],
-        'Design Validation': [{ sop: SOP_DATA5.SOP_009_CLINICAL_EVALUATION, indent: '          ' }],
+        '7-DHF': [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent: '    ', label: 'SOP-Design_Control.pdf ⬅ ' }],
+        'Risk Management': [{ sop: SOP_DATA5.SOP_RISK_MANAGEMENT, indent: '          ' }],
+        'Design Validation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent: '          ' }],
         'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent: '          ' }],
 
       }
