@@ -3,14 +3,14 @@ import swAsmdImage from '../assets/sw_asmd.png';
 export const SOP_DATA5 = {
 
 /***********************************************  SOP 006  *****************************************************/
-  SOP_006_DESIGN_CONTROL: {
+  SOP_DESIGN_CONTROL: {
     id: 'SOP', 
     title: '📄 SOP-Design_Control.pdf', 
     version: '1.0', 
     owner: 'R&D',
     content: `
 ## 1. PURPOSE
-The purpose of this SOP is to establish, document, and maintain a controlled system for the design and development of medical devices to meet, and.
+The purpose of this SOP is to establish, document, and maintain a controlled system for the design and development of medical devices to meet EU MDR 2017/745, ISO 13485, and ISO 14971 requirements.
 
 ## 2. SCOPE
 Applies to all new product development and design changes conducted by the organization.
@@ -24,20 +24,19 @@ Design Transfer: Process of translating development outputs into final manufactu
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
+
 | Role | Responsibility | Regulatory Compliance |
 | Product Manager | Gather user needs, safety inputs, and establish the URS | MDR Annex I (GSPR) |
 | Technical Engineer | Generate technical outputs, execute protocols, and compile DHF assets | ISO 13485 §7.3.4 |
 | R&D | Authorize design plans, chair formal reviews, and oversee development phases | ISO 13485 §7.3.1 |
-| QA  | Maintain design control compliance, approve protocols, and release DHF records | ISO 13485 §4.2.4 |
+| QA | Maintain design control compliance, approve protocols, and release DHF records | ISO 13485 §4.2.4 |
 | PRRC | Verify that validation testing meets safety and compliance benchmarks before launch | MDR Article 15 |
 [TABLE_END]
 
 ## 5. PROCEDURE
 The phases of designing and developing a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
-
-## 5. PROCEDURE
-The phases of designing and developing a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 [TABLE_START]
+
 
 | Phase | Actions | Responsible | Record |
 | Feasibility | Conduct market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
@@ -57,6 +56,7 @@ The phases of designing and developing a MD are described in the table below. Re
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
 
+
 | MDR Requirement | Covered By |
 | Annex I GSPR 1-9 | Input, Verification, and Validation phases |
 | Annex II §3 | Design History File (DHF) Structure |
@@ -67,24 +67,40 @@ The phases of designing and developing a MD are described in the table below. Re
 [TABLE_END]
 
 ## 7. APPENDICES
+DHF_Master_Index.exce
 
+Governing Standard Operating Procedures to be followed:
+SOP-Risk_Management.pdf
+SOP-Change_Control.pdf
 
-
+Associated Templates and Forms to be executed:
+TMP-URS.docx
+TMP-QA-012: Software Architecture Design Specification Template
+TMP-QA-021: Risk Management Plan Template (via SOP??)
+TMP-QA-022: FMEA Matrix Template (via SOP??)
+TMP-QA-023: Risk Management Report Template (via SOP??)
+Form-QA-012: Change Classification and Impact Assessment (via SOP??)
+TMP-QA-031: Design Review Minutes Template
+TMP-QA-041: Verification Protocol and Report Template
+TMP-Validation_Protocol_&_Report.docx
+TMP-QA-051: Design Transfer Checklist
 
 ## 8. REVISION HISTORY
 [TABLE_START]
+
 
 | Rev. | Date | Description of Change | Author |
 | 1.0 | 2026-05-21 | Initial release of this SOP | QA |
 [TABLE_END]
     `.trim()
-  },
+  }
+
 
 
   /***********************************************  SOP 007 - *****************************************************/
 
   SOP_007_RISK_MANAGEMENT: {
-    id: 'SOP-QA-007', 
+    id: 'SOP', 
     title: '📄 SOP-Risk_Management.pdf', 
     version: '1.0', 
     owner: 'Risk Team, QA',
@@ -188,7 +204,7 @@ Residual risk evaluation must be frozen in Ketryx prior to any production branch
   },
   /***********************************************  RISK PLAN  *****************************************************/
   TMP_FMEA_MATRIX: {
-    id: 'TMP-QA-022', 
+    id: 'TMP', 
     title: '📝 TMP-FMEA_Matrix_Template.xlsx', 
     version: '1.0', 
     owner: 'Risk Team, R&D',
@@ -229,7 +245,7 @@ Instructions: Evaluate the final risk profile after the mitigation code has been
   },
   /***********************************************  RISK REPORT  *****************************************************/
     TMP_RISK_REPORT: {
-    id: 'TMP-QA-023', 
+    id: 'TMP', 
     title: '📝 TMP-Risk_Management_Report.docx', 
     version: '1.0', 
     owner: 'QA Manager, PRRC',
@@ -339,7 +355,7 @@ TMP-CER-Report
 
 /**************************************  CHANGE CONTROL (5.5) ****************************************************/
   SOP_CHANGE_CONTROL: {
-    id: 'SOP-QA-004', 
+    id: 'SOP', 
     title: '📄 SOP-Change_Control.pdf', 
     version: '1.0', 
     owner: 'QA',
