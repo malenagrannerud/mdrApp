@@ -137,7 +137,7 @@ Risk Management Team (RMT): A team of at least one from R&D (CTO), QA/RA (PRRC),
 <<<<<<< HEAD
 ## 5. THE RISK MANAGEMENT PROCEDURE
 
-\\`\\`\\`mermaid
+
 =======
 \`\`\`mermaid
 >>>>>>> f55a83b53a76b3282a1dee2efab8a852d38aa0a7
