@@ -1,3 +1,5 @@
+
+
 import swAsmdImage from '../assets/sw_asmd.png';
 
 export const SOP_DATA5 = {
@@ -94,7 +96,7 @@ SOP-Change_Control.pdf
 | 1.0 | 2026-05-21 | Initial release of this SOP | QA |
 [TABLE_END]
     `.trim()
-  },
+  }
 
 
 
@@ -132,9 +134,13 @@ Risk Management Team (RMT): A team of at least one from R&D (CTO), QA/RA (PRRC),
 
 ## 5. THE RISK MANAGEMENT PROCEDURE
 
+<<<<<<< HEAD
 ## 5. THE RISK MANAGEMENT PROCEDURE
 
 \\`\\`\\`mermaid
+=======
+\`\`\`mermaid
+>>>>>>> f55a83b53a76b3282a1dee2efab8a852d38aa0a7
 flowchart TD
     Phase1([Phase 1: Establish Intended Use]) --> Phase2[Phase 2: Identify Hazards & Hazardous Situations]
     Phase2 --> Estimation[2.3 Risk Estimation S x P]
@@ -160,7 +166,11 @@ flowchart TD
     Release --> PMS[2.6 Post-Market Surveillance & AI Drift Monitoring]
     PMS -->|New Hazard or Higher Frequency| CM[Change Management Process]
     CM --> Phase2
+<<<<<<< HEAD
 \\`\\`\\`
+=======
+\`\`\`
+>>>>>>> f55a83b53a76b3282a1dee2efab8a852d38aa0a7
 
 
 PHASE 1. Establish Intended Use 
@@ -488,7 +498,8 @@ Associated Templates and Forms to be executed:
 | 1.0 | 2026-05-25 | Initial release of this Clinical Evaluation SOP | QA |
 [TABLE_END]
     `.trim()
-  },
+  }
+
 
 
 /**************************************  CHANGE CONTROL (5.5) ****************************************************/
@@ -633,4 +644,22 @@ FINAL CLASSIFICATION DECISION:
 [TABLE_END]
     `.trim()
   },
+<<<<<<< HEAD
 };
+=======
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> f55a83b53a76b3282a1dee2efab8a852d38aa0a7
