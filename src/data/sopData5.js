@@ -37,14 +37,14 @@ The phases of designing and developing a MD are described in the table below. Re
 [TABLE_START]
 
 | Phase | Actions | Responsible | Record |
-| Feasibility | Conduct market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
+| Feasibility | Market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
 | Design Planning | Define development structure, milestones, and V&V strategy. | R&D | Design_Plan.pdf |
 | Design Input | Create URS and define regulatory, clinical, and cybersecurity requirements. | Product Manager | Design Input Spec |
 | Design Output | Implement software/hardware code and write TD. | Technical Engineer | Software Architecture Document |
 | Device Risk / Usability | Execute ISO 14971 hazard analysis and FMEA matrix. | Technical Engineer | RMF |
 | Design Review | Conduct formal review meetings and execute gap analysis. | R&D | Review Minutes |
-| Design Verification | Perform unit, integration, and system testing. | Technical Engineer | Traceability Matrix |
-| Design Validation | Execute clinical validation and summative usability testing. | Product Manager | CER |
+| Design Verification | Perform unit, integration, and system testing. | Technical Engineer | Verification_Reports.pdf  |
+| Design Validation | See SOP-Clinical_Evaluation.p | Product Manager | CEP.pdf, CER.pdf |
 | Design Release | Conduct final DHF review and compliance check. | QA | DoC.pdf |
 | Design Transfer | Deploy code into production and onboard critical suppliers. | Technical Engineer | Transfer Checklist |
 | Design Changes | Process change requests and execute impact analysis. | Technical Engineer | SOP-Change_Control.pdf |
@@ -80,7 +80,7 @@ Associated Templates and Forms to be executed:
 📝 TMP-Risk_Management_Report.docx
 📝 TMP-Design_Review_Minutes.docx
 📝 TMP-Verification_Traceability_Matrix.docx
-📝 TMP-Validation_Protocol_&_Report.docx
+📝 TMP-Validation_&_Report.docx
 📝 DoC.pdf
 📝 TMP-Design_Transfer_Checklist.docx
 SOP-Change_Control.pdf
@@ -366,19 +366,20 @@ By signing below, the organization confirms that the Risk Management File is com
     `.trim()
   },
 
-/**************************************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
+/**************************************  SOP - CLINICAL EVALUATION  ****************************************/
   SOP_CLINICAL_EVALUATION: {
     id: 'SOP', 
     title: '📄 SOP-Clinical_Evaluation.pdf', 
     version: '1.0', 
     owner: 'R&D, QA/RA',
     content: `
+
 ## 1. PURPOSE
 The purpose of this SOP is to define the mandatory process for 
 - conducting, 
 - documenting, and 
 - updating 
-the clinical evaluation of Software as a Medical Device (SaMD) to ensure compliance with EU MDR 2017/745 Art. 61 and MDCG 2020-13 guidelines.
+the clinical evaluation to ensure compliance with EU MDR 2017/745 Art. 61 and MDCG 2020-13 guidelines.
 
 ## 2. SCOPE
 Applies to the continuous clinical evaluation of all SaMD products developed by the organization, covering both pre-market evaluation and post-market clinical follow-up (PMCF).
@@ -415,13 +416,9 @@ Input: 📄 Intended_Purpose_Statement.pdf, 📄 Risk_Management_File.pdf (See i
 1.3) ANALYSE RISK & NOVELTY
 
 /*******************************************************************************************/
-PHASE 2) DATA   IDENTIFICATION ➔ 📄 Literature_Report.pdf, 📄 Updated_Initial_Test_Reports_&_Comparance.pdf 
+PHASE 2) DATA   IDENTIFICATION ➔ 📄 Literature_Report.pdf
 Input: ➔ 📄 CEP.pdf (search strategy)
-Input: ➔ 📄 Initial_Test_Reports.pdf 
-
-
-2.1 Literature Search Execution 
-Execute search according to the protocol in the CEP. Search databases like PubMed, Embase, or Cochrane.
+Input: ➔ 📄 Design_Verification_Reports.pdf 
 
 2.2 Internal Data Extraction
 Gather internal software verification and usability data.
@@ -433,18 +430,16 @@ Collect data from equivalent devices or clinical registries.
 PHASE 3) DATA APPRAISAL ()
 Responsible: Clinical Expert
 
-
-
 Analyze Risk Class & Novelty to Determine Data Type
 Appraise data validity and methodological quality against software algorithms and MDCG guidance
 
 1. RA shall evaluate the device risk class (Class I, IIa, IIb, III) according to MDR Annex VIII and MDCG 2019-11.
 2. If the SaMD is Class I or IIa and non-innovative: The clinical data strategy may lean on scientific literature, benchmarking, and equivalent device data.
-3. If the SaMD is Class IIb, Class III, or introduces an innovative algorithm: The Product Manager must plan for a dedicated clinical investigation on the device itself, unless full equivalence can be demonstrated according to MDR Annex XIV Part A (3).
+3. If the SaMD is Class IIb, Class III, or introduces an innovative algorithm: The Product Manager must plan for a dedicated clinical investigation on the device itself,
+unless full equivalence can be demonstrated according to MDR Annex XIV Part A (3).
 
 
 Output: TMP-Clinical_Data_Appraisal_Report.docx
-
 /*******************************************************************************************/
 PHASE 4) ANALYSIS & CER ➔ 📄 CER.pdf
 Gap Analysis via the Clinical Development Plan (CDP)
