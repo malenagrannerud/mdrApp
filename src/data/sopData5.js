@@ -132,19 +132,19 @@ Risk Management Team (RMT): A team of at least one from R&D (CTO), QA/RA (PRRC),
 
 ## 5. THE RISK MANAGEMENT PROCEDURE
 
-\`\`\`mermaid
+\`\`\` mermaid
 flowchart TD
-    Phase1([Phase 1: Establish Intended Use]) --> Phase2[Phase 2: Identify Hazards & Hazardous Situations]
+    Phase1([Phase 1: Establish Intended Use]) --> Phase2[Phase 2: Identify Hazards and Hazardous Situations]
     Phase2 --> Estimation[2.3 Risk Estimation S x P]
     Estimation --> Evaluation{2.3 Risk Evaluation: Is Risk Acceptable?}
     
     Evaluation -- No --> Control[2.4 Implement Risk Controls]
     Control --> Priority{Regulatory Priority}
-    Priority -->|1st| Design[Inherent Safety by Design]
-    Priority -->|2nd| Protective[Protective Measures / UI Alerts]
-    Priority -->|3rd| Info[Information for Safety / User Manual]
+    Priority --> 1st Design[Inherent Safety by Design]
+    Priority --> 2nd Protective[Protective Measures / UI Alerts]
+    Priority --> 3rd Info[Information for Safety / User Manual]
     
-    Design --> Verification[2.5 Verification & Testing]
+    Design --> Verification[2.5 Verification and Testing]
     Protective --> Verification
     Info --> Verification
     
@@ -153,10 +153,10 @@ flowchart TD
     Secondary -- No --> Evaluation
     
     Evaluation -- Yes --> Report[2.5 Compile Risk Management Report]
-    Report --> Release([Product Release & Production Branch Merge])
+    Report --> Release([Product Release and Production Branch Merge])
     
-    Release --> PMS[2.6 Post-Market Surveillance & AI Drift Monitoring]
-    PMS -->|New Hazard or Higher Frequency| CM[Change Management Process]
+    Release --> PMS[2.6 Post-Market Surveillance and AI Drift Monitoring]
+    PMS --> New Hazard or Higher Frequency CM[Change Management Process]
     CM --> Phase2
 \`\`\`
 

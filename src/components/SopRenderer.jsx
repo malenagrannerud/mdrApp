@@ -71,15 +71,15 @@ const SopRenderer = ({ content, image, title }) => {
   for (let i = 0; i < lines.length; i++) {
     const cleanLine = lines[i].trim();
 
-    // 🧜‍♀️ STARTA MERMAID-BLOCK
-    if (cleanLine.startsWith('```mermaid')) {
+     // 🧜‍♀️ STARTA MERMAID-BLOCK
+    if (cleanLine.includes('mermaid')) {
       inMermaid = true;
       currentMermaidLines = [];
       continue;
     }
 
     // 🧜‍♀️ AVSLUTA MERMAID-BLOCK
-    if (cleanLine === '```' && inMermaid) {
+    if (inMermaid && (cleanLine === '```' || cleanLine === '\`\`\`' || cleanLine === '\\`\\`\\`')) {
       inMermaid = false;
       const chartCode = currentMermaidLines.join('\n');
       renderedElements.push(
@@ -94,7 +94,7 @@ const SopRenderer = ({ content, image, title }) => {
 
     // 🧜‍♀️ SAMLA RADER INUTI MERMAID
     if (inMermaid) {
-      if (lines[i] !== '') { // Behåll raden intakt för Mermaids syntax
+      if (lines[i] !== '') {
         currentMermaidLines.push(lines[i]);
       }
       continue;
