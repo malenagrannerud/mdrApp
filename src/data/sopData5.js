@@ -2,15 +2,15 @@ import swAsmdImage from '../assets/sw_asmd.png';
 
 export const SOP_DATA5 = {
 
-/***********************************************  SOP 006 - *****************************************************/
-  SOP_006_DESIGN_CONTROL: {
+/***********************************************  SOP 006  *****************************************************/
+  SOP_DESIGN_CONTROL: {
     id: 'SOP', 
     title: '📄 SOP-Design_Control.pdf', 
     version: '1.0', 
     owner: 'R&D',
     content: `
 ## 1. PURPOSE
-The purpose of this SOP is to establish, document, and maintain a controlled system for the design and development of medical devices to meet, and.
+The purpose of this SOP is to establish, document, and maintain a controlled system for the design and development of medical devices to meet EU MDR 2017/745, ISO 13485, and ISO 14971 requirements.
 
 ## 2. SCOPE
 Applies to all new product development and design changes conducted by the organization.
@@ -28,31 +28,28 @@ Design Transfer: Process of translating development outputs into final manufactu
 | Product Manager | Gather user needs, safety inputs, and establish the URS | MDR Annex I (GSPR) |
 | Technical Engineer | Generate technical outputs, execute protocols, and compile DHF assets | ISO 13485 §7.3.4 |
 | R&D | Authorize design plans, chair formal reviews, and oversee development phases | ISO 13485 §7.3.1 |
-| QA  | Maintain design control compliance, approve protocols, and release DHF records | ISO 13485 §4.2.4 |
+| QA | Maintain design control compliance, approve protocols, and release DHF records | ISO 13485 §4.2.4 |
 | PRRC | Verify that validation testing meets safety and compliance benchmarks before launch | MDR Article 15 |
 [TABLE_END]
 
 ## 5. PROCEDURE
-
-The phases of designing and devoping a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
+The phases of designing and developing a MD are described in the table below. Records are stored in a DHF and indexed in the DHF Index by each process owner. 
 [TABLE_START]
 
-| Phase | Purpose | Activities | Responsible | Approver  | Output (Progression check) |
-|---------------------|---------|----------------|----------------------------------|--------------------------------------|--------------------|
-| Feasibility | Assess technical, clinical, and regulatory viability | Market analysis, PoC, high-level risk assessment | Product Manager | R&D | Feasibility Report, RMF |
-| Design Planning | Define development structure and controls | Design planning, milestones, V&V strategy, resource allocation | R&D | QA | Design Plan, Development Timeline |
-| Design Input | Define product requirements | URS creation, regulatory, clinical & cybersecurity requirements | Product Manager | PRRC | Design Input Spec (DIS), SRS |
-| Design Output | Translate requirements into technical solution | Software/hardware design, implementation, documentation | Technical Engineer | R&D | Source code, architecture docs, IFU, BOM |
-| Device Risk / Usability | Identify and control risks and usability issues | ISO 14971 analysis, FMEA, usability engineering | Technical Engineer | QA | RMF, Usability Engineering File |
-| Design Review | Ensure readiness before phase progression | Formal review meetings, gap analysis | R&D | QA | Review minutes, sign-offs, action logs |
-| Design Verification | Confirm outputs meet inputs | Unit/integration/system testing, static analysis | Technical Engineer | QA | Test protocols, verification reports, traceability matrix |
-| Design Validation | Confirm user needs and intended use are met | Clinical validation, usability testing | Product Manager | PRRC | Validation reports, CER, summative usability report |
-| Design Release | Approve product for market release | Final DHF review, compliance check | QA | PRRC | Design freeze, release approval, DoC |
-| Design Transfer | Move design into production environment | Manufacturing specs, supplier onboarding | Technical Engineer | R&D | Transfer checklist, production documentation |
-| Design Changes | Control post-release modifications | Change requests, impact analysis | Technical Engineer | QA | Change log, updated DHF, updated risk file |
-| Design Maintenance | Maintain post-market compliance | PMS, CAPA, complaint handling | Product Manager | PRRC | PMS reports, CAPA logs, updated risk files |
+| Phase | Actions | Responsible | Record |
+| Feasibility | Conduct market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
+| Design Planning | Define development structure, milestones, and V&V strategy. | R&D | Design_Plan.pdf |
+| Design Input | Create URS and define regulatory, clinical, and cybersecurity requirements. | Product Manager | Design Input Spec |
+| Design Output | Implement software/hardware code and write TD. | Technical Engineer | Software Architecture Document |
+| Device Risk / Usability | Execute ISO 14971 hazard analysis and FMEA matrix. | Technical Engineer | RMF |
+| Design Review | Conduct formal review meetings and execute gap analysis. | R&D | Review Minutes |
+| Design Verification | Perform unit, integration, and system testing. | Technical Engineer | Traceability Matrix |
+| Design Validation | Execute clinical validation and summative usability testing. | Product Manager | CER |
+| Design Release | Conduct final DHF review and compliance check. | QA | DoC.pdf |
+| Design Transfer | Deploy code into production and onboard critical suppliers. | Technical Engineer | Transfer Checklist |
+| Design Changes | Process change requests and execute impact analysis. | Technical Engineer | SOP-Change_Control.pdf |
+| Design Maintenance | Handle PMS, CAPA, and customer complaint tracking. | Product Manager | PMS Report |
 [TABLE_END]
-
 
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
@@ -67,24 +64,31 @@ The phases of designing and devoping a MD are described in the table below. Reco
 [TABLE_END]
 
 ## 7. APPENDICES
+DHF_Master_Index.exce
 
-📁 DHF
-📁 Feasibility
-📁 Design Planning
-📁 Design Input
-📁 Design Output
-📁 Device Risk/Usability
-📁 Design Review
-📁 Design Verification
-📁 Design Release
-📁 Design Validation
-📁 Design Changes
-📁 Design Transfer
-📁 Design Maintenance
+Governing Standard Operating Procedures to be followed:
+SOP-Risk_Management.pdf
+SOP-Change_Control.pdf
 
+Associated Templates and Forms to be executed:
+📝 TMP-Feasibility_Report.docx
+📝 TMP-Design_Plan.docx
+📝 TMP-URS.docx
+📝 TMP-Software_Architecture_Specification.docx
+📝 TMP-Risk_Management_Plan.docx
+📝 TMP-FMEA_Matrix.docx
+📝 TMP-Risk_Management_Report.docx
+📝 TMP-Design_Review_Minutes.docx
+📝 TMP-Verification_Traceability_Matrix.docx
+📝 TMP-Validation_Protocol_&_Report.docx
+📝 DoC.pdf
+📝 TMP-Design_Transfer_Checklist.docx
+SOP-Change_Control.pdf
+📝 TMP-PMS_Plan.docx
 
 ## 8. REVISION HISTORY
 [TABLE_START]
+
 
 | Rev. | Date | Description of Change | Author |
 | 1.0 | 2026-05-21 | Initial release of this SOP | QA |
@@ -93,50 +97,154 @@ The phases of designing and devoping a MD are described in the table below. Reco
   },
 
 
-  /***********************************************  SOP 007 - *****************************************************/
 
-  SOP_007_RISK_MANAGEMENT: {
-    id: 'SOP-QA-007', 
+  /***********************************************  SOP RISK- *****************************************************/
+
+  SOP_RISK_MANAGEMENT: {
+    id: 'SOP', 
     title: '📄 SOP-Risk_Management.pdf', 
     version: '1.0', 
-    owner: 'Risk Team, QA',
+    owner: 'QA/RA',
     content: `
+    
 ## 1. PURPOSE
-The purpose of this SOP is to establish, document, and maintain a continuous risk management system throughout the product lifecycle to meet EU MDR 2017/745, ISO 14971, and ISO 13485 requirements.
+This SOP defines the continuous process for identifying, analyzing, controlling, and monitoring risks related to patient and user safety.
 
 ## 2. SCOPE
-Applies to all lifecycle stages of medical devices managed by the organization, from concept to post-market surveillance.
+Applies to all lifecycle stages of medical devices managed by the organization, from concept to PMS.
 
 ## 3. DEFINITIONS & ABBREVIATIONS
-As Low As Reasonably Practicable (ALARP)
 Failure Mode and Effects Analysis (FMEA)
-Risk Management File (RMF): Systematic compilation of risk records for a specific device
 Hazard: Potential source of harm to patient, user, or environment
+Risk Management File (RMF): Compilation of risk records for a specific device
 Risk Evaluation: Comparison of estimated risk against given risk acceptability criteria
 Risk Control: Process in which decisions are made and measures implemented to reduce risks
+Risk Management Team (RMT): A team of at least one from R&D (CTO), QA/RA (PRRC), and medical expert (MTO).
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
-| Role | Responsibility | Regulatory Compliance |
-| Top Management | Define risk acceptability policy and provide adequate resources | ISO 14971 §4.2 |
-| R&D | Identify technical hazards, implement controls, and execute testing | ISO 14971 §7.1 |
-| Risk Team | Conduct multi-disciplinary risk evaluations and maintain the FMEA matrix | ISO 14971 §4.4 |
-| PRRC | Verify that the overall residual risk profile is acceptable under MDR | MDR Article 15 |
-| QA  | Audit the risk process, approve plans, and release the final Risk Report | ISO 13485 §4.1.3 |
+| Role | Responsibility |
+| Top Management | Define risk acceptability policy and provide adequate resources | 
+| Risk Team | Conduct risk evaluations and maintain the FMEA matrix | 
+| PRRC/QA/RA | Maintain RMF, ensuring full traceability | 
 [TABLE_END]
 
-## 5. PROCEDURE
-[TABLE_START]
+## 5. THE RISK MANAGEMENT PROCEDURE
 
-| Phase | Actions | Responsible | Evidence |
-| 1. PLANNING | Create a Risk Management Plan defining the scope, responsibilities, and criteria for risk acceptability. | CTO & QA | Risk_Plan_Approved.pdf |
-| 2. ANALYSIS | Identify known and predictable hazards under normal and fault conditions. Document in FMEA. | R&D | Active FMEA_Matrix.pdf |
-| 3. EVALUATION | Score each hazard based on severity and probability to determine if risk control is required. | R&D | Evaluated FMEA Record |
-| 4. CONTROL | Implement risk mitigation measures (design safety, protective measures, or safety information). | R&D | Verified Risk Controls |
-| 5. RESIDUAL RISK | Evaluate overall residual risk profile. Ensure all individual risks are within acceptable criteria. | R&D & PRRC | Residual Risk Review |
-| 6. CLOSURE | Compile and sign the Risk Management Report confirming plan objectives are achieved. | QA | Approved Risk Report / RMF |
-[TABLE_END]
+```mermaid
+flowchart TD
+    Phase1([Phase 1: Establish Intended Use]) --> Phase2[Phase 2: Identify Hazards & Hazardous Situations]
+    Phase2 --> Estimation[2.3 Risk Estimation S x P]
+    Estimation --> Evaluation{2.3 Risk Evaluation: Is Risk Acceptable?}
+    
+    Evaluation -- No --> Control[2.4 Implement Risk Controls]
+    Control --> Priority{Regulatory Priority}
+    Priority -->|1st| Design[Inherent Safety by Design]
+    Priority -->|2nd| Protective[Protective Measures / UI Alerts]
+    Priority -->|3rd| Info[Information for Safety / User Manual]
+    
+    Design --> Verification[2.5 Verification & Testing]
+    Protective --> Verification
+    Info --> Verification
+    
+    Verification --> Secondary{Any Secondary Risks?}
+    Secondary -- Yes --> Phase2
+    Secondary -- No --> Evaluation
+    
+    Evaluation -- Yes --> Report[2.5 Compile Risk Management Report]
+    Report --> Release([Product Release & Production Branch Merge])
+    
+    Release --> PMS[2.6 Post-Market Surveillance & AI Drift Monitoring]
+    PMS -->|New Hazard or Higher Frequency| CM[Change Management Process]
+    CM --> Phase2
+```
+
+
+PHASE 1. Establish Intended Use 
+Responsible: RMT
+Before initiating an analysis, the product's Intended Use must be defined in writing. This includes:
+- Patient population: Age, gender, medical condition.
+- Intended user: Medical doctors, nurses, patients.
+- Environment: Hospital, home care, cloud-based deployment.
+Output: Intended_Use_Statement.pdf
+
+PHASE 2. Risk Analysis
+The Risk Management Team shall systematically identify hazards and hazardous situations based on 
+- ISO 14971 (Annex C) and 
+- IEC 62304 guidelines.
+
+2.1) Identify Hazards: 
+Resonsables:
+- SWE: identifierar de tekniska felen (Hazards) i koden eller AI-modellen.
+- MTO förklarar hur detta fel leder till en farlig situation för patienten i verkligheten.
+- PRRC leder workshopen och ser till att de använder rätt terminologi enligt ISO 14971 och IEC 62304.
+Output: Hazard_List.pdf. 
+Each hazard has an ID: 
+"HZ-001: AI scribe fails to extract a critical diagnosis code (ICD-10)."
+
+2.2) Link to Hazardous Situation
+"LK-001: Clinician fails to catch the omission during review --> Patient receives incorrect follow-up care."
+
+2.3) Risk Estimation
+Resonsables: RMT
+The team scores the initial risk (pre-mitigation) using risk_matrix.pdf.
+Output: Current_Risk_Assesment_Report.pdf
+(en tabell där varje fara har fått ett tilldelat risktal (S*P) och färgkodats (Grön, Gul eller Röd) baserat på om risken är acceptabel eller inte.)
+
+2.4 Risk Control
+Resonsables
+R&D/CTO: Inherent safety by design and Protective measures. They are responsible for refactoring code, altering algorithms, or designing popup alerts in the UI.
+QA/RA: Information for safety: You (Regulatory) or a Technical Writer, who updates the User Manual with the appropriate regulatory warning texts.
+RMT: Evaluation of residual and secondary risks
+
+When a risk must be reduced, the team shall apply the following regulatory priority order for control measures [14971:2019]:
+- Inherent safety by design (Highest priority): Modify the code/algorithm to eliminate the fault possibility.
+- Protective measures: Implement automated popup alerts in the UI to warn the user if data is missing.
+- Information for safety (Lowest priority): Write warning text in the User Manual or provide mandatory user training.
+
+Post-implementation evaluation:
+Residual Risk: Is the risk now reduced to an acceptable level?
+Secondary Hazards: Did the new code implementation or alert introduce any new risks?
+
+Output: Risk_Control_Specifications.pdf 
+These are converted into concrete development requirements (e.g., as tickets in Jira/Linear or requirement lines in Ketryx) 
+detailing how the risk will be mitigated, along with updated columns in the risk matrix showing the calculated Residual Risk.
+
+
+2.5 Verification & Risk Management Report
+Responsible:
+Verification (Testing): QA Engineers or SWE who execute automated unit/integration tests in GitHub or perform manual user verification.
+The Report: You (MDR Compliance Operations Specialist). You draft and compile the entire document.
+Approval: Top Management, typically consisting of the CEO, Chief Medical Officer (CMO), and PRRC.
+
+Verification
+Every risk control measure must be verified for effectiveness. 
+Test results (e.g., automated unit/integration tests in GitHub/Ketryx) must link directly to the Risk ID for full traceability.
+
+Risk Management Report
+Once all mitigations are verified, the MDR Compliance Operations Specialist compiles a report. 
+This report concludes that the overall residual risk is acceptable and that the clinical benefits outweigh the risks. 
+The report is approved by management prior to product release.
+
+Output
+- An automated Traceability Matrix (usually in Ketryx) proving an unbroken chain from Hazard ➔ Risk Control ➔ Code/Design Output ➔ Verification Test Case (Passed).
+- A signed Risk Management Report (RMR). This is the official document certifying that the device is safe for release.
+
+
+2.6 Production and Post-Production Monitoring (Post-Market Surveillance)
+Responsible
+Data Collection: Customer Support (customer complaints) and Data/AI Engineers (bug logs and AI model drift metrics).
+Evaluation and Analysis: RA/QA in collaboration with the product team. You monitor if the real-world data contradicts your design-stage assumptions.
+
+The RMF is a living document. Post-launch, the team must:
+- Review customer complaints, bug reports, and AI drift logs monthly.
+- Evaluate if real-world failures match the estimations made during design.
+- If a failure occurs more frequently than estimated, or a new hazard is discovered, the process re-starts at step 3.2 via the CM process.
+
+Output
+- Monthly or quarterly PMS Logs / AI Trend Reports.
+- CRs in your Change Management process if the risk matrix needs updating or if new risk controls must be engineered due to real-world events.
 
 ## 6. MDR COMPLIANCE SUMMARY
 ISO 14971:2019 - Application of Risk Management to Medical Devices 
@@ -145,47 +253,44 @@ MDR Article 10(2) - General Obligations (Risk Management System)
 EN 62366-1:2015 - Application of Usability Engineering to Medical Devices
 
 ## 7. APPENDICES
-TMP-Risk_Plan.docx
-TMP-FMEA_Matrix.docx
-TMP-Risk_Report.docx
+Risk_Plan.pdf
+FMEA_Matrix.pdf
+Risk_Report.pdf --> Put in TD/RMF
 
 ## 8. REVISION HISTORY
 [TABLE_START]
-
 | Rev. | Date | Description of Change | Author |
 | 1.0 | 2026-05-21 | Initial release of this SOP | QA |
 [TABLE_END]
     `.trim()
   },
 
-
-
-    TMP_RISK_PLAN: {
+  /***********************************************  RISK PLAN  *****************************************************/
+    RISK_PLAN: {
     id: 'TMP', 
-    title: '📝 TMP-Risk_Management_Plan.docx', 
+    title: '📝 Risk_Management_Plan.docx', 
     version: '1.0', 
     owner: 'QA, CTO',
     content: `
-# RISK MANAGEMENT PLAN 
+    
+## 1. SCOPE
+This plan defines the risk acceptability criteria and risk management activities for 
+- description of product
+- life cycle phases (from D&D until post market phase)
 
-## 1. PRODUCT SCOPE & LIFECYCLE TRACK
-This plan defines the risk acceptability criteria and risk management activities for Tandem Health AI platform software.
-
-## 2. RISK TEAM ALLOCATION & COMPETENCE
+## 2. RESPONSABILITIES
 [TABLE_START]
 
-
-| Role | Assigned Department / Person | Competence Verification |
-| Risk Chair | Head of Quality Assurance | Certified ISO 14971 Lead |
-| Clinical Expert | Chief Medical Officer | MD with 10 years clinical practice |
-| Software Expert | Chief Technology Officer | MSc Biomedical Engineering / AI |
+| Role | Responsibility | Competence Verification |
+| QA | ... | Certified ISO 14971 Lead |
+| CMO | ...  | MD with 10 years clinical practice |
+| CTO | ... | MSc Biomedical Engineering / AI |
 [TABLE_END]
 
-## 3. RISK ACCEPTABILITY CRITERIA (ISO 14971 MATRIX)
+## 3. RISK MATRIX
 Risk Matrix is based on Severity (1 to 5) multiplied by Probability (1 to 5). Total Score ranges from 1 to 25.
 
 [TABLE_START]
-
 
 | Score Range | Risk Region | Required Action |
 | 1 to 6 | Acceptable | Risk is negligible. No further design controls required. |
@@ -199,38 +304,33 @@ Residual risk evaluation must be frozen in Ketryx prior to any production branch
 ## 5. SIGN-OFF & REVISION HISTORY
 [TABLE_START]
 
-
 | Rev. | Date | Description of Plan | Author | Approver |
 | 1.0 | 2026-05-25 | Initial Risk Plan for release track | QA Team | CTO, QA Manager |
 [TABLE_END]
     `.trim()
   },
-
-
-  TMP_FMEA_MATRIX: {
-    id: 'TMP-QA-022', 
-    title: '📝 TMP-FMEA_Matrix_Template.xlsx', 
+  /***********************************************  RISK MATRIX  *****************************************************/
+  FMEA_MATRIX: {
+    id: 'TMP', 
+    title: '📝 FMEA_Matrix_Template.xlsx', 
     version: '1.0', 
     owner: 'Risk Team, R&D',
-    content: `
-# FAILURE MODES AND EFFECTS ANALYSIS (FMEA) MATRIX TEMPLATE
+    content: `# FAILURE MODES AND EFFECTS ANALYSIS (FMEA) MATRIX TEMPLATE
 
 ## 1. PRE-CONTROL RISK ANALYSIS (PHASE 2 & PHASE 3)
 Instructions: Identify the failure mode, assign Severity (1-5) and Probability (1-5). Multiply to get Initial Risk Score (1-25).
 
 [TABLE_START]
 
-
 | System/Feature ID | Potential Failure Mode | Potential Effect of Failure | Severity (S) | Potential Cause of Failure | Probability (P) | Initial Risk Score (S x P) | Risk Acceptability |
 | REQ-SAMD-___ | [Enter software failure or AI error] | [Enter consequence for patient or clinician] | _ | [Enter root cause or bug trigger] | _ | __ | [Acceptable / Unacceptable] |
 [TABLE_END]
 
 ## 2. RISK CONTROL INTEGRATION (PHASE 4)
-Instructions: If Initial Risk Score is 8 or higher, you must define and code design controls to mitigate the hazard.
+If Initial Risk Score is ≥ 8 --> define and code design controls to mitigate the hazard.
+(Note: If software probability cannot be accurately estimated, P must be set to 5 as a worst-case scenario).
 
 [TABLE_START]
-
-
 | System/Feature ID | Identified Hazard | Risk Mitigation Strategy (Design Control) | Software Branch / Code Commit Reference | Verification Test Protocol Reference | Test Status |
 | REQ-SAMD-___ | [Reference from Table 1] | [Enter code validator, UI warning, or logic constraint] | ://github.com___ | TEST-SAMD-___ | [Passed / Failed / Pending] |
 [TABLE_END]
@@ -239,25 +339,20 @@ Instructions: If Initial Risk Score is 8 or higher, you must define and code des
 Instructions: Evaluate the final risk profile after the mitigation code has been verified and tested.
 
 [TABLE_START]
-
-
 | System/Feature ID | Post-Control Severity (S) | Post-Control Probability (P) | Residual Risk Score (S x P) | Final Acceptability | Ketryx Traceability Matrix ID |
 | REQ-SAMD-___ | _ | _ | __ | [Acceptable / STOP RELEASE] | TRACE-________________________ |
 [TABLE_END]
 
 ## 4. TEMPLATE CONTROL & APPROVAL
 [TABLE_START]
-
-
 | Rev. | Date | Description of Template Structure | Author | Approver |
 | 1.0 | 2026-05-21 | Initial release of the automated FMEA layout | QA Team | QA Manager, CTO |
 [TABLE_END]
     `.trim()
   },
-
-
+  /***********************************************  RISK REPORT  *****************************************************/
     TMP_RISK_REPORT: {
-    id: 'TMP-QA-023', 
+    id: 'TMP', 
     title: '📝 TMP-Risk_Management_Report.docx', 
     version: '1.0', 
     owner: 'QA Manager, PRRC',
@@ -313,61 +408,90 @@ By signing below, the organization confirms that the Risk Management File is com
 
 
 /*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
-  SOP_009_CLINICAL_EVALUATION: {
+  SOP_CLINICAL_EVALUATION: {
     id: 'SOP', 
     title: '📄 SOP-Clinical_Evaluation.pdf', 
     version: '1.0', 
-    owner: 'RA',
-    image: swAsmdImage,
+    owner: 'R&D, QA/RA',
     content: `
 ## 1. PURPOSE
-The purpose of this SOP is to define the process for conducting and documenting clinical evaluations to prove safety and performance to meet,, and.
+The purpose of this SOP is to define the mandatory process for 
+- conducting, 
+- documenting, and 
+- updating 
+the clinical evaluation of Software as a Medical Device (SaMD) to ensure compliance with EU MDR 2017/745 Art. 61 and MDCG 2020-13 guidelines.
 
 ## 2. SCOPE
-Applies to the continuous assessment of clinical data for all medical devices manufactured by the organization across their entire lifecycle.
+Applies to the continuous clinical evaluation of all SaMD products developed by the organization, covering both pre-market evaluation and post-market clinical follow-up (PMCF).
 
 ## 3. DEFINITIONS & ABBREVIATIONS
-See List of Abbreviations in the SOP-Documentation.pdf.
+Clinical Evaluation Plan (CEP)
+Clinical Evaluation Report (CER): A documented report containing the critical evaluation of all clinical data relevant to the device.
+Clinical Evidence: Clinical data and clinical evaluation results pertaining to a device of sufficient amount and quality to allow a qualified assessment of safety and performance.
+Post-Market Clinical Follow-up (PMCF): A continuous process to update the clinical evaluation throughout the lifecycle of the device.
+MDCG 2020-13: EU guidance on clinical evaluation assessment for medical device software.
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
+
 | Role | Responsibility | Regulatory Compliance |
-| Medical Expert | Analyze clinical studies, evaluate literature profiles, and write appraisal text | MDR Annex XIV Part A |
-| RA  | Compile regulatory inputs, define equivalent baselines, and author the CEP | MDR Article 10(1) |
-| PRRC | Review evaluation findings and verify compliance metrics prior to release | MDR Article 15 |
-| QA  | Release the finalized CER into the TD architecture | ISO 13485 §4.2.4 |
+| Product Manager | Act as Clinical Lead, gather clinical literature, and coordinate appraisals | MDR Article 61 §1 |
+| Clinical Expert | Appraise clinical data validity and provide expert clinical judgment | MDR Article 61 §2 |
+| RA | Ensure CER formatting meets MDR requirements and monitor MDCG updates | MDR Annex XIV Part A |
+| QA | Review and approve the final CER, ensuring alignment with the Risk File | ISO 13485 §7.3.7 |
+| PRRC | Authorize the release of the CER into the TD | MDR Article 15 |
 [TABLE_END]
 
 ## 5. PROCEDURE
 [TABLE_START]
 
-| Phase | Actions | Responsible | Evidence |
-| 1. STRATEGY | Establish a CEP defining scope, benchmarks, and data search criteria. | RA | Approved CEP Document |
-| 2. SEARCH | Conduct systematic literature reviews, clinical database searches, and screen clinical field logs. | Medical Expert | Logged Search Queries |
-| 3. APPRAISAL | Evaluate retrieved data packages for methodological soundness, scientific weight, and relevance. | Medical Expert | Signed Data Appraisal Sheet |
-| 4. ANALYSIS | Analyze data against criteria to prove device safety, clinical performance, and benefit-risk ratios. | Medical Expert & RA | Formulated CER Draft |
-| 5. RELEASING | Cross-functional review of the CER. Final sign-off by the PRRC and structural archiving. | PRRC & QA Manager | Approved CER / TD Update |
+
+| Phase | Actions | Responsible | Record |
+| 1. PLANNING | Create a CEP defining the clinical safety, performance, and benefit endpoints. | Product Manager | CEP_Approved.pdf |
+| 2. DATA IDENTIFICATION | Identify relevant clinical data generated from literature searches, clinical investigations, or equivalent devices. | Product Manager | Literature_Search_Protocol_Approved.pdf |
+| 3. DATA APPRAISAL | Appraise identified data sets for methodological quality, scientific validity, and clinical relevance to SaMD algorithms. | Clinical Expert | Clinical_Data_Appraisal_Report_Approved.pdf |
+| 4. ANALYSIS & CER | Analyze the appraised data to prove conformity with safety and performance. Draft the final report. | Product Manager & RA | TMP-CER_Approved.docx |
+| 5. UPDATE & PMCF | Establish a continuous loop to update the CER with real-world post-market data and user feedback. | Product Manager & QA | TMP-PMCF_Plan_Approved.docx |
 [TABLE_END]
 
-## 6. REFERENCES MDR Article 61 - Clinical Evaluation MDR Annex XIV Part A - Clinical Evaluation Plan and Report MEDDEV 2.7/1 Rev. 4 - Clinical Evaluation Guide for Manufacturers ISO 14155:2020 - Clinical Investigation of Medical Devices
+## 6. MDR COMPLIANCE SUMMARY
+[TABLE_START]
+
+
+| MDR Requirement | Covered By |
+| Article 61 | Entirety of this SOP process |
+| Annex XIV Part A | Clinical Evaluation implementation requirements |
+| Annex XIV Part B | PMCF Phase and documentation structure |
+| MDCG 2020-13 | Clinical evaluation logic for software (SaMD) algorithms |
+[TABLE_END]
 
 ## 7. APPENDICES
-TMP-CEP-Layout
-TMP-CER-Report
+Governing SOP to be followed:
+📄 SOP-Design_Control.pdf (SOP-DC)
+📄 SOP-Risk_Management.pdf (SOP-RM)
+
+Associated Templates and Forms to be executed:
+📝 TMP-Clinical_Evaluation_Plan.docx
+📝 TMP-Literature_Search_Protocol.docx
+📝 TMP-Clinical_Data_Appraisal_Report.docx
+📝 TMP-Clinical_Evaluation_Report.docx
+📝 TMP-PMCF_Plan.docx
 
 ## 8. REVISION HISTORY
 [TABLE_START]
 
+
 | Rev. | Date | Description of Change | Author |
-| 1.0 | 2026-05-21 | Initial release of this SOP | QA |
+| 1.0 | 2026-05-25 | Initial release of this Clinical Evaluation SOP | QA |
 [TABLE_END]
     `.trim()
   },
 
+
 /**************************************  CHANGE CONTROL (5.5) ****************************************************/
   SOP_CHANGE_CONTROL: {
-    id: 'SOP-QA-004', 
+    id: 'SOP', 
     title: '📄 SOP-Change_Control.pdf', 
     version: '1.0', 
     owner: 'QA',
@@ -392,10 +516,7 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
-
-
 | Role | Responsibility | Regulatory Compliance |
-| :--- | :--- | :--- |
 | Change Initiator | Identify issue and submit CR ticket in Linear/eQMS | ISO 13485 §4.2.4 |
 | R&D | Assess technical impact on product design, source code and architecture | ISO 13485 §7.3.9 |
 | RA | Evaluate regulatory impact and determine if change is significant | MDR Annex IX §4.10 |
@@ -408,11 +529,8 @@ Impact Assessment: Evaluation of how proposed change affects design, risk, regul
 ## 5. PROCEDURE
 [TABLE_START]
 
-
-
 | Phase | Actions | Responsible | Approver | Record |
-| :--- | :--- | :--- | :--- | :--- |
-| 1. INITIATION | Create a CR ticket in Linear/eQMS. Complete PHASE 1 General Description and Rationale in 📝 CR_&_Impact.docx. | Change Initiator | QA/RA | 📝 CR_&_Impact_Phase_1_Approved.docx |
+| 1. INITIATION | Create a CR ticket in Linear/eQMS. Complete PHASE 1 in 📝 CR_&_Impact.docx. | Change Initiator | QA/RA | 📝 CR_&_Impact_Phase_1_Approved.docx |
 | 2. ASSESSMENT | Run the regulatory impact matrix based on MDCG 2020-3 in PHASE 2. If new hazards are flagged, execute risk evaluation via the central FMEA according to SOP-007-Risk_Management.pdf. | R&D & RA | QA | 📝 CR_&_Impact_Phase_2_Approved.docx |
 | 3. APPROVAL | Convene a CCB meeting to review the PHASE 3 CCB Impact Checklist. PRRC signs off on compliance status and QA issues formal release approval. | PRRC & QA | QA | 📝 CR_&_Impact_Phase_3_Approved.docx |
 | 4. EXECUTION | Implement code in a separate branch. Update affected TD components, fulfill PHASE 4 Verification criteria, and train staff. | R&D & Production | QA | Updated TD, Training Records & Ketryx Logs |
@@ -433,12 +551,8 @@ SOP-007-Risk_Management.pdf
 ## 8. REVISION HISTORY
 [TABLE_START]
 
-
-
 | Rev. | Date | Description of Change | Author | Approver |
-| :--- | :--- | :--- | :--- | :--- |
 | 1.0 | 2026-05-21 | Initial release of this SOP | QA | PRRC |
-
 [TABLE_END]
     `.trim()
   },
@@ -453,21 +567,17 @@ SOP-007-Risk_Management.pdf
     content: `
 # CHANGE CLASSIFICATION & IMPACT ASSESSMENT 
 
-## PHASE 1. GENERAL DESCRIPTION
+## PHASE 1.1. INITIATION CHANGE REQUEST
 [TABLE_START]
 
-
-
 | Field | Input |
-| :--- | :--- |
 | Change Request ID: | CR-________________________ (Linked to Linear ticket) |
 | Date of Assessment: | 2026-05-25 |
 | Change Initiator: | __________________________________________________ |
 | Software Version Affected: | Baseline Version: _________ -> Target Version: _________ |
-
 [TABLE_END]
 
-## PHASE 1. CHANGE DESCRIPTION & RATIONALE
+## PHASE 1.2. INITIATION CHANGE DESCRIPTION & RATIONALE
 
   Proposed Change: [Describe what code, architecture, or workflow is being modified]
   __________________________________________________________________________________________________
@@ -475,10 +585,8 @@ SOP-007-Risk_Management.pdf
   Rationale: [Why is this change necessary? Bug fix, LLM optimization, security patch, feature request?]
   __________________________________________________________________________________________________
 
-## PHASE 2. REGULATORY CLASSIFICATION MATRIX (MDCG 2020-3)
+## PHASE 2. ASSESSMENT - REGULATORY CLASSIFICATION MATRIX (MDCG 2020-3)
 [TABLE_START]
-
-
 
 | # | Classification Question / Criteria | YES | NO |
 | :--- | :--- | :--- | :--- |
@@ -494,55 +602,33 @@ FINAL CLASSIFICATION DECISION:
 - [ ] MINOR (Non-Significant Change): If all answers are NO --> No clinical or regulatory impact. Internal approval and verification are sufficient.
 - [ ] MAJOR (Significant Change): At least one answer is YES --> STOP RELEASE. Formal NB notification and approval are required prior to production deployment.
 
-## PHASE 3. CCB IMPACT CHECKLIST
+## PHASE 3. APPROVAL - CCB IMPACT CHECKLIST
 [TABLE_START]
 
-
-
 | Department | Impact Evaluation | Action Required / Reference |
-| :--- | :--- | :--- |
+
 | Risk Management | Does this require an update to the FMEA/Risk Register? | [ ] Yes (Update central FMEA log via SOP-007) [ ] No |
 | Technical File | Does this alter Software Architecture Design (SDS)? | [ ] Yes (Update TD Annex II) [ ] No |
-| Clinical Report | Does this require updating the CER? | [ ] Yes (Contact Clinical)    [ ] No |
+| Clinical Report | Does this require updating the CER? | [ ] Yes (CEV)    [ ] No |
 | User Labeling | Does this require updates to the IFU? | [ ] Yes (Update Manual)       [ ] No |
-
 [TABLE_END]
 
-## PHASE 4. VERIFICATION & TRACEABILITY EVIDENCE (Ketryx)
+## PHASE 4. ECECUTION - VERIFICATION & TRACEABILITY EVIDENCE (Ketryx)
 - Ketryx Traceability Matrix ID: TRACE-________________________
 - Automated Regression Test Run: [ ] Passed  [ ] Failed  [ ] N/A
 - Code Review Sign-off Link: __________________________________________________
 
+
+## PHASE 5. CLOSURE
+
+
+
 ## 6. REVISION HISTORY & APPROVAL
 [TABLE_START]
-
-
-
 | Rev. | Date | Description of Change | Author | Approver of filled form |
-| :--- | :--- | :--- | :--- | :--- |
 | 1.0 | 2026-05-21 | Initial release of this Template | R&D, QA | PRRC, QA, CTO |
 
 [TABLE_END]
     `.trim()
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };

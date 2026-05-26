@@ -1,5 +1,3 @@
-
-
 <!-- index.html är den grundläggande HTML-filen som laddas när du startar din React-app.
  
 Script-taggen startar main.jsx som i sin tur läser in style.css-->
@@ -14,10 +12,21 @@ Script-taggen startar main.jsx som i sin tur läser in style.css-->
     <!-- DENNA RAD FIXAR ALL DESIGN: -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- DENNA MODUL LADDAR MERMAID GLOBALT UTAN ATT VITE KRASCHAR: -->
+    <script type="module">
+      import mermaid from 'https://jsdelivr.net';
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'neutral',
+        securityLevel: 'loose',
+        flowchart: { htmlLabels: true, useMaxWidth: true }
+      });
+      // Gör motorn åtkomlig för din React-komponent via fönsterobjektet
+      window.mermaid = mermaid;
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-

@@ -1,10 +1,29 @@
 /**
  * src/components/SopRenderer.jsx
- * Komplett bibliotek med stöd för bilder och helt dynamiska tabeller.
+ * Komplett bibliotek med stöd för bilder, dynamiska tabeller och Mermaid-flödesscheman.
  */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const SopRenderer = ({ content, image, title }) => {
+  const containerRef = useRef(null);
+
+  // Trigger för att be Mermaid rita om alla flödesscheman efter att HTML har tryckts ut
+  useEffect(() => {
+    // Hämta den globala instansen som vi laddade in säkert via index.html
+    const globalMermaid = window.mermaid;
+
+    if (containerRef.current && globalMermaid) {
+      const hasMermaid = containerRef.current.querySelector('.mermaid');
+      if (hasMermaid) {
+        try {
+          globalMermaid.contentLoaded();
+        } catch (error) {
+          console.error("Mermaid rendering error:", error);
+        }
+      }
+    }
+  }, [content]);
+
   if (!content) return null;
 
   const renderedElements = [];
@@ -12,6 +31,9 @@ const SopRenderer = ({ content, image, title }) => {
   
   let inTable = false;
   let currentTableRows = [];
+
+  let inMermaid = false;
+  let currentMermaidLines = [];
 
   // Funktion för att rendera ut den sparade tabellen när den stängs
   const renderAccumulatedTable = (tableKey) => {
@@ -48,6 +70,35 @@ const SopRenderer = ({ content, image, title }) => {
   // Loopa igenom alla rader i texten
   for (let i = 0; i < lines.length; i++) {
     const cleanLine = lines[i].trim();
+
+    // 🧜‍♀️ STARTA MERMAID-BLOCK
+    if (cleanLine.startsWith('```mermaid')) {
+      inMermaid = true;
+      currentMermaidLines = [];
+      continue;
+    }
+
+    // 🧜‍♀️ AVSLUTA MERMAID-BLOCK
+    if (cleanLine === '```' && inMermaid) {
+      inMermaid = false;
+      const chartCode = currentMermaidLines.join('\n');
+      renderedElements.push(
+        <div key={`mermaid-${i}`} className="my-8 flex justify-center w-full">
+          <div className="mermaid border-2 border-slate-900 p-6 bg-slate-50 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] w-full overflow-x-auto">
+            {chartCode}
+          </div>
+        </div>
+      );
+      continue;
+    }
+
+    // 🧜‍♀️ SAMLA RADER INUTI MERMAID
+    if (inMermaid) {
+      if (lines[i] !== '') { // Behåll raden intakt för Mermaids syntax
+        currentMermaidLines.push(lines[i]);
+      }
+      continue;
+    }
 
     // 📊 STARTA TABELL
     if (cleanLine === '[TABLE_START]') {
@@ -90,7 +141,7 @@ const SopRenderer = ({ content, image, title }) => {
       continue;
     }
 
-    // RUBRIKER OCH LISTOR (Dina existerande klasser)
+    // RUBRIKER OCH LISTOR
     if (cleanLine.startsWith('# ')) {
       renderedElements.push(<p key={i} className="sop-h1">{cleanLine.replace('# ', '')}</p>);
     } else if (cleanLine.startsWith('## ')) {
@@ -104,8 +155,11 @@ const SopRenderer = ({ content, image, title }) => {
     }
   }
 
-return <div className="sop-content-wrapper">{renderedElements}</div>;
-
+  return (
+    <div className="sop-content-wrapper" ref={containerRef}>
+      {renderedElements}
+    </div>
+  );
 };
 
 export default SopRenderer;
