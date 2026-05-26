@@ -366,21 +366,7 @@ By signing below, the organization confirms that the Risk Management File is com
     `.trim()
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
+/**************************************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
   SOP_CLINICAL_EVALUATION: {
     id: 'SOP', 
     title: '📄 SOP-Clinical_Evaluation.pdf', 
@@ -402,59 +388,86 @@ Clinical Evaluation Plan (CEP)
 Clinical Evaluation Report (CER): A documented report containing the critical evaluation of all clinical data relevant to the device.
 Clinical Evidence: Clinical data and clinical evaluation results pertaining to a device of sufficient amount and quality to allow a qualified assessment of safety and performance.
 Post-Market Clinical Follow-up (PMCF): A continuous process to update the clinical evaluation throughout the lifecycle of the device.
+Product Manager (PM)
 MDCG 2020-13: EU guidance on clinical evaluation assessment for medical device software.
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
-
 | Role | Responsibility | Regulatory Compliance |
-| Product Manager | Act as Clinical Lead, gather clinical literature, and coordinate appraisals | MDR Article 61 §1 |
-| Clinical Expert | Appraise clinical data validity and provide expert clinical judgment | MDR Article 61 §2 |
-| RA | Ensure CER formatting meets MDR requirements and monitor MDCG updates | MDR Annex XIV Part A |
-| QA | Review and approve the final CER, ensuring alignment with the Risk File | ISO 13485 §7.3.7 |
-| PRRC | Authorize the release of the CER into the TD | MDR Article 15 |
+| Product Manager | Act as Clinical Lead, gather clinical literature, and coordinate appraisals |
+| Clinical Expert | Appraise clinical data validity and provide expert clinical judgment | 
+| RA | Ensure CER formatting meets MDR requirements and monitor MDCG updates | 
+| QA | Review and approve the final CER, ensuring alignment with the Risk File | 
+| PRRC | Authorize the release of the CER into the TD | 
 [TABLE_END]
 
-## 5. PROCEDURE
 
-PHASE 1) Define "State of the Art" (SOTA) & Clinical Context
-1. The Product Manager shall conduct a clinical literature search to define the medical context and the current standard of care for the intended condition.
-2. The search must identify current medical guidelines, alternative treatments, and clinical benchmarks (safety/performance thresholds) for similar devices.
-3. The results shall establish the baseline acceptance criteria used to evaluate the device's clinical benefit.
+## 5. PROCEDURE 
+/**********************************************************************************/
+PHASE 1) PLANNING ➔ 📄 CEP.pdf
+Responsible: PM / RA
+Input: 📄 Intended_Purpose_Statement.pdf, 📄 Risk_Management_File.pdf (See initial risk).
 
-PHASE 2) Map Clinical Claims to GSPR
-1. The Product Manager and RA shall screen MDR Annex I (GSPR) to identify all requirements demanding clinical evidence (specifically GSPR 1, 5, and 8).
-2. Every explicit and implicit clinical claim, intended purpose, and indication stated in the marketing material or software UI must be listed.
-3. Each claim must be linked to a specific verification method to ensure it can be fully backed by clinical data.
+1.0) DEFINE LITTERATURE SEARCH PROCESS 
+1.1) WRITE CLINICAL CLAIMS 
+1.2) MAP CLINICAL CLAIMS ↔️ Annex I-GSPR 
+1.3) ANALYSE RISK & NOVELTY
 
-PHASE 3) Analyze Risk Class & Novelty to Determine Data Type
+/*******************************************************************************************/
+PHASE 2) DATA   IDENTIFICATION ➔ 📄 Literature_Report.pdf, 📄 Updated_Initial_Test_Reports_&_Comparance.pdf 
+Input: ➔ 📄 CEP.pdf (search strategy)
+Input: ➔ 📄 Initial_Test_Reports.pdf 
+
+
+2.1 Literature Search Execution 
+Execute search according to the protocol in the CEP. Search databases like PubMed, Embase, or Cochrane.
+
+2.2 Internal Data Extraction
+Gather internal software verification and usability data.
+
+2.3 External Data Extraction 
+Collect data from equivalent devices or clinical registries.
+
+/*******************************************************************************************/
+PHASE 3) DATA APPRAISAL ()
+Responsible: Clinical Expert
+
+
+
+Analyze Risk Class & Novelty to Determine Data Type
+Appraise data validity and methodological quality against software algorithms and MDCG guidance
+
 1. RA shall evaluate the device risk class (Class I, IIa, IIb, III) according to MDR Annex VIII and MDCG 2019-11.
 2. If the SaMD is Class I or IIa and non-innovative: The clinical data strategy may lean on scientific literature, benchmarking, and equivalent device data.
 3. If the SaMD is Class IIb, Class III, or introduces an innovative algorithm: The Product Manager must plan for a dedicated clinical investigation on the device itself, unless full equivalence can be demonstrated according to MDR Annex XIV Part A (3).
 
-PHASE 4) Gap Analysis via the Clinical Development Plan (CDP)
+
+Output: TMP-Clinical_Data_Appraisal_Report.docx
+
+/*******************************************************************************************/
+PHASE 4) ANALYSIS & CER ➔ 📄 CER.pdf
+Gap Analysis via the Clinical Development Plan (CDP)
+
+Run Gap Analysis, verify data sufficiency, and draft final report showing compliance with GSPR. | Product Manager & RA | TMP-Clinical_Evaluation_Report.docx |
+
 1. The Product Manager shall author the Clinical Development Plan (CDP) as a part of the CEP.
 2. The CDP must map all currently available data (e.g., verification testing, usability data, technical performance studies of the software) against the required GSPR milestones and SOTA criteria.
 3. The Product Manager shall perform a Gap Analysis to identify missing clinical endpoints or data-shortfalls.
 4. Any identified data gaps must be resolved by scheduling targeted literature reviews, usability trials, or formal clinical prövningar before locking the design.
 
-PHASE 5) Verification of Data Sufficiency via MDCG Vägledning
+/*******************************************************************************************/
+PHASE 5) UPDATE & PMCF ➔ 📄 CER_v2.0.pdf 📄 PMCF_Plan.pdf
+Input: 📄 TMP-PMCF_Plan.docx
+       📄 CER_v1.0.pdf
+
+
+Verification of Data Sufficiency via MDCG Vägledning
+
+
 1. Prior to finalizing the CER, RA and the Clinical Expert shall cross-reference the compiled data package with MDCG 2020-5 (Sufficient Clinical Evidence) and MDCG 2020-6 (Legacy Devices, if applicable).
 2. The Clinical Expert must sign off that the quantitative and qualitative level of data is robust enough to prove clinical safety, technical performance (algorithm validity), and clinical benefit as required by MDCG 2020-13.
-
-[TABLE_START]
-
-| Phase | Actions | Responsible | Record |
-| :--- | :--- | :--- | :--- |
-| 1. PLANNING | Create a CEP incorporating SOTA definition, GSPR mapping, and the Clinical Development Plan (CDP). | Product Manager | TMP-CEP_Approved.docx |
-| 2. DATA IDENTIFICATION | Execute literature search and clinical data gathering based on risk class and novelty assessment. | Product Manager | TMP-Literature_Search_Protocol.docx |
-| 3. DATA APPRAISAL | Appraise data validity and methodological quality against software algorithms and MDCG guidance. | Clinical Expert | TMP-Clinical_Data_Appraisal_Report.docx |
-| 4. ANALYSIS & CER | Run Gap Analysis, verify data sufficiency, and draft final report showing compliance with GSPR. | Product Manager & RA | TMP-Clinical_Evaluation_Report.docx |
-| 5. UPDATE & PMCF | Establish a continuous loop to update the CER using real-world PMCF loops and PMS inputs. | Product Manager & QA | TMP-PMCF_Plan.docx |
-[TABLE_END]
-
-
+/*******************************************************************************************/
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
 
@@ -488,6 +501,86 @@ Associated Templates and Forms to be executed:
     `.trim()
   },
 
+
+
+/***************************************** CEP **********************************************************/
+  CEP: {
+    id: 'TMP-CEP', 
+    title: '📝 TMP-Clinical_Evaluation_Plan.docx', 
+    version: '1.0', 
+    owner: 'Product Manager / RA',
+    content: `
+    
+## 1. PURPOSE
+The purpose of this document is to define the 
+- clinical evaluation strategy, 
+- clinical development milestones, and 
+- data collection methodologies 
+for the Software as a Medical Device (SaMD) to demonstrate conformity with EU MDR 2017/745 General Safety and Performance Requirements (GSPR).
+
+## 2. SCOPE
+This plan applies exclusively to the pre-market clinical evaluation planning and clinical development of the specified SaMD product version prior to commercial release or major modification.
+
+## 3. DEFINITIONS & ABBREVIATIONS
+Clinical Evaluation Plan CEP
+Clinical Development Plan CDP
+Software as a Medical Device SaMD
+State of the Art SOTA
+
+## 4. RESPONSIBILITY
+[TABLE_START]
+
+| Role | Responsibility  |
+| Product Manager | Complete technical product data, document clinical claims, and align timelines. |
+| Clinical Expert | Establish and validate clinical benchmarks, endpoints, and medical rationale. |
+| RA | Verify GSPR mapping, validate regulatory pathways, and sign off compliance. |
+| QA | Ensure integration with the Risk Management File and approve the final plan. |
+[TABLE_END]
+
+
+## 5. PROCEDURE 
+
+
+
+## 11. SIGN-OFF & APPROVAL BLOCK
+* Product Manager (Clinical Lead): [Name, Signature, Date]
+* Clinical Expert (Medical Reviewer): [Name, Signature, Date]
+* Regulatory Affairs (RA): [Name, Signature, Date]
+* Quality Assurance (QA): [Name, Signature, Date]
+    `.trim()
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
 
 /**************************************  CHANGE CONTROL (5.5) ****************************************************/
