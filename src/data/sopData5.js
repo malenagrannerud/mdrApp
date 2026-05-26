@@ -1,5 +1,6 @@
-import swAsmdImage from '../assets/sw_asmd.png';
 
+
+import swAsmdImage from '../assets/sw_asmd.png';
 export const SOP_DATA5 = {
 
 /***********************************************  SOP 006  *****************************************************/
@@ -427,7 +428,7 @@ Gather internal software verification and usability data.
 Collect data from equivalent devices or clinical registries.
 
 /*******************************************************************************************/
-PHASE 3) DATA APPRAISAL ()
+PHASE 3) DATA APPRAISAL
 Responsible: Clinical Expert
 
 Analyze Risk Class & Novelty to Determine Data Type
@@ -437,7 +438,6 @@ Appraise data validity and methodological quality against software algorithms an
 2. If the SaMD is Class I or IIa and non-innovative: The clinical data strategy may lean on scientific literature, benchmarking, and equivalent device data.
 3. If the SaMD is Class IIb, Class III, or introduces an innovative algorithm: The Product Manager must plan for a dedicated clinical investigation on the device itself,
 unless full equivalence can be demonstrated according to MDR Annex XIV Part A (3).
-
 
 Output: TMP-Clinical_Data_Appraisal_Report.docx
 /*******************************************************************************************/
@@ -456,12 +456,10 @@ PHASE 5) UPDATE & PMCF ➔ 📄 CER_v2.0.pdf 📄 PMCF_Plan.pdf
 Input: 📄 TMP-PMCF_Plan.docx
        📄 CER_v1.0.pdf
 
-
 Verification of Data Sufficiency via MDCG Vägledning
-
-
 1. Prior to finalizing the CER, RA and the Clinical Expert shall cross-reference the compiled data package with MDCG 2020-5 (Sufficient Clinical Evidence) and MDCG 2020-6 (Legacy Devices, if applicable).
 2. The Clinical Expert must sign off that the quantitative and qualitative level of data is robust enough to prove clinical safety, technical performance (algorithm validity), and clinical benefit as required by MDCG 2020-13.
+
 /*******************************************************************************************/
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
