@@ -1,3 +1,5 @@
+
+
 import swAsmdImage from '../assets/sw_asmd.png';
 
 export const SOP_DATA5 = {
@@ -330,7 +332,7 @@ Instructions: Identify the failure mode, assign Severity (1-5) and Probability (
 If Initial Risk Score is ≥ 8 --> define and code design controls to mitigate the hazard.
 (Note: If software probability cannot be accurately estimated, P must be set to 5 as a worst-case scenario).
 
-[TABLE_START}
+[TABLE_START]
 | System/Feature ID | Identified Hazard | Risk Mitigation Strategy (Design Control) | Software Branch / Code Commit Reference | Verification Test Protocol Reference | Test Status |
 | REQ-SAMD-___ | [Reference from Table 1] | [Enter code validator, UI warning, or logic constraint] | ://github.com___ | TEST-SAMD-___ | [Passed / Failed / Pending] |
 [TABLE_END]
@@ -631,24 +633,18 @@ FINAL CLASSIFICATION DECISION:
 [TABLE_END]
     `.trim()
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
