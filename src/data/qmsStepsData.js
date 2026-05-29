@@ -149,7 +149,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
 
 /******************* STEP 6 - OPERATIONS, PROCUREMENT & TRACEABILITY (ISO 7.4 - 7.6) *******************/
 {     id: 'step6', 
-      title: 'Step 6) Operations, Procurement & Traceability (ISO 7.4 - 7.6)', 
+      title: 'Step 6) Operations, Procurement & Traceability ', 
       desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. ISO 13485 Section 7.4-7.6.',
       checklist: [
         { t: '6.1) Purchasing & Supplier Control (ISO 7.4.1 - 7.4.3)',
@@ -181,8 +181,8 @@ The headings are structured according to ISO 13485 sections, with a focus on the
     },
 /****************************************************************************************************/
     { id: 'step7', 
-      title: 'Step 7) Measurement, Analysis & Improvement (ISO 8)', 
-      desc: 'Process Owner: QA Manager',
+      title: 'Step 7) Measurement, Analysis & Improvement ', 
+      desc: 'ISO 8.2',
       checklist: [
         { t: '7.1) Internal Audit & Product Release (ISO 8.2.4 & 8.2.6)', 
           e: 'Create SOP for internal audits and the final product release routine. Establish an annual audit plan for the quality management system as well as control plans and protocols for final inspection.',
@@ -198,28 +198,21 @@ The headings are structured according to ISO 13485 sections, with a focus on the
 
 /****************************************************************************************************/
     { id: 'step8', 
-      title: 'Step 8) Post-Market & Vigilance (MDR Art. 83-92)', 
-      desc: 'Processes to control that the product and system are functioning.',
+      title: 'Step 8) Post-Market & Vigilance ', 
+      desc: 'Processes to control that the product and system are functioning. MDR Art. 83-92',
       checklist: [
         { t: '8.1) Inspection Plans', e: 'Definitions for what is checked at product release.' }
       ]
     },
 
-/****************************************************************************************************/
-    { id: 'step9', 
-      title: 'Step 9) Non-Conformances & CAPA', 
-      desc: 'System for handling errors and preventing recurrence.',
-      checklist: [
-        { t: '9.1) NC & CAPA Process (ISO 8.5)', e: 'Log for deviations and investigation reports for root causes.' }
-      ]
-    },
+
 
 /****************************************************************************************************/
-    { id: 'step10', 
-      title: 'Step 10) Internal Audit & NB-Ready', 
+    { id: 'step9', 
+      title: 'Step 9) Internal Audit & NB-Ready', 
       desc: 'Final review of the entire system before external audit.',
       checklist: [
-        { t: '10.1) Internal Audit Report (ISO 8.2.2)', e: 'Full review of the QMS to ensure readiness for Notified Body.' }
+        { t: '9.1) Internal Audit Report (ISO 8.2.2)', e: 'Full review of the QMS to ensure readiness for Notified Body.' }
       ]
     }
 ]
