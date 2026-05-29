@@ -55,7 +55,8 @@ The headings are structured according to ISO 13485 sections, with a focus on the
         
   files: {
           '1-SCOPE OF QMS': [
-            { sop: SOP_DATA.SOP_1, indent: '    ' }
+            { sop: SOP_DATA.SOP_1, indent: '    ' }, 
+            { sop: SOP_DATA.SOP_2_DOC_CONTROL, indent: '    ' }
           ]
         }
       }

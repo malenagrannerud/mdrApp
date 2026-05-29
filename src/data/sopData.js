@@ -46,6 +46,7 @@ Version 1.0: Initial release (2024-01-15)
   },
 
   SOP_2_DOC_CONTROL: {
+    id: 'SOP',
     title: '📄 SOP-Document_Control.pdf',
     version: '1.0',
     owner: 'QA',
