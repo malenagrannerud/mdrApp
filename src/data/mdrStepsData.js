@@ -83,7 +83,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       { t: '2.1) Set up the Design and Manufacturing processes',
         r: '\nArt. 10.1: "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
-        e: '\nThis step is translated by following ISO 13485:2016 Chapter 7 - Product Realization. '},
+        e: '\nThis step is translated by following ISO 13485:2016 Chapter 7 - Product Realization, for design processes, and the entire ISO 13485:2016 for manufacturing processes. '},
 
       { t: '2.2) Implement a Risk Management process',
         r: '\nArt. 10.2: "Mfrs shall establish, document, implement and maintain a system for risk management as described in Section 3 of Annex I."',

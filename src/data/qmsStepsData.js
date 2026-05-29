@@ -1,6 +1,6 @@
 /**
  * @file qmsStepsData.js
- * @description Central Roadmap-struktur som importerar mallar från qmsSopData.
+ * @description Central Roadmap structure that imports templates from qmsSopData.
  */
 import { SOP_DATA } from './sopData.js';
 import { SOP_DATA5 } from './sopData5.js';
@@ -34,8 +34,8 @@ The headings are structured according to ISO 13485 sections, with a focus on the
  
 /************************************************** STEP 1 ********************************************/
 {   id: 'step1', 
-    title: 'Steg 1) Grundläggande Systemuppbyggnad', 
-    desc: 'Etablera fundamentet för ett QMS.',
+    title: 'Step 1) Fundamental System Setup', 
+    desc: 'Establish the foundation for a QMS.',
     checklist: [
       { t: '1.1) Create a SOP for Software Validation', 
         e: `
@@ -60,30 +60,30 @@ The headings are structured according to ISO 13485 sections, with a focus on the
 
 /************************************************** STEP 2 ********************************************/
     { id: 'step2', 
-      title: 'Steg 2) Kvalitetsmanual & Omfattning', 
-      desc: 'Definiera vad systemet täcker och hur det förhåller sig till lagkrav.',
+      title: 'Step 2) Quality Manual & Scope', 
+      desc: 'Define what the system covers and how it relates to legal requirements.',
       checklist: [
-        { t: '2.1) Quality Manual (ISO 4.2.2)', e: 'Manualen som beskriver hur organisationen uppfyller ISO 13485 och MDR.' },
-        { t: '2.2) QMS Scope & Exclusions', e: 'Dokumentation av vad QMS täcker och vilka delar av ISO 13485 som inte är tillämpliga.' }
+        { t: '2.1) Quality Manual (ISO 4.2.2)', e: 'The manual describing how the organization meets ISO 13485 and MDR.' },
+        { t: '2.2) QMS Scope & Exclusions', e: 'Documentation of what the QMS covers and which parts of ISO 13485 are not applicable.' }
       ]
     },
 /************************************************** STEP 3 ********************************************/
     { id: 'step3', 
-      title: 'Steg 3) Ledningens Ansvar & Planering', 
-      desc: 'Säkerställ att ledningen är engagerad och att en plan för efterlevnad finns.',
+      title: 'Step 3) Management Responsibility & Planning', 
+      desc: 'Ensure management commitment and that a compliance plan is in place.',
       checklist: [
-        { t: '3.1) Kvalitetspolicy & Mål (ISO 5.1)', e: 'Signerad policy och mätbara mål för kvaliteten.' },
-        { t: '3.2) Roller & PRRC (MDR Art 15)', e: 'Utnämning av ansvarig person (PRRC) och organisationsschema.' },
-        { t: '3.3) GAP-analys & Roadmap', e: 'Checklista som visar skillnad mellan nuläge och full efterlevnad.' }
+        { t: '3.1) Quality Policy & Objectives (ISO 5.1)', e: 'Signed policy and measurable quality objectives.' },
+        { t: '3.2) Roles & PRRC (MDR Art 15)', e: 'Appointment of Person Responsible for Regulatory Compliance (PRRC) and organizational chart.' },
+        { t: '3.3) GAP Analysis & Roadmap', e: 'Checklist showing the gap between current state and full compliance.' }
       ]
     },
 /************************************************** STEP 4 ********************************************/
     { id: 'step4', 
-      title: 'Steg 4) Resurshantering', 
-      desc: 'Säkerställ kompetens, utbildning och en säker arbetsmiljö.',
+      title: 'Step 4) Resource Management', 
+      desc: 'Ensure competence, training, and a secure working environment.',
       checklist: [
-        { t: '4.1) Kompetens & Utbildning (ISO 6.2)', e: 'Utbildningsmatris och bevis på personalens skicklighet (CV/Diplom).' },
-        { t: '4.2) Infrastruktur & IT-miljö (ISO 6.3)', e: 'SOP för underhåll av IT-system och säkerhetsuppdateringar.' }
+        { t: '4.1) Competence & Training (ISO 6.2)', e: 'Training matrix and evidence of personnel qualifications (CV/Diplomas).' },
+        { t: '4.2) Infrastructure & IT Environment (ISO 6.3)', e: 'SOP for maintenance of IT systems and security updates.' }
       ]
     },
 
@@ -91,7 +91,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
 /************************************************** STEP 5 ********************************************/
 { id: 'step5', 
   title: 'Step 5) Product Realisation & Design', 
-  desc: 'Control development from idea to finished product with full traceability. ISO 13485 Section 7.1-7.3 + MDR.',
+  desc: 'Control development from idea to finished product with full traceability (see ISO 13485 Section 7). Records in this step are fed into the Technical Documentation.',
   checklist: [
     { t: '5.1) Design Control & Planning',
       e: 'Create a SOP for product development and establish a DHF structure → ',
@@ -146,10 +146,10 @@ The headings are structured according to ISO 13485 sections, with a focus on the
 
 /******************* STEP 6 - OPERATIONS, PROCUREMENT & TRACEABILITY (ISO 7.4 - 7.6) *******************/
 {     id: 'step6', 
-      title: 'Steg 6) Driftsättning, Inköp & Spårbarhet (ISO 7.4 - 7.6)', 
-      desc: 'Säkra kontroll över leverantörer, produktleverans, kundkrav och mätverktyg. ISO 13485 Section 7.4-7.6.',
+      title: 'Step 6) Operations, Procurement & Traceability (ISO 7.4 - 7.6)', 
+      desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. ISO 13485 Section 7.4-7.6.',
       checklist: [
-        { t: '6.1) Inköp & Leverantörsstyrning (ISO 7.4.1 - 7.4.3)',
+        { t: '6.1) Purchasing & Supplier Control (ISO 7.4.1 - 7.4.3)',
           e: 'Create a SOP for purchasing controls and supplier evaluation → ',
           sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT,
           checklist: [
@@ -158,7 +158,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
             { e: 'Evaluate, monitor, and re-approve critical suppliers (ISO 7.4.1.1)' }
           ]
         },
-        { t: '6.2) Kundprocesser & Marknadsfeedback (ISO 7.2.2, 7.2.3 & 8.2.1)',
+        { t: '6.2) Customer Processes & Market Feedback (ISO 7.2.2, 7.2.3 & 8.2.1)',
           checklist: [
             { e: 'Create a SOP for handling customer requirements and post-market feedback (ISO 7.2.2) → ',
               sop: SOP_DATA6.SOP_011_CUSTOMER_PROCESSES },
@@ -166,7 +166,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
           ]
         },
         { 
-          t: '6.3) Produktion, Servicing & UDI-Spårbarhet (ISO 7.5.1, 7.5.8, 7.5.9 & 7.6)',
+          t: '6.3) Production, Servicing & UDI Traceability (ISO 7.5.1, 7.5.8, 7.5.9 & 7.6)',
           checklist: [
             { e: 'Create a SOP for product release, deployment pipelines, and unique device tracking (ISO 7.5.1 & 7.5.4) → ',
               sop: SOP_DATA6.SOP_012_PRODUCTION_AND_TRACEABILITY },
@@ -178,45 +178,45 @@ The headings are structured according to ISO 13485 sections, with a focus on the
     },
 /****************************************************************************************************/
     { id: 'step7', 
-      title: 'Steg 7) Mätning, Analys & Förbättring (ISO 8)', 
-      desc: 'Processägare: QA Manager',
+      title: 'Step 7) Measurement, Analysis & Improvement (ISO 8)', 
+      desc: 'Process Owner: QA Manager',
       checklist: [
-        { t: '7.1) Internrevision & Produktfrisläppning (ISO 8.2.4 & 8.2.6)', 
-          e: 'Skapa SOP för internrevision och rutinen för slutgiltig produktfrisläppning. Upprätta en årlig revisionsplan för kvalitetsledningssystemet samt kontrollplaner och protokoll för slutinspektion.',
+        { t: '7.1) Internal Audit & Product Release (ISO 8.2.4 & 8.2.6)', 
+          e: 'Create SOP for internal audits and the final product release routine. Establish an annual audit plan for the quality management system as well as control plans and protocols for final inspection.',
           sop: SOP_DATA.SOP_013_AUDITS_AND_RELEASE },
-        { t: '7.2) Avvikelsehantering, Non-Conformance (NC) & CAPA (ISO 8.3 & 8.5)', 
-          e: 'Skapa SOP för hantering av avvikelser (Non-Conformances) och korrigerande/förebyggande åtgärder (CAPA). Upprätta ett centralt register för att logga, spåra och stänga ärenden, samt utred grundorsaken.',
+        { t: '7.2) Non-Conformance (NC) & CAPA Management (ISO 8.3 & 8.5)', 
+          e: 'Create SOP for handling deviations (Non-Conformances) and corrective/preventive actions (CAPA). Establish a central register to log, track, and close cases, as well as investigate root cause.',
           sop: SOP_DATA.SOP_014_NC_CAPA_MANAGEMENT },
         { t: '7.3) Data Analysis & Trends (ISO 8.4)', 
-          e: 'Skapa SOP för dataanalys (hur KPI:er och felmängder mäts) och sammanställ regelbundna trendrapporter över kvalitetsdata till ledningen.',
+          e: 'Create SOP for data analysis (how KPIs and error rates are measured) and compile regular trend reports on quality data for management.',
           sop: SOP_DATA.SOP_015_DATA_ANALYSIS } 
       ]
     },
 
 /****************************************************************************************************/
     { id: 'step8', 
-      title: 'Steg 8)  Post-Market & Vigilance (MDR Art. 83-92)', 
-      desc: 'Processer för att kontrollera att produkten och systemet fungerar.',
+      title: 'Step 8) Post-Market & Vigilance (MDR Art. 83-92)', 
+      desc: 'Processes to control that the product and system are functioning.',
       checklist: [
-        { t: '8.1) Inspection Plans', e: 'Definitioner för vad som kontrolleras vid frisläppning av produkt.' }
+        { t: '8.1) Inspection Plans', e: 'Definitions for what is checked at product release.' }
       ]
     },
 
 /****************************************************************************************************/
     { id: 'step9', 
-      title: 'Steg 9) Avvikelser & CAPA', 
-      desc: 'System för att hantera fel och förhindra att de upprepas.',
+      title: 'Step 9) Non-Conformances & CAPA', 
+      desc: 'System for handling errors and preventing recurrence.',
       checklist: [
-        { t: '9.1) NC & CAPA-process (ISO 8.5)', e: 'Logg för avvikelser och utredningsrapporter för rotorsaker.' }
+        { t: '9.1) NC & CAPA Process (ISO 8.5)', e: 'Log for deviations and investigation reports for root causes.' }
       ]
     },
 
 /****************************************************************************************************/
     { id: 'step10', 
-      title: 'Steg 10) Internrevision & NB-redo', 
-      desc: 'Slutkontroll av hela systemet innan extern granskning.',
+      title: 'Step 10) Internal Audit & NB-Ready', 
+      desc: 'Final review of the entire system before external audit.',
       checklist: [
-        { t: '10.1) Internrevisionsrapport (ISO 8.2.2)', e: 'Fullständig genomgång av QMS:et för att säkra att ni är redo för NB.' }
+        { t: '10.1) Internal Audit Report (ISO 8.2.2)', e: 'Full review of the QMS to ensure readiness for Notified Body.' }
       ]
     }
 ]

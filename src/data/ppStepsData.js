@@ -1,75 +1,68 @@
-
-
-
-
-
-
-
 export const PP_DATA = [
   {
     id: 'p1',
-    title: 'Steg 1) Preklinisk utveckling',
-    desc: 'Kartlägg substansens kemiska och biologiska egenskaper in vitro och in vivo innan studier på människa påbörjas.',
+    title: 'Step 1) Preclinical Development',
+    desc: 'Characterize the chemical and biological properties of the substance in vitro and in vivo before initiating human studies.',
     checklist: [
-      { t: 'Laboratoriestudier & karakterisering', 
-        e: 'Dokumentation av molekylstruktur, stabilitet, renhetsgrad och farmaceutisk formuleringsutveckling.' },
+      { t: 'Laboratory Studies & Characterization', 
+        e: 'Documentation of molecular structure, stability, purity, and pharmaceutical formulation development.' },
      
-      { t: 'In vivo toxicitets- och säkerhetsstudier', 
-        e: 'Obligatoriska prekliniska djurförsök för att fastställa toxicitetsprofil, farmakokinetik (ADME) och startdos för människa.' }
+      { t: 'In Vivo Toxicity & Safety Studies', 
+        e: 'Mandatory preclinical animal studies to determine toxicity profile, pharmacokinetics (ADME), and starting dose for humans.' }
     ]
   },
   {
     id: 'p2',
-    title: 'Steg 2) Kliniska prövningar (CTR)',
-    desc: 'Ansök om och genomför kliniska fas I–III-studier på människor enligt förordning (EU) nr 536/2014 via CTIS-portalen.',
+    title: 'Step 2) Clinical Trials (CTR)',
+    desc: 'Apply for and conduct clinical Phase I–III studies in humans in accordance with Regulation (EU) No 536/2014 via the CTIS portal.',
     checklist: [
-      { t: 'Fas I: Human säkerhet och dosering', 
-        e: 'Tester på en liten grupp friska frivilliga (20–100 pers) för att utvärdera tolerabilitet och farmakodynamik.' },
-      { t: 'Fas II: Terapeutisk indikation och effekt', 
-        e: 'Explorativa studier på en mindre, homogen patientgrupp (100–500 pers) för att utvärdera effekt och biverkningsprofil.' },
-      { t: 'Fas III: Slutgiltig bekräftelse av nytta/risk', 
-        e: 'Storskaliga, multicentriska och randomiserade studier (tusentals patienter) för att bevisa statistiskt säkerställd terapeutisk nytta mot placebo eller standardbehandling.' }
+      { t: 'Phase I: Human Safety & Dosing', 
+        e: 'Testing on a small group of healthy volunteers (20–100 people) to evaluate tolerability and pharmacodynamics.' },
+      { t: 'Phase II: Therapeutic Indication & Efficacy', 
+        e: 'Exploratory studies on a smaller, homogeneous patient group (100–500 people) to evaluate efficacy and side effect profile.' },
+      { t: 'Phase III: Final Confirmation of Benefit/Risk', 
+        e: 'Large-scale, multicenter, randomized studies (thousands of patients) to demonstrate statistically significant therapeutic benefit versus placebo or standard of care.' }
     ]
   },
   {
     id: 'p3',
-    title: 'Steg 3) Ansökan om marknadsgodkännande',
-    desc: 'Sammanställ den fullständiga tekniska dokumentationen i CTD-format för regulatorisk granskning och myndighetsgodkännande.',
+    title: 'Step 3) Marketing Authorization Application',
+    desc: 'Compile the complete technical documentation in CTD format for regulatory review and authority approval.',
     checklist: [
-      { t: 'Centraliserat godkännande via EMA', 
-        e: 'Obligatorisk väg för biotekniska och innovativa läkemedel. Vetenskaplig utvärdering görs av EMA:s kommitté CHMP och beslut fattas av EU-kommissionen.' },
-      { t: 'Nationell / Decentraliserad procedur (MRP/DCP)', 
-        e: 'Väg via Läkemedelsverket för produkter som inte omfattas av EMA:s obligatoriska krav, exempelvis generika eller lokala substanser.' },
-      { t: 'Pharma Package regulatoriska dataskydd', 
-        e: 'Säkerställ efterlevnad av de nya tidsperioderna för dataskydd och marknadsexklusivitet för den innovativa substansen.' }
+      { t: 'Centralized Approval via EMA', 
+        e: "Mandatory pathway for biotechnological and innovative medicinal products. Scientific evaluation is conducted by EMA's CHMP committee, with final decision by the European Commission." },
+      { t: 'National / Decentralized Procedure (MRP/DCP)', 
+        e: "Pathway via the Swedish Medical Products Agency for products not covered by EMA's mandatory scope, such as generics or local substances." },
+      { t: 'Pharma Package Regulatory Data Protection', 
+        e: 'Ensure compliance with the new data protection and market exclusivity periods for the innovative substance.' }
     ]
   },
   {
     id: 'p4',
-    title: 'Steg 4) Nationell prissättning & subvention',
-    desc: 'Efter EU-godkännande måste läkemedlet integreras i det nationella prissättnings- och förmånssystemet.',
+    title: 'Step 4) National Pricing & Reimbursement',
+    desc: 'After EU approval, the medicinal product must be integrated into the national pricing and reimbursement system.',
     checklist: [
-      { t: 'Ansökan till TLV (Sverige)', 
-        e: 'Hälsoekonomisk dokumentation skickas till Tandvårds- och läkemedelsförmånsverket för beslut om subvention och inkludering i högkostnadsskyddet.' },
-      { t: 'Värdebaserad prissättning', 
-         e: 'Framtagande av underlag som visar att läkemedlets kostnad står i rimlig proportion till den kliniska nyttan jämfört med befintlig vård.' }
+      { t: 'Application to TLV (Sweden)', 
+        e: 'Health economic documentation is submitted to the Dental and Pharmaceutical Benefits Agency for decisions on reimbursement and inclusion in the high-cost protection scheme.' },
+      { t: 'Value-Based Pricing', 
+         e: "Development of evidence demonstrating that the drug's cost is proportionate to its clinical benefit compared to existing care." }
     ]
   },
   {
     id: 'p5',
-    title: 'Steg 5) Eftermarknadsfas & Farmakovigilans',
-    desc: 'Uppfyll de kontinuerliga skyldigheterna för säkerhetsövervakning efter att läkemedlet har introducerats på marknaden.',
+    title: 'Step 5) Post-Market Phase & Pharmacovigilance',
+    desc: 'Fulfill the continuous obligations for safety monitoring after the medicinal product has been introduced to the market.',
     checklist: [
-      { t: '5.1) Farmakovigilanssystem (QPPV)', 
-        e: 'Etablera ett system för säkerhetsövervakning under ledning av en sakkunnig person (Qualified Person Responsible for Pharmacovigilance) för att samla in biverkningar.' },
-      { t: '5.2) Rapportering till EudraVigilance', 
-        e: 'Omedelbar elektronisk rapportering av alla allvarliga misstänkta biverkningar till EU:s gemensamma biverkningsdatabas enligt det nya biverkningsdirektivet.' },
-      { t: '5.3) Periodiska säkerhetsrapporter (PSUR)', 
-        e: 'Löpande sammanställning och inskickande av Periodic Safety Update Reports till myndigheterna för att bevisa att nytta-riskbalansen förblir positiv.' },
-      { t: '5.4) Spårbarhet & Säkerhetsdetaljer', 
-        e: 'Säkerställ att varje förpackning är försedd med en unik 2D-kod (datamatrix) och en säkerhetsförsegling på apoteksnivå för att förhindra förfalskade läkemedel.' },
-      { t: '5.5) Hantering av produktfel och indragningar', 
-        e: 'Upprätthåll rutiner för att omedelbart kunna stoppa distributionen och dra tillbaka en hel batch (produktåterkallelse) vid minsta misstanke om kvalitetsdefekter.' }
+      { t: '5.1) Pharmacovigilance System (QPPV)', 
+        e: 'Establish a safety monitoring system under the leadership of a Qualified Person Responsible for Pharmacovigilance to collect adverse reactions.' },
+      { t: '5.2) Reporting to EudraVigilance', 
+        e: "Immediate electronic reporting of all serious suspected adverse reactions to the EU's common adverse reaction database in accordance with the new pharmacovigilance directive." },
+      { t: '5.3) Periodic Safety Update Reports (PSUR)', 
+        e: 'Ongoing compilation and submission of Periodic Safety Update Reports to authorities to demonstrate that the benefit-risk balance remains positive.' },
+      { t: '5.4) Traceability & Safety Features', 
+        e: 'Ensure each package carries a unique 2D code (datamatrix) and an anti-tampering seal at pharmacy level to prevent falsified medicines.' },
+      { t: '5.5) Management of Product Defects & Recalls', 
+        e: 'Maintain procedures to immediately halt distribution and recall an entire batch (product recall) at the slightest suspicion of quality defects.' }
     ]
   }
 ];
