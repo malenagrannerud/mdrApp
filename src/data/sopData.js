@@ -6,7 +6,7 @@
 
 export const SOP_DATA = {
 
-  SOP_001: {
+  SOP_1: {
     id: 'SOP',
     title: '📄 SOP-Software_Validation_Process.pdf', 
     version: '1.0', 
@@ -16,11 +16,7 @@ export const SOP_DATA = {
 Validera eQMS och verktyg.
 
 ## 2. SCOPE
-Denna SOP omfattar all mjukvara som används för att hantera, lagra eller processa kvalitetsdata inom företagets QMS, inklusive men inte begränsat till:
-- eQMS-plattformar
-- Dokumenthanteringssystem
-- CAPA/NCR-system
-- Utbildningsdatabaser
+
 
 ## 3. DEFINITIONS
 - Validering: Dokumenterad process som bekräftar att mjukvaran konsekvent producerar förväntade resultat
@@ -49,10 +45,10 @@ Version 1.0: Initial release (2024-01-15)
     `.trim()
   },
 
-  SOP_002_DOC_CONTROL: {
+  SOP_2_DOC_CONTROL: {
     title: '📄 SOP-Document_Control.pdf',
     version: '1.0',
-    owner: 'QA Manager',
+    owner: 'QA',
     content: 'Document control procedure...'
   },
 

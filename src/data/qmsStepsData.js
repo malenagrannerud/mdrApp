@@ -18,7 +18,6 @@ The headings are structured according to ISO 13485 sections, with a focus on the
 
 ...
 
-
 📁 QMS
   📁 1-SCOPE OF QMS
   📁 2-NORMATIVE REFERENCES
@@ -40,7 +39,9 @@ The headings are structured according to ISO 13485 sections, with a focus on the
     title: 'Step 1) Fundamental System Setup', 
     desc: 'Establish the foundation for a QMS.',
     checklist: [
-      { t: '1.1) Create a SOP for Software Validation', 
+      {t:'1.1) Create a SOP for Software Validation'},
+      {t:'1.2) Create a SOP for Document Control'},
+      { t: ' ', 
         e: `
 📁 QMS
   📁 1-SCOPE OF QMS
@@ -54,7 +55,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
         
   files: {
           '1-SCOPE OF QMS': [
-            { sop: SOP_DATA.SOP_001, indent: '    ' }
+            { sop: SOP_DATA.SOP_1, indent: '    ' }
           ]
         }
       }
@@ -128,19 +129,20 @@ The headings are structured according to ISO 13485 sections, with a focus on the
         📁 Design Input
         📁 Design Output
         📁 Device Risk/Usability
-            📁 Risk Management
+          📁 Risk Management
         📁 Design Review
         📁 Design Verification
         📁 Design Release
         📁 Design Validation
-            📁 Clinical Evaluation
+          📁 Clinical Evaluation
         📁 Design Changes
         📁 Design Transfer
         📁 Design Maintenance
   `,
-  files: { '7-DHF': [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent: '    ', label: 'SOP-Design_Control.pdf ' }],
+  files: { '7-DHF': 
+           [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent: '    '}],
            'Risk Management': [{ sop: SOP_DATA5.SOP_RISK_MANAGEMENT, indent: '          ' }],
-           'Design Validation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent: '          ' }],
+           'Clinical Evaluation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent: '          ' }],
            'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent: '          ' }],
           }
     }
