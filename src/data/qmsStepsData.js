@@ -16,6 +16,9 @@ export const QMS_DATA = [
         e: `
 The headings are structured according to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.
 
+...
+
+
 📁 QMS
   📁 1-SCOPE OF QMS
   📁 2-NORMATIVE REFERENCES
