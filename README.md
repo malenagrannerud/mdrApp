@@ -30,14 +30,34 @@ In regulated environments, details compound into trust. This app showcases:
 | **File Structures** | Visual folder hierarchies showing how to organize regulatory documentation |
 
 ---
+## To Do
 
+- [ ] Add expected time dependencies
+- [ ] Add fictive Audit checklists
+- [ ] Add GSPR checklist 
+- [ ] Expand PMS & vigilance workflows (MDR Art. 83–92)
+- [ ] Add UDI registration module (MDR Art. 27)
+- [ ] Add supplier management register and QAA templates
+- [ ] Add calibration and equipment log module
+- [ ] Build PSUR template generator (Periodic Safety Update Report)
+- [ ] Add search functionality across all SOPs and templates
+- [ ] Implement role-based view (QA Manager vs. CTO vs. RA)
+- [ ] Add export to PDF for audit readiness
+- [ ] Expand clinical evaluation workflow (CEP, CER, PMCF plan)
+- [ ] Add Notified Body readiness checklist
+
+
+
+
+
+
+
+---
 ## Tech Stack
-
 - React + TypeScript
 - Vite
 - Tailwind CSS
 - Deployed on Vercel
-
 ---
 
 ## About Me
