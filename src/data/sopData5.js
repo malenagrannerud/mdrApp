@@ -1,5 +1,6 @@
-import swAsmdImage from '../assets/sw_asmd.png';
 
+
+import swAsmdImage from '../assets/sw_asmd.png';
 export const SOP_DATA5 = {
 
 /***********************************************  SOP 006  *****************************************************/
@@ -37,14 +38,14 @@ The phases of designing and developing a MD are described in the table below. Re
 [TABLE_START]
 
 | Phase | Actions | Responsible | Record |
-| Feasibility | Conduct market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
+| Feasibility | Market analysis, PoC, and high-level risk assessment. | Product Manager | Feasibility_Report.pdf |
 | Design Planning | Define development structure, milestones, and V&V strategy. | R&D | Design_Plan.pdf |
 | Design Input | Create URS and define regulatory, clinical, and cybersecurity requirements. | Product Manager | Design Input Spec |
 | Design Output | Implement software/hardware code and write TD. | Technical Engineer | Software Architecture Document |
 | Device Risk / Usability | Execute ISO 14971 hazard analysis and FMEA matrix. | Technical Engineer | RMF |
 | Design Review | Conduct formal review meetings and execute gap analysis. | R&D | Review Minutes |
-| Design Verification | Perform unit, integration, and system testing. | Technical Engineer | Traceability Matrix |
-| Design Validation | Execute clinical validation and summative usability testing. | Product Manager | CER |
+| Design Verification | Perform unit, integration, and system testing. | Technical Engineer | Verification_Reports.pdf  |
+| Design Validation | See SOP-Clinical_Evaluation.p | Product Manager | CEP.pdf, CER.pdf |
 | Design Release | Conduct final DHF review and compliance check. | QA | DoC.pdf |
 | Design Transfer | Deploy code into production and onboard critical suppliers. | Technical Engineer | Transfer Checklist |
 | Design Changes | Process change requests and execute impact analysis. | Technical Engineer | SOP-Change_Control.pdf |
@@ -80,7 +81,7 @@ Associated Templates and Forms to be executed:
 📝 TMP-Risk_Management_Report.docx
 📝 TMP-Design_Review_Minutes.docx
 📝 TMP-Verification_Traceability_Matrix.docx
-📝 TMP-Validation_Protocol_&_Report.docx
+📝 TMP-Validation_&_Report.docx
 📝 DoC.pdf
 📝 TMP-Design_Transfer_Checklist.docx
 SOP-Change_Control.pdf
@@ -120,6 +121,8 @@ Risk Management File (RMF): Compilation of risk records for a specific device
 Risk Evaluation: Comparison of estimated risk against given risk acceptability criteria
 Risk Control: Process in which decisions are made and measures implemented to reduce risks
 Risk Management Team (RMT): A team of at least one from R&D (CTO), QA/RA (PRRC), and medical expert (MTO).
+Residudal risks:
+Secondary risks: 
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
@@ -131,35 +134,6 @@ Risk Management Team (RMT): A team of at least one from R&D (CTO), QA/RA (PRRC),
 [TABLE_END]
 
 ## 5. THE RISK MANAGEMENT PROCEDURE
-
-\`\`\` mermaid
-flowchart TD
-    Phase1([Phase 1: Establish Intended Use]) --> Phase2[Phase 2: Identify Hazards and Hazardous Situations]
-    Phase2 --> Estimation[2.3 Risk Estimation S x P]
-    Estimation --> Evaluation{2.3 Risk Evaluation: Is Risk Acceptable?}
-    
-    Evaluation -- No --> Control[2.4 Implement Risk Controls]
-    Control --> Priority{Regulatory Priority}
-    Priority --> 1st Design[Inherent Safety by Design]
-    Priority --> 2nd Protective[Protective Measures / UI Alerts]
-    Priority --> 3rd Info[Information for Safety / User Manual]
-    
-    Design --> Verification[2.5 Verification and Testing]
-    Protective --> Verification
-    Info --> Verification
-    
-    Verification --> Secondary{Any Secondary Risks?}
-    Secondary -- Yes --> Phase2
-    Secondary -- No --> Evaluation
-    
-    Evaluation -- Yes --> Report[2.5 Compile Risk Management Report]
-    Report --> Release([Product Release and Production Branch Merge])
-    
-    Release --> PMS[2.6 Post-Market Surveillance and AI Drift Monitoring]
-    PMS --> New Hazard or Higher Frequency CM[Change Management Process]
-    CM --> Phase2
-\`\`\`
-
 
 PHASE 1. Establish Intended Use 
 Responsible: RMT
@@ -194,8 +168,8 @@ Output: Current_Risk_Assesment_Report.pdf
 
 2.4 Risk Control
 Resonsables
-R&D/CTO: Inherent safety by design and Protective measures. They are responsible for refactoring code, altering algorithms, or designing popup alerts in the UI.
-QA/RA: Information for safety: You (Regulatory) or a Technical Writer, who updates the User Manual with the appropriate regulatory warning texts.
+R&D/CTO: refactoring code, altering algorithms, or designing popup alerts in the UI.
+QA/RA: updates the User Manual with the appropriate regulatory warning texts.
 RMT: Evaluation of residual and secondary risks
 
 When a risk must be reduced, the team shall apply the following regulatory priority order for control measures [14971:2019]:
@@ -393,33 +367,20 @@ By signing below, the organization confirms that the Risk Management File is com
     `.trim()
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*******************  SOP 009 - CLINICAL EVALUATION (5.4) *******************/
+/**************************************  SOP - CLINICAL EVALUATION  ****************************************/
   SOP_CLINICAL_EVALUATION: {
     id: 'SOP', 
     title: '📄 SOP-Clinical_Evaluation.pdf', 
     version: '1.0', 
     owner: 'R&D, QA/RA',
     content: `
+
 ## 1. PURPOSE
 The purpose of this SOP is to define the mandatory process for 
 - conducting, 
 - documenting, and 
 - updating 
-the clinical evaluation of Software as a Medical Device (SaMD) to ensure compliance with EU MDR 2017/745 Art. 61 and MDCG 2020-13 guidelines.
+the clinical evaluation to ensure compliance with EU MDR 2017/745 Art. 61 and MDCG 2020-13 guidelines.
 
 ## 2. SCOPE
 Applies to the continuous clinical evaluation of all SaMD products developed by the organization, covering both pre-market evaluation and post-market clinical follow-up (PMCF).
@@ -429,32 +390,77 @@ Clinical Evaluation Plan (CEP)
 Clinical Evaluation Report (CER): A documented report containing the critical evaluation of all clinical data relevant to the device.
 Clinical Evidence: Clinical data and clinical evaluation results pertaining to a device of sufficient amount and quality to allow a qualified assessment of safety and performance.
 Post-Market Clinical Follow-up (PMCF): A continuous process to update the clinical evaluation throughout the lifecycle of the device.
+Product Manager (PM)
 MDCG 2020-13: EU guidance on clinical evaluation assessment for medical device software.
 
 ## 4. RESPONSIBILITY
 [TABLE_START]
 
-
 | Role | Responsibility | Regulatory Compliance |
-| Product Manager | Act as Clinical Lead, gather clinical literature, and coordinate appraisals | MDR Article 61 §1 |
-| Clinical Expert | Appraise clinical data validity and provide expert clinical judgment | MDR Article 61 §2 |
-| RA | Ensure CER formatting meets MDR requirements and monitor MDCG updates | MDR Annex XIV Part A |
-| QA | Review and approve the final CER, ensuring alignment with the Risk File | ISO 13485 §7.3.7 |
-| PRRC | Authorize the release of the CER into the TD | MDR Article 15 |
+| Product Manager | Act as Clinical Lead, gather clinical literature, and coordinate appraisals |
+| Clinical Expert | Appraise clinical data validity and provide expert clinical judgment | 
+| RA | Ensure CER formatting meets MDR requirements and monitor MDCG updates | 
+| QA | Review and approve the final CER, ensuring alignment with the Risk File | 
+| PRRC | Authorize the release of the CER into the TD | 
 [TABLE_END]
 
-## 5. PROCEDURE
-[TABLE_START]
 
+## 5. PROCEDURE 
+/**********************************************************************************/
+PHASE 1) PLANNING ➔ 📄 CEP.pdf
+Responsible: PM / RA
+Input: 📄 Intended_Purpose_Statement.pdf, 📄 Risk_Management_File.pdf (See initial risk).
 
-| Phase | Actions | Responsible | Record |
-| 1. PLANNING | Create a CEP defining the clinical safety, performance, and benefit endpoints. | Product Manager | CEP_Approved.pdf |
-| 2. DATA IDENTIFICATION | Identify relevant clinical data generated from literature searches, clinical investigations, or equivalent devices. | Product Manager | Literature_Search_Protocol_Approved.pdf |
-| 3. DATA APPRAISAL | Appraise identified data sets for methodological quality, scientific validity, and clinical relevance to SaMD algorithms. | Clinical Expert | Clinical_Data_Appraisal_Report_Approved.pdf |
-| 4. ANALYSIS & CER | Analyze the appraised data to prove conformity with safety and performance. Draft the final report. | Product Manager & RA | TMP-CER_Approved.docx |
-| 5. UPDATE & PMCF | Establish a continuous loop to update the CER with real-world post-market data and user feedback. | Product Manager & QA | TMP-PMCF_Plan_Approved.docx |
-[TABLE_END]
+1.0) DEFINE LITTERATURE SEARCH PROCESS 
+1.1) WRITE CLINICAL CLAIMS 
+1.2) MAP CLINICAL CLAIMS ↔️ Annex I-GSPR 
+1.3) ANALYSE RISK & NOVELTY
 
+/*******************************************************************************************/
+PHASE 2) DATA   IDENTIFICATION ➔ 📄 Literature_Report.pdf
+Input: ➔ 📄 CEP.pdf (search strategy)
+Input: ➔ 📄 Design_Verification_Reports.pdf 
+
+2.2 Internal Data Extraction
+Gather internal software verification and usability data.
+
+2.3 External Data Extraction 
+Collect data from equivalent devices or clinical registries.
+
+/*******************************************************************************************/
+PHASE 3) DATA APPRAISAL
+Responsible: Clinical Expert
+
+Analyze Risk Class & Novelty to Determine Data Type
+Appraise data validity and methodological quality against software algorithms and MDCG guidance
+
+1. RA shall evaluate the device risk class (Class I, IIa, IIb, III) according to MDR Annex VIII and MDCG 2019-11.
+2. If the SaMD is Class I or IIa and non-innovative: The clinical data strategy may lean on scientific literature, benchmarking, and equivalent device data.
+3. If the SaMD is Class IIb, Class III, or introduces an innovative algorithm: The Product Manager must plan for a dedicated clinical investigation on the device itself,
+unless full equivalence can be demonstrated according to MDR Annex XIV Part A (3).
+
+Output: TMP-Clinical_Data_Appraisal_Report.docx
+/*******************************************************************************************/
+PHASE 4) ANALYSIS & CER ➔ 📄 CER.pdf
+Gap Analysis via the Clinical Development Plan (CDP)
+
+Run Gap Analysis, verify data sufficiency, and draft final report showing compliance with GSPR. | Product Manager & RA | TMP-Clinical_Evaluation_Report.docx |
+
+1. The Product Manager shall author the Clinical Development Plan (CDP) as a part of the CEP.
+2. The CDP must map all currently available data (e.g., verification testing, usability data, technical performance studies of the software) against the required GSPR milestones and SOTA criteria.
+3. The Product Manager shall perform a Gap Analysis to identify missing clinical endpoints or data-shortfalls.
+4. Any identified data gaps must be resolved by scheduling targeted literature reviews, usability trials, or formal clinical prövningar before locking the design.
+
+/*******************************************************************************************/
+PHASE 5) UPDATE & PMCF ➔ 📄 CER_v2.0.pdf 📄 PMCF_Plan.pdf
+Input: 📄 TMP-PMCF_Plan.docx
+       📄 CER_v1.0.pdf
+
+Verification of Data Sufficiency via MDCG Vägledning
+1. Prior to finalizing the CER, RA and the Clinical Expert shall cross-reference the compiled data package with MDCG 2020-5 (Sufficient Clinical Evidence) and MDCG 2020-6 (Legacy Devices, if applicable).
+2. The Clinical Expert must sign off that the quantitative and qualitative level of data is robust enough to prove clinical safety, technical performance (algorithm validity), and clinical benefit as required by MDCG 2020-13.
+
+/*******************************************************************************************/
 ## 6. MDR COMPLIANCE SUMMARY
 [TABLE_START]
 
@@ -488,6 +494,86 @@ Associated Templates and Forms to be executed:
     `.trim()
   },
 
+
+
+/***************************************** CEP **********************************************************/
+  CEP: {
+    id: 'TMP-CEP', 
+    title: '📝 TMP-Clinical_Evaluation_Plan.docx', 
+    version: '1.0', 
+    owner: 'Product Manager / RA',
+    content: `
+    
+## 1. PURPOSE
+The purpose of this document is to define the 
+- clinical evaluation strategy, 
+- clinical development milestones, and 
+- data collection methodologies 
+for the Software as a Medical Device (SaMD) to demonstrate conformity with EU MDR 2017/745 General Safety and Performance Requirements (GSPR).
+
+## 2. SCOPE
+This plan applies exclusively to the pre-market clinical evaluation planning and clinical development of the specified SaMD product version prior to commercial release or major modification.
+
+## 3. DEFINITIONS & ABBREVIATIONS
+Clinical Evaluation Plan CEP
+Clinical Development Plan CDP
+Software as a Medical Device SaMD
+State of the Art SOTA
+
+## 4. RESPONSIBILITY
+[TABLE_START]
+
+| Role | Responsibility  |
+| Product Manager | Complete technical product data, document clinical claims, and align timelines. |
+| Clinical Expert | Establish and validate clinical benchmarks, endpoints, and medical rationale. |
+| RA | Verify GSPR mapping, validate regulatory pathways, and sign off compliance. |
+| QA | Ensure integration with the Risk Management File and approve the final plan. |
+[TABLE_END]
+
+
+## 5. PROCEDURE 
+
+
+
+## 11. SIGN-OFF & APPROVAL BLOCK
+* Product Manager (Clinical Lead): [Name, Signature, Date]
+* Clinical Expert (Medical Reviewer): [Name, Signature, Date]
+* Regulatory Affairs (RA): [Name, Signature, Date]
+* Quality Assurance (QA): [Name, Signature, Date]
+    `.trim()
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
 
 /**************************************  CHANGE CONTROL (5.5) ****************************************************/

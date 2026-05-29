@@ -40,6 +40,11 @@ export default function MdrPage() {
                     : 'border-slate-900 bg-white hover:border-blue-700'
                 }`}
               >
+                <span className={`font-black ${
+                  selected?.id === step.id ? 'text-blue-700' : 'text-slate-300'
+                }`}>
+                  {idx}
+                </span>
                 <h3 className="font-black text-slate-800 text-md uppercase leading-tight">
                   {step.title}
                 </h3>
