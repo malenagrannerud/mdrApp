@@ -112,7 +112,7 @@ export const QMS_DATA = [
         { e: 'Produce a Clinical Evaluation Report (CER) (MDR Annex XIV)' }
       ]
     },
-    { t: '5.4) Design Change Control ',
+    { t: '5.4) Design Change Control',
       checklist: [  
         { e: 'Create a SOP for design change control post-launch → ', 
           sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]}
