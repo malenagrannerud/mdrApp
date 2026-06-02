@@ -2,23 +2,24 @@
  * @file qmsStepsData.js
  * @description Central Roadmap structure that imports templates from qmsSopData.
  */
-import { SOP_DATA } from './sopData.js';
+import { SOP_DATA1 } from './sopData1.js';
 import { SOP_DATA5 } from './sopData5.js';
 import { SOP_DATA6 } from './sopData6.js';
 export const QMS_DATA = [
 
 /************************************************** STEP 0 ********************************************/
 {  id: 'q0',
-    title: 'Introduction',
-    desc: 'A Step by Step Roadmap to Implementing a QMS for Manufacturers',
+    title: 'Implementing a QMS',
+    desc: 'An ISO 13485 and MDR-compliant structure for manufacturers.',
     checklist: [
-      { t: 'QMS Steps Overview',
-        e: `The headings are structured according to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.`},
-      { t: ' ', 
+      { t: 'Project Overview',
+        e: `This roadmap provides deliverables and templates to build a compliant QMS. 
+        The start is an empty file structure, that will be filled with clickable example SOPs, registers, and records, as steps proceeds.`},
+      { t: 'Resulting File Structure', 
         e: `
     
 📁 QMS
-  📁 1-SCOPE OF QMS
+  📁 1-SCOPE
   📁 2-NORMATIVE REFERENCES
   📁 3-TERMS & DEFINITIONS
   📁 4-QMS
@@ -31,30 +32,33 @@ export const QMS_DATA = [
   ]
 },
 
- 
 /************************************************** STEP 1 ********************************************/
 {   id: 'step1', 
-    title: 'Step 1) Fundamental System Setup', 
-    desc: 'Establish the foundation for a QMS.',
+    title: 'Step 1) Set Up an Initial System ', 
+    desc: 'Solidify essential foundations for an ISO 13485 & MDR compliant system by validating documentation software & controlling documents.',
     checklist: [
-      {t:'1.1) Create a SOP for Software Validation'},
-      {t:'1.2) Create a SOP for Document Control'},
-      { t: ' ', 
-        e: `
+      {t:'1.1) Create a SOP for Software Validation ', 
+       e: 'Create a SOP for validating the software used to manage QMS documentation and records. This ensures that the tools themselves are compliant and reliable → ',
+       sop: SOP_DATA1.SOP_SW_VAL,
+      },
+      {t:'1.2) Create a SOP for Document Control', 
+       sop: SOP_DATA1.SOP_DOC_CONTROL},
+
+      {t:'Resulting File Structure', 
+       e: `
+
 📁 QMS
-  📁 1-SCOPE OF QMS
+  📁 1-SCOPE
   📁 2-NORMATIVE REFERENCES
   📁 3-TERMS & DEFINITIONS
-  📁 4-QM
+  📁 4-QMS
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-        
-  files: {
-          '1-SCOPE OF QMS': [
-            { sop: SOP_DATA.SOP_1, indent: '    ' }, 
-            { sop: SOP_DATA.SOP_2_DOC_CONTROL, indent: '    ' }
+  files: {'1-SCOPE': [
+            { sop: SOP_DATA1.SOP_SW_VAL, indent: '    ' }, 
+            { sop: SOP_DATA1.SOP_DOC_CONTROL, indent: '    ' }
           ]
         }
       }
@@ -66,8 +70,24 @@ export const QMS_DATA = [
       title: 'Step 2) Quality Manual & Scope', 
       desc: 'Define what the system covers and how it relates to legal requirements.',
       checklist: [
-        { t: '2.1) Quality Manual (ISO 4.2.2)', e: 'The manual describing how the organization meets ISO 13485 and MDR.' },
-        { t: '2.2) QMS Scope & Exclusions', e: 'Documentation of what the QMS covers and which parts of ISO 13485 are not applicable.' }
+        { t: '2.1) Quality Manual ', 
+          e: 'The manual describing how the organization meets ISO 13485 and MDR.' },
+        { t: '2.2) QMS Scope & Exclusions', 
+          e: 'Documentation of what the QMS covers and which parts of ISO 13485 are not applicable.' },
+        { t: 'Resulting File Structure', 
+          e: `
+    
+📁 QMS
+  📁 1-SCOPE
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  files: []
+        }       
       ]
     },
 /************************************************** STEP 3 ********************************************/
@@ -75,9 +95,26 @@ export const QMS_DATA = [
       title: 'Step 3) Management Responsibility & Planning', 
       desc: 'Ensure management commitment and that a compliance plan is in place.',
       checklist: [
-        { t: '3.1) Quality Policy & Objectives (ISO 5.1)', e: 'Signed policy and measurable quality objectives.' },
-        { t: '3.2) Roles & PRRC (MDR Art 15)', e: 'Appointment of Person Responsible for Regulatory Compliance (PRRC) and organizational chart.' },
-        { t: '3.3) GAP Analysis & Roadmap', e: 'Checklist showing the gap between current state and full compliance.' }
+        { t: '3.1) Quality Policy & Objectives ', 
+          e: 'Signed policy and measurable quality objectives.' },
+        { t: '3.2) Roles & PRRC ', 
+          e: 'Appointment of Person Responsible for Regulatory Compliance (PRRC) and organizational chart.' },
+        { t: '3.3) GAP Analysis & Roadmap', 
+          e: 'Checklist showing the gap between current state and full compliance.' },
+        { t: 'Resulting File Structure', 
+          e: `
+    
+📁 QMS
+  📁 1-SCOPE
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  files: []
+        }
       ]
     },
 /************************************************** STEP 4 ********************************************/
@@ -85,8 +122,24 @@ export const QMS_DATA = [
       title: 'Step 4) Resource Management', 
       desc: 'Ensure competence, training, and a secure working environment.',
       checklist: [
-        { t: '4.1) Competence & Training (ISO 6.2)', e: 'Training matrix and evidence of personnel qualifications (CV/Diplomas).' },
-        { t: '4.2) Infrastructure & IT Environment (ISO 6.3)', e: 'SOP for maintenance of IT systems and security updates.' }
+        { t: '4.1) Competence & Training', 
+          e: 'Training matrix and evidence of personnel qualifications (CV/Diplomas), iso 6.2.' },
+        { t: '4.2) Infrastructure & IT Environment', 
+          e: 'SOP for maintenance of IT systems and security updates.' }, 
+        { t: 'Resulting File Structure', 
+          e: `
+    
+📁 QMS
+  📁 1-SCOPE
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  files: []
+        }
       ]
     },
 
@@ -94,32 +147,29 @@ export const QMS_DATA = [
 /************************************************** STEP 5 ********************************************/
 { id: 'step5', 
   title: 'Step 5) Product Realisation & Design', 
-  desc: 'Control development from idea to finished product with full traceability (see ISO 13485 Section 7). Records in this step are fed into the Technical Documentation.',
+  desc: 'Control development from idea to finished product with full traceability. Records from this step are fed into the Technical Documentation.',
+  
   checklist: [
-    { t: '5.1) Design Control & Planning',
+    { t: '5.1) Design Control ',
       e: 'Create a SOP for product development and establish a DHF structure → ',
       sop: SOP_DATA5.SOP_DESIGN_CONTROL },
+
     { t: '5.2) Risk Management throughout Lifecycle ',
       e: 'Create a SOP for risk management throughout product lifecycle - ISO 14971 → ',
       sop: SOP_DATA5.SOP_RISK_MANAGEMENT },
     
-      { t: '5.3) Clinical Evaluation & Device Validation ',
-      checklist: [
-        { e: 'Create a SOP for clinical evaluation → ', 
-          sop: SOP_DATA5.SOP_CLINICAL_EVALUATION },
-        { e: 'Create a Clinical Evaluation Plan (CEP) per product (MDR Annex XIV Part A)' },
-        { e: 'Conduct a literature review and clinical data collection (MDR Art. 61)' },
-        { e: 'Produce a Clinical Evaluation Report (CER) (MDR Annex XIV)' }
-      ]
-    },
+    { t: '5.3) Clinical Evaluation & Device Validation ',
+      e: 'Create a SOP for clinical evaluation → ', 
+      sop: SOP_DATA5.SOP_CLINICAL_EVALUATION },
+        
     { t: '5.4) Design Change Control',
-      checklist: [  
-        { e: 'Create a SOP for design change control post-launch → ', 
-          sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]}
-      ]
-    },
-    { t: ' ',
+      e: 'Create a SOP for design change control post-launch → ', 
+      sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]},
+
+    { t: 'Resulting File Structure', 
       e: `
+
+
 📁 7-PRODUCT REALIZATION
   📁 7-DHF
     📁 Feasibility
@@ -174,7 +224,21 @@ export const QMS_DATA = [
             { e: 'Create a SOP for product release, deployment pipelines, and unique device tracking (ISO 7.5.1 & 7.5.4) → ',
               sop: SOP_DATA6.SOP_012_PRODUCTION_AND_TRACEABILITY },
             { e: 'Create a SOP for the qualification and validation of automated test software (ISO 7.5.6 & 7.6) → SOP-013' },
-            { e: 'Establish a register for allocated UDI codes and device release versions (ISO 7.5.8 & 7.5.9) → REG-011' }
+            { e: 'Establish a register for allocated UDI codes and device release versions (ISO 7.5.8 & 7.5.9) → REG-011' }, 
+            { t: 'Resulting File Structure', 
+        e: `
+    
+📁 QMS
+  📁 1-SCOPE
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  files: []
+        }
           ]
         }
       ]
@@ -192,16 +256,44 @@ export const QMS_DATA = [
           sop: SOP_DATA.SOP_014_NC_CAPA_MANAGEMENT },
         { t: '7.3) Data Analysis & Trends (ISO 8.4)', 
           e: 'Create SOP for data analysis (how KPIs and error rates are measured) and compile regular trend reports on quality data for management.',
-          sop: SOP_DATA.SOP_015_DATA_ANALYSIS } 
+          sop: SOP_DATA.SOP_015_DATA_ANALYSIS }, 
+        { t: 'Resulting File Structure', 
+        e: `
+    
+📁 QMS
+  📁 1-SCOPE
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  files: []
+        } 
       ]
     },
 
 /****************************************************************************************************/
     { id: 'step8', 
       title: 'Step 8) Post-Market & Vigilance ', 
-      desc: 'Processes to control that the product and system are functioning. MDR Art. 83-92',
+      desc: 'Processes to control that the product and system are functioning.',
       checklist: [
-        { t: '8.1) Inspection Plans', e: 'Definitions for what is checked at product release.' }
+        { t: '8.1) Inspection Plans', e: 'Definitions for what is checked at product release.' }, 
+        { t: 'Resulting File Structure', 
+        e: `
+    
+📁 QMS
+  📁 1-SCOPE
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  files: []
+        }
       ]
     },
 
@@ -212,7 +304,22 @@ export const QMS_DATA = [
       title: 'Step 9) Internal Audit & NB-Ready', 
       desc: 'Final review of the entire system before external audit.',
       checklist: [
-        { t: '9.1) Internal Audit Report (ISO 8.2.2)', e: 'Full review of the QMS to ensure readiness for Notified Body.' }
+        { t: '9.1) Internal Audit Report (ISO 8.2.2)', 
+          e: 'Full review of the QMS to ensure readiness for Notified Body.' }, 
+          { t: ' RESULTING FILE STRUCTURE ', 
+        e: `
+    
+📁 QMS
+  📁 1-SCOPE
+  📁 2-NORMATIVE REFERENCES
+  📁 3-TERMS & DEFINITIONS
+  📁 4-QMS
+  📁 5-MANAGEMENT RESPONSIBILITY
+  📁 6-RESOURCE MANAGEMENT
+  📁 7-PRODUCT REALIZATION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  files: []
+        }
       ]
     }
 ]

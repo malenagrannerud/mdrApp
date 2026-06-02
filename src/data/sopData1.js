@@ -1,21 +1,21 @@
 /**
  * @file sopData.js
- * Central lagring av alla SOPer.
+ * 
  */
 
 
-export const SOP_DATA = {
+export const SOP_DATA1 = {
 
-  SOP_1: {
+  SOP_SW_VAL: {
     id: 'SOP',
-    title: '📄 SOP-Software_Validation_Process.pdf', 
+    title: '📄 SOP-Software_Validation.pdf', 
     version: '1.0', 
     owner: 'QA',
     content: `Document control procedure...
     `.trim()
   },
 
-  SOP_2_DOC_CONTROL: {
+  SOP_DOC_CONTROL: {
     id: 'SOP',
     title: '📄 SOP-Document_Control.pdf',
     version: '1.0',
