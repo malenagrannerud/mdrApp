@@ -1,36 +1,71 @@
+# MDR Compliance – Web Application
 
-# MDR STEPS - READ ONLY 
+THIS APP IS UNDER CONSTRUCTION
 
-## SE STEGEN
+## Overview
+I built this application to demonstrate my ability to translate regulatory requirements into structured, auditable documentation. It is a web app that guides users through MDR (EU 2017/745) compliance workflows and QMS implementation according to ISO 13485:2016. Documents are simplified and fictional for demonstration only.
 
-  1) Gå in i mappen `mdr-main`
-  2) I mappen **QMS** - se stegen för att bygga & underhålla ett QMS enligt ISO 13485
-  3) I mappen **MDR** - se stegen för att sätta en medicinteknisk produkt på marknaden
-
-## SYFTE
-Jag byggde detta repo för att demonstrera min förmåga att omsätta regulatoriska krav i praktisk dokumentation. 
-
-## Viktigt att veta
-
-**Allt innehåll i detta repo är fiktivt.** Produkten, företaget och all klinisk data är påhittade och används enbart i utbildnings- och portfoliosyfte för att demonstrera regulatorisk metodik.
+**Live demo:** [mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
 
 ---
 
+## Why This Matters
 
-# MDR STEPS - THE WEB APP
-## SE APPEN
+In regulated environments, details compound into trust. This app showcases:
 
-1) Klicka på den gröna knappen "Code" uppe till höger i repot.
-2) Välj fliken "Codespaces".
-3) Klicka på den blå knappen "Create codespace on main".
-4) När editorn har laddats i webbläsaren, öppna terminalen längst ner och skriv startkommandot
-    ```bash
-   npm run dev
-   ```
-6) En pop-up ruta dyker upp i det nedre högra hörnet. Klicka på **"Open in Browser"** för att se appen live.
+- **Practical MDR knowledge** – Annex II/III technical documentation structures, clinical evaluation, risk management, post-market surveillance
+- **QMS implementation** – A step-by-step roadmap aligned with ISO 13485:2016 sections 4–8
+- **Traceability** – Clear links between regulatory requirements and the documents that fulfill them
+- **Structured documentation** – Every SOP, register, plan, and report is mapped to its regulatory basis
+
+---
+
+## What You'll Find Here
+
+| Section | Description |
+|---------|-------------|
+| **MDR Path** | Step-by-step technical documentation and compliance workflow |
+| **QMS Roadmap** | 10-step implementation guide based on ISO 13485 |
+| **SOP Templates** | Documented procedures for design control, risk management, clinical evaluation, CAPA, vigilance |
+| **File Structures** | Visual folder hierarchies showing how to organize regulatory documentation |
+
+---
+## To Do
+
+- [ ] Add expected time dependencies
+- [ ] Add fictive Audit checklists
+- [ ] Add GSPR checklist 
+- [ ] Expand PMS & vigilance workflows (MDR Art. 83–92)
+- [ ] Add UDI registration module (MDR Art. 27)
+- [ ] Add supplier management register and QAA templates
+- [ ] Add calibration and equipment log module
+- [ ] Build PSUR template generator (Periodic Safety Update Report)
+- [ ] Add search functionality across all SOPs and templates
+- [ ] Implement role-based view (QA Manager vs. CTO vs. RA)
+- [ ] Add export to PDF for audit readiness
+- [ ] Expand clinical evaluation workflow (CEP, CER, PMCF plan)
+- [ ] Add Notified Body readiness checklist
+
+
+
+
+
 
 
 ---
-*Skapat av Malena Grannerud, april 2026*
+## Tech Stack
+- React + TypeScript
+- Vite
+- Tailwind CSS
+- Deployed on Vercel
+---
 
+## About Me
 
+I am passionate about building systems where quality and compliance are not afterthoughts – they are the foundation. My background spans regulatory affairs, MDR compliance operations, and software development, allowing me to bridge the gap between regulatory requirements and real-world implementation.
+
+**GitHub:** [github.com/malenagrannerud](https://github.com/malenagrannerud)
+
+---
+
+*Created by Malena Grannerud, 2026*
