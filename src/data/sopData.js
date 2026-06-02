@@ -11,37 +11,7 @@ export const SOP_DATA = {
     title: '📄 SOP-Software_Validation_Process.pdf', 
     version: '1.0', 
     owner: 'QA',
-    content: `
-## 1. PURPOSE
-Validera eQMS och verktyg.
-
-## 2. SCOPE
-
-
-## 3. DEFINITIONS
-- Validering: Dokumenterad process som bekräftar att mjukvaran konsekvent producerar förväntade resultat
-- Installation/Operational/Performance Qualification (IQ/OQ/PQ): Standardiserade testfaser för att verifiera korrekt installation, funktion och prestanda 
-
-## 4. RESPONSIBILITY
-- QA Manager: Ansvarig för att godkänna valideringsplan och slutrapport
-- System Administrator: Utför tekniska tester och dokumenterar resultat
-- Process Owner: Verifierar att mjukvaran uppfyller verksamhetskraven
-
-## 5. PROCEDURE 
-- Steg 1: Upprätta en Valideringsplan som identifierar mjukvarans avsedda användning och risknivå
-- Steg 2: Genomför IQ och dokumentera systemkonfigurationen
-- Steg 3: Utför OQ och dokumentera systemets funktioner
-- Steg 4: Slutför PQ under verkliga driftsförhållanden
-- Steg 5: Sammanställ resultaten i en SVR
-- Steg 6: Erhåll sign-off från QA innan systemet tas i drift
-
-## 6. REFERENCES 
-- ISO 13485:2016, Avsnitt 4.1.6
-- IEC 62304:2006 - Medical Device Software
-- GAMP 5 Guidelines
-## 7. APPENDICES 
-## 8. REVISION HISTORY
-Version 1.0: Initial release (2024-01-15)
+    content: `Document control procedure...
     `.trim()
   },
 

@@ -13,11 +13,10 @@ export const QMS_DATA = [
     desc: 'A Step by Step Roadmap to Implementing a QMS for Manufacturers',
     checklist: [
       { t: 'QMS Steps Overview',
+        e: `The headings are structured according to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.`},
+      { t: ' ', 
         e: `
-The headings are structured according to ISO 13485 sections, with a focus on the most critical requirements for MDR compliance. Each step includes specific tasks and deliverables, along with references to relevant SOPs and templates to guide you through the implementation process.
-
-...
-
+    
 📁 QMS
   📁 1-SCOPE OF QMS
   📁 2-NORMATIVE REFERENCES
@@ -27,10 +26,9 @@ The headings are structured according to ISO 13485 sections, with a focus on the
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: {}
-      
+  files: []
       }
-    ]
+  ]
 },
 
  
@@ -47,7 +45,7 @@ The headings are structured according to ISO 13485 sections, with a focus on the
   📁 1-SCOPE OF QMS
   📁 2-NORMATIVE REFERENCES
   📁 3-TERMS & DEFINITIONS
-  📁 4-QMS
+  📁 4-QM
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
@@ -120,31 +118,30 @@ The headings are structured according to ISO 13485 sections, with a focus on the
           sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]}
       ]
     },
-    { t: 'Resulting File Structure',
+    { t: ' ',
       e: `
-  ...
-  📁 7-PRODUCT REALIZATION
-    📁 7-DHF
-        📁 Feasibility
-        📁 Design Planning
-        📁 Design Input
-        📁 Design Output
-        📁 Device Risk/Usability
-          📁 Risk Management
-        📁 Design Review
-        📁 Design Verification
-        📁 Design Release
-        📁 Design Validation
-          📁 Clinical Evaluation
-        📁 Design Changes
-        📁 Design Transfer
-        📁 Design Maintenance
+📁 7-PRODUCT REALIZATION
+  📁 7-DHF
+    📁 Feasibility
+    📁 Design Planning
+    📁 Design Input
+    📁 Design Output
+    📁 Device Risk/Usability
+      📁 Risk Management
+    📁 Design Review
+    📁 Design Verification
+    📁 Design Release
+    📁 Design Validation
+      📁 Clinical Evaluation
+    📁 Design Changes
+    📁 Design Transfer
+    📁 Design Maintenance
   `,
   files: { '7-DHF': 
-           [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent: '    '}],
-           'Risk Management': [{ sop: SOP_DATA5.SOP_RISK_MANAGEMENT, indent: '          ' }],
-           'Clinical Evaluation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent: '          ' }],
-           'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent: '          ' }],
+           [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent: '  ' }],
+           'Risk Management': [{ sop: SOP_DATA5.SOP_RISK_MANAGEMENT, indent: '      ' }],
+           'Clinical Evaluation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent: '      ' }],
+           'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent: '    ' }],
           }
     }
   ]
