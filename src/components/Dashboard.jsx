@@ -13,7 +13,6 @@ const COLORS = { Death: '#ef4444', Injury: '#f59e0b', Malfunction: '#3b82f6' }
 
 /**
  * Product code → namn/klass mapping från FDA API.
- * Uppslaget 2024-06-17.
  */
 const PRODUCT_INFO = {
   'DZE': { name: 'Dental Implant, Root-Form', class: 'II' },
@@ -30,8 +29,6 @@ const PRODUCT_INFO = {
 
 /**
  * Post-Market Surveillance Dashboard
- * 
- * Visar FDA MAUDE-data + lokalt extraherad device-statistik.
  * 
  * @component
  */
@@ -102,27 +99,27 @@ export default function Dashboard() {
   return (
     <div className="page-layout">
       <h1>Post-Market Surveillance Dashboard</h1>
-      <h2>Reports from the FDA MAUDE Database </h2>
+      <h2>Reports from the FDA MAUDE Database</h2>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-4 gap-4 mt-8 mb-4">
         <PBICard title="Total Reports 1992-2025" subtitle="All event types">
-          <p style={{ fontSize: '28px', fontWeight: 700, color: '#111827', margin: 0 }}>{fmt(total)}</p>
+          <p style={{ fontSize: '20px', fontWeight: 700, color: '#111827', margin: 0 }}>{fmt(total)}</p>
         </PBICard>
-        <PBICard title="Reported Deaths 1992-2025" subtitle={pct(deaths, total)}>
-          <p style={{ fontSize: '28px', fontWeight: 700, color: '#DC2626', margin: 0 }}>{fmt(deaths)}</p>
+        <PBICard title="Reported Deaths 1992-2025" subtitle= {pct(deaths, total)}>
+          <p style={{ fontSize: '20px', fontWeight: 700, color: '#DC2626', margin: 0 }}>{fmt(deaths)}</p>
         </PBICard>
         <PBICard title="Reported Injuries 1992-2025" subtitle={pct(injuries, total)}>
-          <p style={{ fontSize: '28px', fontWeight: 700, color: '#D97706', margin: 0 }}>{fmt(injuries)}</p>
+          <p style={{ fontSize: '20px', fontWeight: 700, color: '#D97706', margin: 0 }}>{fmt(injuries)}</p>
         </PBICard>
         <PBICard title="Reported Malfunctions 1992-2025" subtitle={pct(malfunctions, total)}>
-          <p style={{ fontSize: '28px', fontWeight: 700, color: '#2563EB', margin: 0 }}>{fmt(malfunctions)}</p>
+          <p style={{ fontSize: '20px', fontWeight: 700, color: '#2563EB', margin: 0 }}>{fmt(malfunctions)}</p>
         </PBICard>
       </div>
 
-      {/* Charts Row 1 */}
+      {/* Row 1: Severity + Monthly Trend */}
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <PBICard title="Severity Distribution" subtitle="Breakdown of reported event types">
+        <PBICard title="Severity Distribution 1992-2025" subtitle="">
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -138,38 +135,7 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </PBICard>
 
-        <PBICard title="20 Most Reported Product Categories 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={productData} layout="vertical" margin={{ left: 160 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" tickFormatter={fmt} />
-              <YAxis type="category" dataKey="name" width={150} tick={{ fontSize: 10 }} />
-              <Tooltip formatter={(v, _, props) => [fmt(v), `${props.payload.code} (Class ${props.payload.deviceClass})`]} />
-              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-                {productData.map((entry, i) => (
-                  <Cell key={i} fill={entry.deviceClass === 'III' ? '#ef4444' : entry.deviceClass === 'II' ? '#f59e0b' : '#3b82f6'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </PBICard>
-      </div>
-
-      {/* Charts Row 2 */}
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <PBICard title="20 Most Reported Manufacturers 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={manufacturerData} layout="vertical" margin={{ left: 140 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" tickFormatter={fmt} />
-              <YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 10 }} />
-              <Tooltip formatter={v => fmt(v)} />
-              <Bar dataKey="count" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </PBICard>
-
-        <PBICard title="Monthly Trend" subtitle="Reports per month across all years">
+        <PBICard title="Reports per Month 1992-2025 " subtitle="">
           <ResponsiveContainer width="100%" height={300}>
             <ComposedChart data={trend}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -179,6 +145,37 @@ export default function Dashboard() {
               <Area type="monotone" dataKey="reports" fill="#3b82f620" stroke="#3b82f6" name="Reports" />
               <Line type="monotone" dataKey="reports" stroke="#3b82f6" strokeWidth={2} dot={false} />
             </ComposedChart>
+          </ResponsiveContainer>
+        </PBICard>
+      </div>
+
+      {/* Row 2: 2024 Product Categories + Manufacturers */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <PBICard title="20 Most Reported Product Categories 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={productData} layout="vertical" margin={{ left: 170 }}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <XAxis type="number" tickFormatter={fmt} />
+              <YAxis type="category" dataKey="name" width={165} tick={{ fontSize: 9 }} />
+              <Tooltip formatter={(v, _, props) => [fmt(v), `${props.payload.code} (Class ${props.payload.deviceClass})`]} />
+              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+                {productData.map((entry, i) => (
+                  <Cell key={i} fill={entry.deviceClass === 'III' ? '#ef4444' : entry.deviceClass === 'II' ? '#f59e0b' : '#3b82f6'} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </PBICard>
+
+        <PBICard title="20 Most Reported Manufacturers 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={manufacturerData} layout="vertical" margin={{ left: 170 }}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <XAxis type="number" tickFormatter={fmt} />
+              <YAxis type="category" dataKey="name" width={165} tick={{ fontSize: 9 }} />
+              <Tooltip formatter={v => fmt(v)} />
+              <Bar dataKey="count" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </PBICard>
       </div>
