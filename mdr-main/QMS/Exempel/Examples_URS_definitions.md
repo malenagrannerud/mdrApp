@@ -1,0 +1,5 @@
+- Versionshantering: "Systemet ska automatiskt ge dokumentet ett nytt revisionsnummer vid ändring."
+- Elektroniska signaturer: "Systemet ska stödja lösenordsskyddade signaturer som är kopplade till en specifik användare."
+- Audit Trail: "Systemet ska logga vem som läst, ändrat eller godkänt ett dokument och när det skedde."
+- Åtkomst: "Endast QA ska ha behörighet att radera eller arkivera dokument."
+- Lagring: "Systemet ska garantera att dokumenten sparas i minst 10 år."
