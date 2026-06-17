@@ -1,86 +1,126 @@
 {
   "total_rows": 2629411,
-  "top_product_codes": [
-    [
-      "DZE",
-      697107
-    ],
-    [
-      "QBJ",
-      347156
-    ],
-    [
-      "QFG",
-      273207
-    ],
-    [
-      "OZP",
-      129596
-    ],
-    [
-      "BZD",
-      68264
-    ],
-    [
-      "FRN",
-      57739
-    ],
-    [
-      "FPA",
-      47212
-    ],
-    [
-      "QLG",
-      35122
-    ],
-    [
-      "LGW",
-      35083
-    ],
-    [
-      "FTR",
-      30774
-    ],
-    [
-      "DTB",
-      25714
-    ],
-    [
-      "LWS",
-      25224
-    ],
-    [
-      "PQF",
-      22394
-    ],
-    [
-      "NVN",
-      22038
-    ],
-    [
-      "CBK",
-      20339
-    ],
-    [
-      "OZD",
-      18592
-    ],
-    [
-      "LZG",
-      18230
-    ],
-    [
-      "OYC",
-      17620
-    ],
-    [
-      "MKJ",
-      15113
-    ],
-    [
-      "MGB",
-      13762
-    ]
+  "top_products": [
+    {
+      "code": "DZE",
+      "count": 697107,
+      "brand": "BIOHORIZONS INC.",
+      "generic": "ENDOSSEOUS DENTAL IMPLANT"
+    },
+    {
+      "code": "QBJ",
+      "count": 347156,
+      "brand": "DEXCOM G6 CONTINUOUS GLUCOSE MONITORING SYSTEM",
+      "generic": "CONTINUOUS GLUCOSE MONITOR"
+    },
+    {
+      "code": "QFG",
+      "count": 273207,
+      "brand": "T:SLIM X2 INSULIN PUMP WITH INTEROPERABLE TECHNOLOGY (WITH T:CONNECT MOBILE APP)",
+      "generic": "ALTERNATE CONTROLLER ENABLED INFUSION PUMP"
+    },
+    {
+      "code": "OZP",
+      "count": 129596,
+      "brand": "MINIMED 780G US SYSTEM BLE CONNECT 3.0 MG/DL",
+      "generic": "AUTOMATED INSULIN DOSING DEVICE SYSTEM, SINGLE HORMONAL CONTROL"
+    },
+    {
+      "code": "BZD",
+      "count": 68264,
+      "brand": "DREAMSTATION AUTO CPAP",
+      "generic": "VENTILATOR, NON-CONTINUOUS (RESPIRATOR)"
+    },
+    {
+      "code": "FRN",
+      "count": 57739,
+      "brand": "ALARIS SYSTEM",
+      "generic": "PUMP, INFUSION"
+    },
+    {
+      "code": "FPA",
+      "count": 47212,
+      "brand": "AUTOSOFT XC",
+      "generic": "UNO INSET I 60/6 GREY TCAP 10PK INT"
+    },
+    {
+      "code": "QLG",
+      "count": 35122,
+      "brand": "LIBRE 2 SENSOR FREESTYLE",
+      "generic": "FLASH GLUCOSE MONITORING SYSTEM"
+    },
+    {
+      "code": "LGW",
+      "count": 35083,
+      "brand": "INTELLIS",
+      "generic": "STIMULATOR, SPINAL-CORD, TOTALLY IMPLANTED FOR"
+    },
+    {
+      "code": "FTR",
+      "count": 30774,
+      "brand": "MENTOR MEMORYGEL BREAST IMPLANT",
+      "generic": "PROSTHESIS, BREAST, NONINFLATABLE, INTERNAL, SILICONE GEL-FILLED"
+    },
+    {
+      "code": "DTB",
+      "count": 25714,
+      "brand": "CAPSUREFIX NOVUS LEAD MRI SURESCAN",
+      "generic": "PERMANENT PACEMAKER ELECTRODE"
+    },
+    {
+      "code": "LWS",
+      "count": 25224,
+      "brand": "SPRINT QUATTRO SECURE S MRI SURESCAN",
+      "generic": "IMPLANTABLE CARDIOVERTER DEFIBRILLATOR (NON-CRT)"
+    },
+    {
+      "code": "PQF",
+      "count": 22394,
+      "brand": "TRANSMITTER MMT-7841ZN GST5G US",
+      "generic": "SENSOR, GLUCOSE, INVASIVE , NON-ADJUNCTIVE"
+    },
+    {
+      "code": "NVN",
+      "count": 22038,
+      "brand": "TENDRIL STS",
+      "generic": "DRUG ELUTING PERMANENT RIGHT VENTRICULAR (RV)"
+    },
+    {
+      "code": "CBK",
+      "count": 20339,
+      "brand": "TRILOGY 100",
+      "generic": "VENTILATOR, CONTINUOUS, FACILITY USE"
+    },
+    {
+      "code": "OZD",
+      "count": 18592,
+      "brand": "IMPELLA CP",
+      "generic": "TEMPORARY NON-ROLLER TYPE LEFT HEART SUPPORT BLOOD PUMP"
+    },
+    {
+      "code": "LZG",
+      "count": 18230,
+      "brand": "OMNIPOD DASH  INSULIN MANAGEMENT SYSTEM",
+      "generic": "PUMP, INFUSION, INSULIN"
+    },
+    {
+      "code": "OYC",
+      "count": 17620,
+      "brand": "640G INSULIN PUMP MMT-1712K",
+      "generic": "PUMP, INFUSION, INSULIN, TO BE USED WITH INVASIVE GLUCOSE SENSOR"
+    },
+    {
+      "code": "MKJ",
+      "count": 15113,
+      "brand": "EFFICIA DFM100",
+      "generic": "AUTOMATED EXTERNAL DEFIBRILLATORS (NON-WEARABLE)"
+    },
+    {
+      "code": "MGB",
+      "count": 13762,
+      "brand": "PERCLOSE� PROSTYLE�",
+      "generic": "DEVICE, HEMOSTASIS, VASCULAR"
+    }
   ],
   "top_manufacturers": [
     [
@@ -164,5 +204,5 @@
       22048
     ]
   ],
-  "generated": "2026-06-17T14:30:02.814Z"
+  "generated": "2026-06-17T15:12:50.843Z"
 }
