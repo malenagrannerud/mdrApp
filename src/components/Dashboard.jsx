@@ -138,7 +138,7 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </PBICard>
 
-        <PBICard title="Most Reported Product Categories (2024)" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
+        <PBICard title="20 Most Reported Product Categories 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={productData} layout="vertical" margin={{ left: 160 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -157,7 +157,7 @@ export default function Dashboard() {
 
       {/* Charts Row 2 */}
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <PBICard title="Most Reported Manufacturers (2024)" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
+        <PBICard title="20 Most Reported Manufacturers 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={manufacturerData} layout="vertical" margin={{ left: 140 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
