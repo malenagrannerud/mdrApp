@@ -102,20 +102,20 @@ export default function Dashboard() {
   return (
     <div className="page-layout">
       <h1>Post-Market Surveillance Dashboard</h1>
-      <h2>FDA MAUDE Database • All reports 1992–2025</h2>
+      <h2>Reports from the FDA MAUDE Database </h2>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-4 gap-4 mt-8 mb-4">
-        <PBICard title="Total Reports" subtitle="All event types">
+        <PBICard title="Total Reports 1992-2025" subtitle="All event types">
           <p style={{ fontSize: '28px', fontWeight: 700, color: '#111827', margin: 0 }}>{fmt(total)}</p>
         </PBICard>
-        <PBICard title="Deaths" subtitle={pct(deaths, total)}>
+        <PBICard title="Reported Deaths 1992-2025" subtitle={pct(deaths, total)}>
           <p style={{ fontSize: '28px', fontWeight: 700, color: '#DC2626', margin: 0 }}>{fmt(deaths)}</p>
         </PBICard>
-        <PBICard title="Injuries" subtitle={pct(injuries, total)}>
+        <PBICard title="Reported Injuries 1992-2025" subtitle={pct(injuries, total)}>
           <p style={{ fontSize: '28px', fontWeight: 700, color: '#D97706', margin: 0 }}>{fmt(injuries)}</p>
         </PBICard>
-        <PBICard title="Malfunctions" subtitle={pct(malfunctions, total)}>
+        <PBICard title="Reported Malfunctions 1992-2025" subtitle={pct(malfunctions, total)}>
           <p style={{ fontSize: '28px', fontWeight: 700, color: '#2563EB', margin: 0 }}>{fmt(malfunctions)}</p>
         </PBICard>
       </div>
