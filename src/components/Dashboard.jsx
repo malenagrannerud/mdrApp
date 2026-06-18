@@ -106,9 +106,10 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* KORT 1: TOPP PRODUKTER */}
-        <PBICard title="Most reported products 2024" subtitle="Sorted by total number of incident reports">
+        <PBICard title="Topp 10 Medicintekniska Produkter" subtitle="Sorterat efter flest antal incidentrapporter">
           <div className="mb-4 flex items-center gap-2 text-xs font-semibold text-blue-900 bg-blue-50 p-2 rounded">
             <ShieldAlert className="w-4 h-4 text-blue-700" />
+            <span>Visar unika produktkategorier (3-bokstavskoder utbytta mot officiella namn)</span>
           </div>
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -125,9 +126,10 @@ export default function Dashboard() {
         </PBICard>
 
         {/* KORT 2: TOPP TILLVERKARE */}
-        <PBICard title="Most reported manufacturers 2024" subtitle="Sorted by total number of incident reports">
+        <PBICard title="Topp 10 Städade Tillverkare" subtitle="Rensade från suffix som Inc, LLC och Ltd">
           <div className="mb-4 flex items-center gap-2 text-xs font-semibold text-emerald-900 bg-emerald-50 p-2 rounded">
             <Factory className="w-4 h-4 text-emerald-700" />
+            <span>Sammanslagna dotterbolag baserat på dina JS-regler</span>
           </div>
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
