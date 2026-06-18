@@ -18,6 +18,22 @@ In regulated environments, details compound into trust. This app showcases:
 - **Traceability** – Clear links between regulatory requirements and the documents that fulfill them
 - **Structured documentation** – Every SOP, register, plan, and report is mapped to its regulatory basis
 
+
+
+
+
+---
+
+Data from FDA are
+
+1. Filered and aggregated using an ETL-pipeline (To large file for Supabase)
+2. Uploaded to Supabase
+3. Coded with SQL, 
+4. Loaded to the code
+5. Presented in the webb app
+
+
+
 ---
 
 ## What You'll Find Here
@@ -26,8 +42,8 @@ In regulated environments, details compound into trust. This app showcases:
 |---------|-------------|
 | **MDR Path** | Step-by-step technical documentation and compliance workflow |
 | **QMS Roadmap** | 10-step implementation guide based on ISO 13485 |
-| **SOP Templates** | Documented procedures for design control, risk management, clinical evaluation, CAPA, vigilance |
-| **File Structures** | Visual folder hierarchies showing how to organize regulatory documentation |
+| **Post market** | Data on medical device from FDA |
+
 
 ---
 ## To Do

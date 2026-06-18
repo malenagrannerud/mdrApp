@@ -1,3 +1,62 @@
+
+/**
+ * Post-Market Surveillance Dashboard
+ * 
+ * Visualiserar FDA MAUDE adverse event-data för medicintekniska produkter.
+ * 
+ * ========================================
+ * DATAKÄLLOR
+ * ========================================
+ * 
+ * 1. openFDA API (via Vite-proxy /api/fda)
+ *    - ?count=event_type.exact  → KPI:er + cirkeldiagram
+ *      Returnerar: [{term: "Death", count: 227262}, ...]
+ *      Används för: Total Reports, Deaths, Injuries, Malfunctions, Severity Distribution
+ *    - ?count=date_received      → Månadstrend
+ *      Returnerar: [{time: "19920310", count: 5}, ...]
+ *      Används för: Monthly Trend (grupperas på YYYYMM)
+ * 
+ * 2. Supabase (product_stats-tabellen)
+ *      Data har rensats och aggregerats från DEVICE2024.txt via scripts/filter.js
+ *      Kolumner: product_code, total_reports, brand_name, generic_name
+ *      Används för: 20 Most Reported Product Categories, 20 Most Reported Manufacturers
+ * 
+ * ========================================
+ * LAYOUT (Power BI-stil)
+ * ========================================
+ * 
+ * Rad 1: 4 KPI-kort (Total, Deaths, Injuries, Malfunctions) 1992-2025
+ * Rad 2: Cirkeldiagram (Severity Distribution) + Trendlinje (Monthly Trend)
+ * Rad 3: Stapeldiagram (Product Categories 2024) + Stapeldiagram (Manufacturers 2024)
+ * Footer: Disclaimer om MAUDE-datas begränsningar
+ * 
+ * ========================================
+ * BEGRÄNSNINGAR
+ * ========================================
+ * 
+ * - API:et kan inte filtreras på år eller device class
+ * - KPI:er och trend visar HELA databasen (1992-2025), inte bara 2024
+ * - Supabase-datan är från DEVICE2024.txt (endast 2024)
+ * - Device class mappas manuellt via PRODUCT_CATEGORY (endast 10 koder)
+ * - Tillverkardatan använder brand_name som proxy (ingen separat manufacturer-tabell)
+ * 
+ * ========================================
+ * TEKNISK STACK
+ * ========================================
+ * 
+ * - React + Vite (frontend)
+ * - Recharts (diagram)
+ * - Tailwind CSS (styling)
+ * - Lucide React (ikoner)
+ * - openFDA API (event data)
+ * - Supabase (produktstatistik)
+ * - Node.js streams (ETL i filter.js)
+ * 
+ * @component
+ */
+
+
+
 import { useState, useEffect } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -6,46 +65,68 @@ import {
 } from 'recharts'
 import { Activity, Heart, AlertCircle, AlertTriangle, Loader } from 'lucide-react'
 import PBICard from './PBICard'
-import deviceSummary from '../data/device_summary.json'
+import { supabase } from '../lib/supabase'
 
 const BASE = '/api/fda/device/event.json'
 const COLORS = { Death: '#ef4444', Injury: '#f59e0b', Malfunction: '#3b82f6' }
 
+
 /**
- * FDA Product Code → Category mapping
+ * FDA Product Code → Category + Device Class mapping.
+ * Källa: openFDA device/classification API (2026-06-18).
+ * 20 produktkoder från DEVICE2024.txt.
  */
 const PRODUCT_CATEGORY = {
   'DZE': { category: 'Dental Implant, Root-Form', class: '2' },
-  'QBJ': { category: 'Continuous Glucose Monitor', class: '2' },
-  'QFG': { category: 'Insulin Infusion Pump', class: '2' },
-  'OZP': { category: 'Automated Insulin Dosing System', class: '3' },
-  'BZD': { category: 'Ventilator, Non-Continuous', class: '2' },
-  'FRN': { category: 'Infusion Pump', class: '2' },
+  'QBJ': { category: 'Continuous Glucose Monitor, Factory Calibrated', class: '2' },
+  'QFG': { category: 'ACE-Enabled Insulin Infusion Pump', class: '2' },
+  'OZP': { category: 'Automated Insulin Dosing, Single Hormonal Control', class: '3' },
+  'BZD': { category: 'Ventilator, Non-Continuous (Respirator)', class: '2' },
+  'FRN': { category: 'Infusion Pump, General', class: '2' },
   'FPA': { category: 'IV Administration Set', class: '2' },
-  'QLG': { category: 'Continuous Glucose Monitor (Standalone)', class: '2' },
-  'LGW': { category: 'Spinal Cord Stimulator, Implanted', class: '3' },
+  'QLG': { category: 'Continuous Glucose Monitor, Standalone', class: '2' },
+  'LGW': { category: 'Spinal Cord Stimulator, Totally Implanted', class: '3' },
   'FTR': { category: 'Silicone Breast Implant', class: '3' },
+  'DTB': { category: 'Pacemaker Electrode, Permanent', class: '3' },
+  'LWS': { category: 'Implantable Defibrillator, Non-CRT', class: '3' },
+  'PQF': { category: 'Glucose Sensor, Invasive, Non-Adjunctive', class: '3' },
+  'NVN': { category: 'Drug-Eluting Pacemaker Electrode', class: '3' },
+  'CBK': { category: 'Ventilator, Continuous, Facility Use', class: '2' },
+  'OZD': { category: 'Temporary Left Heart Support Blood Pump', class: '3' },
+  'LZG': { category: 'Insulin Infusion Pump, Patch', class: '2' },
+  'OYC': { category: 'Insulin Pump with Invasive Glucose Sensor', class: '3' },
+  'MKJ': { category: 'Automated External Defibrillator, Non-Wearable', class: '3' },
+  'MGB': { category: 'Vascular Hemostasis Device', class: '3' },
 }
 
 export default function Dashboard() {
   const [eventData, setEventData] = useState(null)
   const [trendData, setTrendData] = useState(null)
+  const [productData, setProductData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    setLoading(true)
-    setError(null)
-    Promise.all([
-      fetch(`${BASE}?count=event_type.exact`).then(r => r.json()),
-      fetch(`${BASE}?count=date_received`).then(r => r.json())
-    ])
-      .then(([eventRes, trendRes]) => {
+    async function fetchAll() {
+      setLoading(true)
+      setError(null)
+      try {
+        const [eventRes, trendRes, sbRes] = await Promise.all([
+          fetch(`${BASE}?count=event_type.exact`).then(r => r.json()),
+          fetch(`${BASE}?count=date_received`).then(r => r.json()),
+          supabase.from('product_stats').select('*').order('total_reports', { ascending: false })
+        ])
+        if (sbRes.error) throw new Error(sbRes.error.message)
         setEventData(eventRes)
         setTrendData(trendRes)
-      })
-      .catch(e => setError(e.message))
-      .finally(() => setLoading(false))
+        setProductData(sbRes.data)
+      } catch (e) {
+        setError(e.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchAll()
   }, [])
 
   if (loading) return (
@@ -83,32 +164,24 @@ export default function Dashboard() {
     .map(([m, c]) => ({ month: m.substring(4,6)+'/'+m.substring(0,4), reports: c, sort: m }))
     .sort((a, b) => a.sort.localeCompare(b.sort))
 
-  const dq = deviceSummary?.data_quality || {}
-
-  const productData = (deviceSummary?.top_products || []).map(p => ({
-    category: PRODUCT_CATEGORY[p.code]?.category || p.code,
-    code: p.code,
-    count: p.count,
-    deviceClass: PRODUCT_CATEGORY[p.code]?.class || '?'
+  const productChartData = (productData || []).map(p => ({
+    category: PRODUCT_CATEGORY[p.product_code]?.category || p.product_code,
+    code: p.product_code,
+    count: p.total_reports,
+    deviceClass: PRODUCT_CATEGORY[p.product_code]?.class || '?'
   }))
 
-  const manufacturerData = (deviceSummary?.top_manufacturers || []).map(m => ({
-    name: m.name,
-    count: m.count
-  }))
+  const manufacturerData = (productData || []).map(p => ({
+  name: p.manufacturer_name || p.brand_name || p.product_code,
+  count: p.total_reports
+}))
 
   return (
     <div className="page-layout">
       <h1>Post-Market Surveillance Dashboard</h1>
       <h2>Reports from the FDA MAUDE Database</h2>
 
-      <p style={{ fontSize: 10, color: '#9ca3af', textAlign: 'center', marginTop: 4 }}>
-        Data quality: {fmt(dq.total_rows_kept)} clean rows ({(dq.total_rows_kept/dq.total_rows_input*100).toFixed(1)}% kept)
-        | {fmt(dq.removed_duplicate)} duplicates removed
-        | {fmt(dq.removed_bad_manufacturer)} invalid manufacturers removed
-      </p>
-
-      <div className="grid grid-cols-4 gap-4 mt-6 mb-4">
+      <div className="grid grid-cols-4 gap-4 mt-8 mb-4">
         <PBICard title="Total Reports" subtitle="1992–2025">
           <p style={{ fontSize: '20px', fontWeight: 700, color: '#111827', margin: 0 }}>{fmt(total)}</p>
           <p style={{ fontSize: 11, color: '#9ca3af', margin: '2px 0 0 0' }}>All event types</p>
@@ -163,15 +236,15 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <PBICard title="20 Most Reported Product Categories 2024" subtitle={`${fmt(deviceSummary?.total_reports_analyzed || 0)} reports analyzed`}>
+        <PBICard title="20 Most Reported Product Categories 2024" subtitle="Data from Supabase">
           <ResponsiveContainer width="100%" height={450}>
-            <BarChart data={productData} layout="vertical" margin={{ left: 185 }}>
+            <BarChart data={productChartData} layout="vertical" margin={{ left: 185 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
               <XAxis type="number" tickFormatter={fmt} />
               <YAxis type="category" dataKey="category" width={175} tick={{ fontSize: 9 }} />
               <Tooltip formatter={(v, _, props) => [fmt(v), `Class ${props.payload.deviceClass}`]} />
               <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-                {productData.map((entry, i) => (
+                {productChartData.map((entry, i) => (
                   <Cell key={i} fill={entry.deviceClass === '3' ? '#ef4444' : '#f59e0b'} />
                 ))}
               </Bar>
@@ -179,7 +252,7 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </PBICard>
 
-        <PBICard title="20 Most Reported Manufacturers 2024" subtitle={`${fmt(deviceSummary?.total_reports_analyzed || 0)} reports analyzed`}>
+        <PBICard title="20 Most Reported Manufacturers 2024" subtitle="Data from Supabase">
           <ResponsiveContainer width="100%" height={450}>
             <BarChart data={manufacturerData} layout="vertical" margin={{ left: 180 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -195,7 +268,7 @@ export default function Dashboard() {
       <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', padding: '16px', color: '#92400E' }}>
         <p>
           <strong>Important:</strong> MAUDE data reflects reported events and cannot be used
-          to determine frequency or causality. Data cleaned: {(dq.total_rows_kept/dq.total_rows_input*100).toFixed(1)}% retained.
+          to determine frequency or causality.
         </p>
       </div>
     </div>
