@@ -22,7 +22,7 @@
  * 1. FILTRERA BORT RADER UTAN PRODUKTKOD
  * 2. FILTRERA BORT OGILTIGA TILLVERKARNAMN
  * 3. TA BORT DUBBLETTER (samma MDR_REPORT_KEY)
- * 4. NORMALISERA TILLVERKARNAMN (trim, versaler, suffix)
+ * 4. NORMALISERA TILLVERKARNAMN (ta bort suffix: Inc, LLC, Ltd, Corp, etc.)
  * 5. SLÅ IHOP KÄNDA DUBBLETTER (samma företag, olika stavning)
  * 
  * ========================================
@@ -52,35 +52,47 @@ const productInfo = {}
 
 /**
  * Normaliserar tillverkarnamn.
+ * Tar bort företagssuffix (Inc, LLC, Ltd, Corp, AG, etc.) och punkter.
+ * Behåller ursprunglig kapitalisering.
+ * 
  * @param {string} name - Rått tillverkarnamn
- * @returns {string} Normaliserat namn
+ * @returns {string} Normaliserat namn utan suffix
  */
 function normalizeManufacturer(name) {
-  return name.trim().toUpperCase()
-    .replace(/\./g, '').replace(/\s+/g, ' ')
-    .replace(/ INC$/, ' INC.').replace(/ LLC$/, ' LLC.')
-    .replace(/ LTD$/, ' LTD.').replace(/ CO$/, ' CO.')
-    .replace(/ CORP$/, ' CORP.').replace(/ CORPORATION$/, ' CORP.')
+  return name.trim()
+    .replace(/\./g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/ inc\.?$/i, '')
+    .replace(/ llc\.?$/i, '')
+    .replace(/ ltd\.?$/i, '')
+    .replace(/ co\.?$/i, '')
+    .replace(/ CO\.?$/i, '')
+    .replace(/ CO\.?$/i, '')
+    .replace(/ corp\.?$/i, '')
+    .replace(/ corporation$/i, '')
+    .replace(/ a\/s$/i, '')
+    .replace(/ ag$/i, '')
+    .replace(/ gmbh$/i, '')
+    .replace(/ sa$/i, '')
+    .replace(/ ab$/i, '')
+    .replace(/,/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 /**
  * Slår ihop kända tillverkardubletter.
- * FDA-filen innehåller samma företag med olika stavningar/divisioner.
  * @param {string} name - Normaliserat tillverkarnamn
  * @returns {string} Enhetligt företagsnamn
  */
 function mergeKnownDuplicates(name) {
   const merges = {
-    'NOBEL BIOCARE AB G�TEBORG': 'NOBEL BIOCARE AB',
-    'NOBEL BIOCARE AB GÖTEBORG': 'NOBEL BIOCARE AB',
-    'MEDTRONIC MINIMED': 'MEDTRONIC INC.',
-    'MEDTRONIC PUERTO RICO OPERATIONS CO.': 'MEDTRONIC INC.',
-    'MPRI': 'MEDTRONIC INC.',
-    'CAREFUSION SD': 'BECTON DICKINSON',
-    'AIZU OLYMPUS CO, LTD.': 'OLYMPUS CORP.',
-    'ALLERGAN (COSTA RICA)': 'ABBVIE INC.',
-    'ST JUDE MEDICAL, INC(CRM-SYLMAR)': 'ABBOTT LABORATORIES',
-    'RESPIRONICS, INC.': 'PHILIPS',
+    'NOBEL BIOCARE GÖTEBORG': 'NOBEL BIOCARE',
+    'MEDTRONIC MINIMED': 'MEDTRONIC',
+    'MEDTRONIC PUERTO RICO OPERATIONS': 'MEDTRONIC',
+    'AIZU OLYMPUS': 'OLYMPUS',
+    'SHIRAKAWA OLYMPUS': 'OLYMPUS',
+  
   }
   return merges[name] || name
 }

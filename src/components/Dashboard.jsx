@@ -1,62 +1,19 @@
-
 /**
  * Post-Market Surveillance Dashboard
  * 
  * Visualiserar FDA MAUDE adverse event-data för medicintekniska produkter.
  * 
- * ========================================
- * DATAKÄLLOR
- * ========================================
+ * DATAKÄLLOR:
+ * 1. openFDA API (via Vite-proxy) - KPI:er, cirkeldiagram, trend
+ * 2. Supabase (product_stats + manufacturer_stats) - produkter, tillverkare
  * 
- * 1. openFDA API (via Vite-proxy /api/fda)
- *    - ?count=event_type.exact  → KPI:er + cirkeldiagram
- *      Returnerar: [{term: "Death", count: 227262}, ...]
- *      Används för: Total Reports, Deaths, Injuries, Malfunctions, Severity Distribution
- *    - ?count=date_received      → Månadstrend
- *      Returnerar: [{time: "19920310", count: 5}, ...]
- *      Används för: Monthly Trend (grupperas på YYYYMM)
- * 
- * 2. Supabase (product_stats-tabellen)
- *      Data har rensats och aggregerats från DEVICE2024.txt via scripts/filter.js
- *      Kolumner: product_code, total_reports, brand_name, generic_name
- *      Används för: 20 Most Reported Product Categories, 20 Most Reported Manufacturers
- * 
- * ========================================
- * LAYOUT (Power BI-stil)
- * ========================================
- * 
+ * LAYOUT (Power BI-stil):
  * Rad 1: 4 KPI-kort (Total, Deaths, Injuries, Malfunctions) 1992-2025
- * Rad 2: Cirkeldiagram (Severity Distribution) + Trendlinje (Monthly Trend)
- * Rad 3: Stapeldiagram (Product Categories 2024) + Stapeldiagram (Manufacturers 2024)
- * Footer: Disclaimer om MAUDE-datas begränsningar
- * 
- * ========================================
- * BEGRÄNSNINGAR
- * ========================================
- * 
- * - API:et kan inte filtreras på år eller device class
- * - KPI:er och trend visar HELA databasen (1992-2025), inte bara 2024
- * - Supabase-datan är från DEVICE2024.txt (endast 2024)
- * - Device class mappas manuellt via PRODUCT_CATEGORY (endast 10 koder)
- * - Tillverkardatan använder brand_name som proxy (ingen separat manufacturer-tabell)
- * 
- * ========================================
- * TEKNISK STACK
- * ========================================
- * 
- * - React + Vite (frontend)
- * - Recharts (diagram)
- * - Tailwind CSS (styling)
- * - Lucide React (ikoner)
- * - openFDA API (event data)
- * - Supabase (produktstatistik)
- * - Node.js streams (ETL i filter.js)
+ * Rad 2: Cirkeldiagram + Trendlinje
+ * Rad 3: Produktkategorier 2024 + Tillverkare 2024
  * 
  * @component
  */
-
-
-
 import { useState, useEffect } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -70,12 +27,6 @@ import { supabase } from '../lib/supabase'
 const BASE = '/api/fda/device/event.json'
 const COLORS = { Death: '#ef4444', Injury: '#f59e0b', Malfunction: '#3b82f6' }
 
-
-/**
- * FDA Product Code → Category + Device Class mapping.
- * Källa: openFDA device/classification API (2026-06-18).
- * 20 produktkoder från DEVICE2024.txt.
- */
 const PRODUCT_CATEGORY = {
   'DZE': { category: 'Dental Implant, Root-Form', class: '2' },
   'QBJ': { category: 'Continuous Glucose Monitor, Factory Calibrated', class: '2' },
@@ -103,6 +54,7 @@ export default function Dashboard() {
   const [eventData, setEventData] = useState(null)
   const [trendData, setTrendData] = useState(null)
   const [productData, setProductData] = useState(null)
+  const [manufacturerData, setManufacturerData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -111,15 +63,18 @@ export default function Dashboard() {
       setLoading(true)
       setError(null)
       try {
-        const [eventRes, trendRes, sbRes] = await Promise.all([
+        const [eventRes, trendRes, sbRes, mfrRes] = await Promise.all([
           fetch(`${BASE}?count=event_type.exact`).then(r => r.json()),
           fetch(`${BASE}?count=date_received`).then(r => r.json()),
-          supabase.from('product_stats').select('*').order('total_reports', { ascending: false })
+          supabase.from('product_stats').select('*').order('total_reports', { ascending: false }),
+          supabase.from('manufacturer_stats').select('*').order('count', { ascending: false })
         ])
         if (sbRes.error) throw new Error(sbRes.error.message)
+        if (mfrRes.error) throw new Error(mfrRes.error.message)
         setEventData(eventRes)
         setTrendData(trendRes)
         setProductData(sbRes.data)
+        setManufacturerData(mfrRes.data)
       } catch (e) {
         setError(e.message)
       } finally {
@@ -171,10 +126,10 @@ export default function Dashboard() {
     deviceClass: PRODUCT_CATEGORY[p.product_code]?.class || '?'
   }))
 
-  const manufacturerData = (productData || []).map(p => ({
-  name: p.manufacturer_name || p.brand_name || p.product_code,
-  count: p.total_reports
-}))
+  const manufacturerChartData = (manufacturerData || []).map(m => ({
+    name: m.name,
+    count: m.count
+  }))
 
   return (
     <div className="page-layout">
@@ -254,7 +209,7 @@ export default function Dashboard() {
 
         <PBICard title="20 Most Reported Manufacturers 2024" subtitle="Data from Supabase">
           <ResponsiveContainer width="100%" height={450}>
-            <BarChart data={manufacturerData} layout="vertical" margin={{ left: 180 }}>
+            <BarChart data={manufacturerChartData} layout="vertical" margin={{ left: 180 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
               <XAxis type="number" tickFormatter={fmt} />
               <YAxis type="category" dataKey="name" width={175} tick={{ fontSize: 9 }} />
