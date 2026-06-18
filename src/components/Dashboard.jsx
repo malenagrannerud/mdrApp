@@ -6,46 +6,13 @@ import {
 } from 'recharts'
 import { Activity, Heart, AlertCircle, AlertTriangle, Loader } from 'lucide-react'
 import PBICard from './PBICard'
-
-/**
- * Statisk JSON-fil extraherad från DEVICE2024.txt via scripts/filter-device.js.
- * Innehåller:
- * - top_products: [{code, count, brand, generic}] - 20 mest rapporterade produktkoder
- * - top_manufacturers: [[name, count]] - 20 tillverkare med flest rapporter
- * - total_rows: totalt antal rader i DEVICE2024.txt
- * 
- * @type {Object}
- * @property {number} total_rows - 2,629,411
- * @property {Array} top_products - Produktkoder med count, brand, generic
- * @property {Array} top_manufacturers - Tillverkarnamn med count
- */
 import deviceSummary from '../data/device_summary.json'
 
-/**
- * Bas-URL för openFDA API via Vite-proxy.
- * Vid lokal utveckling proxas anrop till https://api.fda.gov
- * @constant {string}
- */
 const BASE = '/api/fda/device/event.json'
-
-/**
- * Färgmappning för allvarlighetsgrader i diagram.
- * @constant {Object<string, string>}
- */
 const COLORS = { Death: '#ef4444', Injury: '#f59e0b', Malfunction: '#3b82f6' }
 
 /**
- * FDA Product Code → Device Category + Class mapping.
- * Källa: openFDA device/classification API (2026-06-17).
- * 
- * Varje product code (3 tecken) mappas till:
- * - category: FDA:s officiella device_name/classification_name
- * - class: '2' eller '3' (Class I, II, III)
- * 
- * Endast de 10 vanligaste produktkoderna från DEVICE2024.txt är inkluderade.
- * Övriga produktkoder visas som sin råa kod.
- * 
- * @constant {Object<string, {category: string, class: string}>}
+ * FDA Product Code → Category mapping
  */
 const PRODUCT_CATEGORY = {
   'DZE': { category: 'Dental Implant, Root-Form', class: '2' },
@@ -60,45 +27,12 @@ const PRODUCT_CATEGORY = {
   'FTR': { category: 'Silicone Breast Implant', class: '3' },
 }
 
-/**
- * Post-Market Surveillance Dashboard
- * 
- * Kombinerar två datakällor:
- * 1. openFDA API (live): event_type counts + date_received trend (1992–2025)
- * 2. Lokal JSON (statisk): product codes + manufacturers från DEVICE2024.txt
- * 
- * Layout (Power BI-stil):
- * - Rad 1: 4 KPI-kort (total, deaths, injuries, malfunctions)
- * - Rad 2: Cirkeldiagram (severity) + Trend (monthly)
- * - Rad 3: Product Categories 2024 + Manufacturers 2024
- * 
- * @component
- */
 export default function Dashboard() {
-  /**
-   * API-respons från ?count=event_type.exact
-   * @type {[Object|null, Function]} 
-   */
   const [eventData, setEventData] = useState(null)
-  
-  /**
-   * API-respons från ?count=date_received
-   * @type {[Object|null, Function]}
-   */
   const [trendData, setTrendData] = useState(null)
-  
-  /** @type {[boolean, Function]} */
   const [loading, setLoading] = useState(true)
-  
-  /** @type {[string|null, Function]} */
   const [error, setError] = useState(null)
 
-  /**
-   * Hämta data från openFDA vid mount.
-   * Två parallella anrop:
-   * 1. event_type.exact - för KPI:er och cirkeldiagram
-   * 2. date_received - för månadstrend
-   */
   useEffect(() => {
     setLoading(true)
     setError(null)
@@ -127,69 +61,30 @@ export default function Dashboard() {
     </div>
   )
 
-  /**
-   * Extrahera KPI:er från event_type-svaret.
-   * API returnerar [{term: "Death", count: 227262}, ...]
-   */
   const results = eventData?.results || []
-  
-  /** Hitta count för en specifik event_type */
   const find = (t) => results.find(r => r.term === t)?.count || 0
-  
-  /** Totala antalet rapporter (summerar alla event_types) */
   const total = results.reduce((s, r) => s + r.count, 0)
-  
-  /** Antal dödsfallsrapporter */
   const deaths = find('Death')
-  
-  /** Antal skaderapporter */
   const injuries = find('Injury')
-  
-  /** Antal felfunktionsrapporter */
   const malfunctions = find('Malfunction')
 
-  /**
-   * Formatera tal med amerikanskt tusentalsavgränsare.
-   * @param {number} n
-   * @returns {string}
-   */
   const fmt = (n) => n?.toLocaleString('en-US') || '0'
-
-  /**
-   * Beräkna procentandel med en decimal.
-   * Returnerar '0.0%' om whole är 0.
-   * @param {number} part
-   * @param {number} whole
-   * @returns {string}
-   */
   const pct = (part, whole) => {
     if (!whole || whole === 0 || !part) return '0.0%'
     return ((part / whole) * 100).toFixed(1) + '%'
   }
 
-  /**
-   * Bygg månadsvis trend från daglig API-data.
-   * API returnerar [{time: "20230115", count: 423}, ...]
-   * Grupperar på YYYYMM (första 6 tecknen) och summerar.
-   */
   const monthly = {}
   trendData?.results?.forEach(({ time, count }) => {
     const m = time.substring(0, 6)
     monthly[m] = (monthly[m] || 0) + count
   })
   const trend = Object.entries(monthly)
-    .map(([m, c]) => ({ 
-      month: m.substring(4,6)+'/'+m.substring(0,4), 
-      reports: c, 
-      sort: m 
-    }))
+    .map(([m, c]) => ({ month: m.substring(4,6)+'/'+m.substring(0,4), reports: c, sort: m }))
     .sort((a, b) => a.sort.localeCompare(b.sort))
 
-  /**
-   * Transformera produktdata från JSON till diagramformat.
-   * Slår upp kategori-namn och device class via PRODUCT_CATEGORY.
-   * Fallback: visar råa product code om den inte finns i mappen.
-   */
+  const dq = deviceSummary?.data_quality || {}
+
   const productData = (deviceSummary?.top_products || []).map(p => ({
     category: PRODUCT_CATEGORY[p.code]?.category || p.code,
     code: p.code,
@@ -197,18 +92,23 @@ export default function Dashboard() {
     deviceClass: PRODUCT_CATEGORY[p.code]?.class || '?'
   }))
 
-  /**
-   * Transformera tillverkardata från JSON till diagramformat.
-   */
-  const manufacturerData = (deviceSummary?.top_manufacturers || []).map(([name, count]) => ({ name, count }))
+  const manufacturerData = (deviceSummary?.top_manufacturers || []).map(m => ({
+    name: m.name,
+    count: m.count
+  }))
 
   return (
     <div className="page-layout">
       <h1>Post-Market Surveillance Dashboard</h1>
       <h2>Reports from the FDA MAUDE Database</h2>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-4 gap-4 mt-8 mb-4">
+      <p style={{ fontSize: 10, color: '#9ca3af', textAlign: 'center', marginTop: 4 }}>
+        Data quality: {fmt(dq.total_rows_kept)} clean rows ({(dq.total_rows_kept/dq.total_rows_input*100).toFixed(1)}% kept)
+        | {fmt(dq.removed_duplicate)} duplicates removed
+        | {fmt(dq.removed_bad_manufacturer)} invalid manufacturers removed
+      </p>
+
+      <div className="grid grid-cols-4 gap-4 mt-6 mb-4">
         <PBICard title="Total Reports" subtitle="1992–2025">
           <p style={{ fontSize: '20px', fontWeight: 700, color: '#111827', margin: 0 }}>{fmt(total)}</p>
           <p style={{ fontSize: 11, color: '#9ca3af', margin: '2px 0 0 0' }}>All event types</p>
@@ -227,7 +127,6 @@ export default function Dashboard() {
         </PBICard>
       </div>
 
-      {/* Row 2: Severity + Trend */}
       <div className="grid grid-cols-2 gap-4 mb-4">
         <PBICard title="Severity Distribution 1992–2025" subtitle="Breakdown of reported event types">
           {total > 0 ? (
@@ -263,15 +162,14 @@ export default function Dashboard() {
         </PBICard>
       </div>
 
-      {/* Row 3: Product Categories + Manufacturers 2024 */}
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <PBICard title="20 Most Reported Product Categories 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
+        <PBICard title="20 Most Reported Product Categories 2024" subtitle={`${fmt(deviceSummary?.total_reports_analyzed || 0)} reports analyzed`}>
           <ResponsiveContainer width="100%" height={450}>
             <BarChart data={productData} layout="vertical" margin={{ left: 185 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
               <XAxis type="number" tickFormatter={fmt} />
               <YAxis type="category" dataKey="category" width={175} tick={{ fontSize: 9 }} />
-              <Tooltip formatter={(v, _, props) => [fmt(v), `${props.payload.code} | Class ${props.payload.deviceClass}`]} />
+              <Tooltip formatter={(v, _, props) => [fmt(v), `Class ${props.payload.deviceClass}`]} />
               <Bar dataKey="count" radius={[0, 4, 4, 0]}>
                 {productData.map((entry, i) => (
                   <Cell key={i} fill={entry.deviceClass === '3' ? '#ef4444' : '#f59e0b'} />
@@ -281,7 +179,7 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </PBICard>
 
-        <PBICard title="20 Most Reported Manufacturers 2024" subtitle={`From ${fmt(deviceSummary?.total_rows || 0)} device records`}>
+        <PBICard title="20 Most Reported Manufacturers 2024" subtitle={`${fmt(deviceSummary?.total_reports_analyzed || 0)} reports analyzed`}>
           <ResponsiveContainer width="100%" height={450}>
             <BarChart data={manufacturerData} layout="vertical" margin={{ left: 180 }}>
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -297,7 +195,7 @@ export default function Dashboard() {
       <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', padding: '16px', color: '#92400E' }}>
         <p>
           <strong>Important:</strong> MAUDE data reflects reported events and cannot be used
-          to determine frequency or causality.
+          to determine frequency or causality. Data cleaned: {(dq.total_rows_kept/dq.total_rows_input*100).toFixed(1)}% retained.
         </p>
       </div>
     </div>
