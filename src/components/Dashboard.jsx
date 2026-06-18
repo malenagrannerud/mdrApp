@@ -1,32 +1,15 @@
 /**
  * Post-Market Surveillance Dashboard
  * 
- * Visualiserar FDA MAUDE adverse event-data för medicintekniska produkter.
- * 
- * DATAKÄLLOR:
- * 1. openFDA API (via Vite-proxy) - KPI:er, cirkeldiagram, trend
- * 2. Supabase (product_stats + manufacturer_stats) - produkter, tillverkare
- * 
- * LAYOUT (Power BI-stil):
- * Rad 1: 4 KPI-kort (Total, Deaths, Injuries, Malfunctions) 1992-2025
- * Rad 2: Cirkeldiagram + Trendlinje
- * Rad 3: Produktkategorier 2024 + Tillverkare 2024
- * 
- * @component
+ * Hämtar och visualiserar städad DEVICE2024-data direkt från Supabase.
  */
 import { useState, useEffect } from 'react'
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  PieChart, Pie, Cell, ResponsiveContainer,
-  LineChart, Line, Area, ComposedChart
-} from 'recharts'
-import { Activity, Heart, AlertCircle, AlertTriangle, Loader } from 'lucide-react'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { Loader, ShieldAlert, Factory } from 'lucide-react'
 import PBICard from './PBICard'
 import { supabase } from '../lib/supabase'
 
-const BASE = '/api/fda/device/event.json'
-const COLORS = { Death: '#ef4444', Injury: '#f59e0b', Malfunction: '#3b82f6' }
-
+// Vi sparar din ordlista för produktkoder så att vi kan visa snygga namn i diagrammet
 const PRODUCT_CATEGORY = {
   'DZE': { category: 'Dental Implant, Root-Form', class: '2' },
   'QBJ': { category: 'Continuous Glucose Monitor, Factory Calibrated', class: '2' },
@@ -51,180 +34,114 @@ const PRODUCT_CATEGORY = {
 }
 
 export default function Dashboard() {
-  const [eventData, setEventData] = useState(null)
-  const [trendData, setTrendData] = useState(null)
-  const [productData, setProductData] = useState(null)
-  const [manufacturerData, setManufacturerData] = useState(null)
+  const [productData, setProductData] = useState([])
+  const [manufacturerData, setManufacturerData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    async function fetchAll() {
+    async function fetchFromSupabase() {
       setLoading(true)
       setError(null)
       try {
-        const [eventRes, trendRes, sbRes, mfrRes] = await Promise.all([
-          fetch(`${BASE}?count=event_type.exact`).then(r => r.json()),
-          fetch(`${BASE}?count=date_received`).then(r => r.json()),
-          supabase.from('product_stats').select('*').order('total_reports', { ascending: false }),
-          supabase.from('manufacturer_stats').select('*').order('count', { ascending: false })
-        ])
-        if (sbRes.error) throw new Error(sbRes.error.message)
-        if (mfrRes.error) throw new Error(mfrRes.error.message)
-        setEventData(eventRes)
-        setTrendData(trendRes)
-        setProductData(sbRes.data)
-        setManufacturerData(mfrRes.data)
+        // HÄMTNING 1: Motsvarar SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
+        const productsHook = await supabase
+          .from('product_stats')
+          .select('*')
+          .order('total_reports', { ascending: false })
+          .limit(10)
+
+        // HÄMTNING 2: Motsvarar SELECT * FROM manufacturer_stats ORDER BY count DESC LIMIT 10;
+        const manufacturersHook = await supabase
+          .from('manufacturer_stats')
+          .select('*')
+          .order('count', { ascending: false })
+          .limit(10)
+
+        if (productsHook.error) throw new Error(productsHook.error.message)
+        if (manufacturersHook.error) throw new Error(manufacturersHook.error.message)
+
+        setProductData(productsHook.data)
+        setManufacturerData(manufacturersHook.data)
       } catch (e) {
         setError(e.message)
       } finally {
         setLoading(false)
       }
     }
-    fetchAll()
+    fetchFromSupabase()
   }, [])
 
   if (loading) return (
-    <div className="page-layout text-center">
-      <Loader className="w-8 h-8 animate-spin mx-auto" style={{color: '#1e40af'}} />
-      <p>Loading MAUDE data from FDA...</p>
+    <div className="flex flex-col items-center justify-center pt-20">
+      <Loader className="w-8 h-8 animate-spin text-blue-800" />
+      <p className="mt-2 text-gray-600 font-medium">Hämtar städad 2024-data från Supabase...</p>
     </div>
   )
 
   if (error) return (
-    <div className="page-layout text-center">
-      <p style={{color: '#DC2626'}}>Failed to load data: {error}</p>
+    <div className="text-center pt-20 text-red-600 font-semibold">
+      <p>Kunde inte hämta data: {error}</p>
     </div>
   )
 
-  const results = eventData?.results || []
-  const find = (t) => results.find(r => r.term === t)?.count || 0
-  const total = results.reduce((s, r) => s + r.count, 0)
-  const deaths = find('Death')
-  const injuries = find('Injury')
-  const malfunctions = find('Malfunction')
-
-  const fmt = (n) => n?.toLocaleString('en-US') || '0'
-  const pct = (part, whole) => {
-    if (!whole || whole === 0 || !part) return '0.0%'
-    return ((part / whole) * 100).toFixed(1) + '%'
-  }
-
-  const monthly = {}
-  trendData?.results?.forEach(({ time, count }) => {
-    const m = time.substring(0, 6)
-    monthly[m] = (monthly[m] || 0) + count
-  })
-  const trend = Object.entries(monthly)
-    .map(([m, c]) => ({ month: m.substring(4,6)+'/'+m.substring(0,4), reports: c, sort: m }))
-    .sort((a, b) => a.sort.localeCompare(b.sort))
-
-  const productChartData = (productData || []).map(p => ({
-    category: PRODUCT_CATEGORY[p.product_code]?.category || p.product_code,
-    code: p.product_code,
-    count: p.total_reports,
-    deviceClass: PRODUCT_CATEGORY[p.product_code]?.class || '?'
+  // JS-Transformering: Mappa produktkoder till deras riktiga kategorinamn för diagrammet
+  const productChartData = productData.map(p => ({
+    category: PRODUCT_CATEGORY[p.product_code]?.category || `Kod: ${p.product_code}`,
+    reports: p.total_reports,
+    brand: p.brand_name || 'Okänt märke'
   }))
 
-  const manufacturerChartData = (manufacturerData || []).map(m => ({
-    name: m.name,
-    count: m.count
-  }))
+  // Formateringshjälp för stora tal (t.ex. 340691 -> 340 691)
+  const fmt = (n) => n?.toLocaleString('sv-SE') || '0'
 
   return (
-    <div className="page-layout">
-      <h1>Post-Market Surveillance Dashboard</h1>
-      <h2>Reports from the FDA MAUDE Database</h2>
-
-      <div className="grid grid-cols-4 gap-4 mt-8 mb-4">
-        <PBICard title="Total Reports" subtitle="1992–2025">
-          <p style={{ fontSize: '20px', fontWeight: 700, color: '#111827', margin: 0 }}>{fmt(total)}</p>
-          <p style={{ fontSize: 11, color: '#9ca3af', margin: '2px 0 0 0' }}>All event types</p>
-        </PBICard>
-        <PBICard title="Reported Deaths" subtitle="1992–2025">
-          <p style={{ fontSize: '20px', fontWeight: 700, color: '#DC2626', margin: 0 }}>{fmt(deaths)}</p>
-          <p style={{ fontSize: 11, color: '#DC2626', margin: '2px 0 0 0' }}>{pct(deaths, total)} of total</p>
-        </PBICard>
-        <PBICard title="Reported Injuries" subtitle="1992–2025">
-          <p style={{ fontSize: '20px', fontWeight: 700, color: '#D97706', margin: 0 }}>{fmt(injuries)}</p>
-          <p style={{ fontSize: 11, color: '#D97706', margin: '2px 0 0 0' }}>{pct(injuries, total)} of total</p>
-        </PBICard>
-        <PBICard title="Reported Malfunctions" subtitle="1992–2025">
-          <p style={{ fontSize: '20px', fontWeight: 700, color: '#2563EB', margin: 0 }}>{fmt(malfunctions)}</p>
-          <p style={{ fontSize: 11, color: '#2563EB', margin: '2px 0 0 0' }}>{pct(malfunctions, total)} of total</p>
-        </PBICard>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <PBICard title="Severity Distribution 1992–2025" subtitle="Breakdown of reported event types">
-          {total > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={[{n:'Deaths',v:deaths},{n:'Injuries',v:injuries},{n:'Malfunctions',v:malfunctions}]}
-                  cx="50%" cy="50%" innerRadius={60} outerRadius={100}
-                  dataKey="v"
-                  label={({n,v}) => `${n} ${pct(v, total)}`}
-                >
-                  <Cell fill={COLORS.Death} /><Cell fill={COLORS.Injury} /><Cell fill={COLORS.Malfunction} />
-                </Pie>
-                <Tooltip formatter={(v) => [fmt(v), pct(v, total)]} />
-              </PieChart>
-            </ResponsiveContainer>
-          ) : (
-            <p style={{textAlign:'center', padding: 40}}>No data available</p>
-          )}
-        </PBICard>
-
-        <PBICard title="Monthly Trend 1992–2025" subtitle="Reports per month across all years">
-          <ResponsiveContainer width="100%" height={300}>
-            <ComposedChart data={trend}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" tick={{ fontSize: 9 }} interval={Math.floor(trend.length / 6)} />
-              <YAxis tickFormatter={fmt} />
-              <Tooltip formatter={v => fmt(v)} />
-              <Area type="monotone" dataKey="reports" fill="#3b82f620" stroke="#3b82f6" name="Reports" />
-              <Line type="monotone" dataKey="reports" stroke="#3b82f6" strokeWidth={2} dot={false} />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </PBICard>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <PBICard title="20 Most Reported Product Categories 2024" subtitle="Data from Supabase">
-          <ResponsiveContainer width="100%" height={450}>
-            <BarChart data={productChartData} layout="vertical" margin={{ left: 185 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" tickFormatter={fmt} />
-              <YAxis type="category" dataKey="category" width={175} tick={{ fontSize: 9 }} />
-              <Tooltip formatter={(v, _, props) => [fmt(v), `Class ${props.payload.deviceClass}`]} />
-              <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-                {productChartData.map((entry, i) => (
-                  <Cell key={i} fill={entry.deviceClass === '3' ? '#ef4444' : '#f59e0b'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </PBICard>
-
-        <PBICard title="20 Most Reported Manufacturers 2024" subtitle="Data from Supabase">
-          <ResponsiveContainer width="100%" height={450}>
-            <BarChart data={manufacturerChartData} layout="vertical" margin={{ left: 180 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" tickFormatter={fmt} />
-              <YAxis type="category" dataKey="name" width={175} tick={{ fontSize: 9 }} />
-              <Tooltip formatter={v => fmt(v)} />
-              <Bar dataKey="count" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </PBICard>
-      </div>
-
-      <div style={{ backgroundColor: '#FFFBEB', border: '1px solid #FCD34D', padding: '16px', color: '#92400E' }}>
-        <p>
-          <strong>Important:</strong> MAUDE data reflects reported events and cannot be used
-          to determine frequency or causality.
+    <div className="p-6 bg-gray-50 min-h-screen font-sans">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">Post-Market Surveillance Dashboard 2024</h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Visualisering av exakt den data du precis har städat och laddat upp från DEVICE2024.txt
         </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* KORT 1: TOPP PRODUKTER */}
+        <PBICard title="Most reported products 2024" subtitle="Sorted by total number of incident reports">
+          <div className="mb-4 flex items-center gap-2 text-xs font-semibold text-blue-900 bg-blue-50 p-2 rounded">
+            <ShieldAlert className="w-4 h-4 text-blue-700" />
+          </div>
+          <div className="w-full h-[350px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={productChartData} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis type="number" tickFormatter={fmt} tick={{ fontSize: 10 }} />
+                <YAxis dataKey="category" type="category" width={140} tick={{ fontSize: 9 }} />
+                {/* Custom Tooltip som visar det populäraste varumärket när man hovrar över stapeln */}
+                <Tooltip formatter={(value, name, props) => [fmt(value), `Incidenter (Topp-märke: ${props.payload.brand})`]} />
+                <Bar dataKey="reports" fill="#1e40af" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </PBICard>
+
+        {/* KORT 2: TOPP TILLVERKARE */}
+        <PBICard title="Most reported manufacturers 2024" subtitle="Sorted by total number of incident reports">
+          <div className="mb-4 flex items-center gap-2 text-xs font-semibold text-emerald-900 bg-emerald-50 p-2 rounded">
+            <Factory className="w-4 h-4 text-emerald-700" />
+          </div>
+          <div className="w-full h-[350px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={manufacturerData} margin={{ top: 10, right: 10, left: 10, bottom: 50 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                {/* Vi roterar texten -45 grader så att tillverkarnas namn inte krockar med varandra */}
+                <XAxis dataKey="name" angle={-45} textAnchor="end" height={60} tick={{ fontSize: 9 }} interval={0} />
+                <YAxis tickFormatter={fmt} tick={{ fontSize: 10 }} />
+                <Tooltip formatter={(value) => [fmt(value), 'Totalt antal incidenter']} />
+                <Bar dataKey="count" fill="#10b981" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </PBICard>
       </div>
     </div>
   )
