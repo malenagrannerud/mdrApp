@@ -35,17 +35,6 @@ Data from FDA are
 
 
 ---
-
-## What You'll Find Here
-
-| Section | Description |
-|---------|-------------|
-| **MDR Path** | Step-by-step technical documentation and compliance workflow |
-| **QMS Roadmap** | 10-step implementation guide based on ISO 13485 |
-| **Post market** | Data on medical device from FDA |
-
-
----
 ## To Do
 
 - [ ] Add expected time dependencies
