@@ -786,14 +786,14 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       { t: '10.5) PMS activities are taking place with the required scope', 
         e: `Maintain PMS activities according to Art. 83, paying particular attention to the interfaces listed in paragraph 3 a–h. Compile periodic safety files based on risk class ➔ `,
-        sop: TD_DATA.PSUR_REPORT }, // KORRIGERING: Kopplad till det nya skarpa eftermarknadsdokumentet
+        sop: TD_DATA.PSUR_REPORT }, 
 
       { t: '10.6) Deviations and complaints are investigated, corrective actions are taken to address nonconformities, and appropriate parties are informed', 
         e: `Take corrective actions for non-compliant products, and inform distributors, the AR, and the importer. Immediately inform competent authorities and the NB about products presenting a serious risk (Art. 10.12).` },
 
       { t: '10.7) Incidents are investigated and serious incidents are reported within the required time', 
         e: `Report all serious incidents to the authorities no later than 15 days after becoming aware of them. Report all field safety corrective actions (FSCA), preferably before the action is taken, as well as changes in trends for other incidents, all as described in Articles 87 and 88 (Article 10.13) ➔ `,
-        sop: TD_DATA.VIGILANCE_LOG }, // KORRIGERING: Lagat placeholder-felet och kopplat till skarp incident-logg
+        sop: TD_DATA.VIGILANCE_LOG }, 
 
       { t: '10.8) The PRRC is carrying out their duties', 
         e: `Ensure the Person Responsible for Regulatory Compliance (PRRC) systematically oversees batch release conformity, technical documentation maintenance, and fast-track post-market vigilance tasks (Article 15).` },
