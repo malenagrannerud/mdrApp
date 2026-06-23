@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import StartPage from './pages/startPage';
 import QmsPage from './pages/qms';
 import MdrPage from './pages/mdr';
-// Enbart Pharma bortkommenterad för att isolera importfelet på Vercel:
-// import PpPage from './pages/pp';
+
 import SurveillanceDashboard from './components/Dashboard';
 import TabBar from './components/tab'; 
 import './style.css';
@@ -20,8 +19,7 @@ export default function App() {
         {currentPage === 'mdr' && <MdrPage />}
         {currentPage === 'qms' && <QmsPage />}
         {currentPage === 'surveillance' && <SurveillanceDashboard />}
-        {/* Enbart Pharma bortkommenterad i renderingen: */}
-        {/* {currentPage === 'pharma' && <PpPage />} */}
+       
       </div>
     </div>
   );
