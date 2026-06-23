@@ -76,9 +76,10 @@ export const QMS_DATA = [
       },
 
       { t: '1.4) Create a SOP for Data Integrity & Backup Verification (ISO 4.2.5 - Control of records)',
-        e: 'This SOP defines who maintains records and when to verify automated, system backups to secure data integrity and ensure full business recovery if system failures occur.' },
+        e: 'This SOP defines who maintains records and when to verify automated, system backups to secure data integrity and ensure full business recovery if system failures occur.', 
+        sop: SOP_DATA1.SOP_BACKUP_RESTORE},
       
-        { t: 'Resulting File Structure', 
+      { t: 'Resulting File Structure', 
         e: `
 
 📁 ISO 13485-QMS
@@ -99,8 +100,6 @@ export const QMS_DATA = [
 },
 
 /************************************************** STEP 2 ********************************************/
-
-
 { id: 'step2', 
       title: 'Step 2) Create the Quality Manual & Scope',
       checklist: [
@@ -118,7 +117,7 @@ export const QMS_DATA = [
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
   files: { '4-QMS': 
-           [{ sop: SOP_DATA2.QUALITY_MANUAL, indent: '   ' }],
+           [{ sop: SOP_DATA2.QUALITY_MANUAL, indent: '    ' }],
           }
         }       
       ]
