@@ -365,6 +365,3 @@ This file details the structural device traits and nomenclature keys uploaded to
 
 
 
-
-
-};
