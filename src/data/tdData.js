@@ -167,12 +167,56 @@ Prior to Notified Body or Health Authority submission, a mandatory alignment che
   },
 
 
+/**
+ * @file tdData.js
+ * @description Dokumentmallar och innehåll för Technical Documentation (TD) i MDR-stegen.
+ * KORRIGERING: Innehåller exakt de 6 filerna från Step 1-2, samt de 2 helt nya filerna från Step 3.
+ */
 
 
 
+  // ================== STEP 3  ==================
+  GSPR_MATRIX: {
+    id: 'DOC-08',
+    title: '📄 GSPR_compliance_matrix_product_X.xlsx',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This matrix acts as the mandatory General Requirements Checklist to map and demonstrate compliance with all relevant safety and performance requirements of MDR Annex I [MDR 2017/745].
 
+## 2. Technical File Matrix Checklist
+[TABLE_START]
 
+| Annex I Clause | Requirement Summary | Harmonised Standard Applied | Evidence Document Reference |
+| Chapter I (1-9) | General Safety and Risk Management | EN ISO 14971:2019 | DOC-03 / Hazard_Analysis.pdf |
+| Chapter II (10-21) | Requirements Regarding Design & Construction | EN 62304 / ISO 10993 | Software_V&V.pdf / Bio_Report.pdf |
+| Chapter III (22) | Information Supplied with the Device | EN ISO 15223-1 / EN 1041 | DOC-09 / IFU_Draft_V1.pdf |
+[TABLE_END]
 
+## 3. Compliance & Cross-Directives
+- Verification reports and bench test raw data must be mapped against each applicable requirement row.
+- Environmental, battery, and hazardous substance cross-directives (e.g., RoHS, REACH) must be logged inside this matrix.
+    `.trim()
+  },
 
+  LABEL_PACK: {
+    id: 'DOC',
+    title: '📄 Labeling_and_IFU_Pack_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This document compiles all user-facing information, layout files, and instructions for use required by MDR Annex I Chapter III [MDR 2017/745].
+
+## 2. Deliverables List
+- 1. Device Case Label Artwork: Includes Basic UDI-DI placeholders, serial/batch codes, and required safety symbols.
+- 2. Instructions for Use (IFU): Technical user manual detailing indications, contraindications, and storage conditions.
+- 3. Implant Card & SSCP (If Applicable): Summary of Safety and Clinical Performance required under Article 18 and Article 32 for high-risk Class III/implantable devices.
+
+## 3. Verification & Translations
+- All labeling files must align with technical risks mapped in the GSPR checklist.
+- Translation procedures must follow corporate QMS workflows before entering local markets.
+    `.trim()
+  }
 };
-
