@@ -630,14 +630,71 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       /**********************  STEP 8 ****************************************/
 
+  /**********************  STEP 8 ****************************************/
   {
     id: 'm8',
-    title: 'Step 8) Finalize conformity assessment',
-    desc: 'Demonstrate compliance with the general safety and performance requirements.',
+    title: 'Step 8) Complete the conformity assessment',
+    desc: 'Select an authorized Notified Body and pass the mandatory QMS and technical documentation audits to secure official EU compliance certification.',
     checklist: [
-      { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
+      
+      { 
+        t: 'Step 8.1) Evaluate alternative conformity assessment routes and select a Designated Notified Body via NANDO',
+        r: 'Art. 52',
+        e: `This activity audits Notified Body capabilities using the EU Commission's NANDO database to ensure the chosen registrar is designated for your product code and risk tier.` 
+      },
+
+      { 
+        t: 'Step 8.2) Execute full quality management system assessment under Annex IX Chapter I criteria',
+        r: 'Annex IX Ch. I',
+        e: `This audit verifies compliance across the manufacturer's corporate quality workflows. Success yields the official EU Quality Management System Certificate ➔ `,
+        sop: TD_DATA.QMS_CERT 
+      },
+
+      { 
+        t: 'Step 8.3) Pass product-specific Technical Documentation review under Annex IX Chapter II parameters',
+        r: 'Annex IX Ch. II',
+        e: `This audit assesses the product-specific technical file (folders 1–6). Success yields the official EU Technical Documentation Assessment Certificate ➔ `,
+        sop: TD_DATA.TD_CERT 
+      },
+
+      { 
+        t: 'Step 8.4) Implement alternative assessment certification routes for outsourced or custom-made devices if applicable',
+        r: 'Annex X, XI & XIII',
+        e: `This fallback check tracks special routes (EU type-examination certificates via Annex X, or Product Verification certificates via Annex XI Part B, or Custom-Made controls via Annex XIII).` 
+      },
+
+      { t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT A
+    📄 Technical_File_Index_product_X.pdf
+    📄 EUDAMED_SRN_and_Registration_Record_product_X.pdf
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+        📄 UDI_and_Traceability_Plan_product_X.pdf
+        📄 EMDN_and_Device_Listing_Data_product_X.pdf
+        📄 MDR_EU_QMS_Certificate_product_X.pdf
+        📄 MDR_EU_Technical_Documentation_Certificate_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+        📄 Distribution_and_traceability_matrix_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+        📄 Clinical_Evaluation_Report_CER_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf
+        📄 PMCF_plan_product_X.pdf `,
+      } // KORRIGERING: Endast de 2 nya certifikatsfilerna från detta steg har adderats till Mapp 1.
     ]
   },
+
 
       /**********************  STEP 9 ****************************************/
 
