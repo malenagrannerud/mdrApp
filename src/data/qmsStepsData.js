@@ -22,30 +22,22 @@ export const QMS_DATA = [
   title: 'Implementing a QMS',
   desc: 'A Roadmap to Implementing a Compliant Quality Management System According to ISO 13485',
   checklist: [
-    { 
-      t: 'Project Overview',
-      e: 'This roadmap provides deliverables and templates to build a compliant Quality Management System (QMS).',
-      checklist: [
-        { 
-          t: 'Level 1. Quality Policy & Objectives',
-          e: 'Defines the corporate commitment to quality and regulatory compliance, establishing measurable targets signed by Management.'
-        }, 
-        { 
-          t: 'Level 2. Quality Manual (QM)',
-          e: 'Describes the scope of the QMS, details the overall system structure, and provides documented justifications for any requirement exclusions.'
-        }, 
-        { 
-          t: 'Level 3. Standard Operating Procedure (SOP) & Work Instructions (WIs)',
-          e: 'SOPs describe who does what and when (operational workflows), while WIs describe how to execute specific tasks step-by-step.'
-        },
-        { 
-          t: 'Level 4. Forms & Records',
-          e: 'Provides objective evidence of actions taken, documenting what was done, when, and by whom to ensure full regulatory traceability.'
-        }
-      ]
-    },
-    { 
-      t: 'Resulting File Structure', 
+    { t: 'PROJECT OVERVIEW',
+      e: 'This roadmap provides deliverables and templates to build a compliant Quality Management System (QMS).'},
+   
+    { t: 'Level 1. Quality Policy & Objectives',
+      e: 'Defines the corporate commitment to quality and regulatory compliance, establishing measurable targets signed by Management.'}, 
+   
+    { t: 'Level 2. Quality Manual (QM)',
+      e: 'Describes the scope of the QMS, details the overall system structure, and provides documented justifications for any requirement exclusions.'}, 
+    
+    { t: 'Level 3. Standard Operating Procedure (SOP) & Work Instructions (WIs)',
+      e: 'SOPs describe who does what and when (operational workflows), while WIs describe how to execute specific tasks step-by-step.'},
+
+    { t: 'Level 4. Forms & Records',
+      e: 'Provides objective evidence of actions taken, documenting what was done, when, and by whom to ensure full regulatory traceability.'},
+    
+    { t: 'Resulting File Structure', 
       e: `
 
 📁 ISO 13485-QMS
