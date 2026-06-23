@@ -1,72 +1,50 @@
 # MDR Compliance – Web Application
 
-THIS APP IS UNDER CONSTRUCTION
 
-## Overview
-I built this application to demonstrate my ability to translate regulatory requirements into structured, auditable documentation. It is a web app that guides users through MDR (EU 2017/745) compliance workflows and QMS implementation according to ISO 13485:2016. Documents are simplified and fictional for demonstration only.
 
-**Live demo:** [mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
+## ABOUT
+This web app that guides users in steps through 
+- MDR EU 2017/745 compliance workflows
+- QMS ISO 13485:2016 implementation workflows
+With the aim of showing how implemetentation of these processes may look like. In each step, there are simplified and fictional examples of SOP's and WI's for demonstration only.
 
----
+This app also contain a PMS Data module, with the aim of showing how data from Databases can be used in for example Clinical Evaluations and PMS plannings. 
 
-## Why This Matters
 
-In regulated environments, details compound into trust. This app showcases:
-
-- **Practical MDR knowledge** – Annex II/III technical documentation structures, clinical evaluation, risk management, post-market surveillance
-- **QMS implementation** – A step-by-step roadmap aligned with ISO 13485:2016 sections 4–8
-- **Traceability** – Clear links between regulatory requirements and the documents that fulfill them
-- **Structured documentation** – Every SOP, register, plan, and report is mapped to its regulatory basis
+## LIVE DEMO
+[mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
 
 
 
 
+## FUTURE STEPS
 
----
+MDR Steps
+- [ ] Add templates and example for each step
+- [ ] Add GSPR checklist
 
-Data from FDA are
-
-1. Filered and aggregated using an ETL-pipeline (To large file for Supabase)
-2. Uploaded to Supabase
-3. Coded with SQL, 
-4. Loaded to the code
-5. Presented in the webb app
-
-
-
----
-## To Do
-
-- [ ] Add expected time dependencies
+QMS Steps
 - [ ] Add fictive Audit checklists
-- [ ] Add GSPR checklist 
+- [ ] Add expected time dependencies
 - [ ] Expand PMS & vigilance workflows (MDR Art. 83–92)
-- [ ] Add UDI registration module (MDR Art. 27)
-- [ ] Add supplier management register and QAA templates
-- [ ] Add calibration and equipment log module
-- [ ] Build PSUR template generator (Periodic Safety Update Report)
-- [ ] Add search functionality across all SOPs and templates
-- [ ] Implement role-based view (QA Manager vs. CTO vs. RA)
-- [ ] Add export to PDF for audit readiness
-- [ ] Expand clinical evaluation workflow (CEP, CER, PMCF plan)
-- [ ] Add Notified Body readiness checklist
+
+PMS Data Steps
+- [ ] Add data from more databases
 
 
-
----
-## Tech Stack
+## TECH STACK
 - React JSX
 - Vite
 - Tailwind CSS
 - Deployed on Vercel
----
 
-## About Me
 
-I am passionate about building systems where quality and compliance are not afterthoughts – they are the foundation. My background spans regulatory affairs, MDR compliance operations, and digital systems management, allowing me to bridge the gap between regulatory requirements and real-world quality workflows.
+## CONTACT
 
-**GitHub:** [github.com/malenagrannerud](https://github.com/malenagrannerud)
+Malena Grannerud 
+malena.grannerud@gmail.com
+https://www.linkedin.com/in/malena-grannerud
 
----
+
 
 *Created by Malena Grannerud, 2026*
