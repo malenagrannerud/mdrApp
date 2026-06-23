@@ -7,15 +7,6 @@ export const DOC_DATA = {
 
 
 
-
-
-
-
-
-
-
-
-
   ART_61: {
     title: 'ART. 61 - CLINICAL EVALUATION',
     content: `# ABBREVIATIONS

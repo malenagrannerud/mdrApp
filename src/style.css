@@ -45,11 +45,13 @@ p {
   font-weight: 600;
 }
 
+
+/** mdr references */
 .article-ref {
   font-size: 12px;
   font-style: italic;
-  font-weight: 600;
-  color: #5d50d2;
+  font-weight: 300;
+  color: #ff00f7;
   margin: 0;
   padding: 0;
   line-height: 1.3;
