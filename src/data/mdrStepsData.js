@@ -74,8 +74,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 4-GSPR 
     📁 5-RISK MANAGEMENT 
     📁 6-V&V
-    📁 7-PMS `,
-        }, 
+    📁 7-PMS `,}, 
         
         { t: 'Guidance Documents from the MDCG' },
         { mdcg: MDCG_DATA.INFOGRAPHIC },
@@ -87,19 +86,19 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         { mdcg: MDCG_DATA.MDCG_2023_4 },
         { mdcg: MDCG_DATA.MDCG_SAMD_AI },
         { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }, 
-        
-        
       ]
     },
 
   /**********************  STEP 2 ****************************************/
 
-  /**********************  STEP 2 ****************************************/
   {   
     id: 'm2',
     title: 'Step 2) Establish processes and resources',
-    desc: 'Read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.',
+    desc: 'This step establishes the corporate infrastructure and processes required to comply with MDR ',
     checklist: [
+       { 
+        e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,
+      },
 
       { 
         t: 'Step 2.1) Set up design and manufacturing processes',
@@ -119,9 +118,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         t: 'Step 2.3) Establish a Clinical Evaluation process',
         r: 'Art. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
         e: 'This document outlines data collection methodology, used to plan how to scientifically prove device safety and performance on humans ➔ ',
-        sop: TD_DATA.CLIN_EVAL,
-        doc: [DOC_DATA.ART_61, DOC_DATA.AX_I, DOC_DATA.AX_III, DOC_DATA.AX_XIV]
-      },
+        sop: TD_DATA.CLIN_EVAL},
 
       { 
         t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
@@ -131,7 +128,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       },
 
       { 
-        t: 'Step 2.5) Build Quality Management System',
+        t: 'Step 2.5) Build the Quality Management System (QMS)',
         r: 'Art. 10.9',
         e: 'This document acts as corporate infrastructure, used to prove overall organizational compliance and resource management to the auditor ➔ ',
         sop: TD_DATA.QMS_MANUAL
@@ -187,16 +184,34 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         sop: TD_DATA.PRRC_APPOINT
       },
 
-      { 
-        t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
+      { t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
         e: 'This document maps your external brain trust, used to prove you have qualified consultants and test labs contracted ➔ ',
-        sop: TD_DATA.EXPERT_MATRIX
-      },
+        sop: TD_DATA.EXPERT_MATRIX },
 
-      { e: '💡 For guidance on clinical evaluation - go to Step 4' },
+      { t: ' ',
+        e: '💡 For guidance on clinical evaluation - go to Step 4' },
 
-      { t: 'Guidance Documents from the MDCG' },
-      { e: 'UDI GUIDANCE' },
+
+
+
+        {t: 'Resulting File Structure', 
+         e: `
+  📁 PRODUCT A
+  📁 TECHNICAL DOCUMENTATION
+    📁 1-DEVICE DESCRIPTION
+    📄 Device_description_and_rationale.pdf
+    📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+    📁 3-DESIGN & MANUFACTURING INFO
+    📁 4-GSPR 
+    📁 5-RISK MANAGEMENT 
+    📁 6-V&V
+    📁 7-PMS `,}, 
+        
+
+      { t: 'Guidance Documents from the MDCG', 
+        e: ` `},
+
+      { e: `UDI GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
       { mdcg: MDCG_DATA.MDCG_2021_19 },
       { mdcg: MDCG_DATA.MDCG_2021_10 },
@@ -211,15 +226,15 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_2018_4 },
       { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
 
-      { t: 'PMS GUIDANCE' },
+      { e: `PMS GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2025_10 },
       { mdcg: MDCG_DATA.MDCG_2022_21 },
 
-      { t: 'VIGILANCE GUIDANCE' },
+      { e: `VIGILANCE GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2024_1 },
       { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
 
-      { t: 'PRRC GUIDANCE' },
+      { e: `PRRC GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
     ]  
   },
