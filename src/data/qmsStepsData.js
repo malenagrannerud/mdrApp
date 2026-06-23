@@ -247,7 +247,7 @@ export const QMS_DATA = [
         { t: '6.2) Create a SOP for Customer Processes & Market Feedback (ISO 7.2 - Customer-related processes )',
           e: 'This SOP defines who logs user input and when market data is analyzed, to address customer requirements, manage post-market feedback, and capture potential complaints.'
         },
-        { t: '6.3) Create a SOP for Production, Servicing & UDI Traceability (ISO 7.5 - Production and service provision & ISO 7.6 - Control of monitoring and measuring equipment)',
+        { t: '6.3) Create a SOP for Production, Servicing & UDI Traceability (ISO 7.5 - Production and service provision, ISO 7.6 - Control of monitoring and measuring equipment)',
           e: 'This SOP defines who controls manufacturing batches and when production software is validated, to secure end-to-end device traceability, track UDI codes, and prevent unvalidated software from running production tests.',
           
         },
@@ -279,18 +279,30 @@ export const QMS_DATA = [
       title: 'Step 7) Establish Measurement, Analysis & Improvement ', 
       desc: 'Monitor QMS performance, control non-conforming products, and drive continuous improvement. ISO 13485 Section 8.',
       checklist: [
-        { t: '7.1) Create a SOP for Internal Audit & Product Release (ISO 8.2.4 - Internal audit & ISO 8.2.6 - Monitoring and measurement of product)', 
-          e: 'This SOP defines who conducts internal audits and when final product release inspections are performed, used to establish the annual audit plan and provide objective evidence that products meet specifications before distribution.',
-          sop: SOP_DATA6.SOP_013_AUDITS_AND_RELEASE 
+
+        { t: '7.1) Create a SOP for Post-Market Surveillance (ISO 8.2.1 - Feedback & ISO 8.5.1 - General improvement)', 
+          e: 'This SOP defines who gathers field performance data and when user feedback is reviewed, to proactively monitor product safety and maintain regulatory compliance post-launch.' 
         },
-        { t: '7.2) Create a SOP for Non-Conformance & CAPA Management (ISO 8.3 - Control of nonconforming product & ISO 8.5.2 - Corrective action & ISO 8.5.3 - Preventive action)', 
-          e: 'This SOP defines who documents product deviations and when a formal root-cause investigation is triggered, used to isolate nonconforming items and track corrective or preventive actions to closure.',
+
+        { t: '7.2) Create a SOP for Vigilance & Adverse Event Reporting (ISO 8.2.3 - Reporting to regulatory authorities & MDR Art. 87)', 
+          e: 'This SOP defines who evaluates product incidents and when regulatory authorities must be notified, to secure legally mandated reporting timelines and protect patient safety.' 
+        },
+
+        { t: '7.3) Create a SOP for Internal Audit & Product Release (ISO 8.2.4 - Internal audit & ISO 8.2.6 - Monitoring and measurement of product)', 
+          e: 'This SOP defines who conducts internal quality audits and when final product inspections are performed, to execute the annual audit plan and provide objective evidence of device release approval.',
+          sop: SOP_DATA6.SOP_013_AUDITS_AND_RELEASE  
+        },
+        
+        { t: '7.4) Create a SOP for Non-Conformance & CAPA Management (ISO 8.3 - Control of nonconforming product, ISO 8.5.2 - Corrective action & ISO 8.5.3 - Preventive action)', 
+          e: 'This SOP defines who logs product deviations and when a formal root-cause investigation is triggered, to isolate nonconforming items and track corrective or preventive actions to closure.',
           sop: SOP_DATA6.SOP_014_NC_CAPA_MANAGEMENT 
         },
-        { t: '7.3) Create a SOP for Data Analysis & Trends (ISO 8.4 - Analysis of data)', 
-          e: 'This SOP defines who aggregates quality metrics and when trend reports are compiled, used to evaluate QMS effectiveness and feed crucial data into management reviews.',
+       
+        { t: '7.5) Create a SOP for Data Analysis & Trends (ISO 8.4 - Analysis of data)', 
+          e: 'This SOP defines who aggregates quality metrics and when trend reports are compiled, to evaluate QMS effectiveness and feed crucial data into management reviews.',
           sop: SOP_DATA6.SOP_015_DATA_ANALYSIS 
         }, 
+        
         { t: 'Resulting File Structure', 
           e: `
     
@@ -302,6 +314,8 @@ export const QMS_DATA = [
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
           files: {
             '8-MEASUREMENT, ANALYSIS & IMPROVEMENT': [
+              { sop: 'Post-Market Surveillance Plan', indent: '    ' },
+              { sop: 'SOP Vigilance Reporting', indent: '    ' },
               { sop: SOP_DATA6.SOP_013_AUDITS_AND_RELEASE, indent: '    ' },
               { sop: SOP_DATA6.SOP_014_NC_CAPA_MANAGEMENT, indent: '    ' },
               { sop: SOP_DATA6.SOP_015_DATA_ANALYSIS, indent: '    ' }
@@ -310,56 +324,4 @@ export const QMS_DATA = [
         } 
       ]
     },
-
-/****************************************************************************************************/
-    { id: 'step8', 
-      title: 'Step 8) Establish Post-Market & Vigilance ', 
-      desc: 'Processes to control that the product and system are functioning after commercial launch.',
-      checklist: [
-        { t: '8.1) Create Inspection Plans & Post-Market Surveillance (ISO 8.2.1 - Feedback & ISO 8.5.1 - General improvement)', 
-          e: 'This document defines who performs field safety evaluations and when regulatory authorities are notified of incidents, used to protect patient safety and maintain compliance post-launch.' 
-        }, 
-        { t: 'Resulting File Structure', 
-          e: `
-    
-📁 ISO 13485-QMS
-  📁 4-QMS
-  📁 5-MANAGEMENT RESPONSIBILITY
-  📁 6-RESOURCE MANAGEMENT
-  📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-          files: {
-            '8-MEASUREMENT, ANALYSIS & IMPROVEMENT': [
-              { sop: 'Post-Market Surveillance Plan', indent: '    ' }
-            ]
-          }
-        }
-      ]
-    },
-
-/****************************************************************************************************/
-    { id: 'step9', 
-      title: 'Step 9) Establish Internal Audits & NB-Readiness ', 
-      desc: 'Final review of the entire system before external audit.',
-      checklist: [
-        { t: '9.1) Generate Internal Audit Report & Audit Readiness (ISO 8.2.4 - Internal audit)', 
-          e: 'This process defines who reviews the gathered QMS records and when final readiness status is approved, used to compile the ultimate objective evidence required by the Notified Body.' 
-        }, 
-        { t: 'Resulting File Structure', 
-          e: `
-    
-📁 ISO 13485-QMS
-  📁 4-QMS
-  📁 5-MANAGEMENT RESPONSIBILITY
-  📁 6-RESOURCE MANAGEMENT
-  📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-          files: {
-            '8-MEASUREMENT, ANALYSIS & IMPROVEMENT': [
-              { sop: 'Internal Audit Report', indent: '    ' }
-            ]
-          }
-        }
-      ]
-    }
 ];
