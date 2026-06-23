@@ -14,7 +14,7 @@ export const MDR_DATA = [
 {  
     id: 'm0',
     title: 'Introduction',
-    desc: 'A Step by Step Roadmap to Implementing MDR for Manufacturers',
+    desc: 'A Step by Step Roadmap to CE marking medical devices according to MDR.',
     checklist: [
       { 
         t: 'MDR Steps Overview',
@@ -61,7 +61,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }, 
         
         {t: 'Resulting File Structure' }, 
-        {e: `📁 PRODUCT A
+        {e: `
+
+  📁 PRODUCT A
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION
     📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
@@ -70,7 +72,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 5-RISK MANAGEMENT 
     📁 6-V&V
     📁 7-PMS `,
-      }
+        }
       ]
     },
 
@@ -174,7 +176,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   {
     id: 'm4',
     title: 'Step 4) Finalize clinical evaluation',
-    desc: 'Define the product’s intended purpose and risk class according to Annex VIII.',
+    desc: 'Define the intended purpose and risk class according to Annex VIII.',
     checklist: [
       { t: 'Intended Purpose Statement', e: 'Clear definition of what the product is intended to do and for whom.' },
       { t: 'MDR Classification Report', e: 'Justification of class (e.g., IIa according to Rule 11).' }
