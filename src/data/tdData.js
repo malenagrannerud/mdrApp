@@ -382,14 +382,68 @@ Official EU Technical Documentation Assessment Certificate issued by the designa
 - Certifies that the device technical documentation (folders 1–6) meets full safety and performance criteria of Annex II and Annex III.
 - Provides the unique technical identification token enabling legal batch release.
     `.trim()
+  },
+
+
+
+  // ================== STEP 10 NEW ACTIVE POST-MARKET RECORDS ==================
+    PSUR_REPORT: {
+    id: 'DOC-19',
+    title: '📄 PSUR_Report_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Post-Market Evidence Log
+Continuous Periodic Safety Update Report (PSUR) compiled according to MDR Article 86 criteria to demonstrate proactive surveillance [MDR 2017/745].
+
+## 2. Reviewed Safety Parameters
+- Contains active audit evidence that the benefit-risk determination has been reviewed and remains positive.
+- Integrates real-world feedback tracking to update the Clinical Evaluation Report (CER) and Risk Files.
+- Records technical file change logs to ensure the documentation represents the currently manufactured device state.
+    `.trim()
+  },
+
+    // ================== STEP 9 NEW FILE ==================
+  DOC_CONF: {
+    id: 'DOC-18',
+    title: '📄 Signed_EU_Declaration_of_Conformity_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Legal Statement
+Official EU Declaration of Conformity issued and signed by corporate management under sole responsibility to satisfy MDR Annex IV criteria [MDR 2017/745].
+
+## 2. Mandatory Declaration Elements
+- Device Identification: Basic UDI-DI token, commercial product name, and structural configuration listings.
+- Risk Classification: Certified risk tier statement backed by designated Notified Body certificates (DOC-16 & DOC-17).
+- Language Requirements: Fully translated iterations mapped against target EU Member States language profiles (MDR language overview requirements).
+
+## 3. Executive Sign-Off
+- Confirms that the device satisfies all applicable safety parameters of Regulation (EU) 2017/745 before being placed on the market.
+    `.trim()
+  },
+
+  // Anropas av sop: TD_DATA.VIGILANCE_LOG (Löpande bevis i: 📁 7-PMS)
+  VIGILANCE_LOG: {
+    id: 'DOC-20',
+    title: '📄 Periodic_Vigilance_and_Trend_Log_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Vigilance and Incident Records
+Active registry tracking and recording clinical deviations, customer complaints, and serious incident evaluations under Article 10(13) [MDR 2017/745].
+
+## 2. Fast-Track Incident Routing
+- Documents that all serious incidents are investigated and reported to national authorities within the mandatory 15-day window.
+- Tracks trend updates, field safety notices (FSN), and Field Safety Corrective Actions (FSCA) to isolate nonconforming units.
+- Captures objective evidence of the PRRC carrying out their legal verification duties during market life.
+    `.trim()
   }
-
-
-
-
-
-
 };
+
+
+
+
 
 
 
