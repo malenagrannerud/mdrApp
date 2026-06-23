@@ -59,19 +59,19 @@ export const QMS_DATA = [
         e: 'A GAP analysis is done by QA and the report shows the gap between current state of the company and full QMS compliance. Management can use this information to prioritize improvement initiatives.' },
 
       { t: '1.2) Create a SOP for Software Validation (ISO 4.1 - General requirements)', 
-        e: 'This SOP defines hwo validates the eQMS and when, to secure data integrity.',
+        e: 'This SOP defines who validates the eQMS and when, to secure data integrity.',
         sop: SOP_DATA1.SOP_SW_VAL,
       },
 
       { t: '1.3) Create a SOP for Document Control (ISO 4.2.4 - Control of documents)', 
-        e: 'This SOP defines how procedures are drafted, reviewed, approved with electronic signatures, and version-controlled.',
+        e: 'This SOP defines who is responsible for document control and when it is done, to ensure only approved and current document revisions are available at points of use.',        
         sop: SOP_DATA1.SOP_DOC_CONTROL
       },
 
       { t: '1.4) Create a SOP for Data Integrity & Backup Verification (ISO 4.2.5 - Control of records)',
-        e: 'This SOP defines requirements for maintaining records and verifies automated, tamper-proof system backups via restore tests.'        
-      },
-      { t: 'Resulting File Structure', 
+        e: 'This SOP defines who maintains records and when to verify automated, system backups to secure data integrity and ensure full business recovery if system failures occur.' },
+      
+        { t: 'Resulting File Structure', 
         e: `
 
 📁 ISO 13485-QMS
@@ -92,8 +92,10 @@ export const QMS_DATA = [
 },
 
 /************************************************** STEP 2 ********************************************/
-    { id: 'step2', 
-      title: 'Step 2) Quality Manual & Scope',
+
+
+{ id: 'step2', 
+      title: 'Step 2) CreateQuality Manual & Scope',
       checklist: [
         { t: '2.1) Generate the Quality Manual (ISO 4.2.2 - Quality manual)', 
           e: 'The QM describes what the QMS covers and why. It is used as a staring documment for anyone who what to understand the copmany. This can be the NB, auditors, new employees and external parties. It is also used to motivate exclutions.   ', 
@@ -115,18 +117,21 @@ export const QMS_DATA = [
       ]
     },
 /************************************************** STEP 3 ********************************************/
-    { id: 'step3', 
-      title: 'Step 3) Management Responsibility', 
-      desc: 'Ensure executive management commitment, formalize regulatory roles, and establish review cycles.',
-      checklist: [
-        { t: '3.1) Create a SOP for Quality Policy & Objectives (ISO 5.3 & 5.4.1) ', 
-          e: 'Describes the formal corporate Quality Policy and measurable quality objectives, signed by Management' },
+    
 
-        { t: '3.2) Create a SOP for Roles & Appoint PRRC (ISO 5.5 & MDR Art. 15) ', 
-          e: 'Describes how PRRC is appointed and organizational chart.' },
+{ id: 'step3', 
+      title: 'Step 3) Establish Management Responsibility', 
+      desc: 'Ensure executive management commitment, formalize roles, and establish review cycles.',
+      checklist: [
+        { t: '3.1) Create a SOP for Quality Policy & Objectives (ISO 5.3 - Quality policy & ISO 5.4.1 - Quality objectives) ', 
+          e: 'This SOP defines who drafts quality objectives and when management signs them, to align the organization with corporate quality commitments and measure QMS performance.'},
+        
+          { t: '3.2) Create a SOP for Roles & Appoint PRRC (ISO 5.5 - Responsibility, authority and communication & MDR Art. 15)', 
+          e: 'This SOP defines who appoints regulatory roles and when the organizational chart is updated, to secure formal PRRC assignment and fulfill legal EU MDR requirements.'  },
  
-        { t: '3.3) Create a SOP for Management Review (ISO 5.6)', 
-          e: 'Describes how the process, inputs (e.g., audit results, customer complaints), and outputs (e.g., resource needs) for management to review the QMS effectiveness.' },
+        { t: '3.3) Create a SOP for Management Review (ISO 5.6 - Management review)', 
+          e: 'This SOP defines who conducts executive reviews and when they are scheduled, to evaluate audits and complaints to ensure continuous suitability and effectiveness of the QMS.' 
+        },
         
       { t: 'Resulting File Structure', 
           e: `
@@ -143,13 +148,15 @@ export const QMS_DATA = [
     },
 /************************************************** STEP 4 ********************************************/
     { id: 'step4', 
-      title: 'Step 4) Resource Management', 
+      title: 'Step 4) Establish Resource Management', 
       desc: 'Ensure competence, training, and a secure working environment.',
       checklist: [
-        { t: '4.1) Competence & Training', 
-          e: 'Training matrix and evidence of personnel qualifications (CV/Diplomas), iso 6.2.' },
-        { t: '4.2) Infrastructure & IT Environment', 
-          e: 'SOP for maintenance of IT systems and security updates.' }, 
+        { t: '4.1) Create a SOP for Competence & Training (ISO 6.2 - Human resources)', 
+          e: 'This SOP defines who assesses competence gaps and when personnel training records are updated, to maintain a qualified training matrix and provide objective evidence of staff qualifications.' 
+        },
+        { t: '4.2) Create a SOP for Infrastructure & IT Environment (ISO 6.3 - Infrastructure)', 
+          e: 'This SOP defines who maintains IT infrastructure and when security updates are performed, to prevent data loss, unauthorized system changes, and secure a compliant digital validation environment.' 
+        }, 
         { t: 'Resulting File Structure', 
           e: `
     
@@ -159,33 +166,38 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: []
+          files: []
         }
       ]
     },
 
-
 /************************************************** STEP 5 ********************************************/
+
+
 { id: 'step5', 
-  title: 'Step 5) Product Realisation & Design', 
+  title: 'Step 5) Establish Product Realisation & Design', 
   desc: 'Control development from idea to finished product with full traceability. Records from this step are fed into the Technical Documentation.',
   
   checklist: [
-    { t: '5.1) Design Control ',
-      e: 'Create a SOP for product development and establish a DHF structure → ',
-      sop: SOP_DATA5.SOP_DESIGN_CONTROL },
+    { t: '5.1) Create a SOP for Design Control (ISO 7.3 - Design and development)',
+      e: 'This SOP defines who documents product development phases and when formal design reviews are conducted, used to establish a compliant Design History File (DHF) with traceability from inputs to outputs.',
+      sop: SOP_DATA5.SOP_DESIGN_CONTROL 
+    },
 
-    { t: '5.2) Risk Management throughout Lifecycle ',
-      e: 'Create a SOP for risk management throughout product lifecycle - ISO 14971 → ',
-      sop: SOP_DATA5.SOP_RISK_MANAGEMENT },
+    { t: '5.2) Create a SOP for Risk Management throughout Lifecycle (ISO 7.1 - Planning of product realization & ISO 14971 - Application of risk management to medical devices)',
+      e: 'This SOP defines who identifies product hazards and when risk assessments are updated, to maintain a lifecycle risk management file and secure patient and user safety.',
+      sop: SOP_DATA5.SOP_RISK_MANAGEMENT 
+    },
     
-    { t: '5.3) Clinical Evaluation & Device Validation ',
-      e: 'Create a SOP for clinical evaluation → ', 
-      sop: SOP_DATA5.SOP_CLINICAL_EVALUATION },
+    { t: '5.3) Create a SOP for Clinical Evaluation & Device Validation (ISO 7.3.7 - Design and development validation)',
+      e: 'This SOP defines who performs clinical assessments and when device validation is executed, to gather clinical evidence and confirm that the device meets its intended use and user needs safely.', 
+      sop: SOP_DATA5.SOP_CLINICAL_EVALUATION 
+    },
         
-    { t: '5.4) Design Change Control',
-      e: 'Create a SOP for design change control post-launch → ', 
-      sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]},
+    { t: '5.4) Create a SOP for Design Change Control (ISO 7.3.9 - Control of design and development changes)',
+      e: 'This SOP defines who reviews engineering modifications and when product changes are approved post-launch, to prevent unintended quality degradation and verify that modifications do not impact device safety.', 
+      sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]
+    },
 
     { t: 'Resulting File Structure', 
       e: `
@@ -212,75 +224,75 @@ export const QMS_DATA = [
       📁 Design Maintenance
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
   `,
-  files: { '7.1-DHF': 
-           [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent: '  ' }],
-           'Risk Management': [{ sop: SOP_DATA5.SOP_RISK_MANAGEMENT, indent: '      ' }],
-           'Clinical Evaluation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent: '      ' }],
-           'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent: '    ' }],
-          }
+      files: { 
+        '7.1-DHF': [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent: '  ' }],
+        'Risk Management': [{ sop: SOP_DATA5.SOP_RISK_MANAGEMENT, indent: '      ' }],
+        'Clinical Evaluation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent: '      ' }],
+        'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent: '    ' }]
+      }
     }
   ]
 },
 
-/******************* STEP 6 - OPERATIONS, PROCUREMENT & TRACEABILITY (ISO 7.4 - 7.6) *******************/
+/******************* STEP 6 - OPERATIONS, PROCUREMENT & TRACEABILITY *******************/
 {     id: 'step6', 
-      title: 'Step 6) Operations, Procurement & Traceability ', 
-      desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. ISO 13485 Section 7.4-7.6.',
+      title: 'Step 6) Establish Operations, Procurement & Traceability ', 
+      desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. ',
       checklist: [
-        { t: '6.1) Purchasing & Supplier Control (ISO 7.4.1 - 7.4.3)',
-          e: 'Create a SOP for purchasing controls and supplier evaluation → ',
+        { t: '6.1) Create a SOP for Purchasing & Supplier Control (ISO 7.4 - Purchasing)',
+          e: 'This SOP defines who evaluates external vendors and when supplier audits are performed, to maintain the Approved Supplier List (ASL) and ensure materials meet regulatory requirements.',
           sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT,
-          checklist: [
-            { e: 'Establish Approved Supplier List (ASL) (ISO 7.4.1.1) → REG-009' },
-            { e: 'Create Quality Assurance Agreement (QAA) template (ISO 7.4.2) → TMP-001' },
-            { e: 'Evaluate, monitor, and re-approve critical suppliers (ISO 7.4.1.1)' }
-          ]
+        
         },
-        { t: '6.2) Customer Processes & Market Feedback (ISO 7.2.2, 7.2.3 & 8.2.1)',
-          checklist: [
-            { e: 'Create a SOP for handling customer requirements and post-market feedback (ISO 7.2.2) → ',
-              sop: SOP_DATA6.SOP_011_CUSTOMER_PROCESSES },
-            { e: 'Establish a register to log and evaluate customer complaints and market feedback (ISO 7.2.3) → REG-010' }
-          ]
+        { t: '6.2) Create a SOP for Customer Processes & Market Feedback (ISO 7.2 - Customer-related processes )',
+          e: 'This SOP defines who logs user input and when market data is analyzed, to address customer requirements, manage post-market feedback, and capture potential complaints.'
         },
-        { 
-          t: '6.3) Production, Servicing & UDI Traceability (ISO 7.5.1, 7.5.8, 7.5.9 & 7.6)',
-          checklist: [
-            { e: 'Create a SOP for product release, deployment pipelines, and unique device tracking (ISO 7.5.1 & 7.5.4) → ',
-              sop: SOP_DATA6.SOP_012_PRODUCTION_AND_TRACEABILITY },
-            { e: 'Create a SOP for the qualification and validation of automated test software (ISO 7.5.6 & 7.6) → SOP-013' },
-            { e: 'Establish a register for allocated UDI codes and device release versions (ISO 7.5.8 & 7.5.9) → REG-011' }, 
-            { t: 'Resulting File Structure', 
-        e: `
+        { t: '6.3) Create a SOP for Production, Servicing & UDI Traceability (ISO 7.5 - Production and service provision & ISO 7.6 - Control of monitoring and measuring equipment)',
+          e: 'This SOP defines who controls manufacturing batches and when production software is validated, to secure end-to-end device traceability, track UDI codes, and prevent unvalidated software from running production tests.',
+          
+        },
+        { t: 'Resulting File Structure', 
+          e: `
     
 📁 ISO 13485-QMS
   📁 4-QMS
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
+    📁 7.4-PURCHASING
+    📁 7.5-PRODUCTION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: []
-        }
-          ]
+          files: {
+            '7.4-PURCHASING': [
+              { sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT, indent: '    ' }
+            ],
+            '7.5-PRODUCTION': [
+              { sop: SOP_DATA6.SOP_012_PRODUCTION_AND_TRACEABILITY, indent: '    ' }
+            ]
+          }
         }
       ]
     },
+
 /****************************************************************************************************/
     { id: 'step7', 
-      title: 'Step 7) Measurement, Analysis & Improvement ', 
-      desc: 'ISO 8.2',
+      title: 'Step 7) Establish Measurement, Analysis & Improvement ', 
+      desc: 'Monitor QMS performance, control non-conforming products, and drive continuous improvement. ISO 13485 Section 8.',
       checklist: [
-        { t: '7.1) Internal Audit & Product Release (ISO 8.2.4 & 8.2.6)', 
-          e: 'Create SOP for internal audits and the final product release routine. Establish an annual audit plan for the quality management system as well as control plans and protocols for final inspection.',
-          sop: SOP_DATA1.SOP_013_AUDITS_AND_RELEASE },
-        { t: '7.2) Non-Conformance (NC) & CAPA Management (ISO 8.3 & 8.5)', 
-          e: 'Create SOP for handling deviations (Non-Conformances) and corrective/preventive actions (CAPA). Establish a central register to log, track, and close cases, as well as investigate root cause.',
-          sop: SOP_DATA1.SOP_014_NC_CAPA_MANAGEMENT },
-        { t: '7.3) Data Analysis & Trends (ISO 8.4)', 
-          e: 'Create SOP for data analysis (how KPIs and error rates are measured) and compile regular trend reports on quality data for management.',
-          sop: SOP_DATA1.SOP_015_DATA_ANALYSIS }, 
+        { t: '7.1) Create a SOP for Internal Audit & Product Release (ISO 8.2.4 - Internal audit & ISO 8.2.6 - Monitoring and measurement of product)', 
+          e: 'This SOP defines who conducts internal audits and when final product release inspections are performed, used to establish the annual audit plan and provide objective evidence that products meet specifications before distribution.',
+          sop: SOP_DATA6.SOP_013_AUDITS_AND_RELEASE 
+        },
+        { t: '7.2) Create a SOP for Non-Conformance & CAPA Management (ISO 8.3 - Control of nonconforming product & ISO 8.5.2 - Corrective action & ISO 8.5.3 - Preventive action)', 
+          e: 'This SOP defines who documents product deviations and when a formal root-cause investigation is triggered, used to isolate nonconforming items and track corrective or preventive actions to closure.',
+          sop: SOP_DATA6.SOP_014_NC_CAPA_MANAGEMENT 
+        },
+        { t: '7.3) Create a SOP for Data Analysis & Trends (ISO 8.4 - Analysis of data)', 
+          e: 'This SOP defines who aggregates quality metrics and when trend reports are compiled, used to evaluate QMS effectiveness and feed crucial data into management reviews.',
+          sop: SOP_DATA6.SOP_015_DATA_ANALYSIS 
+        }, 
         { t: 'Resulting File Structure', 
-        e: `
+          e: `
     
 📁 ISO 13485-QMS
   📁 4-QMS
@@ -288,19 +300,27 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: []
+          files: {
+            '8-MEASUREMENT, ANALYSIS & IMPROVEMENT': [
+              { sop: SOP_DATA6.SOP_013_AUDITS_AND_RELEASE, indent: '    ' },
+              { sop: SOP_DATA6.SOP_014_NC_CAPA_MANAGEMENT, indent: '    ' },
+              { sop: SOP_DATA6.SOP_015_DATA_ANALYSIS, indent: '    ' }
+            ]
+          }
         } 
       ]
     },
 
 /****************************************************************************************************/
     { id: 'step8', 
-      title: 'Step 8) Post-Market & Vigilance ', 
-      desc: 'Processes to control that the product and system are functioning.',
+      title: 'Step 8) Establish Post-Market & Vigilance ', 
+      desc: 'Processes to control that the product and system are functioning after commercial launch.',
       checklist: [
-        { t: '8.1) Inspection Plans', e: 'Definitions for what is checked at product release.' }, 
+        { t: '8.1) Create Inspection Plans & Post-Market Surveillance (ISO 8.2.1 - Feedback & ISO 8.5.1 - General improvement)', 
+          e: 'This document defines who performs field safety evaluations and when regulatory authorities are notified of incidents, used to protect patient safety and maintain compliance post-launch.' 
+        }, 
         { t: 'Resulting File Structure', 
-        e: `
+          e: `
     
 📁 ISO 13485-QMS
   📁 4-QMS
@@ -308,22 +328,25 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: []
+          files: {
+            '8-MEASUREMENT, ANALYSIS & IMPROVEMENT': [
+              { sop: 'Post-Market Surveillance Plan', indent: '    ' }
+            ]
+          }
         }
       ]
     },
 
-
-
 /****************************************************************************************************/
     { id: 'step9', 
-      title: 'Step 9) Internal Audit & NB-Ready', 
+      title: 'Step 9) Establish Internal Audits & NB-Readiness ', 
       desc: 'Final review of the entire system before external audit.',
       checklist: [
-        { t: '9.1) Internal Audit Report (ISO 8.2.2)', 
-          e: 'Full review of the QMS to ensure readiness for Notified Body.' }, 
-          { t: ' RESULTING FILE STRUCTURE ', 
-        e: `
+        { t: '9.1) Generate Internal Audit Report & Audit Readiness (ISO 8.2.4 - Internal audit)', 
+          e: 'This process defines who reviews the gathered QMS records and when final readiness status is approved, used to compile the ultimate objective evidence required by the Notified Body.' 
+        }, 
+        { t: 'Resulting File Structure', 
+          e: `
     
 📁 ISO 13485-QMS
   📁 4-QMS
@@ -331,8 +354,12 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: []
+          files: {
+            '8-MEASUREMENT, ANALYSIS & IMPROVEMENT': [
+              { sop: 'Internal Audit Report', indent: '    ' }
+            ]
+          }
         }
       ]
     }
-]
+];
