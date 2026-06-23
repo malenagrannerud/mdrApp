@@ -23,7 +23,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       {t: 'Resulting File Structure', 
        e: `
 
-📁 PRODUCT A
+📁 PRODUCT X
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION 
     📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
@@ -68,7 +68,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
         {t: 'Resulting File Structure', 
          e: `
-  📁 PRODUCT A
+  📁 PRODUCT X
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION
     📄 Device_description_and_rationale.pdf
@@ -93,7 +93,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     },
 
   /**********************  STEP 2 ****************************************/
-/**********************  STEP 2 ****************************************/
   {   
     id: 'm2',
     title: 'Step 2) Establish processes and resources',
@@ -177,7 +176,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       { t: 'Resulting File Structure', 
         e: `
-  📁 PRODUCT A
+  📁 PRODUCT X
     📁 TECHNICAL DOCUMENTATION
       📁 1-DEVICE DESCRIPTION
         📄 Device_description_&_rationale_product_X.pdf
@@ -236,15 +235,87 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
 
 
-  /**********************  STEP 3 ****************************************/
+    /**********************  STEP 3 ****************************************/
   {
     id: 'm3',
-    title: 'Step 3) Comply with GSPR',
-    desc: 'Compile the technical file according to Annex II & III.',
+    title: 'Step 3) Minimise the risks and fulfil the GSPR',
+    desc: 'All devices must comply with the general safety and performance requirements set out in MDR Annex I.',
     checklist: [
-      { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
+      
+      { 
+        t: 'Step 3.1) Execute risk management activities and benefit-risk evaluation',
+        r: 'Art. 5.2, Annex I Ch. I',
+        e: `This activity updates the product safety profiles. It ensures that all design hazards are reduced as far as possible and legally outweighed by the claimed medical benefits ➔ `,
+        sop: TD_DATA.RM 
+      },
+
+      { 
+        t: 'Step 3.2) Compile the GSPR checklist and applicability matrix',
+        r: 'Annex I Ch. II',
+        e: `This document creates a requirements checklist, mapping every applicable Annex I requirement to specific development testing evidence and design parameters ➔ `,
+        sop: TD_DATA.GSPR_MATRIX 
+      },
+
+      { 
+        t: 'Step 3.3) Map harmonised standards and EU common specifications',
+        r: 'Art. 8 & Art. 9',
+        e: `This activity identifies and applies the official EN, CENELEC, and common specification standards published in the Official Journal of the EU to prove state-of-the-art compliance.` 
+      },
+
+      { 
+        t: 'Step 3.4) Verify compliance with other applicable EU directives',
+        r: 'MDR Core Mandate',
+        e: `This activity tracks environmental and chemical safety regulations, ensuring environmental compliance for batteries or health and safety controls for hazardous substances.` 
+      },
+
+      { 
+        t: 'Step 3.5) Finalize labeling, instructions for use, and high-risk database summaries',
+        r: 'Annex I Ch. III, Art. 18 & Art. 32',
+        e: `This pack compiles all user-facing information, instructions for use (IFU), and carton labels, including implant cards and Summaries of Safety and Clinical Performance (SSCP) for Class III devices ➔ `,
+        sop: TD_DATA.LABEL_PACK 
+      },
+
+      { 
+        t: 'Step 3.6) Compile the post-market surveillance plan for the device',
+        r: 'Art. 84 & Annex III Sec. 1.1',
+        e: `This document establishes the proactive data-gathering framework required to continuously monitor and re-validate product safety after commercial launch ➔ `,
+        sop: TD_DATA.PMS_PROCESS 
+      },
+
+      { 
+        t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT X
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf `,
+      },
+
+      { t: 'Guidance Documents from the MDCG & SCHEER' },
+      { mdcg: MDCG_DATA.MDCG_2024_13 },
+      { mdcg: MDCG_DATA.MDCG_2021_8 },
+      { mdcg: MDCG_DATA.MDCG_2021_11 },
+      { mdcg: MDCG_DATA.MDCG_2021_5_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2019_16_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2019_8_REV2 },
+      { mdcg: MDCG_DATA.SCHEER_GUIDELINES }
     ]
-  }, 
+  },
+
+  /**********************  STEP 4 ****************************************/
 
 
   {
@@ -256,6 +327,10 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: 'MDR Classification Report', e: 'Justification of class (e.g., IIa according to Rule 11).' }
     ]
   },
+
+
+    /**********************  STEP 5 ****************************************/
+
   {
     id: 'm5',
     title: 'Step 5) Finalize Technical Documentation',
@@ -264,6 +339,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
     ]
   },
+
+    /**********************  STEP 6 ****************************************/
+
   {
     id: 'm6',
     title: 'Step 6) Arrange distribution',
@@ -272,6 +350,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
     ]
   }, 
+
+    /**********************  STEP 7 ****************************************/
+
   {
     id: 'm7',
     title: 'Step 7) Register the product',
@@ -281,6 +362,10 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: 'MDR Classification Report', e: 'Justification of class (e.g., IIa according to Rule 11).' }
     ]
   },
+
+
+      /**********************  STEP 8 ****************************************/
+
   {
     id: 'm8',
     title: 'Step 8) Finalize conformity assessment',
@@ -289,6 +374,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
     ]
   },
+
+      /**********************  STEP 9 ****************************************/
+
   {
     id: 'm9',
     title: 'Step 9) Finalize the last administrative details',
@@ -297,6 +385,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
     ]
   }, 
+
+      /**********************  STEP 10 ****************************************/
+
   {
     id: 'm10',
     title: 'Step 10) Maintain a PMS system',
