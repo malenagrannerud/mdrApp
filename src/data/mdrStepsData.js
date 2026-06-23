@@ -45,23 +45,26 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
       checklist: [
-        { t: 'Step 1.1) Compile the Qualification Rationale (MDR Article 2(1))', 
+        { t: 'Step 1.1) Compile the Qualification Rationale ', 
+          r: 'Art. 2(1): Contains the definition of a medical device. ',
           e: `This proves that the product is eligible for, and must carry, a medical device CE mark according to MDR.`},
        
-        { t: 'Step 1.2) Compile the Statement of Intended Purpose (MDR Article 2(1))', 
+        { t: 'Step 1.2) Compile the Statement of Intended Purpose ', 
+          r: 'Art. 2(1): Contains the definition of a medical device. ',
           e: `This  defines what the product does, who it is for, and how it cures or treats a medical condition.`},
-        { 
-          t: 'Step 1.3) Compile the Device Classification Rationale (MDR Annex VIII)', 
-          e: `This legally justifies the risk class (I, IIa, IIb, III) to determine if a NB must audit the product.`
-        },
+        
+        { t: 'Step 1.3) Compile the Device Classification Rationale (MDR Annex VIII)', 
+          r: 'Annex VIII: Go trough the rules to determine the risk class. ',
+          e: `This justifies risk class (I, IIa, IIb, III) which will determine if a NB must audit the product. 
+          
+          Step 1.1), 1.2) and 1.3) result in the document ➔`, 
+          sop: TD_DATA.DD},
 
         { t: ' ', 
           e: `ℹ️ If you can not classify the future product: request a decision from the CA according to the Helsinki Procedure.`}, 
 
-
         {t: 'Resulting File Structure', 
          e: `
-
   📁 PRODUCT A
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION
@@ -97,17 +100,16 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       desc: 'Read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.',
       checklist: [
 
-       { 
-          t: 'Step 2.1) Set up design and manufacturing processes',
+       {  t: 'Step 2.1) Set up design and manufacturing processes',
           r: 'Art. 10.1: When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR.',
-          e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production.`,
-          doc: TD_DATA.manufacturingProcess
-        },
+          e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
+          sop: TD_DATA.MF_P },
       
 
         { t: 'Step 2.2) Implement a risk management (RM) process',
           r: 'Art. 10.2: "Mfr shall establish, document, implement and maintain a system for RM as in Annex I - section 3."',
-          e: 'It establishes the ISO 14971 framework. It results in **Risk_management_procedure.pdf** saved in **📁 5-RISK MANAGEMENT**, used to systematically identify and control safety hazards across the product lifecycle.' },
+          e: 'This document establishes the ISO 14971 framework, used to systematically identify and control safety hazards across the product lifecycle ➔ ' ,
+          sop: TD_DATA.RM }, 
 
         { t: '2.3) Establish a Clinical Evaluation process',
           r: '\nArt. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
