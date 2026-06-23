@@ -21,7 +21,7 @@ export const QMS_DATA = [
   title: 'Implementing a QMS',
   desc: 'A Roadmap to Implementing a Quality Management System According to ISO 13485',
   checklist: [
-    { t: 'PROJECT OVERVIEW',
+    { t: 'OVERVIEW',
       e: 'This roadmap provides deliverables and templates to build a compliant Quality Management System (QMS), with reference chapters to the standard.'},
    
     { t: '  Level 1. Quality Policy & Objectives',
