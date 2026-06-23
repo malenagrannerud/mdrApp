@@ -93,6 +93,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     },
 
   /**********************  STEP 2 ****************************************/
+/**********************  STEP 2 ****************************************/
   {   
     id: 'm2',
     title: 'Step 2) Establish processes and resources',
@@ -102,29 +103,31 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: ' ', 
         e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,},
 
-      { t: 'Step 2.1) Set up design and manufacturing processes',
-        r: 'Art. 10.1: "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
+        { t: 'Step 2.1) Set up design and manufacturing processes',
+        r: 'Art. 10.1 & 10.9(g): "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
         e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
         sop: TD_DATA.MF_P },
       
-      { t: 'Step 2.2) Implement a risk management (RM) process',
-        r: 'Art. 10.2: "Mfr shall establish, document, implement and maintain a system for RM as in Annex I - section 3."',
-        e: `This document establishes the ISO 14971 framework, used to systematically identify and control safety hazards across the product lifecycle ➔ `,
+        { t: 'Step 2.2) Implement a risk management (RM) process',
+        r: 'Art. 10.2 & Annex I Ch. I (2-9)',
+        e: `This document establishes the ISO 14971 framework to identify and control hazards across the lifecycle. It must integrate post-market data (Art. 83-86) and include a dedicated human factors/usability sub-process following EN 62366 ➔ `,
         sop: TD_DATA.RM },
 
-      {  t: 'Step 2.3) Establish a Clinical Evaluation process',
-        r: 'Art. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
-        e: `This document outlines data collection methodology, used to plan how to scientifically prove device safety and performance on humans ➔ `,
+            {  t: 'Step 2.3) Establish a Clinical Evaluation Process (CEP)',
+        r: 'Art. 10.3, Art. 61 & Annex XIV Part A',
+        e: `This document defines a 5-stage methodology (Plan, Identify, Appraise, Analyse, Report) based on Annex XIV and MEDDEV 2.7/1. It must explicitly govern the Clinical Evaluation Plan (CEP), PMCF Plan, and PMCF Evaluation Reports ➔ `,
         sop: TD_DATA.CLIN_EVAL},
 
-      { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
+
+            { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
         r: 'Art. 10.4, 10.6, 10.7 & 10.8',
-        e: 'This document creates workflows for legal paperwork, used to organize all compliance files, assign UDI barcodes, and draft the Declaration of Conformity ➔ ',
+        e: `Use the 7-chapter structure as a project deliverables tracker on the critical path. The process must enforce a final alignment check for vocabulary and state-of-the-art arguments, alongside a change history log for NB compliance ➔ `,
         sop: TD_DATA.TD_PROCESS },
+
 
       { t: 'Step 2.5) Build a Quality Management System (QMS) manual',
         r: 'Art. 10.9',
-        e: 'Non-product specific document. Created in QMS path. See QMS path ➔ 📁 4-QMS'}, 
+        e: `Non-product specific document. Created in QMS path. See QMS path ➔ Step 0` }, 
 
       { t: 'Step 2.6) Plan PMS activities',
         r: 'Art. 10.10',
@@ -133,29 +136,29 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       { t: 'Step 2.7) Create labelling development process, including translations',
         r: 'Art. 10.11',
-        e: 'Non-product specific process. Created in QMS path. See QMS path ➔ 📁 7-PRODUCT REALIZATION'},
+        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 2` },
 
       { 
         t: 'Step 2.8) Establish corrective action and recall process',
         r: 'Art. 10.12',
-        e: 'Non-product specific process. Created in QMS path. See QMS path ➔ 📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT'
+        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` 
       }, 
 
       { 
         t: 'Step 2.9) Set up Vigilance process, including serious incident reporting',
         r: 'Art. 10.13',
-        e: 'Non-product specific process. Created in QMS path. See QMS path ➔ 📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT'
+        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` 
       }, 
 
       { 
         t: 'Step 2.10) Define regulatory authority interaction process',
         r: 'Art. 10.14',
-        e: 'Non-product specific process. Created in QMS path. See ISO 13485-QMS ➔ 📁 5-MANAGEMENT RESPONSIBILITY'
+        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 2` 
       }, 
 
       { t: 'Step 2.11) Arrange legal liability and damage compensation',
         r: 'Art. 10.16',
-        e: 'Non-product specific setup. Maintained in corporate archive. See QMS path ➔ 📁 5-MANAGEMENT RESPONSIBILITY'}, 
+        e: `Non-product specific setup. Maintained in corporate archive. See QMS path ➔ Step 2` }, 
 
       { t: 'Step 2.12) Appoint PRRC to oversee regulatory compliance',
         r: 'Art. 15',
@@ -164,7 +167,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       { 
         t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
-        e: 'Non-product specific matrix. Maintained in corporate HR/Vendor records. See QMS path ➔ 6-RESOURCE MANAGEMENT'
+        e: `Non-product specific matrix. Maintained in corporate HR/Vendor records. See QMS path ➔ Step 2` 
       }, 
 
       { 
@@ -177,8 +180,8 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   📁 PRODUCT A
     📁 TECHNICAL DOCUMENTATION
       📁 1-DEVICE DESCRIPTION
-        📄 Device_description_&_rationale.pdf
-        📄 PRRC_appointment_&_mandate_letter.pdf
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
       📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
       📁 3-DESIGN & MANUFACTURING INFO
         📄 Manufacturing_process_description_product_X.pdf
@@ -229,7 +232,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
     ]  
   },
-
 
 
 

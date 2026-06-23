@@ -29,9 +29,11 @@ The purpose of this document is to formally qualify and classify the device unde
     `.trim()
   },
 
+
+
+
   // ------------------ STEP 2 FILES ------------------
   
-  // Anropas av sop: TD_DATA.MF_P (Sparas i: 📁 3-DESIGN & MANUFACTURING INFO)
   MF_P: {
     id: 'DOC-02',
     title: '📄 Manufacturing_process_description_product_X.pdf',
@@ -58,7 +60,6 @@ This procedure defines the methods used to control the design, development, and 
     `.trim()
   }, 
 
-  // Anropas av sop: TD_DATA.RM (Sparas i: 📁 5-RISK MANAGEMENT)
   RM: {
     id: 'DOC-03',
     title: '📄 RM_procedure_product_X.pdf',
@@ -77,7 +78,6 @@ Defines the mandatory risk management lifecycle according to ISO 14971 and MDR A
     `.trim()
   },
 
-  // Anropas av sop: TD_DATA.CLIN_EVAL (Sparas i: 📁 6-V&V)
   CLIN_EVAL: {
     id: 'DOC-04',
     title: '📄 CEP_product_X.pdf',
@@ -120,6 +120,59 @@ The official board-signed mandate certifying the appointment of the Person Respo
 - Maintenance of technical documentation.
 - Execution of post-market vigilance reporting.
     `.trim()
-  }
+  },
+
+
+        // Anropas av sop: TD_DATA.TD_PROCESS (Sparas i: 📁 TECHNICAL DOCUMENTATION Root)
+  TD_PROCESS: {
+    id: 'DOC',
+    title: '📄 Technical_documentation_compilation_procedure.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This procedure defines the system for compiling, monitoring, and maintaining the product-specific Technical Documentation to ensure total compliance with MDR Annex II and Annex III.
+
+## 2. Technical File Index & Deliverables Tracker
+The Technical Documentation must be organized as a project deliverables tracker across seven mandatory chapters. Pre-market records occupy folders 1–6, while post-market plans occupy folder 7.
+
+[TABLE_START]
+
+| Chapter / Folder | Phase Focus | Key Deliverable Example |
+| 1-DEVICE DESCRIPTION | Pre-Market | Qualification & Rationale Report |
+| 2-INFO SUPPLIED BY MFR | Pre-Market | Instructions for Use (IFU) & Labels |
+| 3-DESIGN & MFG INFO | Pre-Market | Manufacturing Flowcharts & Validation |
+| 4-GSPR | Pre-Market | GSPR Essential Requirements Matrix |
+| 5-RISK MANAGEMENT | Pre-Market | Risk Management File (ISO 14971) |
+| 6-V&V | Pre-Market | Clinical Evaluation Report (CER) |
+| 7-PMS | Post-Market | Post-Market Surveillance Plan |
+[TABLE_END]
+
+## 3. Critical Path Monitoring
+- Technical documentation compilation is a process of active project tracking.
+- Authors (suppliers) must be assigned to each document during project kick-off.
+- Final regulatory approval cannot be granted without complete verification and validation records.
+
+## 4. Final Consistency Check
+Prior to Notified Body or Health Authority submission, a mandatory alignment check must be executed to ensure:
+- Consistent technical vocabulary and document formatting across all R&D units.
+- The documentation makes a persuasive argument that the device achieves its claimed medical benefits.
+- Risks are mitigated to the lowest possible level representing the current state of the art.
+
+## 5. Change Control and Periodic Review
+- Any modification to the device or software code must be recorded in a dedicated change history log.
+- Changes requiring prior approval by the Notified Body (Annex IX, 4.10 and Annex X, 5.2) must be flagged before market implementation.
+- Periodic reviews must be performed to guarantee the Technical Documentation represents the currently manufactured device state.
+    `.trim()
+  },
+
+
+
+
+
+
+
+
+
 };
 
