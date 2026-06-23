@@ -1,23 +1,35 @@
 /**
  * src/components/StepDetail.jsx 
- *
- * StepDetail Component
- * Renderar detaljvyn för ett valt steg.
+ * Skapar detaljvyn för ett valt steg.
+ * 
  */
 
 import React from 'react';
 import Link from './Link';
 
+/**
+ * Hjälpfunktion som visar SOPar osv i filstrukturen
+ * 
+ */
 const extractFolderName = (line) => {
   const match = line.match(/📁\s+(.+)/);
   return match ? match[1].trim() : null;
 };
 
+
+/**
+ * ChecklistItem: komponent som renderar en punkt i en checklista.
+ * Den hanterar allt innehåll för ett specifikt delsteg (sub-step) och fattar beslut baserat på datan:
+ * - Om texten har (emoji (📁) && 'files'-objekt) --> interaktivt filträd .
+ * - Om det finns länkdata för 'sop', 'doc' eller 'mdcg' (som sträng eller array) --> <Link />-komponenter.
+ * - Om punkten har en egen under-checklista ('checklist'), anropar komponenten sig själv rekursivt.
+ * 
+ */
+
 const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
 
   const renderTreeStructure = (text, files) => {
     if (!text) return null;
-    
     const lines = text.split('\n');
     const fileMap = files || {};
     
@@ -51,6 +63,7 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
               })}
             </div>
           );
+
         })}
       </div>
     );
@@ -66,7 +79,12 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
         item.e.includes('📁') && item.files ? (
           renderTreeStructure(item.e, item.files)
         ) : (
-          <p className={item.e.includes('📁') ? 'tree-structure' : 'section-text'}>
+
+          /**
+           *  Visar text så som jag skriver med whitespace och radbrytningar 
+           * 
+          */
+          <p className={item.e.includes('📁') ? 'tree-structure' : 'section-text whitespace-pre-line'}>
             {item.e}
           </p>
         )

@@ -6,39 +6,28 @@
  * 
  * t: output: vad du ska göra kort
  * e: beskriver vad outputen gör och vad den används till 
- * 
- * Levels: 
- * 1. QM
- * 2. SOP: Describes who does what and when
- * 3. WI: Describes how to do it, step by step
- * 4. Records: Evidence of what was done, when, and by whom
- * 
- * 
  */
+
 import { SOP_DATA1 } from './sopData1.js';
 import { SOP_DATA2 } from './sopData2.js';
 import { SOP_DATA5 } from './sopData5.js';
 import { SOP_DATA6 } from './sopData6.js';
-
 
 export const QMS_DATA = [
 
 /************************************************** STEP 0 ********************************************/
 {  id: 'q0',
     title: 'Implementing a QMS',
-    desc: 'An ISO 13485 and MDR-compliant structure.',
+    desc: '',
     checklist: [
       { t: 'Project Overview',
         e: `This roadmap provides deliverables and templates to build a compliant Qualit management system (QMS). 
-        The start is an empty file structure, that will be filled with clickable example SOPs, registers, and records, as steps proceed.
         
-      
-        The hierarchy of the QMS is as follows:
-        1. Quality Manual (QM) - Describes the scope of the QMS and what it covers.
-        2. Standard Operating Procedures (SOPs) - Describes who does what and when.
-        3. Work Instructions (WIs) - Describes how to do it, step by step.
-        4. Records - Evidence of what was done, when, and by whom.
-        
+        The hierarchy of the QMS follows:
+          1. Quality Manual (QM) - Describes the scope of the QMS and what it covers.
+          2. Standard Operating Procedure (SOP) - Describe who does what and when.
+          3. Work Instructions (WIs) - Describe how to do it, step by step.
+          4. Records - Evidence of what was done, when, and by whom.
         
         `},
       { t: 'Resulting File Structure', 
@@ -54,26 +43,33 @@ export const QMS_DATA = [
       }
   ]
 },
+
 /************************************************** STEP 1 ********************************************/
 {   id: 'step1', 
     title: 'Step 1) Set Up an Initial System', 
-    desc: 'Solidify essential foundations for a QMS by finding gaps, validating documentation software & controlling documents.',
+    desc: 'Solidify essential foundations for a QMS by finding gaps, establishing a roadmap, and implementing core SOPs.',
     checklist: [
-      { t: '1.1) Perform a GAP Analysis & set a Roadmap to QMS compliance', 
-        e: 'Establish a checklist and report showing the gap between the current state of the company and full QMS compliance.' },
+
+/**  FÖLJ FORMEN
+ * t: output: vad du ska göra kort
+ * e: beskriver vad outputen gör och vad den används till 
+ */
+
+      { t: '1.1) Perform a GAP Analysis', 
+        e: 'A GAP analysis is done by QA and the report shows the gap between current state of the company and full QMS compliance. Management can use this information to prioritize improvement initiatives.' },
 
       { t: '1.2) Create a SOP for Software Validation (ISO 4.1 - General requirements)', 
-        e: 'Defines how to validate the eQMS or infrastructure software prior to formal use to secure data integrity.',
+        e: 'This SOP defines hwo validates the eQMS and when, to secure data integrity.',
         sop: SOP_DATA1.SOP_SW_VAL,
       },
 
       { t: '1.3) Create a SOP for Document Control (ISO 4.2.4 - Control of documents)', 
-        e: 'Defines how procedures are drafted, reviewed, approved with electronic signatures, and version-controlled.',
+        e: 'This SOP defines how procedures are drafted, reviewed, approved with electronic signatures, and version-controlled.',
         sop: SOP_DATA1.SOP_DOC_CONTROL
       },
 
       { t: '1.4) Create a SOP for Data Integrity & Backup Verification (ISO 4.2.5 - Control of records)',
-        e: 'Defines requirements for maintaining records and verifies automated, tamper-proof system backups via restore tests.'        
+        e: 'This SOP defines requirements for maintaining records and verifies automated, tamper-proof system backups via restore tests.'        
       },
       { t: 'Resulting File Structure', 
         e: `
