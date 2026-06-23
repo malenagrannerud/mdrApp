@@ -1,6 +1,8 @@
 /**
  * src/components/SopRenderer.jsx
- * Komplett bibliotek med stöd för bilder, dynamiska tabeller och Mermaid-flödesscheman.
+ * 
+ * Bibliotek med stöd för bilder, 
+ * dynamiska tabeller och Mermaid-flödesscheman.
  */
 import React, { useEffect, useRef } from 'react';
 

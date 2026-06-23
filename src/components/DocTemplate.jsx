@@ -1,6 +1,8 @@
 /**
  * src/components/DocTemplate.jsx
  * Enkel dokumentvisning - utan metadata-board
+ * 
+ * 
  */
 
 import React from 'react';
