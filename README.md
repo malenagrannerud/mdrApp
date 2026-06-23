@@ -1,83 +1,68 @@
-# MDR Compliance – Web Application
-
-THIS APP IS UNDER CONSTRUCTION
-
-## Overview
-I built this application to demonstrate my ability to translate regulatory requirements into structured, auditable documentation. It is a web app that guides users through MDR (EU 2017/745) compliance workflows and QMS implementation according to ISO 13485:2016. Documents are simplified and fictional for demonstration only.
-
-**Live demo:** [mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
-
----
-
-## Why This Matters
-
-In regulated environments, details compound into trust. This app showcases:
-
-- **Practical MDR knowledge** – Annex II/III technical documentation structures, clinical evaluation, risk management, post-market surveillance
-- **QMS implementation** – A step-by-step roadmap aligned with ISO 13485:2016 sections 4–8
-- **Traceability** – Clear links between regulatory requirements and the documents that fulfill them
-- **Structured documentation** – Every SOP, register, plan, and report is mapped to its regulatory basis
+# MDR COMPLIANCE WEB APP
 
 
 
+## ABOUT
+This web app contains 
+- MDR Steps: EU 2017/745 compliance workflows
+- QMS Steps: ISO 13485:2016 implementation workflows
+
+with the aim of guiding cross-functional teams such as 
+
+- Medical device manufacturers 
+- Quality and regulatory experts
+- Data Analysists, and 
+- Stakeholders
+
+to align on regulatory milestones and what these processes may look like in practice. 
+
+## LIVE DEMO
+[mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
 
 
----
+## METHODS AND RESULTS
 
-Data from FDA are
+### MDR Steps
+The complex legal text of the EU 2017/745 regulation was transformed into a roadmap. Users gain a visual understanding of the CE-marking journey. 
 
-1. Filered and aggregated using an ETL-pipeline (To large file for Supabase)
-2. Uploaded to Supabase
-3. Coded with SQL, 
-4. Loaded to the code
-5. Presented in the webb app
+### QMS Steps
+The core requirements of ISO 13485:2016 were mapped into a step-by-step implementation guide. The interface focuses on the practical setup of a QMS, highlighting SOPs and WIs. Startups and manufacturers get a roadmap to understand how to build a compliant, audit-ready QMS.
 
-
-
----
-
-## What You'll Find Here
-
-| Section | Description |
-|---------|-------------|
-| **MDR Path** | Step-by-step technical documentation and compliance workflow |
-| **QMS Roadmap** | 10-step implementation guide based on ISO 13485 |
-| **Post market** | Data on medical device from FDA |
+### PMS Data Analysis
+Using a dataset from FDA MAUDE of the most frequently reported products and manufacturers from 2024, this module illustrates:
+- **Trend Spotting:** How manufacturers can monitor industry-wide product failures and common safety risks.
+- **Competitor & Market Analysis:** How to filter and benchmark data to see which product categories generate the most incident reports.
+- **Proactive Risk Management:** How data analysis feeds back into Clinical Evaluations and PMS planning to improve device safety before issues occur.
 
 
----
-## To Do
+## FUTURE STEPS
 
-- [ ] Add expected time dependencies
-- [ ] Add fictive Audit checklists
-- [ ] Add GSPR checklist 
+### QA/RA
+- [ ] Add GSPR checklist
 - [ ] Expand PMS & vigilance workflows (MDR Art. 83–92)
-- [ ] Add UDI registration module (MDR Art. 27)
-- [ ] Add supplier management register and QAA templates
-- [ ] Add calibration and equipment log module
-- [ ] Build PSUR template generator (Periodic Safety Update Report)
-- [ ] Add search functionality across all SOPs and templates
-- [ ] Implement role-based view (QA Manager vs. CTO vs. RA)
-- [ ] Add export to PDF for audit readiness
-- [ ] Expand clinical evaluation workflow (CEP, CER, PMCF plan)
-- [ ] Add Notified Body readiness checklist
+- [ ] Add fictive Audit checklists
+
+### PMS Data Analysis
+- [ ] Integrate interactive data visualizations (charts) for adverse event trends
+- [ ] Expand the PMS module to fetch and parse data from mock external databases
+- [ ] Implement automated risk-scoring metrics based on data volume
 
 
-
----
-## Tech Stack
+## TECH STACK
 - React JSX
 - Vite
 - Tailwind CSS
+  
+- Supabase
+
 - Deployed on Vercel
----
 
-## About Me
+## CONTACT
 
-I am passionate about building systems where quality and compliance are not afterthoughts – they are the foundation. My background spans regulatory affairs, MDR compliance operations, and digital systems management, allowing me to bridge the gap between regulatory requirements and real-world quality workflows.
+Malena Grannerud 
+malena.grannerud@gmail.com
+https://www.linkedin.com/in/malena-grannerud
 
-**GitHub:** [github.com/malenagrannerud](https://github.com/malenagrannerud)
 
----
 
 *Created by Malena Grannerud, 2026*
