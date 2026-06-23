@@ -61,7 +61,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
           sop: TD_DATA.DD},
 
         { t: ' ', 
-          e: `ℹ️ If you can not classify the future product: request a decision from the CA according to the Helsinki Procedure.`}, 
+          e: `💡 If you can not classify the future product: request a decision from the CA according to the Helsinki Procedure.`}, 
 
         {t: 'Resulting File Structure', 
          e: `
@@ -94,99 +94,136 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
   /**********************  STEP 2 ****************************************/
 
+  /**********************  STEP 2 ****************************************/
+  {   
+    id: 'm2',
+    title: 'Step 2) Establish processes and resources',
+    desc: 'Read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.',
+    checklist: [
 
-  {   id: 'm2',
-      title: 'Step 2) Establish processes and resources',
-      desc: 'Read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.',
-      checklist: [
-
-       {  t: 'Step 2.1) Set up design and manufacturing processes',
-          r: 'Art. 10.1: When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR.',
-          e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
-          sop: TD_DATA.MF_P },
+      { 
+        t: 'Step 2.1) Set up design and manufacturing processes',
+        r: 'Art. 10.1: When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR.',
+        e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
+        sop: TD_DATA.MF_P 
+      },
       
+      { 
+        t: 'Step 2.2) Implement a risk management (RM) process',
+        r: 'Art. 10.2: "Mfr shall establish, document, implement and maintain a system for RM as in Annex I - section 3."',
+        e: 'This document establishes the ISO 14971 framework, used to systematically identify and control safety hazards across the product lifecycle ➔ ',
+        sop: TD_DATA.RM 
+      },
 
-        { t: 'Step 2.2) Implement a risk management (RM) process',
-          r: 'Art. 10.2: "Mfr shall establish, document, implement and maintain a system for RM as in Annex I - section 3."',
-          e: 'This document establishes the ISO 14971 framework, used to systematically identify and control safety hazards across the product lifecycle ➔ ' ,
-          sop: TD_DATA.RM }, 
+      { 
+        t: 'Step 2.3) Establish a Clinical Evaluation process',
+        r: 'Art. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
+        e: 'This document outlines data collection methodology, used to plan how to scientifically prove device safety and performance on humans ➔ ',
+        sop: TD_DATA.CLIN_EVAL,
+        doc: [DOC_DATA.ART_61, DOC_DATA.AX_I, DOC_DATA.AX_III, DOC_DATA.AX_XIV]
+      },
 
-        { t: '2.3) Establish a Clinical Evaluation process',
-          r: '\nArt. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
-          e: 'It outlines data collection methodology. It results in **Clinical_Evaluation_Plan_CEP.pdf** saved in **📁 6-V&V**, used to plan how to scientifically prove device safety and performance on humans.'},
-          {doc: DOC_DATA.ART_61},
-          {doc:DOC_DATA.AX_I},  
-          {doc:DOC_DATA.AX_III}, 
-          {doc: DOC_DATA.AX_XIV},
-        
+      { 
+        t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
+        r: 'Art. 10.4, 10.6, 10.7 & 10.8',
+        e: 'This document creates workflows for legal paperwork, used to organize all compliance files, assign UDI barcodes, and draft the Declaration of Conformity ➔ ',
+        sop: TD_DATA.TD_PROCESS
+      },
 
-        { t: '2.4) Develop and maintain TD, UDI and DoC processes',
-          e: 'It creates workflows for legal paperwork. It results in **Technical_File_Index.pdf** saved in **📁 TECHNICAL DOCUMENTATION (Root)**, used to organize all compliance files, assign UDI barcodes, and draft the Declaration of Conformity.' },
+      { 
+        t: 'Step 2.5) Build Quality Management System',
+        r: 'Art. 10.9',
+        e: 'This document acts as corporate infrastructure, used to prove overall organizational compliance and resource management to the auditor ➔ ',
+        sop: TD_DATA.QMS_MANUAL
+      },
 
-        { t: '2.5) Build Quality Management System',
-          e: 'It acts as corporate infrastructure. It results in **QMS_Manual.pdf** saved in your **General QMS System**, used to prove overall organizational compliance and resource management to the auditor.' },
+      { 
+        t: 'Step 2.6) Plan Post Market Surveillance activities',
+        r: 'Art. 10.10',
+        e: 'This document establishes proactive market feedback loops, used to gather real-world safety data after the product is released ➔ ',
+        sop: TD_DATA.PMS_PROCESS
+      },
 
-        { t: '2.6) Plan Post Market Surveillance activities',
-          e: 'It establishes proactive market feedback loops. It results in **PMS_Plan.pdf** saved in **📁 7-PMS**, used to gather real-world safety data after the product is released.' },
-          
-        { t: '2.7) Create labelling development process, including translations',
-          e: 'It controls user-facing text. It results in **Labeling_and_IFU_Pack.pdf** saved in **📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER**, used to secure legal translations and correct warning labels.' },
-          
-        { t: '2.8) Establish corrective action and recall process',
-          e: 'It creates an emergency safety workflow. It results in **CAPA_and_Recall_Procedure.pdf** saved in your **General QMS System**, used to safely pull faulty devices off the market if injuries occur.' },
-          
-        { t: '2.9) Set up Vigilance process, including serious incident reporting',
-          e: 'It creates a fast-track authority channel. It results in **Vigilance_Reporting_Procedure.pdf** saved in your **General QMS System**, used to legally report serious patient injuries or deaths within strict hourly deadlines.' },
-          
-        { t: '2.10) Define regulatory authority interaction process',
-          e: 'It governs official communications. It results in **Regulatory_Interaction_Procedure.pdf** saved in your **General QMS System**, used to handle sample testing, audits, and unannounced inspections smoothly.' },
-          
-        { t: '2.11) Arrange legal liability and damage compensation',
-          e: 'It secures financial protection. It results in **Product_Liability_Insurance_Certificate.pdf** saved in your **Corporate/Admin Archive**, used to prove financial coverage for potential patient injuries.' },
-          
-        { t: '2.12) Appoint PRRC to oversee regulatory compliance',
-          r: 'Art. 15',
-          mdcg: MDCG_DATA.MDCG_2019_7_REV1,
-          e: 'It assigns individual legal responsibility. It results in **PRRC_Appointment_Letter.pdf** saved in **📁 1-DEVICE DESCRIPTION**, used to officially designate the person who signs off on device releases.' },
-          
-        { t: '2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
-          e: 'It maps your external brain trust. It results in **External_Expertise_and_Lab_Matrix.pdf** saved in your **General QMS System**, used to prove you have qualified consultants and test labs contracted.' },
-        
-        { e: '💡 For guidance on clinical evaluation - go to Step 4' },
+      { 
+        t: 'Step 2.7) Create labelling development process, including translations',
+        r: 'Art. 10.11',
+        e: 'This document controls user-facing text, used to secure legal translations and correct warning labels ➔ ',
+        sop: TD_DATA.LABEL_PROCESS
+      },
 
+      { 
+        t: 'Step 2.8) Establish corrective action and recall process',
+        r: 'Art. 10.12',
+        e: 'This document creates an emergency safety workflow, used to safely pull faulty devices off the market if injuries occur ➔ ',
+        sop: TD_DATA.CAPA_RECALL
+      },
 
+      { 
+        t: 'Step 2.9) Set up Vigilance process, including serious incident reporting',
+        r: 'Art. 10.13',
+        e: 'This document creates a fast-track authority channel, used to legally report serious patient injuries or deaths within strict hourly deadlines ➔ ',
+        sop: TD_DATA.VIGILANCE
+      },
 
-        { t: 'Guidance Documents from the MDCG' },
-        { e: `UDI GUIDANCE` },
-        { mdcg: MDCG_DATA.MDCG_2022_7 },
-        { mdcg: MDCG_DATA.MDCG_2021_19 },
-        { mdcg: MDCG_DATA.MDCG_2021_10 },
-        { mdcg: MDCG_DATA.MDCG_2021_9 },
-        { mdcg: MDCG_DATA.MDCG_2018_1_REV4 },
-        { mdcg: MDCG_DATA.MDCG_2020_18 },
-        { mdcg: MDCG_DATA.MDCG_2019_2 },
-        { mdcg: MDCG_DATA.MDCG_2019_1 },
-        { mdcg: MDCG_DATA.MDCG_2018_7 },
-        { mdcg: MDCG_DATA.MDCG_2018_6 },
-        { mdcg: MDCG_DATA.MDCG_2018_5 },
-        { mdcg: MDCG_DATA.MDCG_2018_4 },
-        { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
+      { 
+        t: 'Step 2.10) Define regulatory authority interaction process',
+        r: 'Art. 10.14',
+        e: 'This document governs official communications, used to handle sample testing, audits, and unannounced inspections smoothly ➔ ',
+        sop: TD_DATA.REG_INTERACT
+      },
 
-        { t: 'PMS GUIDANCE' },
-        { mdcg: MDCG_DATA.MDCG_2025_10 },
-        { mdcg: MDCG_DATA.MDCG_2022_21 },
+      { 
+        t: 'Step 2.11) Arrange legal liability and damage compensation',
+        r: 'Art. 10.16',
+        e: 'This document secures financial protection, used to prove financial coverage for potential patient injuries ➔ ',
+        sop: TD_DATA.LIABILITY
+      },
 
-        { t: 'VIGILANCE GUIDANCE' },
-        { mdcg: MDCG_DATA.MDCG_2024_1 },
-        { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
+      { 
+        t: 'Step 2.12) Appoint PRRC to oversee regulatory compliance',
+        r: 'Art. 15',
+        mdcg: MDCG_DATA.MDCG_2019_7_REV1,
+        e: 'This document assigns individual legal responsibility, used to officially designate the person who signs off on device releases ➔ ',
+        sop: TD_DATA.PRRC_APPOINT
+      },
 
-        { t: 'PRRC GUIDANCE' },
-        { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
-      ]  
-  
+      { 
+        t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
+        e: 'This document maps your external brain trust, used to prove you have qualified consultants and test labs contracted ➔ ',
+        sop: TD_DATA.EXPERT_MATRIX
+      },
 
-},
-  
+      { e: '💡 For guidance on clinical evaluation - go to Step 4' },
+
+      { t: 'Guidance Documents from the MDCG' },
+      { e: 'UDI GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2022_7 },
+      { mdcg: MDCG_DATA.MDCG_2021_19 },
+      { mdcg: MDCG_DATA.MDCG_2021_10 },
+      { mdcg: MDCG_DATA.MDCG_2021_9 },
+      { mdcg: MDCG_DATA.MDCG_2018_1_REV4 },
+      { mdcg: MDCG_DATA.MDCG_2020_18 },
+      { mdcg: MDCG_DATA.MDCG_2019_2 },
+      { mdcg: MDCG_DATA.MDCG_2019_1 },
+      { mdcg: MDCG_DATA.MDCG_2018_7 },
+      { mdcg: MDCG_DATA.MDCG_2018_6 },
+      { mdcg: MDCG_DATA.MDCG_2018_5 },
+      { mdcg: MDCG_DATA.MDCG_2018_4 },
+      { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
+
+      { t: 'PMS GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2025_10 },
+      { mdcg: MDCG_DATA.MDCG_2022_21 },
+
+      { t: 'VIGILANCE GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2024_1 },
+      { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
+
+      { t: 'PRRC GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
+    ]  
+  },
+
 
 
 
