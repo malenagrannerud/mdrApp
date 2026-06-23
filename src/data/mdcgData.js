@@ -47,8 +47,7 @@ export const MDCG_DATA = {
     title: '📖 MDCG on the classification of SAMD and the interplay with AI Act (AIA)',
     content: `
 # Content
-    `.trim()
-  },
+    `.trim()},
 
   INFOGRAPHIC: {
     id: 'MDCG-INFO',
@@ -56,8 +55,7 @@ export const MDCG_DATA = {
     content: `
 # Content
 
-`.trim()
-  },
+`.trim()},
 
   MDCG_2025_6: {
     id: 'MDCG 2025-6',
@@ -65,8 +63,7 @@ export const MDCG_DATA = {
     content: `
 # Content
 
-`.trim()
-  },
+`.trim()},
 
   MDCG_2023_4: {
     id: 'MDCG 2023-4',
