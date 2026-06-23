@@ -81,7 +81,7 @@ ISO and IEC maintain terminological databases for use in standardization at the 
 — IEC Electropedia: available at http://www.electropedia.org/
 
 3.1 Post-market clinical follow-up (PMCF) study
-Study carried out following marketing approval intended to answer specific questions relating to 
+Study carried out after marketing approval intended to answer specific questions relating to 
 clinical safety or performance (i.e. residual risks) of a MD when used in accordance with its approved labelling
 
 Note 1 to entry: 
@@ -96,28 +96,27 @@ Note 2 to entry:
 For IVDR, a similar type of studies exists, e.g. post-market performance follow-up (PMPF) study in Europe.
 
 3.2 PMS
-Systematic process to collect and analyse experience gained from MD that have been placed on the market
+Systematic process to collect and analyse experience gained from MD placed on the market
 [SOURCE:ISO 13485:2016, 3.14]
 
 4 Purpose of PMS process
 
-5 Planning of post-market surveillance
-5.1 General
-5.2 Scope of the post-market surveillance plan
-5.3 Objective of the post-market surveillance plan
-5.4 Responsibilities and authorities
-5.5 Data collection
-5.5.1 Data sources
-5.5.2 Defining data collection methods
-5.5.3 Developing the data collection protocol
+5 Planning of PMS
+    5.1 General
+    5.2 Scope of the PMS plan
+    5.3 Objective of the PMS plan
+    5.4 Responsibilities and authorities
+    5.5 Data collection
+        5.5.1 Data sources
+        5.5.2 Defining data collection methods
+        5.5.3 Developing the data collection protocol
 
-5.6 Data analysis
-5.6.1 General
-5.6.2 Considerations concerning planning the data analysis
-5.6.3 Methods for data analysis
-5.7 Report on data analysis
-5.8 Interface with other processes
-
+    5.6 Data analysis
+        5.6.1 General
+        5.6.2 Considerations concerning planning the data analysis
+        5.6.3 Methods for data analysis
+    5.7 Report on data analysis
+    5.8 Interface with other processes
 
 6 Review of the post-market surveillance plan
 6.1 Purpose of the review
@@ -125,25 +124,66 @@ Systematic process to collect and analyse experience gained from MD that have be
 6.3 Review
 Annex A Examples of data sources
 Annex B Examples of data analysis methods
-B.1 General
-B.2 Overview table: data analysis methods
-B.3 Descriptive methods for trend analysis
-B.4 Descriptive method: Bar charts
-B.5 Descriptive method, Pareto analysis
-B.6 Qualitative techniques
-Annex C Examples of post-market surveillance plans
-C.1 Example of a post-market surveillance plan for a surgical scalpel
-C.1.1 General
-C.1.2 Scope of the post-market surveillance plan
-C.1.3 Objective of the post-market surveillance plan
-C.1.4 Responsibilities and authorities
-C.1.5 Data collection
-C.1.6 Data analysis
-C.1.7 Report on data analysis
-C.1.8 Review of the post-market surveillance plan
+    B.1 General
+    B.2 Overview table: data analysis methods
+    B.3 Descriptive methods for trend analysis
+    B.4 Descriptive method: Bar charts
+    B.5 Descriptive method, Pareto analysis
+    B.6 Qualitative techniques
+Annex C Examples of PMS plans
+    C.1 Example of a post-market surveillance plan for a surgical scalpel
+        C.1.1 General
+        C.1.2 Scope of the post-market surveillance plan
+        C.1.3 Objective of the post-market surveillance plan
+        C.1.4 Responsibilities and authorities
+        C.1.5 Data collection
+        C.1.6 Data analysis
+        C.1.7 Report on data analysis
+        C.1.8 Review of the post-market surveillance plan
 
+C.2 Example of a post-market surveillance plan for a radiation therapy system
+    C.2.1 General
+    C.2.2 Scope of the post-market surveillance plan
+    C.2.3 Objective of the post-market surveillance plan
+    C.2.4 Responsibilities and authorities
+    C.2.5 Data collection
+    C.2.6 Data analysis
+    C.2.7 Report on data analysis
+    C.2.8 Review of the post-market surveillance plan
+C.3 Example of a post-market surveillance plan for a drug eluting stent
+    C.3.1 General
+    C.3.2 Scope of the post-market surveillance plan
+    C.3.3 Objective of the post-market surveillance plan
+    C.3.4 Responsibilities and authorities
+    C.3.5 Data collection
+        C.3.5.1 Passive/reactive feedback
+        C.3.5.2 Proactive feedback
+    C.3.6 Data analysis
+        C.3.6.1 General
+        C.3.6.2 PMCF studies
+    C.3.7 Report on data analysis
+    C.3.8 Review of the post-market surveillance plan
 
+C.4 Example of a post-market surveillance plan for a blood glucose monitoring system
+C.4.1 General
+C.4.2 Scope of the post-market surveillance plan
+C.4.3 Objective of the post-market surveillance plan
+C.4.4 Responsibilities and authorities
+C.4.5 Data collection
+C.4.6 Data analysis
+C.4.7 Report on data analysis
+C.4.8 Review of the post-market surveillance plan
 
+C.5 Example for large IVD analyser
+    C.5.1 General
+    C.5.2 Scope of the post-market surveillance plan
+    C.5.3 Objective of the post-market surveillance plan
+    C.5.4 Responsibilities and authorities
+    C.5.5 Data collection
+    C.5.6 Data analysis
+    C.5.7 Report on data analysis
+    C.5.8 Review of the post-market surveillance plan
+Bibliography
 
 
 
