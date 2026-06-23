@@ -627,10 +627,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     ]
   },
 
-
       /**********************  STEP 8 ****************************************/
-
-  /**********************  STEP 8 ****************************************/
   {
     id: 'm8',
     title: 'Step 8) Complete the conformity assessment',
@@ -697,52 +694,173 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
 
       /**********************  STEP 9 ****************************************/
-
   {
     id: 'm9',
-    title: 'Step 9) Finalize the last administrative details',
-    desc: 'Compile the technical file according to Annex II & III.',
+    title: 'Step 9) Complete the final administrative procedures before launch',
+    desc: 'Finalize legal declarations, complete national language packaging requirements, and verify importer/distributor operational records.',
     checklist: [
-      { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
+      
+      { 
+        t: 'Step 9.1) Finalize and sign the official EU Declaration of Conformity',
+        r: 'Annex IV & Annex VI Sec. 2.2',
+        e: `This document establishes the sole legal responsibility of the manufacturer. It must include all required language versions for target distribution countries before commercialization ➔ `,
+        sop: TD_DATA.DOC_CONF 
+      },
+
+      { 
+        t: 'Step 9.2) Finalize manufacturer registration and transfer technical tokens to the Authorised Representative',
+        r: 'Art. 11',
+        e: `This activity transfers the finalized Technical Documentation, Notified Body certificates, and registration confirmations to the EU AR to enable their mandatory mandate listing.` 
+      },
+
+      { 
+        t: 'Step 9.3) Provide the designated EU Importer with the signed DoC and device labeling data',
+        r: 'Art. 13',
+        e: `This transfer provides the Importer with verified artwork, UDI parameters, and signed legal declarations required for custom borders and regulatory lot tracking.` 
+      },
+
+      { 
+        t: 'Step 9.4) Deliver localized language packaging, instructions, and importer data to supply chain Distributors',
+        r: 'Art. 14',
+        e: `This activity verifies that initial supply chain distributors receive national language versions of the packaging, instructions for use (IFU), and correct Importer address attachments.` 
+      },
+
+      { 
+        t: 'Step 9.5) Publish localized packaging artwork and technical instructions on the corporate website',
+        r: 'Annex I Sec. 23.1',
+        e: `This action uploads and publishes all target national language iterations of the device instructions and labeling to the public corporate website.` 
+      },
+
+      { t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT A
+    📄 Technical_File_Index_product_X.pdf
+    📄 EUDAMED_SRN_and_Registration_Record_product_X.pdf
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+        📄 UDI_and_Traceability_Plan_product_X.pdf
+        📄 EMDN_and_Device_Listing_Data_product_X.pdf
+        📄 MDR_EU_QMS_Certificate_product_X.pdf
+        📄 MDR_EU_Technical_Documentation_Certificate_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+        📄 Signed_EU_Declaration_of_Conformity_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+        📄 Distribution_and_traceability_matrix_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+        📄 Clinical_Evaluation_Report_CER_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf
+        📄 PMCF_plan_product_X.pdf `,
+      }, // KORRIGERING: Endast den slutgiltiga guld-filen (Signed DoC) har adderats till Mapp 2 i filträdet.
+
+      { t: 'Guidance Documents from the MDCG' },
+      { mdcg: MDCG_DATA.MDCG_LANGUAGE_REQUIREMENTS }
     ]
-  }, 
-
+  },
       /**********************  STEP 10 ****************************************/
-
   {
     id: 'm10',
-    title: 'Step 10) Maintain a PMS system',
-    desc: 'Show documentation that:',
+    title: 'Step 10) Fulfil the ongoing obligations in the post launch phase',
+    desc: 'Maintain continuous compliance, execute proactive post-market clinical follow-ups, and manage lifecycle vigilance reporting requirements.',
     checklist: [
       { t: '10.1) The benefit-risk determination has been reviewed', 
-        e: 'Maintain the risk management system according to Annex I, Section 3 (Art. 10.2)' },
+        e: `Maintain the risk management system according to Annex I, Section 3. Ensure that real-world performance data is fed back to re-verify product safety profiles (Art. 10.2).` },
 
       { t: '10.2) PMCF is being performed and the clinical evaluation is being updated', 
-        e: 'Conduct the planned PMCF activities according to Annex XIV, Part B (Art. 10.3)' },
+        e: `Conduct the planned PMCF activities according to Annex XIV, Part B. Use real-world outcomes to update the Clinical Evaluation Report (Art. 10.3).` },
 
       { t: '10.3) Up-to-date technical documentation, including AR’s copy and history of changes', 
-        e: 'Technical documentation is kept up to date according to Annex II and III (Art. 10.4)' },
+        e: `Technical documentation must be kept up to date according to Annex II and III. Maintain a full history log of changes for national authority audits (Art. 10.4 & 10.8).` },
 
       { t: '10.4) The QMS covers all required processes and is being reviewed and updated', 
-        e: 'Keep the QMS updated and continuously improve it; (a) to ensure that the manufactured product continues to comply with the requirements, including any changes in harmonized standards, and (b) that the multiple procedures and systems required by the Regulation (listed a to m) remain effective and compliant (Article 10.9)' },
+        e: `Keep the QMS updated and continuously improve it; (a) to ensure that the manufactured product continues to comply with the requirements, including any changes in harmonized standards, and (b) that the multiple procedures and systems required by the Regulation (listed a to m) remain effective and compliant (Article 10.9).` },
 
       { t: '10.5) PMS activities are taking place with the required scope', 
-        e: 'Maintain PMS activities according to Art. 83, with particular attention to the interfaces listed in paragraph 3 a–h (Art. 10.10)' },
+        e: `Maintain PMS activities according to Art. 83, paying particular attention to the interfaces listed in paragraph 3 a–h. Compile periodic safety files based on risk class ➔ `,
+        sop: TD_DATA.PSUR_REPORT }, // KORRIGERING: Kopplad till det nya skarpa eftermarknadsdokumentet
 
       { t: '10.6) Deviations and complaints are investigated, corrective actions are taken to address nonconformities, and appropriate parties are informed', 
-        e: 'Take corrective actions for non-compliant products, and inform distributors, the AR, and the importer. Immediately inform competent authorities and the NB about products presenting a serious risk (Art. 10.12)' },
+        e: `Take corrective actions for non-compliant products, and inform distributors, the AR, and the importer. Immediately inform competent authorities and the NB about products presenting a serious risk (Art. 10.12).` },
 
       { t: '10.7) Incidents are investigated and serious incidents are reported within the required time', 
-        e: '...' },
-      
+        e: `Report all serious incidents to the authorities no later than 15 days after becoming aware of them. Report all field safety corrective actions (FSCA), preferably before the action is taken, as well as changes in trends for other incidents, all as described in Articles 87 and 88 (Article 10.13) ➔ `,
+        sop: TD_DATA.VIGILANCE_LOG }, // KORRIGERING: Lagat placeholder-felet och kopplat till skarp incident-logg
+
       { t: '10.8) The PRRC is carrying out their duties', 
-        e: 'Report all serious incidents to the authorities no later than 15 days after becoming aware of them. Report all field safety corrective actions (FSCA), preferably before the action is taken, as well as changes in trends for other incidents, all as described in Articles 87 and 88 (Article 10.13).' },
+        e: `Ensure the Person Responsible for Regulatory Compliance (PRRC) systematically oversees batch release conformity, technical documentation maintenance, and fast-track post-market vigilance tasks (Article 15).` },
       
       { t: '10.9) Traceability of supply', 
-        e: 'Maintain traceability records for all products received or supplied to other economic operators (e.g., importers or distributors) or supplied to health institutions or healthcare professionals (Art. 25.2)' },
+        e: `Maintain traceability records for all products received or supplied to other economic operators (e.g., importers or distributors) or supplied to health institutions or healthcare professionals (Art. 25.2).` },
       
       { t: '10.10) Updating or confirming registration data', 
-        e: 'Update EUDAMED within one week of any changes to the registration data and reconfirm the accuracy of the data every second year (Art. 31.4 and 31.5)' },
-    ]
-  } 
+        e: `Update EUDAMED within one week of any changes to the registration data and reconfirm the accuracy of the data every second year (Art. 31.4 and 31.5).` },
+
+      { t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT X
+    📄 Technical_File_Index_product_X.pdf
+    📄 EUDAMED_SRN_and_Registration_Record_product_X.pdf
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+        📄 UDI_and_Traceability_Plan_product_X.pdf
+        📄 EMDN_and_Device_Listing_Data_product_X.pdf
+        📄 MDR_EU_QMS_Certificate_product_X.pdf
+        📄 MDR_EU_Technical_Documentation_Certificate_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+        📄 Signed_EU_Declaration_of_Conformity_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+        📄 Distribution_and_traceability_matrix_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+        📄 Clinical_Evaluation_Report_CER_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf
+        📄 PMCF_plan_product_X.pdf
+        📄 PSUR_Report_product_X.pdf
+        📄 Periodic_Vigilance_and_Trend_Log_product_X.pdf `,
+      }, 
+        
+      { t: 'Guidance Documents from the MDCG & Templates' },
+      { e: 'SUPPLY CHAIN INTERRUPTION GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2024_16 },
+      { mdcg: MDCG_DATA.MDCG_2024_16_ANNEX },
+      { mdcg: MDCG_DATA.MDCG_SUPPLY_Q&A_REV1 },
+
+      { e: 'POST MARKET SURVEILLANCE GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2022_21 },
+
+      { e: 'VIGILANCE & REPORTING FORMS' },
+      { mdcg: MDCG_DATA.MDCG_2024_1 },
+      { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
+      { mdcg: MDCG_DATA.MIR_FORM_V7_3_1 },
+      { mdcg: MDCG_DATA.MIR_DATABASE_XSD_XSL },
+      { mdcg: MDCG_DATA.MIR_HELPTEXT },
+      { mdcg: MDCG_DATA.FSCA_REPORT_V2_11 },
+      { mdcg: MDCG_DATA.FSN_TEMPLATE_REV1 },
+      { mdcg: MDCG_DATA.FSN_CUSTOMER_REPLY_REV1 },
+      { mdcg: MDCG_DATA.FSN_DISTRIBUTOR_REPLY_REV1 },
+      { mdcg: MDCG_DATA.FSN_Q&A },
+      { mdcg: MDCG_DATA.TREND_REPORT_V12_11 },
+      { mdcg: MDCG_DATA.PSR_FORM_V12_11 }
+    ]  
+  }
 ];
+
+
