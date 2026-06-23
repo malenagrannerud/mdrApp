@@ -351,9 +351,38 @@ This file details the structural device traits and nomenclature keys uploaded to
 - Applied EMDN Code & Category Title: [Insert official European Medical Device Nomenclature key].
 - Device Listing Parameters: Links specific design variants, core safety properties, and container pack criteria as defined in Annex VI Part B.
     `.trim()
+  }, 
+
+ // ================== STEP 8 NEW FILES ==================
+  QMS_CERT: {
+    id: 'DOC-16',
+    title: '📄 MDR_EU_QMS_Certificate_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Regulatory Status
+Official EU Quality Management System Certificate issued by the designated Notified Body under MDR Annex IX Chapter I (Section 2.3) [MDR 2017/745].
+
+## 2. Scope & Audit Verification
+- Verifies that the manufacturer's corporate quality processes satisfy full Article 10(9) criteria.
+- Validates structural manufacturing facilities, audit reviews, and corporate document controls.
+    `.trim()
+  },
+
+  TD_CERT: {
+    id: 'DOC-17',
+    title: '📄 MDR_EU_Technical_Documentation_Certificate_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Regulatory Status
+Official EU Technical Documentation Assessment Certificate issued by the designated Notified Body under MDR Annex IX Chapter II (Section 4.9) [MDR 2017/745].
+
+## 2. Technical File Verification
+- Certifies that the device technical documentation (folders 1–6) meets full safety and performance criteria of Annex II and Annex III.
+- Provides the unique technical identification token enabling legal batch release.
+    `.trim()
   }
-
-
 
 
 
