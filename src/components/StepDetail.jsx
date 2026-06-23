@@ -84,7 +84,7 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
            *  Visar text så som jag skriver med whitespace och radbrytningar 
            * 
           */
-          <p className={item.e.includes('📁') ? 'tree-structure' : 'section-text whitespace-pre-line'}>
+          <p className={item.e.includes('📁') ? 'tree-structure font-mono text-sm whitespace-pre-wrap' : 'section-text whitespace-pre-line'}>
             {item.e}
           </p>
         )

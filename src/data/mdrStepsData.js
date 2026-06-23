@@ -14,7 +14,7 @@ export const MDR_DATA = [
 {  
     id: 'm0',
     title: 'Introduction',
-    desc: 'A Step by Step Roadmap to CE marking medical devices according to MDR',
+    desc: 'A Roadmap to CE Marking Medical Devices According to MDR',
     checklist: [
       { t: 'MDR Steps Overview',
         e: `This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
