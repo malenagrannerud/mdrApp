@@ -1,7 +1,8 @@
-
 /**
  * @file mdrStepsData.js
  * @description Regulatoriska steg för MDR-efterlevnad.
+ * 
+ * 
  */
 
 import { MDCG_DATA } from './mdcgData.js';
@@ -9,17 +10,19 @@ import { DOC_DATA } from './docData.js';
 
 export const MDR_DATA = [
 
-
-/************************  STEP 0 ****************************************/
+/***********************  STEP 0 ****************************************/
 {  
     id: 'm0',
     title: 'Introduction',
-    desc: 'A Step by Step Roadmap to CE marking medical devices according to MDR.',
+    desc: 'A Step by Step Roadmap to CE marking medical devices according to MDR',
     checklist: [
-      { 
-        t: 'MDR Steps Overview',
+      { t: 'MDR Steps Overview',
         e: `This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
-Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities. 
+Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities.` 
+      }, 
+
+      {t: 'Resulting File Structure', 
+       e: `
 
 📁 PRODUCT A
   📁 TECHNICAL DOCUMENTATION
@@ -29,10 +32,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 4-GSPR 
     📁 5-RISK MANAGEMENT 
     📁 6-V&V
-    📁 7-PMS
-  `,
-        style: { whiteSpace: 'pre-line', lineHeight: '1.2' }
-      }
+    📁 7-PMS` }
     ]
   },
 
@@ -156,13 +156,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
 
 
-
-
-
-
-
   /**********************  STEP 3 ****************************************/
-
   {
     id: 'm3',
     title: 'Step 3) Comply with GSPR',

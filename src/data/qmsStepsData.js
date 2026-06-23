@@ -32,7 +32,7 @@ export const QMS_DATA = [
         `},
       { t: 'Resulting File Structure', 
         e: `
-    
+
 📁 ISO 13485-QMS
   📁 4-QMS
   📁 5-MANAGEMENT RESPONSIBILITY
