@@ -96,13 +96,14 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     title: 'Step 2) Establish processes and resources',
     desc: 'This step establishes the corporate infrastructure and processes required to comply with MDR ',
     checklist: [
-       { 
+       
+      {t:'  ', 
         e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,
       },
 
       { 
         t: 'Step 2.1) Set up design and manufacturing processes',
-        r: 'Art. 10.1: When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR.',
+        r: 'Art. 10.1: "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
         e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
         sop: TD_DATA.MF_P 
       },
@@ -208,10 +209,10 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 7-PMS `,}, 
         
 
-      { t: 'Guidance Documents from the MDCG', 
-        e: ` `},
+      { t: 'Guidance Documents from the MDCG'},
 
-      { e: `UDI GUIDANCE` },
+      { t: ' ', 
+      e: `UDI GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
       { mdcg: MDCG_DATA.MDCG_2021_19 },
       { mdcg: MDCG_DATA.MDCG_2021_10 },
@@ -226,15 +227,18 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_2018_4 },
       { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
 
-      { e: `PMS GUIDANCE` },
+      { t: ' ', 
+       e: `PMS GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2025_10 },
       { mdcg: MDCG_DATA.MDCG_2022_21 },
 
-      { e: `VIGILANCE GUIDANCE` },
+      { t: ' ', 
+       e: `VIGILANCE GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2024_1 },
       { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
 
-      { e: `PRRC GUIDANCE` },
+      { t: ' ', 
+       e: `PRRC GUIDANCE` },
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
     ]  
   },
