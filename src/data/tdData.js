@@ -218,5 +218,153 @@ This document compiles all user-facing information, layout files, and instructio
 - All labeling files must align with technical risks mapped in the GSPR checklist.
 - Translation procedures must follow corporate QMS workflows before entering local markets.
     `.trim()
+  },
+
+
+
+  // ================== STEP 4 NEW FILES ==================
+  CER_REPORT: {
+    id: 'DOC-',
+    title: '📄 CER_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This report synthesizes all analyzed clinical data to demonstrate sufficient clinical evidence of safety and performance under MDR Article 61(11).
+
+## 2. Technical File Clinical Records
+- Device Equivalence Evaluation: Analysis of competitor data parameters if applicable.
+- Appraisal Results of Published Literature: Critical scoring of scientific database registries.
+- Results of Clinical Investigations: Raw trial summaries conducted under Annex XV parameters.
+
+## 3. Clinical Conclusions
+- Proof that the device achieves its claimed medical benefits during intended use environment.
+- Benefit-Risk Determination: Formal declaration that all foreseeable clinical risks are outweighed by patient benefits.
+    `.trim()
+  },
+
+  PMCF_PLAN: {
+    id: 'DOC',
+    title: '📄 PMCF_plan_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+Defines the mandatory post-market clinical follow-up planning required by Annex XIV Part B 6.
+
+## 2. Proactive Clinical Tracking
+- General PMCF Procedures: Feedback loops from active user registries and clinical surveys.
+- Specific PMCF Procedures: Evaluation parameters for long-term clinical trials or patient cohorts.
+- Data Justification Strategy: Explicitly outlines how post-market data will be fed back into the CER and Risk Files.
+    `.trim()
+  }, 
+
+
+  // ================== STEP 5 NEW FILES ==================
+  TF_INDEX: {
+    id: 'DOC-11',
+    title: '📄 Technical_File_Index_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This master document acts as the final index and project deliverables tracker confirming that all data from Steps 1–4 are organized according to MDR Annex II and Annex III [MDR 2017/745].
+
+## 2. Technical File Compilation Checklist
+- Pre-market Records: Verified and locked inside folders 1–6 (Device Description, Labeling, GSPR, Risk, and V&V).
+- Post-market Plans: Verified and locked inside folder 7 (PMS and PMCF architectures).
+- Proper processes and design gate-reviews have been documented to generate the data that supports final European market approval.
+    `.trim()
+  },
+
+  UDI_PLAN: {
+    id: 'DOC-12',
+    title: '📄 UDI_and_Traceability_Plan_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This document maps and defines the Unique Device Identifier structures required by MDR Article 27 and Part C of Annex VI [MDR 2017/745].
+
+## 2. Barcode System Specifications
+- Basic UDI-DI Assignment: The corporate regulatory identifier linking the product family inside EUDAMED.
+- UDI-DI Assignment: The unique commercial barcode mapped to specific device variations and packing tiers.
+- UDI-PI Rules: The dynamic tracker parameters containing serial codes, batch numbers, and software manufacturing dates.
+
+## 3. Distribution Tracking
+- Ensures the barcode is readable in its intended use environment, enabling full device tracking wherever it is distributed inside the EU.
+    `.trim()
+  }, 
+
+ // ================== STEP 6 NEW FILE ==================
+  DIST_MATRIX: {
+    id: 'DOC-13',
+    title: '📄 Distribution_and_traceability_matrix_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This matrix documents the designated legal entities authorized to distribute the medical device within the EU market and establishes required economic operator data loops [MDR 2017/745].
+
+## 2. Economic Operators & Scope Mandates
+[TABLE_START]
+
+| Operator Type | Corporate Name & Address | EUDAMED SRN Number | Verification Mandate Summary |
+| Authorised Rep (Art. 11) | [Insert EU AR Company Name] | [Insert SRN] | Act as primary contact for European Competent Authorities. |
+| EU Importer (Art. 13) | [Insert EU Importer Name] | [Insert SRN] | Verify CE certificate, local labeling, and keep complaint logs. |
+| Distributor (Art. 14) | [Insert Logistics/Distributor] | N/A | Check local language compliance and report serious incidents. |
+[TABLE_END]
+
+## 3. Communication and Serious Incident Routing
+- All field complaints or suspected serious incidents captured by Distributors or Importers must be routed to the PRRC within 48 hours.
+- Repackaging or relabeling activities executed by economic operators must comply with Article 16 criteria and be recorded in this matrix.
+    `.trim()
+  }, 
+
+    // ================== STEP 7 NEW FILES ==================
+  EUDAMED_REC: {
+    id: 'DOC-14',
+    title: '📄 EUDAMED_SRN_and_Registration_Record_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This document logs the economic operator data submitted to the EUDAMED Actor Registration module to verify compliance with MDR Article 31 and Annex VI Part A Section 1 [MDR 2017/745].
+
+## 2. Actor Validation & Single Registration Number
+- Registered Actor Role: Manufacturer (Mfr) / Importer / Authorised Representative.
+- Issued SRN: [Insert generated Single Registration Number here].
+- Validation Date: Confirms official verification by the designated national competent authority.
+    `.trim()
+  },
+
+  EMDN_DATA: {
+    id: 'DOC-15',
+    title: '📄 EMDN_and_Device_Listing_Data_product_X.pdf',
+    version: '1.0',
+    owner: 'R&D',
+    content: `
+# 1. Purpose
+This file details the structural device traits and nomenclature keys uploaded to EUDAMED to satisfy Article 29 and Annex VI Part A Section 2 criteria [MDR 2017/745].
+
+## 2. Nomenclature Mapping (EMDN)
+- Applied EMDN Code & Category Title: [Insert official European Medical Device Nomenclature key].
+- Device Listing Parameters: Links specific design variants, core safety properties, and container pack criteria as defined in Annex VI Part B.
+    `.trim()
   }
+
+
+
+
+
+
+
+
+};
+
+
+
+
+
+
 };

@@ -414,35 +414,216 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
     /**********************  STEP 5 ****************************************/
 
+  /**********************  STEP 5 ****************************************/
   {
     id: 'm5',
-    title: 'Step 5) Finalize Technical Documentation',
-    desc: 'Demonstrate compliance with the general safety and performance requirements.',
+    title: 'Step 5) Compile the technical documentation',
+    desc: 'Organize and present all generated data from previous steps to demonstrate compliance with MDR Annex II and Annex III.',
     checklist: [
-      { t: 'GSPR Checklist', e: 'Mapping of each requirement against evidence and standards (e.g., IEC 62304).' }
+      
+      { 
+        t: 'Step 5.1) Compile the Technical Documentation checklist and index',
+        r: 'Annex II',
+        e: `This file acts as the master index and contents table for the pre-market phase, providing an audited roadmap over folders 1–6 to prove the device is safe and performs as intended ➔ `,
+        sop: TD_DATA.TF_INDEX 
+      },
+
+      { 
+        t: 'Step 5.2) Assign Basic UDI-DI and establish the UDI traceability plan',
+        r: 'Art. 27 & Annex VI Part C',
+        e: `This document defines the unique device identification barcode structures, enabling full data tracking, scanning, and device allocation across the European Union market ➔ `,
+        sop: TD_DATA.UDI_PLAN 
+      },
+
+      { 
+        t: 'Step 5.3) Compile the Technical Documentation on post-market surveillance',
+        r: 'Annex III',
+        e: `This file acts as the master index for the post-market phase, structuring folder 7 into active surveillance logs, data analytics channels, and mandatory safety update plans ➔ `,
+        sop: TD_DATA.PMS_PROCESS 
+      },
+
+      { t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT A
+    📄 Technical_File_Index_product_X.pdf
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+        📄 UDI_and_Traceability_Plan_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+        📄 Clinical_Evaluation_Report_CER_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf
+        📄 PMCF_plan_product_X.pdf `,
+      }, // KORRIGERING: Endast de 2 nya filerna från detta steg har adderats till trädet på sina exakta platser.
+
+      { t: 'Guidance Documents from the MDCG' },
+      { mdcg: MDCG_DATA.MDCG_2022_7 },
+      { mdcg: MDCG_DATA.MDCG_2021_19 },
+      { mdcg: MDCG_DATA.MDCG_2021_10 },
+      { mdcg: MDCG_DATA.MDCG_2021_09 },
+      { mdcg: MDCG_DATA.MDCG_2018_1_REV4 },
+      { mdcg: MDCG_DATA.MDCG_2020_18 },
+      { mdcg: MDCG_DATA.MDCG_2019_2 },
+      { mdcg: MDCG_DATA.MDCG_2019_1 },
+      { mdcg: MDCG_DATA.MDCG_2018_7 },
+      { mdcg: MDCG_DATA.MDCG_2018_6 },
+      { mdcg: MDCG_DATA.MDCG_2018_5 },
+      { mdcg: MDCG_DATA.MDCG_2018_4 },
+      { mdcg: MDCG_DATA.MDCG_2018_3_REV1 }
     ]
   },
 
-    /**********************  STEP 6 ****************************************/
 
+    /**********************  STEP 6 ****************************************/
+  /**********************  STEP 6 ****************************************/
   {
     id: 'm6',
     title: 'Step 6) Arrange distribution',
-    desc: 'Compile the technical file according to Annex II & III.',
+    desc: 'Establish compliant European distribution channels and define obligations for Authorized Representatives, Importers, and Distributors.',
     checklist: [
-      { t: 'Technical File Index', e: 'Structure: Device Description, Risk, Clinical Evaluation, Labeling.' }
+      
+      { 
+        t: 'Step 6.1) Map and establish distributor compliance information loops',
+        r: 'Art. 14',
+        e: `This activity defines the workflows with European distributors, ensuring they actively verify device conformity and establish dual-channel communication for reporting complaints and serious incidents.` 
+      },
+
+      { 
+        t: 'Step 6.2) Appoint an EU Authorised Representative (Foreign manufacturers only)',
+        r: 'Art. 11',
+        e: `This mandate legally appoints your representative within the EU to act on your behalf in front of the Authorities, defining their exact scope and regulatory mandate.` 
+      },
+
+      { 
+        t: 'Step 6.3) Appoint the primary EU Importer and align registration data',
+        r: 'Art. 13',
+        e: `This activity secures a registered Importer into the EU who must verify compliance, register with Authorities, log customer complaints, and report serious incidents.` 
+      },
+
+      { 
+        t: 'Step 6.4) Compile the final distribution agreements and traceability matrix',
+        r: 'Art. 11, 13 & 14',
+        e: `This document records the legal entities fulfilling the roles of AR, Importer, and Distributor, tracking how data flows to maintain the device state-of-the-art ➔ `,
+        sop: TD_DATA.DIST_MATRIX 
+      },
+
+      { t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT A
+    📄 Technical_File_Index_product_X.pdf
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+        📄 UDI_and_Traceability_Plan_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+        📄 Distribution_and_traceability_matrix_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+        📄 Clinical_Evaluation_Report_CER_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf
+        📄 PMCF_plan_product_X.pdf `,
+      }, // KORRIGERING: Endast den nya matrisen har lagts till i Mapp 3 i filträdet.
+
+      { t: 'Guidance Documents from the MDCG' },
+      { mdcg: MDCG_DATA.MDCG_2025_4 },
+      { mdcg: MDCG_DATA.MDCG_2022_16 },
+      { mdcg: MDCG_DATA.MDCG_2021_27 },
+      { mdcg: MDCG_DATA.MDCG_2021_26 }
     ]
-  }, 
+  },
 
-    /**********************  STEP 7 ****************************************/
 
-  {
-    id: 'm7',
-    title: 'Step 7) Register the product',
-    desc: 'Define the product’s intended purpose and risk class according to Annex VIII.',
+  /**********************  STEP 7 ****************************************/
+  { id: 'm7',
+    title: 'Step 7) Register the device and the manufacturer',
+    desc: 'Register economic operators to obtain an SRN and upload required device and UDI data module elements to EUDAMED.',
     checklist: [
-      { t: 'Intended Purpose Statement', e: 'Clear definition of what the product is intended to do and for whom.' },
-      { t: 'MDR Classification Report', e: 'Justification of class (e.g., IIa according to Rule 11).' }
+      
+      { t: 'Step 7.1) Submit economic operator data to obtain the Single Registration Number (SRN)',
+        r: 'Art. 31 & Annex VI Part A Sec. 1',
+        e: `This activity initiates actor registration. It submits establishment profiles to national competent authorities to validate and issue your mandatory SRN ➔ `,
+        sop: TD_DATA.EUDAMED_REC },
+
+      { 
+        t: 'Step 7.2) Select European Medical Device Nomenclature (EMDN) codes and map device listing elements',
+        r: 'Art. 29 & Annex VI Part A Sec. 2',
+        e: `This activity assigns official nomenclature codes, auditing device classifications and structural listing properties required for public cataloging ➔ `,
+        sop: TD_DATA.EMDN_DATA 
+      },
+
+      { 
+        t: 'Step 7.3) Upload final UDI data elements to the EUDAMED database module',
+        r: 'Art. 29 & Annex VI Part B',
+        e: `This activity enters the spired Basic UDI-DI and specific device identification attributes into the central system before launching conformity assessment.` 
+      },
+
+      { 
+        t: 'Step 7.4) Evaluate Class I criteria for direct step bypass rules',
+        r: 'Art. 52.7',
+        e: `This check verifies if the device is a non-sterile, non-reusable, and non-measuring Class I unit. If all conditions match, bypass Step 8 and proceed directly to Step 9.` 
+      },
+
+      { t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT A
+    📄 Technical_File_Index_product_X.pdf
+    📄 EUDAMED_SRN_and_Registration_Record_product_X.pdf
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+        📄 UDI_and_Traceability_Plan_product_X.pdf
+        📄 EMDN_and_Device_Listing_Data_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+        📄 Distribution_and_traceability_matrix_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+        📄 Clinical_Evaluation_Report_CER_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf
+        📄 PMCF_plan_product_X.pdf `,
+      }, 
+
+      { t: 'Guidance Documents from the MDCG' },
+      { e: 'EUROPEAN MEDICAL DEVICE NOMENCLATURE (EMDN) GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2025_1 },
+      { mdcg: MDCG_DATA.MDCG_2024_2_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2021_12_REV1 },
+      
+      { e: 'EUDAMED MODULE REGISTRATION GUIDANCE' },
+      { mdcg: MDCG_DATA.EUDAMED_GRADUAL_ROLLOUT },
+      { mdcg: MDCG_DATA.MDCG_2021_13_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2021_1_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2020_15 },
+      { mdcg: MDCG_DATA.MDCG_2019_5 },
+      { mdcg: MDCG_DATA.MDCG_2019_4 }
     ]
   },
 
