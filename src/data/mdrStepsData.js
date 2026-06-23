@@ -317,16 +317,99 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
   /**********************  STEP 4 ****************************************/
 
-
+  /**********************  STEP 4 ****************************************/
   {
     id: 'm4',
-    title: 'Step 4) Finalize clinical evaluation',
-    desc: 'Define the intended purpose and risk class according to Annex VIII.',
+    title: 'Step 4) Complete the clinical evaluation',
+    desc: 'All devices must fulfil the clinical requirements of Article 61 and Part A of Annex XIV to demonstrate performance and safety.',
     checklist: [
-      { t: 'Intended Purpose Statement', e: 'Clear definition of what the product is intended to do and for whom.' },
-      { t: 'MDR Classification Report', e: 'Justification of class (e.g., IIa according to Rule 11).' }
+      
+      { 
+        t: 'Step 4.1) Author and update the Clinical Evaluation Plan (CEP)',
+        r: 'Art. 5.3 & Annex XIV Part A 1(a)',
+        e: `This document locks down the initial planning stage. It defines the methodology, data search criteria, and establishes endpoints for sufficient clinical evidence ➔ `,
+        sop: TD_DATA.CLIN_EVAL 
+      },
+
+      { 
+        t: 'Step 4.2) Appraise literature and evaluate data for equivalence or novelty',
+        r: 'Art. 61.3 & Annex XIV Part A',
+        e: `This activity systematically searches, identifies, and appraises relevant scientific literature and alternative treatment options to determine data sufficiency or gaps.` 
+      },
+
+      { 
+        t: 'Step 4.3) Compile Clinical Investigation documentation if trial data is required',
+        r: 'Art. 62-81 & Annex XV',
+        e: `This documentation package governs human trials. It compiles the Investigator's Brochure, Clinical Investigation Plan, and submission forms required for high-risk or novel devices.` 
+      },
+
+      { 
+        t: 'Step 4.4) Author the final Clinical Evaluation Report (CER)',
+        r: 'Art. 61.11 & Annex XIV Part A 4',
+        e: `This report documents the final analysis of all clinical data. It provides the core scientific proof that the device achieves its claimed medical benefits and operates safely ➔ `,
+        sop: TD_DATA.CER_REPORT 
+      },
+
+      { 
+        t: 'Step 4.5) Establish the Post-Market Clinical Follow-up (PMCF) plan',
+        r: 'Annex XIV Part B 6',
+        e: `This plan outlines the post-launch clinical data collection lifecycle. It schedules proactive studies and registry tracking to gather continuous safety data over the lifespan of the device ➔ `,
+        sop: TD_DATA.PMCF_PLAN 
+      },
+
+      { 
+        t: 'Resulting File Structure', 
+        e: `
+  📁 PRODUCT A
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale_product_X.pdf
+        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+        📄 Labeling_and_IFU_Pack_product_X.pdf
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+      📁 4-GSPR 
+        📄 GSPR_compliance_matrix_product_X.xlsx
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+        📄 CER_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf
+        📄 PMCF_plan_product_X.pdf `,
+      }, 
+
+      { t: 'Guidance Documents from the MDCG' },
+      { e: 'CLINICAL EVALUATION GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2024_10 },
+      { mdcg: MDCG_DATA.MDCG_2020_6 },
+      { mdcg: MDCG_DATA.MDCG_2020_5 },
+      { mdcg: MDCG_DATA.MDCG_2020_1 },
+      { mdcg: MDCG_DATA.MDCG_2019_9_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2019_3_REV1 },
+      
+      { e: 'CLINICAL INVESTIGATIONS GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2024_15 },
+      { mdcg: MDCG_DATA.MDCG_2024_5 },
+      { mdcg: MDCG_DATA.MDCG_2024_5_APP_A },
+      { mdcg: MDCG_DATA.MDCG_2024_3 },
+      { mdcg: MDCG_DATA.MDCG_2024_3_APP_A },
+      { mdcg: MDCG_DATA.MDCG_2023_7 },
+      { mdcg: MDCG_DATA.MDCG_2021_28 },
+      { mdcg: MDCG_DATA.MDCG_2021_20 },
+      { mdcg: MDCG_DATA.MDCG_2021_8 },
+      { mdcg: MDCG_DATA.MDCG_2021_6_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2020_10_1_REV1 },
+      { mdcg: MDCG_DATA.MDCG_2020_10_2_REV1 },
+
+      { e: 'POST MARKET CLINICAL FOLLOW-UP GUIDANCE' },
+      { mdcg: MDCG_DATA.MDCG_2020_8 },
+      { mdcg: MDCG_DATA.MDCG_2020_7 }
     ]
   },
+
 
 
     /**********************  STEP 5 ****************************************/
