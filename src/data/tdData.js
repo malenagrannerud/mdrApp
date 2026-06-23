@@ -8,7 +8,7 @@ export const TD_DATA = {
   // ------------------ STEP 1 OUTPUT ------------------
   DD: {
     id: 'DOC-01', 
-    title: '📄 Device_description_&_rationale',
+    title: '📄 Device_description_&_rationale.pdf',
     version: '1.0', 
     owner: 'R&D',
     content: `
@@ -31,7 +31,7 @@ The purpose of this document is to formally qualify and classify the device unde
   // ------------------ STEP 2 OUTPUTS ------------------
   MF_P: {
     id: 'DOC-02',
-    title: '📄 Manufacturing_process_description',
+    title: '📄 Manufacturing_process_description.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -57,7 +57,7 @@ This procedure defines the methods used to control the design, development, and 
 
   RM: {
     id: 'DOC-03',
-    title: '📄 Risk_management_procedure',
+    title: '📄 Risk_management_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -75,7 +75,7 @@ Defines the mandatory risk management lifecycle according to ISO 14971 and MDR A
 
   CLIN_EVAL: {
     id: 'DOC-04',
-    title: '📄 Clinical_evaluation_plan_CEP',
+    title: '📄 Clinical_evaluation_plan_CEP.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -92,7 +92,7 @@ Establishes the process for conducting clinical evaluations to maintain continuo
 
   TD_PROCESS: {
     id: 'DOC-05',
-    title: '📄 Technical_documentation_compilation_procedure',
+    title: '📄 Technical_documentation_compilation_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -103,7 +103,7 @@ Defines how the corporate Technical File index is maintained, structured accordi
 
   QMS_MANUAL: {
     id: 'DOC-06',
-    title: '📄 Quality_management_system_manual',
+    title: '📄 Quality_management_system_manual.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -114,7 +114,7 @@ The high-level corporate document detailing how the organization complies with I
 
   PMS_PROCESS: {
     id: 'DOC-07',
-    title: '📄 Post_market_surveillance_procedure',
+    title: '📄 Post_market_surveillance_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -125,7 +125,7 @@ Establishes proactive post-market monitoring loops to systematically harvest dat
 
   LABEL_PROCESS: {
     id: 'DOC-08',
-    title: '📄 Labeling_and_translation_control_procedure',
+    title: '📄 Labeling_and_translation_control_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -136,7 +136,7 @@ Governs the creation, verification, and legal translation of user manuals (IFU),
 
   CAPA_RECALL: {
     id: 'DOC-09',
-    title: '📄 Corrective_action_and_recall_procedure',
+    title: '📄 Corrective_action_and_recall_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -147,7 +147,7 @@ Outlines the trigger mechanisms for CAPA investigations and the field safety act
 
   VIGILANCE: {
     id: 'DOC-10',
-    title: '📄 Vigilance_and_serious_incident_reporting_procedure',
+    title: '📄 Vigilance_and_serious_incident_reporting_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -163,7 +163,7 @@ Establishes mandatory pathways to report patient death, temporary or permanent s
 
   REG_INTERACT: {
     id: 'DOC-11',
-    title: '📄 Regulatory_authority_interaction_procedure',
+    title: '📄 Regulatory_authority_interaction_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -174,7 +174,7 @@ Defines corporate behavior and documentation protocols during national market au
 
   LIABILITY: {
     id: 'DOC-12',
-    title: '📄 Financial_liability_and_damage_compensation_procedure',
+    title: '📄 Financial_liability_and_damage_compensation_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -185,7 +185,7 @@ Maintains compliance with MDR Article 10(16), ensuring that corporate product li
 
   PRRC_APPOINT: {
     id: 'DOC-13',
-    title: '📄 PRRC_appointment_and_mandate_letter',
+    title: '📄 PRRC_appointment_and_mandate_letter.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -201,7 +201,7 @@ The official board-signed mandate certifying the appointment of the Person Respo
 
   EXPERT_MATRIX: {
     id: 'DOC-14',
-    title: '📄 External_expertise_and_laboratory_matrix',
+    title: '📄 External_expertise_and_laboratory_matrix.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
