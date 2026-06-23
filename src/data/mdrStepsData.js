@@ -45,9 +45,12 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
       checklist: [
+
+        {t: ' '}, 
+    
         { t: 'Step 1.1) Compile the Qualification Rationale ', 
           r: 'Art. 2(1): Contains the definition of a medical device. ',
-          e: `This proves that the product is eligible for, and must carry, a medical device CE mark according to MDR.`},
+          e: `This proves that the product is eligible for, and must carry a CE mark according to MDR.`},
        
         { t: 'Step 1.2) Compile the Statement of Intended Purpose ', 
           r: 'Art. 2(1): Contains the definition of a medical device. ',
@@ -90,128 +93,108 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     },
 
   /**********************  STEP 2 ****************************************/
-
   {   
     id: 'm2',
     title: 'Step 2) Establish processes and resources',
     desc: 'This step establishes the corporate infrastructure and processes required to comply with MDR ',
     checklist: [
        
-      {t:'  ', 
-        e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,
-      },
+      { t: ' ', 
+        e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,},
 
-      { 
-        t: 'Step 2.1) Set up design and manufacturing processes',
+      { t: 'Step 2.1) Set up design and manufacturing processes',
         r: 'Art. 10.1: "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
         e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
-        sop: TD_DATA.MF_P 
-      },
+        sop: TD_DATA.MF_P },
       
-      { 
-        t: 'Step 2.2) Implement a risk management (RM) process',
+      { t: 'Step 2.2) Implement a risk management (RM) process',
         r: 'Art. 10.2: "Mfr shall establish, document, implement and maintain a system for RM as in Annex I - section 3."',
-        e: 'This document establishes the ISO 14971 framework, used to systematically identify and control safety hazards across the product lifecycle ➔ ',
-        sop: TD_DATA.RM 
-      },
+        e: `This document establishes the ISO 14971 framework, used to systematically identify and control safety hazards across the product lifecycle ➔ `,
+        sop: TD_DATA.RM },
 
-      { 
-        t: 'Step 2.3) Establish a Clinical Evaluation process',
+      {  t: 'Step 2.3) Establish a Clinical Evaluation process',
         r: 'Art. 10.3: "Mfrs shall conduct a clinical evaluation in accordance with Art. 61 and Annex XIV, including a PMCF."',
-        e: 'This document outlines data collection methodology, used to plan how to scientifically prove device safety and performance on humans ➔ ',
+        e: `This document outlines data collection methodology, used to plan how to scientifically prove device safety and performance on humans ➔ `,
         sop: TD_DATA.CLIN_EVAL},
 
-      { 
-        t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
+      { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
         r: 'Art. 10.4, 10.6, 10.7 & 10.8',
         e: 'This document creates workflows for legal paperwork, used to organize all compliance files, assign UDI barcodes, and draft the Declaration of Conformity ➔ ',
-        sop: TD_DATA.TD_PROCESS
-      },
+        sop: TD_DATA.TD_PROCESS },
 
-      { 
-        t: 'Step 2.5) Build the Quality Management System (QMS)',
+      { t: 'Step 2.5) Build a Quality Management System (QMS) manual',
         r: 'Art. 10.9',
-        e: 'This document acts as corporate infrastructure, used to prove overall organizational compliance and resource management to the auditor ➔ ',
-        sop: TD_DATA.QMS_MANUAL
-      },
+        e: 'Non-product specific document. Created in QMS path. See QMS path ➔ 📁 4-QMS'}, 
 
-      { 
-        t: 'Step 2.6) Plan Post Market Surveillance activities',
+      { t: 'Step 2.6) Plan PMS activities',
         r: 'Art. 10.10',
         e: 'This document establishes proactive market feedback loops, used to gather real-world safety data after the product is released ➔ ',
-        sop: TD_DATA.PMS_PROCESS
-      },
+        sop: TD_DATA.PMS_PROCESS  },
 
-      { 
-        t: 'Step 2.7) Create labelling development process, including translations',
+      { t: 'Step 2.7) Create labelling development process, including translations',
         r: 'Art. 10.11',
-        e: 'This document controls user-facing text, used to secure legal translations and correct warning labels ➔ ',
-        sop: TD_DATA.LABEL_PROCESS
-      },
+        e: 'Non-product specific process. Created in QMS path. See QMS path ➔ 📁 7-PRODUCT REALIZATION'},
 
       { 
         t: 'Step 2.8) Establish corrective action and recall process',
         r: 'Art. 10.12',
-        e: 'This document creates an emergency safety workflow, used to safely pull faulty devices off the market if injuries occur ➔ ',
-        sop: TD_DATA.CAPA_RECALL
-      },
+        e: 'Non-product specific process. Created in QMS path. See QMS path ➔ 📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT'
+      }, 
 
       { 
         t: 'Step 2.9) Set up Vigilance process, including serious incident reporting',
         r: 'Art. 10.13',
-        e: 'This document creates a fast-track authority channel, used to legally report serious patient injuries or deaths within strict hourly deadlines ➔ ',
-        sop: TD_DATA.VIGILANCE
-      },
+        e: 'Non-product specific process. Created in QMS path. See QMS path ➔ 📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT'
+      }, 
 
       { 
         t: 'Step 2.10) Define regulatory authority interaction process',
         r: 'Art. 10.14',
-        e: 'This document governs official communications, used to handle sample testing, audits, and unannounced inspections smoothly ➔ ',
-        sop: TD_DATA.REG_INTERACT
-      },
+        e: 'Non-product specific process. Created in QMS path. See ISO 13485-QMS ➔ 📁 5-MANAGEMENT RESPONSIBILITY'
+      }, 
 
-      { 
-        t: 'Step 2.11) Arrange legal liability and damage compensation',
+      { t: 'Step 2.11) Arrange legal liability and damage compensation',
         r: 'Art. 10.16',
-        e: 'This document secures financial protection, used to prove financial coverage for potential patient injuries ➔ ',
-        sop: TD_DATA.LIABILITY
-      },
+        e: 'Non-product specific setup. Maintained in corporate archive. See QMS path ➔ 📁 5-MANAGEMENT RESPONSIBILITY'}, 
 
-      { 
-        t: 'Step 2.12) Appoint PRRC to oversee regulatory compliance',
+      { t: 'Step 2.12) Appoint PRRC to oversee regulatory compliance',
         r: 'Art. 15',
         e: 'This document assigns individual legal responsibility, used to officially designate the person who signs off on device releases ➔ ',
-        sop: TD_DATA.PRRC_APPOINT
+        sop: TD_DATA.PRRC_APPOINT },
+
+      { 
+        t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
+        e: 'Non-product specific matrix. Maintained in corporate HR/Vendor records. See QMS path ➔ 6-RESOURCE MANAGEMENT'
+      }, 
+
+      { 
+        t: ' ',
+        e: '💡 For guidance on clinical evaluation - go to Step 4' 
       },
 
-      { t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
-        e: 'This document maps your external brain trust, used to prove you have qualified consultants and test labs contracted ➔ ',
-        sop: TD_DATA.EXPERT_MATRIX },
-
-      { t: ' ',
-        e: '💡 For guidance on clinical evaluation - go to Step 4' },
-
-
-
-
-        {t: 'Resulting File Structure', 
-         e: `
+      { t: 'Resulting File Structure', 
+        e: `
   📁 PRODUCT A
-  📁 TECHNICAL DOCUMENTATION
-    📁 1-DEVICE DESCRIPTION
-    📄 Device_description_and_rationale.pdf
-    📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
-    📁 3-DESIGN & MANUFACTURING INFO
-    📁 4-GSPR 
-    📁 5-RISK MANAGEMENT 
-    📁 6-V&V
-    📁 7-PMS `,}, 
+    📁 TECHNICAL DOCUMENTATION
+      📁 1-DEVICE DESCRIPTION
+        📄 Device_description_&_rationale.pdf
+        📄 PRRC_appointment_&_mandate_letter.pdf
+      📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
+      📁 3-DESIGN & MANUFACTURING INFO
+        📄 Manufacturing_process_description_product_X.pdf
+      📁 4-GSPR 
+      📁 5-RISK MANAGEMENT 
+        📄 RM_procedure_product_X.pdf
+      📁 6-V&V
+        📄 CEP_product_X.pdf
+      📁 7-PMS 
+        📄 PMS_procedure_product_X.pdf `,
+      },
         
-
-      { t: 'Guidance Documents from the MDCG'},
+      { t: 'Guidance Documents from the MDCG' },
 
       { t: ' ', 
-      e: `UDI GUIDANCE` },
+        e: 'UDI GUIDANCE'  },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
       { mdcg: MDCG_DATA.MDCG_2021_19 },
       { mdcg: MDCG_DATA.MDCG_2021_10 },
@@ -226,22 +209,26 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_2018_4 },
       { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
 
-      { t: ' ', 
-       e: `PMS GUIDANCE` },
+      { 
+        t: ' ', 
+        e: 'PMS GUIDANCE' 
+      },
       { mdcg: MDCG_DATA.MDCG_2025_10 },
       { mdcg: MDCG_DATA.MDCG_2022_21 },
 
       { t: ' ', 
-       e: `VIGILANCE GUIDANCE` },
+        e: 'VIGILANCE GUIDANCE' 
+      },
       { mdcg: MDCG_DATA.MDCG_2024_1 },
       { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
 
-      { t: ' ', 
-       e: `PRRC GUIDANCE` },
+      { 
+        t: ' ', 
+        e: 'PRRC GUIDANCE' 
+      },
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
     ]  
   },
-
 
 
 

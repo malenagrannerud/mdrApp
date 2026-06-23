@@ -1,11 +1,12 @@
 /**
  * @file tdData.js
  * @description Dokumentmallar och innehåll för Technical Documentation (TD) i MDR-stegen.
+ * KORRIGERING: Sammanslagen och rensad från dubbla deklarationer och trasiga filhuvuden.
  */
 
 export const TD_DATA = {
 
-  // ------------------ STEP 1 OUTPUT ------------------
+  // ------------------ STEP 1 FILE (📁 1-DEVICE DESCRIPTION) ------------------
   DD: {
     id: 'DOC-01', 
     title: '📄 Device_description_&_rationale.pdf',
@@ -28,7 +29,9 @@ The purpose of this document is to formally qualify and classify the device unde
     `.trim()
   },
 
-  // ------------------ STEP 2 OUTPUTS ------------------
+  // ------------------ STEP 2 FILES ------------------
+  
+  // Anropas av sop: TD_DATA.MF_P (Sparas i: 📁 3-DESIGN & MANUFACTURING INFO)
   MF_P: {
     id: 'DOC-02',
     title: '📄 Manufacturing_process_description.pdf',
@@ -55,6 +58,7 @@ This procedure defines the methods used to control the design, development, and 
     `.trim()
   }, 
 
+  // Anropas av sop: TD_DATA.RM (Sparas i: 📁 5-RISK MANAGEMENT)
   RM: {
     id: 'DOC-03',
     title: '📄 Risk_management_procedure.pdf',
@@ -73,6 +77,7 @@ Defines the mandatory risk management lifecycle according to ISO 14971 and MDR A
     `.trim()
   },
 
+  // Anropas av sop: TD_DATA.CLIN_EVAL (Sparas i: 📁 6-V&V)
   CLIN_EVAL: {
     id: 'DOC-04',
     title: '📄 Clinical_evaluation_plan_CEP.pdf',
@@ -90,30 +95,9 @@ Establishes the process for conducting clinical evaluations to maintain continuo
     `.trim()
   },
 
-  TD_PROCESS: {
-    id: 'DOC-05',
-    title: '📄 Technical_documentation_compilation_procedure.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-Defines how the corporate Technical File index is maintained, structured according to MDR Annex II & III, and prepared for Notified Body submission.
-    `.trim()
-  },
-
-  QMS_MANUAL: {
-    id: 'DOC-06',
-    title: '📄 Quality_management_system_manual.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-The high-level corporate document detailing how the organization complies with ISO 13485:2016 and MDR Article 10(9).
-    `.trim()
-  },
-
+  // Anropas av sop: TD_DATA.PMS_PROCESS (Sparas i: 📁 7-PMS)
   PMS_PROCESS: {
-    id: 'DOC-07',
+    id: 'DOC-05',
     title: '📄 Post_market_surveillance_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
@@ -123,69 +107,10 @@ Establishes proactive post-market monitoring loops to systematically harvest dat
     `.trim()
   },
 
-  LABEL_PROCESS: {
-    id: 'DOC-08',
-    title: '📄 Labeling_and_translation_control_procedure.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-Governs the creation, verification, and legal translation of user manuals (IFU), software UI strings, and physical product carton labels (MDR Art. 10(11)).
-    `.trim()
-  },
-
-  CAPA_RECALL: {
-    id: 'DOC-09',
-    title: '📄 Corrective_action_and_recall_procedure.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-Outlines the trigger mechanisms for CAPA investigations and the field safety action protocols required to quarantine or execute a full field safety recall.
-    `.trim()
-  },
-
-  VIGILANCE: {
-    id: 'DOC-10',
-    title: '📄 Vigilance_and_serious_incident_reporting_procedure.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-Establishes mandatory pathways to report patient death, temporary or permanent serious health degradations, or public health crises directly to the Competent Authorities.
-
-## 2. Regulatory Reporting Windows
-- Serious Public Health Threat: Report within 2 calendar days.
-- Death or Unanticipated Serious Degradation: Report within 15 calendar days.
-- All other reportable serious incidents: Report within 30 calendar days.
-    `.trim()
-  },
-
-  REG_INTERACT: {
-    id: 'DOC-11',
-    title: '📄 Regulatory_authority_interaction_procedure.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-Defines corporate behavior and documentation protocols during national market audits, sample requests, or unannounced Notified Body audits.
-    `.trim()
-  },
-
-  LIABILITY: {
-    id: 'DOC-12',
-    title: '📄 Financial_liability_and_damage_compensation_procedure.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-Maintains compliance with MDR Article 10(16), ensuring that corporate product liability insurance coverage maps perfectly to the risks of commercial scale.
-    `.trim()
-  },
-
+  // Anropas av sop: TD_DATA.PRRC_APPOINT (Sparas i: 📁 1-DEVICE DESCRIPTION)
   PRRC_APPOINT: {
-    id: 'DOC-13',
-    title: '📄 PRRC_appointment_and_mandate_letter.pdf',
+    id: 'DOC-06',
+    title: '📄 PRRC_appointment_&_mandate_letter.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -197,16 +122,6 @@ The official board-signed mandate certifying the appointment of the Person Respo
 - Maintenance of technical documentation.
 - Execution of post-market vigilance reporting.
     `.trim()
-  },
-
-  EXPERT_MATRIX: {
-    id: 'DOC-14',
-    title: '📄 External_expertise_and_laboratory_matrix.pdf',
-    version: '1.0',
-    owner: 'R&D',
-    content: `
-# 1. Purpose
-A dynamic register of contracted third-party ISO 17025 accredited test laboratories, biocompatibility consultants, and clinical investigators.
-    `.trim()
   }
 };
+
