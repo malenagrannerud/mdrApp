@@ -9,8 +9,8 @@ import { Loader, ShieldAlert, Factory } from 'lucide-react'
 import PBICard from './PBICard'
 import { supabase } from '../lib/supabase'
 
-// Vi sparar din ordlista för produktkoder så att vi kan visa snygga namn i diagrammet
 const PRODUCT_CATEGORY = {
+
   'DZE': { category: 'Dental Implant, Root-Form', class: '2' },
   'QBJ': { category: 'Continuous Glucose Monitor, Factory Calibrated', class: '2' },
   'QFG': { category: 'ACE-Enabled Insulin Infusion Pump', class: '2' },
@@ -98,19 +98,14 @@ export default function Dashboard() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen font-sans">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Post-Market Surveillance Dashboard 2024</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Visualisering av exakt den data du precis har städat och laddat upp från DEVICE2024.txt
-        </p>
+        <h1 className="text-2xl font-bold text-gray-900">PMS Dashboard </h1>
+     
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* KORT 1: TOPP PRODUKTER */}
-        <PBICard title="Topp 10 Medicintekniska Produkter" subtitle="Sorterat efter flest antal incidentrapporter">
-          <div className="mb-4 flex items-center gap-2 text-xs font-semibold text-blue-900 bg-blue-50 p-2 rounded">
-            <ShieldAlert className="w-4 h-4 text-blue-700" />
-            <span>Visar unika produktkategorier (3-bokstavskoder utbytta mot officiella namn)</span>
-          </div>
+        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter 2024" subtitle="Sorterat efter flest antal incidentrapporter">
+          
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={productChartData} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
@@ -126,11 +121,8 @@ export default function Dashboard() {
         </PBICard>
 
         {/* KORT 2: TOPP TILLVERKARE */}
-        <PBICard title="Topp 10 Städade Tillverkare" subtitle="Rensade från suffix som Inc, LLC och Ltd">
-          <div className="mb-4 flex items-center gap-2 text-xs font-semibold text-emerald-900 bg-emerald-50 p-2 rounded">
-            <Factory className="w-4 h-4 text-emerald-700" />
-            <span>Sammanslagna dotterbolag baserat på dina JS-regler</span>
-          </div>
+        <PBICard title="Topp 10 Rapporterade Tillverkare 2024" subtitle="Rensade från suffix som Inc, LLC och Ltd">
+         
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={manufacturerData} margin={{ top: 10, right: 10, left: 10, bottom: 50 }}>
