@@ -16,23 +16,37 @@ import { SOP_DATA6 } from './sopData6.js';
 export const QMS_DATA = [
 
 /************************************************** STEP 0 ********************************************/
-{  id: 'q0',
-    title: 'Implementing a QMS',
-    desc: 'A Roadmap to Implementing a Compliant Quality Management System According to ISO 13485',
-
-    checklist: [
-      { t: 'Project Overview',
-        e: `This roadmap provides deliverables and templates to build a compliant Qualit management system (QMS). 
-        
-        The hierarchy of the QMS follows:
-          1. Quality Manual (QM) - Describes the scope of the QMS and what it covers.
-          2. Standard Operating Procedure (SOP) - Describe who does what and when.
-          3. Work Instructions (WIs) - Describe how to do it, step by step.
-          4. Records - Evidence of what was done, when, and by whom.
-        
-        `},
-      { t: 'Resulting File Structure', 
-        e: `
+/************************************************** STEP 0 ********************************************/
+{  
+  id: 'q0',
+  title: 'Implementing a QMS',
+  desc: 'A Roadmap to Implementing a Compliant Quality Management System According to ISO 13485',
+  checklist: [
+    { 
+      t: 'Project Overview',
+      e: 'This roadmap provides deliverables and templates to build a compliant Quality Management System (QMS).',
+      checklist: [
+        { 
+          t: 'Level 1. Quality Policy & Objectives',
+          e: 'Defines the corporate commitment to quality and regulatory compliance, establishing measurable targets signed by Management.'
+        }, 
+        { 
+          t: 'Level 2. Quality Manual (QM)',
+          e: 'Describes the scope of the QMS, details the overall system structure, and provides documented justifications for any requirement exclusions.'
+        }, 
+        { 
+          t: 'Level 3. Standard Operating Procedure (SOP) & Work Instructions (WIs)',
+          e: 'SOPs describe who does what and when (operational workflows), while WIs describe how to execute specific tasks step-by-step.'
+        },
+        { 
+          t: 'Level 4. Forms & Records',
+          e: 'Provides objective evidence of actions taken, documenting what was done, when, and by whom to ensure full regulatory traceability.'
+        }
+      ]
+    },
+    { 
+      t: 'Resulting File Structure', 
+      e: `
 
 📁 ISO 13485-QMS
   📁 4-QMS
@@ -40,8 +54,8 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: []
-      }
+      files: {}
+    }
   ]
 },
 
