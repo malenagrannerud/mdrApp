@@ -766,7 +766,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_LANGUAGE_REQUIREMENTS }
     ]
   },
-      /**********************  STEP 10 ****************************************/
+  /**********************  STEP 10 ****************************************/
   {
     id: 'm10',
     title: 'Step 10) Fulfil the ongoing obligations in the post launch phase',
