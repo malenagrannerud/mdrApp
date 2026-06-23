@@ -2,7 +2,6 @@
  * @file mdrStepsData.js
  * @description Regulatoriska steg för MDR-efterlevnad.
  * 
- * 
  */
 
 import { MDCG_DATA } from './mdcgData.js';
@@ -12,11 +11,16 @@ export const MDR_DATA = [
 
 /***********************  STEP 0 ****************************************/
 {  
+
+/**
+ * t: output: vad du ska göra kort
+ * e: beskriver vad outputen gör och vad den används till 
+ */
     id: 'm0',
     title: 'Introduction',
     desc: 'A Roadmap to CE Marking Medical Devices According to MDR',
     checklist: [
-      { t: 'MDR Steps Overview',
+      { t: 'OVERVIEW',
         e: `This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
 Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities.` }, 
 
@@ -42,8 +46,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       checklist: [
         { t: 'Step 1.1) Compile the rationale for deciding if the product is a medical device' },
         { t: 'Step 1.2) Compile the statement of the intended purpose and users of the device' }, 
-        { 
-          t: 'Step 1.3) The device classification rationale', 
+        { t: 'Step 1.3) The device classification rationale', 
           e: '💡 If you can not classify the future product: request a decision from the CA. The CA have an agreed procedure for handling such enquiries.'
         },
         { t: 'Guidance Documents from the MDCG' },

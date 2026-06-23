@@ -8,7 +8,7 @@ export const MDCG_DATA = {
   /******************************   STEP 1  ***************************************************/ 
     Manual: {
     id: 'Manual',
-    title: 'on borderline and classification under MDR and IVDR v3',
+    title: '📖 On borderline and classification under MDR and IVDR v3',
     content: `
 # Content
 
@@ -17,7 +17,7 @@ export const MDCG_DATA = {
 
   MDCG_2022_5_REV1: {
     id: 'MDCG 2022-5 Rev.1',
-    title: 'Guidance on borderline between MD and medicinal products under MDR',
+    title: '📖 Guidance on borderline between MD and medicinal products under MDR',
     content: `
 # Content
 
@@ -26,7 +26,7 @@ export const MDCG_DATA = {
 
   MDCG_2021_24: {
     id: 'MDCG 2021-24',
-    title: 'Guidance on classification of MD',
+    title: '📖 Guidance on classification of MD',
     content: `
 # Content
 
@@ -35,7 +35,7 @@ export const MDCG_DATA = {
 
   HELSINKI_PROCEDURE: {
     id: 'HELSINKI-PROCEDURE',
-    title: 'Helsinki Procedure for borderline and classification under MDR & IVDR',
+    title: '📖 Helsinki Procedure for borderline and classification under MDR & IVDR',
     content: `
 # Content
 
@@ -44,7 +44,7 @@ export const MDCG_DATA = {
 
   MDCG_SAMD_AI: {
     id: 'MDCG-SAMD-AI',
-    title: 'MDCG on the classification of SAMD and the interplay with Artificial Intelligence Act (AIA)',
+    title: '📖 MDCG on the classification of SAMD and the interplay with Artificial Intelligence Act (AIA)',
     content: `
     # Content
     `.trim()
@@ -52,7 +52,7 @@ export const MDCG_DATA = {
 
   INFOGRAPHIC: {
     id: 'MDCG-INFO',
-    title: 'Infographic - Is your software a MD?',
+    title: '📖 Infographic - Is your software a MD?',
     content: `
 # Content
 
@@ -61,7 +61,7 @@ export const MDCG_DATA = {
 
   MDCG_2025_6: {
     id: 'MDCG 2025-6',
-    title: 'FAQ on Interplay between MDR & IVDR and the AI Act (AIA)',
+    title: '📖 FAQ on Interplay between MDR & IVDR and the AI Act (AIA)',
     content: `
 # Content
 
@@ -70,7 +70,7 @@ export const MDCG_DATA = {
 
   MDCG_2023_4: {
     id: 'MDCG 2023-4',
-    title: 'Medical Device Software (MDSW) - Hardware combinations',
+    title: '📖 Medical Device Software (MDSW) - Hardware combinations',
     content: `
 # Content
 
@@ -79,7 +79,7 @@ export const MDCG_DATA = {
 
   MDCG_2019_11_REV1: {
     id: 'MDCG 2019-11 Rev.1',
-    title: 'Qualification and classification of software - MDR & IVDR',
+    title: '📖 Qualification and classification of software - MDR & IVDR',
     content: `
 # Content
 
