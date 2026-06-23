@@ -19,7 +19,7 @@ const MdcgTemplate = ({ title, content, onClose }) => {
             <h2 className="text-2xl font-black text-slate-900 uppercase">{title}</h2>
           </div>
           <button onClick={onClose} className="p-2 border-2 border-slate-900 hover:bg-slate-900 hover:text-white transition-colors">
-            <X size={28} />
+            <X size={18} />
           </button>
         </div>
 
