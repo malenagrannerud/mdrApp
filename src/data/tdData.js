@@ -34,7 +34,7 @@ The purpose of this document is to formally qualify and classify the device unde
   // Anropas av sop: TD_DATA.MF_P (Sparas i: 📁 3-DESIGN & MANUFACTURING INFO)
   MF_P: {
     id: 'DOC-02',
-    title: '📄 Manufacturing_process_description.pdf',
+    title: '📄 Manufacturing_process_description_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -61,7 +61,7 @@ This procedure defines the methods used to control the design, development, and 
   // Anropas av sop: TD_DATA.RM (Sparas i: 📁 5-RISK MANAGEMENT)
   RM: {
     id: 'DOC-03',
-    title: '📄 Risk_management_procedure.pdf',
+    title: '📄 RM_procedure_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -80,7 +80,7 @@ Defines the mandatory risk management lifecycle according to ISO 14971 and MDR A
   // Anropas av sop: TD_DATA.CLIN_EVAL (Sparas i: 📁 6-V&V)
   CLIN_EVAL: {
     id: 'DOC-04',
-    title: '📄 Clinical_evaluation_plan_CEP.pdf',
+    title: '📄 CEP_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -95,10 +95,9 @@ Establishes the process for conducting clinical evaluations to maintain continuo
     `.trim()
   },
 
-  // Anropas av sop: TD_DATA.PMS_PROCESS (Sparas i: 📁 7-PMS)
   PMS_PROCESS: {
     id: 'DOC-05',
-    title: '📄 Post_market_surveillance_procedure.pdf',
+    title: '📄 PMS_procedure_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -107,10 +106,9 @@ Establishes proactive post-market monitoring loops to systematically harvest dat
     `.trim()
   },
 
-  // Anropas av sop: TD_DATA.PRRC_APPOINT (Sparas i: 📁 1-DEVICE DESCRIPTION)
   PRRC_APPOINT: {
     id: 'DOC-06',
-    title: '📄 PRRC_appointment_&_mandate_letter.pdf',
+    title: '📄 PRRC_appointment_&_mandate_letter_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
