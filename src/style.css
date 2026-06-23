@@ -45,12 +45,10 @@ p {
   font-weight: 600;
 }
 
-
-/** mdr references */
+/** mdr / iso references */
 .article-ref {
   font-size: 12px;
-  font-style: italic;
-  font-weight: 300;
+  font-weight: 800; 
   color: #ff00f7;
   margin: 0;
   padding: 0;
@@ -108,17 +106,25 @@ p {
 
 
 /***************** END SOP Texter *******/
-
 .document-link {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
-  color: #1e40af !important; /* Tailwind blue-700 för att matcha trädet */
-  font-size: 0.875rem !important; /* Återställd till 14px enligt din kod */
-  font-family: monospace !important;
-  font-weight: bold !important; /* 🔥 TYPSNITTET ÄR NU BOLD */
+  color: #1e40af !important; /* Tailwind blue-700 */
+  font-size: 0.875rem !important; /* 14px */
+  
+  /* KORRIGERING: Ändrat från inherit till samma linjära MONO-stack som dokumenten */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-weight: bold !important; 
+  font-style: normal !important;
+  
   background: none !important;
   border: none !important;
+  
+  border-radius: 0px !important; 
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  
   padding: 0 !important;
   margin: 0 !important;
   cursor: pointer !important;
