@@ -44,7 +44,7 @@ export const MDCG_DATA = {
 
   MDCG_SAMD_AI: {
     id: 'MDCG-SAMD-AI',
-    title: '📖 MDCG on the classification of SAMD and the interplay with Artificial Intelligence Act (AIA)',
+    title: '📖 MDCG on the classification of SAMD and the interplay with AI Act (AIA)',
     content: `
 # Content
     `.trim()
@@ -98,7 +98,7 @@ export const MDCG_DATA = {
 
   MDCG_2021_19: {
     id: 'MDCG 2021-19',
-    title: '📖 Guidance note integration of the UDI within an organisation\'s quality management system',
+    title: '📖 Guidance note integration of the UDI within an organisations QMS',
     content: `
 # Content
 
@@ -143,7 +143,7 @@ export const MDCG_DATA = {
 
   MDCG_2019_2: {
     id: 'MDCG 2019-2',
-    title: '📖 Guidance on application of UDI rules to device-part of products referred to in article 1(8), 1(9) and 1(10) of Regulation 745/2017',
+    title: '📖 Guidance on application of UDI rules to device-part of products referred to in article 1(8), 1(9) and 1(10) of MDR',
     content: `
 # Content
 
@@ -206,7 +206,7 @@ export const MDCG_DATA = {
 
   MDCG_2025_10: {
     id: 'MDCG 2025-10',
-    title: '📖 Guidance on post-market surveillance of medical devices and in vitro diagnostic medical devices',
+    title: '📖 Guidance on post-market surveillance of medical devices and IVDR',
     content: `
 # Content
 
@@ -215,7 +215,7 @@ export const MDCG_DATA = {
 
   MDCG_2022_21: {
     id: 'MDCG 2022-21',
-    title: '📖 Guidance on Periodic Safety Update Report (PSUR) according to Regulation (EU) 2017/745',
+    title: '📖 Guidance on PSUR according to Regulation (EU) 2017/745',
     content: `
 # Content
 

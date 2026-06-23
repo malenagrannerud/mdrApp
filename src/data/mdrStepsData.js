@@ -180,7 +180,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { 
         t: 'Step 2.12) Appoint PRRC to oversee regulatory compliance',
         r: 'Art. 15',
-        mdcg: MDCG_DATA.MDCG_2019_7_REV1,
         e: 'This document assigns individual legal responsibility, used to officially designate the person who signs off on device releases ➔ ',
         sop: TD_DATA.PRRC_APPOINT
       },

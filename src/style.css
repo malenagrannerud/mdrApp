@@ -48,12 +48,15 @@ p {
 /** mdr / iso references */
 .article-ref {
   font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
   font-weight: 800; 
+  font-style: normal !important; /* Förbjuder all kurvig/kursiv text */
   color: #ff00f7;
   margin: 0;
   padding: 0;
   line-height: 1.3;
 }
+
 
 .headingStepCard {
   color: gray;
