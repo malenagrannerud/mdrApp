@@ -17,7 +17,7 @@ export const QMS_DATA = [
     checklist: [
       { t: 'Project Overview',
         e: `This roadmap provides deliverables and templates to build a compliant QMS. 
-        The start is an empty file structure, that will be filled with clickable example SOPs, registers, and records, as steps proceeds.`},
+        The start is an empty file structure, that will be filled with clickable example SOPs, registers, and records, as steps proceed.`},
       { t: 'Resulting File Structure', 
         e: `
     
@@ -36,16 +36,18 @@ export const QMS_DATA = [
     title: 'Step 1) Set Up an Initial System', 
     desc: 'Solidify essential foundations for an ISO 13485 & MDR compliant system by validating documentation software & controlling documents.',
     checklist: [
-      { t: '1.1) Create a SOP for Software Validation (ISO 4.1 - General requirements)', 
-        e: 'Validate the eQMS or infrastructure software prior to formal use to secure data integrity.',
+      { t: '1.1) GAP Analysis & Roadmap', 
+        e: 'A checklist showing the gap between current state and QMS compliance.' },
+      { t: '1.2) Create a SOP for Software Validation (ISO 4.1 - General requirements)', 
+        e: 'Describes how to validate the eQMS or infrastructure software prior to formal use to secure data integrity.',
         sop: SOP_DATA1.SOP_SW_VAL,
       },
-      { t: '1.2) Create a SOP for Document Control (ISO 4.2.4 - Control of documents)', 
-        e: 'Define how procedures are drafted, reviewed, approved with electronic signatures, and version-controlled.',
+      { t: '1.3) Create a SOP for Document Control (ISO 4.2.4 - Control of documents)', 
+        e: 'Defines how procedures are drafted, reviewed, approved with electronic signatures, and version-controlled.',
         sop: SOP_DATA1.SOP_DOC_CONTROL
       },
-      { t: '1.3) Create a SOP for Data Integrity & Backup Verification (ISO 4.2.5 - Control of records)',
-        e: 'Establish document control records and verify automated, tamper-proof system backups via restore tests.',
+      { t: '1.4) Create a SOP for Data Integrity & Backup Verification (ISO 4.2.5 - Control of records)',
+        e: 'Describes document control records and verify automated, tamper-proof system backups via restore tests.',
         sop: SOP_DATA1.SOP_BACKUP_RESTORE
       },
       { t: 'Resulting File Structure', 
@@ -71,10 +73,10 @@ export const QMS_DATA = [
 /************************************************** STEP 2 ********************************************/
     { id: 'step2', 
       title: 'Step 2) Quality Manual & Scope', 
-      desc: 'Define what the system covers and how it relates to legal requirements.',
+      desc: 'Define what the QMS covers and how it relates to legal requirements.',
       checklist: [
-        { t: '2.1) Generate the Quality Manual (ISO 4.2.2 Quality manual) ', 
-          e: 'The manual includes the scope of the QMS, including details and justifications for any exclusions, the documented procedures established for the QMS (or references to them), a description of the interaction between the processes of the QMS and the outline of the documentation structure used in the QMS', 
+        { t: '2.1) Generate the Quality Manual (ISO 4.2.2 Quality manual)', 
+          e: 'Defines the scope of the QMS, details and justifications for any exclusions, the documented procedures established for the QMS (or references to them), a description of the interaction between the processes of the QMS and the outline of the documentation structure used in the QMS', 
           sop: SOP_DATA2.QUALITY_MANUAL 
         },
         { t: 'Resulting File Structure', 
@@ -95,16 +97,19 @@ export const QMS_DATA = [
     },
 /************************************************** STEP 3 ********************************************/
     { id: 'step3', 
-      title: 'Step 3) Management Responsibility & Planning', 
-      desc: 'Ensure management commitment and that a compliance plan is in place.',
+      title: 'Step 3) Management Responsibility', 
+      desc: 'Ensure executive management commitment, formalize regulatory roles, and establish review cycles.',
       checklist: [
-        { t: '3.1) Quality Policy & Objectives ', 
-          e: 'Signed policy and measurable quality objectives.' },
-        { t: '3.2) Roles & PRRC ', 
-          e: 'Appointment of Person Responsible for Regulatory Compliance (PRRC) and organizational chart.' },
-        { t: '3.3) GAP Analysis & Roadmap', 
-          e: 'Checklist showing the gap between current state and full compliance.' },
-        { t: 'Resulting File Structure', 
+        { t: '3.1) Create a SOP for Quality Policy & Objectives (ISO 5.3 & 5.4.1) ', 
+          e: 'Contains the formal corporate Quality Policy and measurable quality objectives, signed by Management' },
+
+        { t: '3.2) Create a SOP for Roles & Appoint PRRC (ISO 5.5 & MDR Art. 15) ', 
+          e: 'Contains how PRRC is appointed and organizational chart.' },
+ 
+        { t: '3.3) Create a SOP for Management Review (ISO 5.6)', 
+          e: 'Containts how the process, inputs (e.g., audit results, customer complaints), and outputs (e.g., resource needs) for management to review the QMS effectiveness.' },
+        
+      { t: 'Resulting File Structure', 
           e: `
     
 📁 ISO 13485-QMS
