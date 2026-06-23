@@ -18,7 +18,8 @@ export const QMS_DATA = [
 /************************************************** STEP 0 ********************************************/
 {  id: 'q0',
     title: 'Implementing a QMS',
-    desc: '',
+    desc: 'A Roadmap to Implementing a Compliant Quality Management System According to ISO 13485',
+
     checklist: [
       { t: 'Project Overview',
         e: `This roadmap provides deliverables and templates to build a compliant Qualit management system (QMS). 
