@@ -95,7 +95,7 @@ export const QMS_DATA = [
 
 
 { id: 'step2', 
-      title: 'Step 2) CreateQuality Manual & Scope',
+      title: 'Step 2) Create the Quality Manual & Scope',
       checklist: [
         { t: '2.1) Generate the Quality Manual (ISO 4.2.2 - Quality manual)', 
           e: 'The QM describes what the QMS covers and why. It is used as a staring documment for anyone who what to understand the copmany. This can be the NB, auditors, new employees and external parties. It is also used to motivate exclutions.   ', 
