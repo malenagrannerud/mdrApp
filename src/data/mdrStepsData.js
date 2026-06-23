@@ -18,8 +18,7 @@ export const MDR_DATA = [
     checklist: [
       { t: 'MDR Steps Overview',
         e: `This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
-Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities.` 
-      }, 
+Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities.` }, 
 
       {t: 'Resulting File Structure', 
        e: `
@@ -35,8 +34,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 7-PMS` }
     ]
   },
-
-
 
   /**********************  STEP 1 ****************************************/
     {  
