@@ -190,6 +190,8 @@ ISO 9000:2015, Quality management systems — Fundamentals and vocabulary`.trim(
 
 Annex A Comparison of content between ISO 13485:2003 and ISO 13485:2016
 Annex B Correspondence between ISO 13485:2016 and ISO 9001:2015
+
+
 Bibliography
 [1]	ISO 9001:2015^3, Quality management systems — Requirements
 [2]	ISO 10012, Measurement management systems — Requirements for measurement processes and measuring equipment
@@ -212,12 +214,6 @@ Bibliography
 5 Available from website: http://www.imdrf.org/documents/doc-ghtf-sg5.asp
 6 Available from website: http://www.imdrf.org/documents/doc-ghtf-sg1.asp
 7 Available from website: http://www.imdrf.org/documents/doc-ghtf-sg1.asp
-
-
-
-
-
-
 
 
 
