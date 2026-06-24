@@ -43,6 +43,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   /**********************  STEP 1 ****************************************/
     {     id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
+      desc: '  ',
       checklist: [
 
         {t: ' '}, 
