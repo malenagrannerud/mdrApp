@@ -191,38 +191,53 @@ export const MDR_DATA = [
         (l) 8.5.2 and 8.5.3—CAPA
         (m) 8—Measurement, analysis and improvement
         - Art. 10.9(2): Def of the QMS scope which, according to 4.2.2 of the Standard, has to be documented in the QM. 
-        
+
         `,
-        e: `This is proved by implementing a QMS per ISO 13485 covering all (a)-(m). Used to ensure devices in series production remain in conformity with MDR. See QMS Step 0-7.`},
-      
+        e: `This is proved by implementing a QMS per ISO 13485 covering (a)-(m). Used to ensure devices in series production remain in conformity with MDR. See QMS Step 0-7.`},
+    
+      { t: 'Step 2.6) Plan PMS activities',
+        r: `
+        Art. 10.10: "Mfs shall establish, document, implement and maintain a PMS system.
 
-
-{ t: 'Step 2.6) Plan PMS activities',
-        r: 'Art. 10.10: "Mfs shall establish, document, implement and maintain a PMS system."',
+        `,
         e: `Implement proactive market feedback loops to gather real-world safety data post-launch. See QMS Step 7.2. ➔`},
 
       { t: 'Step 2.7) Create labelling development process',
-        r: 'Art. 10.11: "Mfs shall establish, document, implement and maintain a system for labelling."',
+        r: `
+        Art. 10.11: "Mfs shall establish, document, implement and maintain a system for labelling
+        
+        `,
         e: `Implement process for creating IFU, labels, translations per Annex I Ch. III. See QMS Step 5.4. ➔`},
 
       { t: 'Step 2.8) Establish corrective action and recall process',
-        r: 'Art. 10.12: "Mfs shall establish, document, implement and maintain a system for corrective and preventive actions."',
+        r: `
+        Art. 10.12: "Mfs shall establish, document, implement and maintain a system for corrective and preventive actions.
+        `,
         e: `Implement CAPA process including recall procedures. See QMS Step 6.2. ➔`},
 
       { t: 'Step 2.9) Set up Vigilance process',
-        r: 'Art. 10.13: "Mfs shall establish, document, implement and maintain a system for vigilance."',
+        r: `
+        Art. 10.13: "Mfs shall establish, document, implement and maintain a system for vigilance
+        `,
         e: `Implement serious incident reporting (15 days), FSCA, and trend monitoring per Art. 87-92. See QMS Step 7.2. ➔`},
 
       { t: 'Step 2.10) Define regulatory authority interaction process',
-        r: 'Art. 10.14: "Mfs shall establish, document, implement and maintain a system for communication with CAs."',
+        r: `
+        Art. 10.14: "Mfs shall establish, document, implement and maintain a system for communication with CAs.
+        
+        `,
         e: `Implement process for CA queries, Helsinki Procedure, and unannounced audits. See QMS Step 7.4. ➔`},
 
       { t: 'Step 2.11) Arrange legal liability and damage compensation',
-        r: 'Art. 10.16: "Mfs shall have measures in place to provide sufficient financial coverage for potential liability."',
+        r: `
+        Art. 10.16: "Mfs shall have measures in place to provide sufficient financial coverage for potential liability.
+        `,
         e: `Secure product liability insurance. Maintain in corporate archive. ➔`},
 
       { t: 'Step 2.12) Appoint PRRC',
-        r: 'Art. 15: "Mfs shall have at least one PRRC with requisite expertise."',
+        r:`
+        Art. 15: "Mfs shall have at least one PRRC with requisite expertise.
+        `,
         e: `Formally appoint PRRC via signed mandate letter. PRRC oversees batch release, TD, PMS, and vigilance. Original in QMS, copy in TD 1-DEVICE. See QMS Step 2.2. ➔`},
 
       { t: 'Step 2.13) Secure access to required expertise',
