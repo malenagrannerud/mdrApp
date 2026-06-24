@@ -137,10 +137,10 @@ export const MDR_DATA = [
         - Art. 10.2: "Mfs shall establish, document, implement and maintain RM as in Ax I, section 3."
         - Ax I: RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (includes Art. 83-86 )→ Amend controls if necessary.
         - Art. 83-86: Mfs shall have a PMS system, plan and report (class I) or PSUR (class IIa and up)
+
         `,
         e: `This is proved by implementing ISO 14971. Since ISO 14971 say what to be done but not by how ➔ RM activities (FMEA, risk matrix, report) must be assigned to different compentecies. 
             It is recommended to include Human factor & usability EN 62366 to cover related risks . See QMS Step 4.2. `},
-
 
 
 
@@ -153,14 +153,9 @@ export const MDR_DATA = [
         - MEDDEV 2.7/1 rev.4: Basis for the process — more detail than Ax XIV
         - ISO 13485 §7.3.7 Design Validation
         - ISO 14155 Clinical Investigations
-        
+
         `,
         e: `This is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
-
-
-
-
-
 
 
 
@@ -172,6 +167,11 @@ export const MDR_DATA = [
         r: `Art. 10.4: "Mfs shall draw up and keep up to date technical documentation."\nArt. 10.6-10.8: UDI system, DoC, change history.`,
         e: `Implement a process for compiling and maintaining the 7-chapter TD structure. Enforce vocabulary alignment, state-of-the-art arguments, and change history log. See QMS Step 7.1. ➔`},
 
+
+
+
+
+        
       { t: 'Step 2.5) Build a QMS',
         r: 'Art. 10.9: "Mfs shall establish, document, implement and maintain a QMS."',
         e: `Build the full Quality Management System per ISO 13485. Covers all processes in (a)-(m). See QMS Step 0-7. ➔`},
