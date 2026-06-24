@@ -239,7 +239,7 @@ export const QMS_DATA = [
   ]
 },
 
-/******************* STEP 6 - OPERATIONS, PROCUREMENT & TRACEABILITY *******************/
+/******************* STEP 6  *******************/
 {     id: 'step6', 
       title: 'Step 6) Establish Operations, Procurement & Traceability ', 
       desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. ',
