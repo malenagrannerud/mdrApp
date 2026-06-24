@@ -2,9 +2,6 @@
  * @file mdrStepsData.js
  * @description Regulatoriska steg för MDR-efterlevnad.
  * 
- */
-
-/**
  * t: output: vad du ska göra kort
  * e: beskrive vad outputen gör och vad den används till 
  */
@@ -115,12 +112,31 @@ export const MDR_DATA = [
         e: `Read through Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed. If not, subcontracting is an option.`},
 
       { t: 'Step 2.1) Implement design and manufacturing processes',
-        r: `Art. 10.1: "Mfs shall ensure that the MD have been designed & mfed according to MDR."\nArt. 10.9(g): "The QMS shall address… product realisation, including planning, D&D, production and service provision."`,
-        e: `This is proved by implementing ISO 13485 Section 7 — Product Realisation. See QMS Step 4 & 5. ➔`},
+        r: `
+        - Art. 10.1: "Mfs shall ensure that the MD have been designed & mfed according to MDR."
+        
+        - Art. 10.9(g): "The QMS shall address… product realisation: planning, D&D, production and service provision."
+          
+          `,
+        e: `This is proved by implementing ISO 13485 Section 7 — Product Realisation. See QMS Step 4 & 5. `},
+
+
+
 
       { t: 'Step 2.2) Implement a RM process',
-        r: `Art. 10.2: "Mfs shall establish, document, implement and maintain a system for RM."\nAnnex I Ch. I (2-9): Reduce risks as far as possible, state of the art, human factors, transport/storage, benefit-risk outweighs residual risks.`,
-        e: `Implement ISO 14971 as company-wide process. Assign roles, define document formats (FMEA, risk matrix, report). Integrate post-market data (Art. 83-86) and usability (EN 62366). See QMS Step 4.2. ➔`},
+        r: `
+        - Art. 10.2: "Mfs shall establish, document, implement and maintain RM as in Annex I, section 3."
+        
+        - Annex I Ch. I (2-9): RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (includes Art. 83-86 )→ Amend controls if necessary.
+        
+        - Art. 83-86: Mfs shall have a PMS system, plan and report (class I) or PSUR (class IIa and up)
+        `,
+        e: `This is proved by implementing ISO 14971. Since ISO 14971 say what to be done but not by how ➔ RM activities (FMEA, risk matrix, report) must be assigned to different compentecies. 
+            It is recommended to include Human factor & usability EN 62366 to cover related risks . See QMS Step 4.2. `},
+
+
+
+
 
       { t: 'Step 2.3) Establish a clinical evaluation process',
         r: `Art. 10.3: "Mfs shall establish, document, implement and maintain a system for clinical evaluation."\nArt. 61 & Annex XIV Part A: 5-stage methodology.`,
