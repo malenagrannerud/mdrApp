@@ -391,11 +391,6 @@ Applies to all regulatory horizon scanning and CA communication activities.
 [TABLE_END]
     `.trim()
 }
-
-
-
-
-
 }; 
 
 
