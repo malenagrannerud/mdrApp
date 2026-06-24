@@ -66,10 +66,10 @@ export const QMS_DATA = [
     desc: 'Solidify essential QMS foundations: document control, software validation, and data integrity. Runs in parallel with Steps 2-3.',
     checklist: [
       { t: '1.1) Perform a GAP Analysis', 
-        e: 'A GAP analysis is done by QA and the report shows the gap between current state of the company and full QMS compliance. Management can use this information to prioritize improvement initiatives.' },
+        e: 'A GAP analysis is done by QA and the report shows the gap between current state of the company and full QMS compliance. Management can use this to prioritize improvement initiatives.' },
 
       { t: '1.2) Create a SOP for Document & Data Control (4.1, 4.2.4, 4.2.5)', 
-        e: 'This SOP consolidates three interconnected documentation processes: (a) Software Validation — validates eQMS and automated tools to secure data integrity; (b) Document Control — ensures only approved, current document revisions are available at points of use; (c) Data Integrity & Backup — verifies automated system backups for full business recovery. Consolidated because all three share the same owner (QA) and are audited together.',
+        e: 'This SOP defines who validates the eQMS, controls QMS documents, and verifies automated backups, to secure data integrity, ensure only approved document revisions are in use, and guarantee full business recovery if system failures occur.',
         sop: SOP_DATA.SOP_DOC_DATA_CONTROL
       },
       
