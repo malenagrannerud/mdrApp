@@ -2,7 +2,10 @@
  * @file qmsStepsData.js
  * @description Central Roadmap structure that imports templates from qmsSopData.
  * 
- * 
+ * Phases:
+ *   Phase 1 (Parallel): Steps 1-4 — Foundation
+ *   Phase 2 (Parallel): Steps 5-6 — Product Realization & Operations
+ *   Phase 3 (Parallel): Steps 7-8 — Oversight & Regulatory
  * 
  * t: output: vad du ska göra kort
  * e: beskriver vad outputen gör och vad den används till 
@@ -12,6 +15,7 @@ import { SOP_DATA1 } from './sopData1.js';
 import { SOP_DATA2 } from './sopData2.js';
 import { SOP_DATA5 } from './sopData5.js';
 import { SOP_DATA6 } from './sopData6.js';
+import { SOP_DATA8 } from './sopData8.js';
 
 export const QMS_DATA = [
 
@@ -22,8 +26,17 @@ export const QMS_DATA = [
   desc: 'A Roadmap to Implementing a Quality Management System According to ISO 13485',
   checklist: [
     { t: 'OVERVIEW',
-      e: 'This roadmap provides deliverables and templates to build a compliant Quality Management System (QMS), with reference chapters to the standard.'},
+      e: 'This roadmap provides deliverables and templates to build a compliant Quality Management System (QMS), with reference chapters to the standard. Steps are grouped into three phases based on dependencies and parallel execution potential.'},
    
+    { t: '  Phase 1 — Foundation (Steps 1-4)',
+      e: '  Can all start immediately. Builds document control, management commitment, and resource infrastructure in parallel.'}, 
+   
+    { t: '  Phase 2 — Product Realization & Operations (Steps 5-6)',
+      e: '  Starts after Phase 1 foundation is in place. Design control and operational processes run in parallel.'}, 
+    
+    { t: '  Phase 3 — Oversight & Regulatory (Steps 7-8)',
+      e: '  Starts after Phase 2 processes are operational. Measurement, CAPA, and regulatory affairs run in parallel.'},
+
     { t: '  Level 1. Quality Policy & Objectives',
       e: '  Defines the corporate commitment to quality and regulatory compliance, establishing measurable targets signed by Management.'}, 
    
@@ -52,8 +65,8 @@ export const QMS_DATA = [
 
 /************************************************** STEP 1 ********************************************/
 {   id: 'step1', 
-    title: 'Step 1) Set Up an Initial System', 
-    desc: 'Solidify essential foundations for a QMS by finding gaps, establishing a roadmap, and implementing core SOPs.',
+    title: 'Phase 1: Step 1) Set Up an Initial System', 
+    desc: 'Solidify essential foundations for a QMS by finding gaps, establishing a roadmap, and implementing core SOPs. Runs in parallel with Steps 2-4.',
     checklist: [
       { t: '1.1) Perform a GAP Analysis', 
         e: 'A GAP analysis is done by QA and the report shows the gap between current state of the company and full QMS compliance. Management can use this information to prioritize improvement initiatives.' },
@@ -94,7 +107,8 @@ export const QMS_DATA = [
 
 /************************************************** STEP 2 ********************************************/
 { id: 'step2', 
-      title: 'Step 2) Create the Quality Manual & Scope',
+      title: 'Phase 1: Step 2) Create the Quality Manual & Scope',
+      desc: 'Define the QMS scope, structure, and exclusions. Runs in parallel with Steps 1, 3, 4.',
       checklist: [
         { t: '2.1) Generate the Quality Manual (4.2.2 Quality manual)', 
           e: 'The QM describes what the QMS covers and why. It is used as a starting document for anyone who wants to understand the company. This can be the NB, auditors, new employees and external parties. It is also used to motivate exclusions.', 
@@ -116,20 +130,27 @@ export const QMS_DATA = [
         }       
       ]
     },
+
 /************************************************** STEP 3 ********************************************/
     
 { id: 'step3', 
-      title: 'Step 3) Establish Management Responsibility', 
-      desc: 'Ensure executive management commitment, formalize roles, and establish review cycles.',
+      title: 'Phase 1: Step 3) Establish Management Responsibility', 
+      desc: 'Ensure executive management commitment, formalize roles, and establish review cycles. Runs in parallel with Steps 1, 2, 4.',
       checklist: [
-        { t: '3.1) Create a SOP for Quality Policy & Objectives (5.3 Quality policy & 5.4.1 Quality objectives) ', 
-          e: 'This SOP defines who drafts quality objectives and when management signs them, to align the organization with corporate quality commitments and measure QMS performance.'},
+        { t: '3.1) Create a SOP for Quality Policy & Objectives (5.3 Quality policy & 5.4.1 Quality objectives)', 
+          e: 'This SOP defines who drafts quality objectives and when management signs them, to align the organization with corporate quality commitments and measure QMS performance.',
+          sop: SOP_DATA2.SOP_QUALITY_POLICY
+        },
         
-          { t: '3.2) Create a SOP for Roles & Appoint PRRC (5.5 Responsibility, authority and communication & MDR Art. 15)', 
-          e: 'This SOP defines who appoints regulatory roles and when the organizational chart is updated, to secure formal PRRC assignment and fulfill legal EU MDR requirements.'  },
+        { t: '3.2) Create a SOP for Roles & Appoint PRRC (5.5 Responsibility, authority and communication & MDR Art. 15)', 
+          e: 'This SOP defines who appoints regulatory roles and when the organizational chart is updated, to secure formal PRRC assignment and fulfill legal EU MDR requirements.',
+          sop: SOP_DATA2.SOP_ROLES_PRRC
+        },
  
         { t: '3.3) Create a SOP for Management Review (5.6 Management review)', 
-          e: 'This SOP defines who conducts executive reviews and when they are scheduled, to evaluate audits and complaints to ensure continuous suitability and effectiveness of the QMS.' },
+          e: 'This SOP defines who conducts executive reviews and when they are scheduled, to evaluate audits and complaints to ensure continuous suitability and effectiveness of the QMS.',
+          sop: SOP_DATA2.SOP_MANAGEMENT_REVIEW
+        },
         
         { t: 'Resulting File Structure', 
           e: `
@@ -140,20 +161,29 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: []
+  files: {
+    '5-MANAGEMENT RESPONSIBILITY': [
+      { sop: SOP_DATA2.SOP_QUALITY_POLICY, indent: '  ' },
+      { sop: SOP_DATA2.SOP_ROLES_PRRC, indent: '  ' },
+      { sop: SOP_DATA2.SOP_MANAGEMENT_REVIEW, indent: '  ' }
+    ]
+  }
         }
       ]
     },
+
 /************************************************** STEP 4 ********************************************/
     { id: 'step4', 
-      title: 'Step 4) Establish Resource Management', 
-      desc: 'Ensure competence, training, and a secure working environment.',
+      title: 'Phase 1: Step 4) Establish Resource Management', 
+      desc: 'Ensure competence, training, and a secure working environment. Runs in parallel with Steps 1, 2, 3.',
       checklist: [
         { t: '4.1) Create a SOP for Competence & Training (6.2 Human resources)', 
-          e: 'This SOP defines who assesses competence gaps and when personnel training records are updated, to maintain a qualified training matrix and provide objective evidence of staff qualifications.' 
+          e: 'This SOP defines who assesses competence gaps and when personnel training records are updated, to maintain a qualified training matrix and provide objective evidence of staff qualifications.',
+          sop: SOP_DATA2.SOP_COMPETENCE_TRAINING
         },
         { t: '4.2) Create a SOP for Infrastructure & IT Environment (6.3 Infrastructure)', 
-          e: 'This SOP defines who maintains IT infrastructure and when security updates are performed, to prevent data loss, unauthorized system changes, and secure a compliant digital validation environment.' 
+          e: 'This SOP defines who maintains IT infrastructure and when security updates are performed, to prevent data loss, unauthorized system changes, and secure a compliant digital validation environment.',
+          sop: SOP_DATA2.SOP_INFRASTRUCTURE_IT
         }, 
         { t: 'Resulting File Structure', 
           e: `
@@ -164,15 +194,20 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-          files: []
+          files: {
+            '6-RESOURCE MANAGEMENT': [
+              { sop: SOP_DATA2.SOP_COMPETENCE_TRAINING, indent: '  ' },
+              { sop: SOP_DATA2.SOP_INFRASTRUCTURE_IT, indent: '  ' }
+            ]
+          }
         }
       ]
     },
 
 /************************************************** STEP 5 ********************************************/
 { id: 'step5', 
-  title: 'Step 5) Establish Product Realisation & Design', 
-  desc: 'Control development from idea to finished product with full traceability. Records from this step are fed into the Technical Documentation.',
+  title: 'Phase 2: Step 5) Establish Product Realisation & Design', 
+  desc: 'Control development from idea to finished product with full traceability. Records feed into Technical Documentation. Runs in parallel with Step 6.',
   
   checklist: [
     { t: '5.1) Create a SOP for Design Control (7.3 Design and development)',
@@ -232,18 +267,20 @@ export const QMS_DATA = [
 
 /************************************************** STEP 6 ********************************************/
 {     id: 'step6', 
-      title: 'Step 6) Establish Operations, Procurement & Traceability ', 
-      desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools.',
+      title: 'Phase 2: Step 6) Establish Operations, Procurement & Traceability', 
+      desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. Runs in parallel with Step 5.',
       checklist: [
         { t: '6.1) Create a SOP for Purchasing & Supplier Control (7.4 Purchasing)',
           e: 'This SOP defines who evaluates external vendors and when supplier audits are performed, to maintain the Approved Supplier List (ASL) and ensure materials meet regulatory requirements.',
           sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT,
         },
         { t: '6.2) Create a SOP for Customer Processes & Market Feedback (7.2 Customer-related processes)',
-          e: 'This SOP defines who logs user input and when market data is analyzed, to address customer requirements, manage post-market feedback, and capture potential complaints.'
+          e: 'This SOP defines who logs user input and when market data is analyzed, to address customer requirements, manage post-market feedback, and capture potential complaints.',
+          sop: SOP_DATA6.SOP_CUSTOMER_PROCESSES
         },
         { t: '6.3) Create a SOP for Production, Servicing & UDI Traceability (7.5 Production and service provision, 7.6 Control of monitoring and measuring equipment)',
           e: 'This SOP defines who controls manufacturing batches and when production software is validated, to secure end-to-end device traceability, track UDI codes, and prevent unvalidated software from running production tests.',
+          sop: SOP_DATA6.SOP_PRODUCTION_UDI
         },
         { t: 'Resulting File Structure', 
           e: `
@@ -253,18 +290,26 @@ export const QMS_DATA = [
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
+    📁 DHF
     📁 7.4-PURCHASING
     📁 7.5-PRODUCTION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-          files: {}
+          files: {
+            '7.4-PURCHASING': [
+              { sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT, indent: '    ' }
+            ],
+            '7.5-PRODUCTION': [
+              { sop: SOP_DATA6.SOP_PRODUCTION_UDI, indent: '    ' }
+            ]
+          }
         }
       ]
     },
 
 /************************************************** STEP 7 ********************************************/
     { id: 'step7', 
-      title: 'Step 7) Establish Measurement, Analysis & Improvement', 
-      desc: 'Monitor QMS performance, control non-conforming products, and drive continuous improvement. ISO 13485 Section 8.',
+      title: 'Phase 3: Step 7) Establish Measurement, Analysis & Improvement', 
+      desc: 'Monitor QMS performance, control non-conforming products, and drive continuous improvement. ISO 13485 Section 8. Runs in parallel with Step 8.',
       checklist: [
 
         { t: '7.1) Create a SOP for Internal Audit & Product Release (8.2.4 Internal audit, 8.2.6 Monitoring and measurement of product)', 
@@ -304,28 +349,33 @@ export const QMS_DATA = [
 
 /************************************************** STEP 8 ********************************************/
     { id: 'step8', 
-      title: 'Step 8) Establish Regulatory Affairs', 
-      desc: 'Build the regulatory infrastructure for CE marking, submissions, and post-market compliance. Owned by Regulatory Affairs under PRRC oversight.',
+      title: 'Phase 3: Step 8) Establish Regulatory Affairs', 
+      desc: 'Build the regulatory infrastructure for CE marking, submissions, and post-market compliance. Owned by Regulatory Affairs under PRRC oversight. Runs in parallel with Step 7.',
       checklist: [
 
         { t: '8.1) Create a SOP for Technical Documentation (TD) Compilation (MDR Annex II & III)',
-          e: 'This SOP defines who compiles the TD and when final review gates are executed, to package design outputs into a submission-ready format and ensure alignment with MDR Annex II and III requirements.' 
+          e: 'This SOP defines who compiles the TD and when final review gates are executed, to package design outputs into a submission-ready format and ensure alignment with MDR Annex II and III requirements.',
+          sop: SOP_DATA8.SOP_TD_COMPILATION
         },
 
         { t: '8.2) Create a SOP for EUDAMED & UDI Registration (MDR Art. 29-31)', 
-          e: 'This SOP defines who registers economic operators and devices in EUDAMED and when registration data must be updated, to secure SRN issuance and maintain UDI/Device data modules.' 
+          e: 'This SOP defines who registers economic operators and devices in EUDAMED and when registration data must be updated, to secure SRN issuance and maintain UDI/Device data modules.',
+          sop: SOP_DATA8.SOP_EUDAMED_UDI
         },
 
-        { t: '8.3) Create a SOP for NB communication  (MDR Art. 52, Annex IX)',
-          e: 'This SOP defines who manages NB interactions and when submission dossiers are transmitted, to coordinate audits, respond to non-conformities, and maintain valid CE certificates.' 
+        { t: '8.3) Create a SOP for Notified Body Communication & Submissions (MDR Art. 52, Annex IX)',
+          e: 'This SOP defines who manages NB interactions and when submission dossiers are transmitted, to coordinate audits, respond to non-conformities, and maintain valid CE certificates.',
+          sop: SOP_DATA8.SOP_NB_COMMUNICATION
         },
 
-        { t: '8.4) Create a SOP for PMS (MDR Art. 83-86)',
-          e: 'This SOP defines who gathers field performance data and when PMS reports are compiled, to proactively monitor product safety, update the PSUR, and feed real-world data back into the risk management and clinical evaluation processes.' 
+        { t: '8.4) Create a SOP for Post-Market Surveillance (MDR Art. 83-86)',
+          e: 'This SOP defines who gathers field performance data and when PMS reports are compiled, to proactively monitor product safety, update the PSUR, and feed real-world data back into the risk management and clinical evaluation processes.',
+          sop: SOP_DATA8.SOP_PMS
         },
         
-        { t: '8.5) Create a SOP for Vigilance & Adverse Event reporting (MDR Art. 87-92)',
-          e: 'This SOP defines who evaluates product incidents and when regulatory authorities must be notified, to secure legally mandated 15-day serious incident reporting, manage Field Safety Corrective Actions (FSCA), and track trend analyses.' 
+        { t: '8.5) Create a SOP for Vigilance & Adverse Event Reporting (MDR Art. 87-92)',
+          e: 'This SOP defines who evaluates product incidents and when regulatory authorities must be notified, to secure legally mandated 15-day serious incident reporting, manage Field Safety Corrective Actions (FSCA), and track trend analyses.',
+          sop: SOP_DATA8.SOP_VIGILANCE
         },
        
         { t: 'Resulting File Structure', 
@@ -336,8 +386,17 @@ export const QMS_DATA = [
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-          files: { }
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS`,
+          files: {
+            '9-REGULATORY AFFAIRS': [
+              { sop: SOP_DATA8.SOP_TD_COMPILATION, indent: '  ' },
+              { sop: SOP_DATA8.SOP_EUDAMED_UDI, indent: '  ' },
+              { sop: SOP_DATA8.SOP_NB_COMMUNICATION, indent: '  ' },
+              { sop: SOP_DATA8.SOP_PMS, indent: '  ' },
+              { sop: SOP_DATA8.SOP_VIGILANCE, indent: '  ' }
+            ]
+          }
         } 
       ]
     },
