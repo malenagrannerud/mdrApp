@@ -73,7 +73,7 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
     <div className={item.t ? 'pt-8' : 'pt-0'}>
       
       {item.t && <h4 className="headingSubStep">{item.t}</h4>}
-      {item.r && <p className="article-ref">{item.r}</p>}
+      {item.r && <p className="article-ref section-text whitespace-pre-line">{item.r}</p>}
       
       {item.e && (
         item.e.includes('📁') && item.files ? (
