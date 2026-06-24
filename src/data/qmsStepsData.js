@@ -1,17 +1,18 @@
 /**
  * @file qmsStepsData.js
- * @description Central Roadmap structure that imports templates from qmsSopData.
+ * @description Central Roadmap structure that imports templates from sopData.
  * 
  * Phases:
- *   Phase 1 (Parallel): Steps 1-4 — Foundation
- *   Phase 2 (Parallel): Steps 5-6 — Product Realization & Operations
- *   Phase 3 (Parallel): Steps 7-8 — Oversight & Regulatory
+ *   Phase 1 (Parallel): Steps 1-3 — Foundation
+ *   Phase 2 (Parallel): Steps 4-5 — Product Realization & Operations
+ *   Phase 3 (Parallel): Steps 6-7 — Oversight & Regulatory
  * 
  * t: output: vad du ska göra kort
  * e: beskriver vad outputen gör och vad den används till 
  */
 
 import { SOP_DATA } from './sopData.js';
+
 export const QMS_DATA = [
 
 /************************************************** STEP 0 ********************************************/
@@ -23,13 +24,13 @@ export const QMS_DATA = [
     { t: 'OVERVIEW',
       e: 'This roadmap provides deliverables and templates to build a compliant Quality Management System (QMS), with reference chapters to the standard. Steps are grouped into three phases based on dependencies and parallel execution potential.'},
    
-    { t: '  Phase 1 — Foundation (Steps 1-4)',
-      e: '  Can all start immediately. Builds document control, management commitment, and resource infrastructure in parallel.'}, 
+    { t: '  Phase 1 — Foundation (Steps 1-3)',
+      e: '  Can all start immediately. Builds document control, management framework, and resource infrastructure in parallel.'}, 
    
-    { t: '  Phase 2 — Product Realization & Operations (Steps 5-6)',
+    { t: '  Phase 2 — Product Realization & Operations (Steps 4-5)',
       e: '  Starts after Phase 1 foundation is in place. Design control and operational processes run in parallel.'}, 
     
-    { t: '  Phase 3 — Oversight & Regulatory (Steps 7-8)',
+    { t: '  Phase 3 — Oversight & Regulatory (Steps 6-7)',
       e: '  Starts after Phase 2 processes are operational. Measurement, CAPA, and regulatory affairs run in parallel.'},
 
     { t: '  Level 1. Quality Policy & Objectives',
@@ -52,7 +53,8 @@ export const QMS_DATA = [
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS`,
       files: {}
     }
   ]
@@ -60,25 +62,16 @@ export const QMS_DATA = [
 
 /************************************************** STEP 1 ********************************************/
 {   id: 'step1', 
-    title: 'Phase 1: Step 1) Set Up an Initial System', 
-    desc: 'Solidify essential foundations for a QMS by finding gaps, establishing a roadmap, and implementing core SOPs. Runs in parallel with Steps 2-4.',
+    title: 'Phase 1: Step 1) Set Up Document & Data Control', 
+    desc: 'Solidify essential QMS foundations: document control, software validation, and data integrity. Runs in parallel with Steps 2-3.',
     checklist: [
       { t: '1.1) Perform a GAP Analysis', 
         e: 'A GAP analysis is done by QA and the report shows the gap between current state of the company and full QMS compliance. Management can use this information to prioritize improvement initiatives.' },
 
-      { t: '1.2) Create a SOP for Software Validation (4.1 General requirements)', 
-        e: 'This SOP defines who validates the eQMS and when, to secure data integrity.',
-        sop: SOP_DATA1.SOP_SW_VAL,
+      { t: '1.2) Create a SOP for Document & Data Control (4.1, 4.2.4, 4.2.5)', 
+        e: 'This SOP consolidates three interconnected documentation processes: (a) Software Validation — validates eQMS and automated tools to secure data integrity; (b) Document Control — ensures only approved, current document revisions are available at points of use; (c) Data Integrity & Backup — verifies automated system backups for full business recovery. Consolidated because all three share the same owner (QA) and are audited together.',
+        sop: SOP_DATA.SOP_DOC_DATA_CONTROL
       },
-
-      { t: '1.3) Create a SOP for Document Control (4.2.4 Control of documents)', 
-        e: 'This SOP defines who is responsible for document control and when it is done, to ensure only approved and current document revisions are available at points of use.',        
-        sop: SOP_DATA1.SOP_DOC_CONTROL
-      },
-
-      { t: '1.4) Create a SOP for Data Integrity & Backup Verification (4.2.5 Control of records)',
-        e: 'This SOP defines who maintains records and when to verify automated, system backups to secure data integrity and ensure full business recovery if system failures occur.', 
-        sop: SOP_DATA1.SOP_BACKUP_RESTORE},
       
       { t: 'Resulting File Structure', 
         e: `
@@ -88,12 +81,11 @@ export const QMS_DATA = [
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS`,
   files: {
     '4-QMS': [
-      { sop: SOP_DATA1.SOP_SW_VAL, indent: '    ' }, 
-      { sop: SOP_DATA1.SOP_DOC_CONTROL, indent: '    ' },
-      { sop: SOP_DATA1.SOP_BACKUP_RESTORE, indent: '    ' }
+      { sop: SOP_DATA.SOP_DOC_DATA_CONTROL, indent: '    ' }
     ]
   }
  }
@@ -101,19 +93,18 @@ export const QMS_DATA = [
 },
 
 /************************************************** STEP 2 ********************************************/
-
 { id: 'step2', 
-      title: 'Phase 1: Step 2) Create the management framework',
-      desc: 'Define the QMS scope, structure, exclusions, quality policy, organizational roles (including PRRC), and management review cycles. Runs in parallel with Steps 1, 3, 4.',
+      title: 'Phase 1: Step 2) Create the Management Framework',
+      desc: 'Define the QMS scope, structure, quality policy, objectives, organizational roles (including PRRC), and management review cycles. Runs in parallel with Steps 1, 3.',
       checklist: [
-        { t: '2.1) Generate the Quality Manual (4.2.2 Quality manual)', 
+        { t: '2.1) Generate the Quality Manual (4.2.2)', 
           e: 'The QM describes what the QMS covers and why. It defines the QMS scope, structure, process interaction map, and justifies any ISO 13485 exclusions. It is the starting document for NB auditors, new employees, and external parties.', 
-          sop: SOP_DATA2.QUALITY_MANUAL 
+          sop: SOP_DATA.QUALITY_MANUAL 
         },
 
         { t: '2.2) Establish Management Framework (5.3, 5.4.1, 5.5, 5.6 & MDR Art. 15)', 
-          e: 'This SOP covers Quality Policy, measurable objectives, PRRC appointment, and annual Management Review. It proves to auditors that management is committed, a PRRC exists, and that the QMS is systematically reviewed. Without it → ISO 13485 §5 fails → no CE marking',
-          sop: SOP_DATA2.SOP_MANAGEMENT_FRAMEWORK
+          e: 'This SOP consolidates four management processes: Quality Policy, measurable objectives, organizational roles with PRRC appointment (MDR Art. 15), and annual Management Review. Proves to auditors that management is committed, a PRRC exists, and the QMS is systematically reviewed. Without it → ISO 13485 §5 fails → no CE marking.',
+          sop: SOP_DATA.SOP_MANAGEMENT_FRAMEWORK
         },
         
         { t: 'Resulting File Structure', 
@@ -124,31 +115,32 @@ export const QMS_DATA = [
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS`,
   files: {
     '4-QMS': [
-      { sop: SOP_DATA2.QUALITY_MANUAL, indent: '    ' }
+      { sop: SOP_DATA.QUALITY_MANUAL, indent: '    ' }
     ],
     '5-MANAGEMENT RESPONSIBILITY': [
-      { sop: SOP_DATA2.SOP_MANAGEMENT_FRAMEWORK, indent: '  ' }
+      { sop: SOP_DATA.SOP_MANAGEMENT_FRAMEWORK, indent: '  ' }
     ]
   }
         }       
       ]
     },
 
-/************************************************** STEP 4 ********************************************/
-    { id: 'step4', 
-      title: 'Phase 1: Step 4) Establish Resource Management', 
-      desc: 'Ensure competence, training, and a secure working environment. Runs in parallel with Steps 1, 2, 3.',
+/************************************************** STEP 3 ********************************************/
+    { id: 'step3', 
+      title: 'Phase 1: Step 3) Establish Resource Management', 
+      desc: 'Ensure competence, training, and a secure working environment. Runs in parallel with Steps 1-2.',
       checklist: [
-        { t: '4.1) Create a SOP for Competence & Training (6.2 Human resources)', 
+        { t: '3.1) Create a SOP for Competence & Training (6.2)', 
           e: 'This SOP defines who assesses competence gaps and when personnel training records are updated, to maintain a qualified training matrix and provide objective evidence of staff qualifications.',
-          sop: SOP_DATA2.SOP_COMPETENCE_TRAINING
+          sop: SOP_DATA.SOP_COMPETENCE_TRAINING
         },
-        { t: '4.2) Create a SOP for Infrastructure & IT Environment (6.3 Infrastructure)', 
+        { t: '3.2) Create a SOP for Infrastructure & IT Environment (6.3)', 
           e: 'This SOP defines who maintains IT infrastructure and when security updates are performed, to prevent data loss, unauthorized system changes, and secure a compliant digital validation environment.',
-          sop: SOP_DATA2.SOP_INFRASTRUCTURE_IT
+          sop: SOP_DATA.SOP_INFRASTRUCTURE_IT
         }, 
         { t: 'Resulting File Structure', 
           e: `
@@ -158,43 +150,42 @@ export const QMS_DATA = [
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS`,
           files: {
             '6-RESOURCE MANAGEMENT': [
-              { sop: SOP_DATA2.SOP_COMPETENCE_TRAINING, indent: '  ' },
-              { sop: SOP_DATA2.SOP_INFRASTRUCTURE_IT, indent: '  ' }
+              { sop: SOP_DATA.SOP_COMPETENCE_TRAINING, indent: '  ' },
+              { sop: SOP_DATA.SOP_INFRASTRUCTURE_IT, indent: '  ' }
             ]
           }
         }
       ]
     },
 
-/************************************************** STEP 5 ********************************************/
-{ id: 'step5', 
-  title: 'Phase 2: Step 5) Establish Product Realisation & Design', 
-  desc: 'Control development from idea to finished product with full traceability. Records feed into Technical Documentation. Runs in parallel with Step 6.',
+/************************************************** STEP 4 ********************************************/
+{ id: 'step4', 
+  title: 'Phase 2: Step 4) Establish Product Realisation & Design', 
+  desc: 'Control development from idea to finished product with full traceability. Records feed into Technical Documentation. Runs in parallel with Step 5.',
   
   checklist: [
-    { t: '5.1) Create a SOP for Design Control (7.3 Design and development)',
+    { t: '4.1) Create a SOP for Design Control (7.3)',
       e: 'This SOP defines who documents product development phases and when formal design reviews are conducted, used to establish a compliant Design History File (DHF) with traceability from inputs to outputs.',
-      sop: SOP_DATA5.SOP_DESIGN_CONTROL 
+      sop: SOP_DATA.SOP_DESIGN_CONTROL 
     },
 
-    { t: '5.2) Create a SOP for Risk Management throughout Lifecycle (7.1 Planning of product realization & ISO 14971 - Application of risk management to medical devices)',
+    { t: '4.2) Create a SOP for Risk Management throughout Lifecycle (7.1 & ISO 14971)',
       e: 'This SOP defines who identifies product hazards and when risk assessments are updated, to maintain a lifecycle risk management file and secure patient and user safety.',
-      sop: SOP_DATA5.SOP_RISK_MANAGEMENT 
+      sop: SOP_DATA.SOP_RISK_MANAGEMENT 
     },
     
-    { t: '5.3) Create a SOP for Clinical Evaluation & Device Validation (7.3.7 Design and development validation)',
+    { t: '4.3) Create a SOP for Clinical Evaluation & Device Validation (7.3.7)',
       e: 'This SOP defines who performs clinical assessments and when device validation is executed, to gather clinical evidence and confirm that the device meets its intended use and user needs safely.', 
-      sop: SOP_DATA5.SOP_CLINICAL_EVALUATION 
+      sop: SOP_DATA.SOP_CLINICAL_EVALUATION 
     },
 
-// lägg till design transfer
-        
-    { t: '5.4) Create a SOP for Design Change Control (7.3.9 Control of design and development changes)',
-      e: 'This SOP defines who reviews engineering modifications and when product changes are approved post-launch, to prevent unintended quality degradation and verify that modifications do not impact device safety.', 
-      sop: [SOP_DATA5.SOP_CHANGE_CONTROL, SOP_DATA5.CHANGE_MATRIX]
+    { t: '4.4) Create a SOP for Design Transfer & Change Control (7.3.8, 7.3.9)',
+      e: 'This SOP consolidates two linked processes: (a) Design Transfer — ensures design outputs are properly translated to production specifications; (b) Design Change Control — defines who reviews engineering modifications and when changes are approved post-launch, including regulatory classification per MDCG 2020-3. Consolidated because changes often span both design and production.',
+      sop: [SOP_DATA.SOP_DESIGN_TRANSFER_CHANGE, SOP_DATA.CHANGE_MATRIX]
     },
 
     { t: 'Resulting File Structure', 
@@ -217,37 +208,34 @@ export const QMS_DATA = [
       📁 Design Release
       📁 Design Validation
         📁 Clinical Evaluation
-      📁 Design Changes
       📁 Design Transfer
+      📁 Design Changes
       📁 Design Maintenance
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS
   `,
       files: { 
-        '7-PRODUCT REALIZATION': [{ sop: SOP_DATA5.SOP_DESIGN_CONTROL, indent:'  ' }],
-        'Device Risk/Usability': [{ sop: SOP_DATA5.SOP_RISK_MANAGEMENT, indent:'      ' }],
-        'Design Validation': [{ sop: SOP_DATA5.SOP_CLINICAL_EVALUATION, indent:'      ' }],
-        'Design Changes': [{ sop: SOP_DATA5.SOP_CHANGE_CONTROL, indent:'      ' }]
+        '7-PRODUCT REALIZATION': [{ sop: SOP_DATA.SOP_DESIGN_CONTROL, indent:'  ' }],
+        'Device Risk/Usability': [{ sop: SOP_DATA.SOP_RISK_MANAGEMENT, indent:'      ' }],
+        'Design Validation': [{ sop: SOP_DATA.SOP_CLINICAL_EVALUATION, indent:'      ' }],
+        'Design Transfer': [{ sop: SOP_DATA.SOP_DESIGN_TRANSFER_CHANGE, indent:'      ' }]
       }
     }
   ]
 },
 
-/************************************************** STEP 6 ********************************************/
-{     id: 'step6', 
-      title: 'Phase 2: Step 6) Establish Operations, Procurement & Traceability', 
-      desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. Runs in parallel with Step 5.',
+/************************************************** STEP 5 ********************************************/
+{     id: 'step5', 
+      title: 'Phase 2: Step 5) Establish Operations, Procurement & Traceability', 
+      desc: 'Secure control over suppliers, production, customer requirements, and traceability. Runs in parallel with Step 4.',
       checklist: [
-        { t: '6.1) Create a SOP for Purchasing, Supplier Control & Supplier Evaluation (7.4 Purchasing)',
-          e: 'This SOP defines who evaluates external vendors and when supplier audits are performed, to maintain the Approved Supplier List (ASL) and ensure materials meet regulatory requirements.',
-          sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT,
+        { t: '5.1) Create a SOP for Supplier & Production Control (7.4, 7.5, 7.6)',
+          e: 'This SOP consolidates three operational processes: (a) Purchasing & Supplier Control — evaluates external vendors and maintains the Approved Supplier List (ASL); (b) Supplier Evaluation — qualifies new suppliers through audits and performance monitoring; (c) Production, Servicing & UDI Traceability — controls manufacturing batches and secures end-to-end device traceability. Consolidated because supplier quality directly impacts production quality.',
+          sop: SOP_DATA.SOP_SUPPLIER_PRODUCTION
         },
-        { t: '6.2) Create a SOP for Customer Processes & Market Feedback (7.2 Customer-related processes)',
-          e: 'This SOP defines who logs user input and when market data is analyzed, to address customer requirements, manage post-market feedback, and capture potential complaints.',
-          sop: SOP_DATA6.SOP_CUSTOMER_PROCESSES
-        },
-        { t: '6.3) Create a SOP for Production, Servicing & UDI Traceability (7.5 Production and service provision, 7.6 Control of monitoring and measuring equipment)',
-          e: 'This SOP defines who controls manufacturing batches and when production software is validated, to secure end-to-end device traceability, track UDI codes, and prevent unvalidated software from running production tests.',
-          sop: SOP_DATA6.SOP_PRODUCTION_UDI
+        { t: '5.2) Create a SOP for Customer Processes & Market Feedback (7.2)',
+          e: 'This SOP defines who logs user input and when market data is analyzed, to address customer requirements, manage post-market feedback, and capture potential complaints. Kept separate because customer feedback routes to RA for PMS/vigilance, not to production.',
+          sop: SOP_DATA.SOP_CUSTOMER_PROCESSES
         },
         { t: 'Resulting File Structure', 
           e: `
@@ -258,40 +246,32 @@ export const QMS_DATA = [
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
     📁 DHF
-    📁 7.4-PURCHASING
-    📁 7.5-PRODUCTION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+    📁 7.4-SUPPLIER_&_PRODUCTION
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS`,
           files: {
-            '7.4-PURCHASING': [
-              { sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT, indent: '    ' }
-            ],
-            '7.5-PRODUCTION': [
-              { sop: SOP_DATA6.SOP_PRODUCTION_UDI, indent: '    ' }
+            '7.4-SUPPLIER_&_PRODUCTION': [
+              { sop: SOP_DATA.SOP_SUPPLIER_PRODUCTION, indent: '    ' }
             ]
           }
         }
       ]
     },
 
-/************************************************** STEP 7 ********************************************/
-    { id: 'step7', 
-      title: 'Phase 3: Step 7) Establish Measurement, Analysis & Improvement', 
-      desc: 'Monitor QMS performance, control non-conforming products, and drive continuous improvement. ISO 13485 Section 8. Runs in parallel with Step 8.',
+/************************************************** STEP 6 ********************************************/
+    { id: 'step6', 
+      title: 'Phase 3: Step 6) Establish Measurement, Analysis & Improvement', 
+      desc: 'Monitor QMS performance, control non-conforming products, and drive continuous improvement. ISO 13485 Section 8. Runs in parallel with Step 7.',
       checklist: [
 
-        { t: '7.1) Create a SOP for Internal Audit & Product Release (8.2.4 Internal audit, 8.2.6 Monitoring and measurement of product)', 
-          e: 'This SOP defines who conducts internal quality audits and when final product inspections are performed, to execute the annual audit plan and provide objective evidence of device release approval.',
-          sop: SOP_DATA6.SOP_013_AUDITS_AND_RELEASE  
-        },
-        
-        { t: '7.2) Create a SOP for Non-Conformance & CAPA Management (8.3 Control of nonconforming product, 8.5.2 Corrective action, 8.5.3 Preventive action)', 
-          e: 'This SOP defines who logs product deviations and when a formal root-cause investigation is triggered, to isolate nonconforming items and track corrective or preventive actions to closure.',
-          sop: SOP_DATA6.SOP_014_NC_CAPA_MANAGEMENT 
+        { t: '6.1) Create a SOP for Audit, CAPA & Product Release (8.2.4, 8.2.6, 8.3, 8.5.2, 8.5.3)', 
+          e: 'This SOP consolidates three interconnected quality processes: (a) Internal Audit — plans and conducts annual QMS audits; (b) Product Release — verifies batch conformity before market release per PRRC oversight; (c) NC & CAPA Management — logs non-conformities, triggers root-cause investigation, and tracks corrective/preventive actions to closure. Consolidated because audit findings directly feed CAPA, and CAPA effectiveness is verified at product release.',
+          sop: SOP_DATA.SOP_AUDIT_CAPA_RELEASE
         },
        
-        { t: '7.3) Create a SOP for Data Analysis & Trends (8.4 Analysis of data)', 
-          e: 'This SOP defines who aggregates quality metrics and when trend reports are compiled, to evaluate QMS effectiveness and feed crucial data into management reviews.',
-          sop: SOP_DATA6.SOP_015_DATA_ANALYSIS 
+        { t: '6.2) Create a SOP for Data Analysis & Trends (8.4)', 
+          e: 'This SOP defines who aggregates quality metrics and when trend reports are compiled, to evaluate QMS effectiveness and feed crucial data into management reviews. Kept separate because data analysis serves both QA and RA functions.',
+          sop: SOP_DATA.SOP_015_DATA_ANALYSIS 
         }, 
         
         { t: 'Resulting File Structure', 
@@ -302,52 +282,43 @@ export const QMS_DATA = [
   📁 5-MANAGEMENT RESPONSIBILITY
   📁 6-RESOURCE MANAGEMENT
   📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
+  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT
+  📁 9-REGULATORY AFFAIRS`,
           files: {
             '8-MEASUREMENT, ANALYSIS & IMPROVEMENT': [
-              { sop: SOP_DATA6.SOP_013_AUDITS_AND_RELEASE, indent: '  ' },
-              { sop: SOP_DATA6.SOP_014_NC_CAPA_MANAGEMENT, indent: '  ' },
-              { sop: SOP_DATA6.SOP_015_DATA_ANALYSIS, indent: '  ' }
+              { sop: SOP_DATA.SOP_AUDIT_CAPA_RELEASE, indent: '  ' },
+              { sop: SOP_DATA.SOP_015_DATA_ANALYSIS, indent: '  ' }
             ]
           }
         } 
       ]
     },
 
-/************************************************** STEP 8 ********************************************/
-    { id: 'step8', 
-      title: 'Phase 3: Step 8) Establish Regulatory Affairs', 
-      desc: 'Build the regulatory infrastructure for CE marking, submissions, and post-market compliance. Owned by Regulatory Affairs under PRRC oversight. Runs in parallel with Step 7.',
+/************************************************** STEP 7 ********************************************/
+    { id: 'step7', 
+      title: 'Phase 3: Step 7) Establish Regulatory Affairs', 
+      desc: 'Build the regulatory infrastructure for CE marking, submissions, and post-market compliance. Owned by Regulatory Affairs under PRRC oversight. Runs in parallel with Step 6.',
       checklist: [
 
-        { t: '8.1) Create a SOP for Technical Documentation (TD) Compilation (MDR Annex II & III)',
-          e: 'This SOP defines who compiles the TD and when final review gates are executed, to package design outputs into a submission-ready format and ensure alignment with MDR Annex II and III requirements.',
-          sop: SOP_DATA8.SOP_TD_COMPILATION
+        { t: '7.1) Create a SOP for Technical Documentation & EUDAMED Registration (MDR Annex II, III, Art. 29-31)',
+          e: 'This SOP consolidates two submission-related processes: (a) TD Compilation — packages design outputs into submission-ready format per MDR Annex II & III; (b) EUDAMED & UDI Registration — registers economic operators and devices, assigns Basic UDI-DI and UDI-DI. Consolidated because both are submission prerequisites handled by the same RA team.',
+          sop: SOP_DATA.SOP_TD_EUDAMED
         },
 
-        { t: '8.2) Create a SOP for EUDAMED & UDI Registration (MDR Art. 29-31)', 
-          e: 'This SOP defines who registers economic operators and devices in EUDAMED and when registration data must be updated, to secure SRN issuance and maintain UDI/Device data modules.',
-          sop: SOP_DATA8.SOP_EUDAMED_UDI
+        { t: '7.2) Create a SOP for Post-Market Surveillance & Vigilance (MDR Art. 83-92)',
+          e: 'This SOP consolidates two post-market processes: (a) PMS — gathers field performance data, compiles PSUR, and feeds data back to risk/clinical; (b) Vigilance — evaluates incidents, reports serious incidents within 15 days, manages FSCA/FSN. Consolidated because both share the same data sources (complaints, feedback, literature) and are audited together.',
+          sop: SOP_DATA.SOP_PMS_VIGILANCE
         },
 
-        { t: '8.3) Create a SOP for NB communication (MDR Art. 52, Annex IX)',
-          e: 'This SOP defines who manages NB interactions and when submission dossiers are transmitted, to coordinate audits, respond to non-conformities, and maintain valid CE certificates.',
-          sop: SOP_DATA8.SOP_NB_COMMUNICATION
+        { t: '7.3) Create a SOP for Notified Body Communication (MDR Art. 52, Annex IX)',
+          e: 'This SOP defines who manages NB interactions — selection via NANDO, submission dossiers, audit coordination, NC responses, and certificate maintenance. Kept separate because NB communication is a distinct competency from submission preparation.',
+          sop: SOP_DATA.SOP_NB_COMMUNICATION
         },
 
-        { t: '8.4) Create a SOP for Post-Market Surveillance (MDR Art. 83-86)',
-          e: 'This SOP defines who gathers field performance data and when PMS reports are compiled, to proactively monitor product safety, update the PSUR, and feed real-world data back into the risk management and clinical evaluation processes.',
-          sop: SOP_DATA8.SOP_PMS
+        { t: '7.4) Create a SOP for Regulatory Intelligence & CA Interaction',
+          e: 'This SOP defines who monitors regulatory changes (MDCG updates, standard revisions, new legislation) and when competent authority interactions are required (Helsinki Procedure, registration queries, unannounced audits). Kept separate because it requires continuous horizon scanning, not event-driven execution.',
+          sop: SOP_DATA.SOP_REGULATORY_INTELLIGENCE
         },
-        
-        { t: '8.5) Create a SOP for Vigilance & Adverse Event Reporting (MDR Art. 87-92)',
-          e: 'This SOP defines who evaluates product incidents and when regulatory authorities must be notified, to secure legally mandated 15-day serious incident reporting, manage Field Safety Corrective Actions (FSCA), and track trend analyses.',
-          sop: SOP_DATA8.SOP_VIGILANCE
-        },
-
-        // lägg till regulatory intelligence
-
-        // lägg till CA interaction
        
         { t: 'Resulting File Structure', 
           e: `
@@ -361,11 +332,10 @@ export const QMS_DATA = [
   📁 9-REGULATORY AFFAIRS`,
           files: {
             '9-REGULATORY AFFAIRS': [
-              { sop: SOP_DATA8.SOP_TD_COMPILATION, indent: '  ' },
-              { sop: SOP_DATA8.SOP_EUDAMED_UDI, indent: '  ' },
-              { sop: SOP_DATA8.SOP_NB_COMMUNICATION, indent: '  ' },
-              { sop: SOP_DATA8.SOP_PMS, indent: '  ' },
-              { sop: SOP_DATA8.SOP_VIGILANCE, indent: '  ' }
+              { sop: SOP_DATA.SOP_TD_EUDAMED, indent: '  ' },
+              { sop: SOP_DATA.SOP_PMS_VIGILANCE, indent: '  ' },
+              { sop: SOP_DATA.SOP_NB_COMMUNICATION, indent: '  ' },
+              { sop: SOP_DATA.SOP_REGULATORY_INTELLIGENCE, indent: '  ' }
             ]
           }
         } 
