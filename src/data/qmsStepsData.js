@@ -45,25 +45,17 @@ export const QMS_DATA = [
       DOCUMENTATION HIERARCHY
 
       Level 1. Quality Policy & Objectives
-      Defines the corporate commitment to quality and regulatory compliance, establishing measurable targets signed by Management.
+      Defines the corporate commitment to quality and regulatory compliance, establishing measurable targets.
    
      Level 2. Quality Manual (QM)
-     Describes the scope of the QMS, details the overall system structure, and provides documented justifications for any requirement exclusions. 
+     Describes the scope of the QMS, system structure, and justifications for requirement exclusions. 
     
      Level 3. Standard Operating Procedure (SOP) & Work Instructions (WIs)
-     SOPs describe who does what and when (operational workflows), while WIs describe how to execute specific tasks step-by-step.
+     SOPs describe who does what and when, while WIs describes how to do specific tasks.
 
     Level 4. Forms & Records
-    Provides objective evidence of actions taken, documenting what was done, when, and by whom to ensure full regulatory traceability.
+    Provides evidence of actions, documenting what was done, when, and by whom to ensure full traceability.
     
-
-    REFERERENCES
-
-    
-
-
-
-
    `},
     { t: ' Resulting File Structure ', 
       e: `
