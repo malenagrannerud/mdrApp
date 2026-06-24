@@ -8,7 +8,6 @@ export const SOP_DATA = {
 
 // ================== NYA KONSOLIDERADE SOP:er ==================
 
-// --- Step 1: Ersätter SOP_SW_VAL, SOP_DOC_CONTROL, SOP_BACKUP_RESTORE ---
 SOP_DOC_DATA_CONTROL: {
     id: 'SOP-001',
     title: '📄 SOP-Document_and_Data_Control.pdf',
@@ -16,7 +15,8 @@ SOP_DOC_DATA_CONTROL: {
     owner: 'QA',
     content: `
 ## 1. PURPOSE
-The purpose of this SOP is to consolidate three interconnected documentation and data integrity processes into a single controlled document: (a) Software Validation — validates eQMS and automated tools per ISO 13485 §4.1.6; (b) Document Control — ensures only approved, current document revisions are available per §4.2.4; (c) Data Integrity & Backup — verifies automated system backups for full business recovery per §4.2.5. Consolidated because all three share the same owner (QA) and are audited together.
+The purpose of this SOP is to consolidate three interconnected documentation and data integrity processes into a single controlled document: (a) Software Validation — validates eQMS and automated tools per ISO 13485 §4.1.6; (b) Document Control — ensures only approved, current document revisions are available per §4.2.4; (c) Data Integrity & Backup — verifies automated system backups for full business recovery per §4.2.5. 
+Consolidated because all three share the same owner (QA) and are audited together.
 
 ## 2. SCOPE
 Applies to all QMS software tools, QMS documentation, and data storage systems.
