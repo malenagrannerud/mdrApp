@@ -126,7 +126,7 @@ The official board-signed mandate certifying the appointment of the Person Respo
         // Anropas av sop: TD_DATA.TD_PROCESS (Sparas i: 📁 TECHNICAL DOCUMENTATION Root)
   TD_PROCESS: {
     id: 'DOC',
-    title: '📄 Technical_documentation_procedure.pdf',
+    title: '📄 SOP-Technical_documentation.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
