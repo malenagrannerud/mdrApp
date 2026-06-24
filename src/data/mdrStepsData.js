@@ -3,7 +3,8 @@
  * @description Regulatoriska steg för MDR-efterlevnad.
  * 
  * t: output: vad du ska göra kort
- * e: beskrive vad outputen gör och vad den används till 
+ * r: regulatoriska referenser 
+ * e: beskriver hur outputen är bevisad och vad den används till 
  */
 
 import { MDCG_DATA } from './mdcgData.js';
@@ -43,11 +44,10 @@ export const MDR_DATA = [
       }
     ]
   },
-
   /**********************  STEP 1 ****************************************/
     {     id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
-      desc: ' This step decides conformity route of the product  ',
+      desc: ' This step decides conformity route of the product. (a)-(d) is requred for the TD  ',
       checklist: [
         { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and statement (d) principle of use and mode of action', 
           r: `
@@ -56,7 +56,7 @@ export const MDR_DATA = [
           - Ax II 1(1): TD
           `,
           e: `
-          Read the articles and compile the statements. These are required in the TD according to Ax II 1(1)`,
+          Read the articles and compile the statements. These are required in the TD according to Ax II 1(1) ➔`,
           sop: TD_DATA.DD},
         
 
@@ -71,14 +71,12 @@ export const MDR_DATA = [
 
         { t: 'Step 1.3) Compile the (b) risk classification rational', 
           r: `
-          - Art. 51: Devices shall be classifyed (shall be as in Ax VIII), taking into account intended purpose and inherent risks. 
+          - Art. 51: Devices shall be classified (shall be as in Ax VIII), taking into account intended purpose and inherent risks. 
           - Ax VIII: Rules to determine risk class.
           
           `,
-          e: `This statement justifies risk class (I, IIa, IIb, III) which will determine if a NB must audit the product ➔`, 
+          e: `Read the articles and classify the MD. This will determine if a NB must audit the product ➔`, 
           sop: TD_DATA.DD},
-
-
 
         { t: ' ', 
           e: `💡 Step 1) also applies to devices offered in EU via the internet (Art. 6), including diagnostic or therapeutic services.
@@ -117,7 +115,7 @@ export const MDR_DATA = [
   /**********************  STEP 2 ****************************************/
   { id: 'm2',
     title: 'Step 2) Establish processes and resources',
-    desc: 'Outputs in this step are basically the QMS of the company ',
+    desc: 'Outputs in this step are the QMS of the company ',
     checklist: [
        
       { t: ' ', 
@@ -126,11 +124,10 @@ export const MDR_DATA = [
       { t: 'Step 2.1) Implement design and manufacturing processes',
         r: `
         - Art. 10.1: "Mfs shall ensure that the MD have been designed & mfed according to MDR."
-        
         - Art. 10.9(g): "The QMS shall address… product realisation: planning, D&D, production and service provision."
           
           `,
-        e: `This is proved by implementing ISO 13485 Section 7 — Product Realisation. See QMS Step 4 & 5. `},
+        e: `This is proved by implementing ISO 13485 7 — Product Realisation. See QMS Step 4 & 5. `},
 
 
 
@@ -138,9 +135,7 @@ export const MDR_DATA = [
       { t: 'Step 2.2) Implement a RM process',
         r: `
         - Art. 10.2: "Mfs shall establish, document, implement and maintain RM as in Ax I, section 3."
-        
         - Ax I: RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (includes Art. 83-86 )→ Amend controls if necessary.
-        
         - Art. 83-86: Mfs shall have a PMS system, plan and report (class I) or PSUR (class IIa and up)
         `,
         e: `This is proved by implementing ISO 14971. Since ISO 14971 say what to be done but not by how ➔ RM activities (FMEA, risk matrix, report) must be assigned to different compentecies. 
@@ -150,9 +145,27 @@ export const MDR_DATA = [
 
 
 
-      { t: 'Step 2.3) Establish a clinical evaluation process',
-        r: `Art. 10.3: "Mfs shall establish, document, implement and maintain a system for clinical evaluation."\nArt. 61 & Annex XIV Part A: 5-stage methodology.`,
-        e: `Implement a process for Plan, Identify, Appraise, Analyse, Report per Annex XIV and MEDDEV 2.7/1. Governs CEP, PMCF Plan, and PMCF Evaluation Reports. See QMS Step 4.3. ➔`},
+      { t: 'Step 2.3) Implement a CEV process',
+        r: `
+        - Art. 10.3: Mfs shall establish, document, implement and maintain a system for CEV.
+        - Art. 61: A CEV must be defined and methodologic: (a) critical evaluation of literature and (b) CIs, (c) treatment options
+        - Annex XIV: Defines the clinical process — CEP → identify data → appraise data → analyse data → CER → PMCF → update CER/Risk/CAPA.
+        - MEDDEV 2.7/1 rev.4: Basis for the process — more detail than Ax XIV
+        - ISO 13485 §7.3.7 Design Validation
+        - ISO 14155 Clinical Investigations
+        `,
+        e: `This is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
+
+
+
+
+
+
+
+
+
+
+
 
       { t: 'Step 2.4) Establish TD, UDI and DoC processes',
         r: `Art. 10.4: "Mfs shall draw up and keep up to date technical documentation."\nArt. 10.6-10.8: UDI system, DoC, change history.`,
