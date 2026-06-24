@@ -177,23 +177,25 @@ export const MDR_DATA = [
       { t: 'Step 2.5) Build a QMS according to ISO 13485:2016',
         r: `
         - Art. 10.9(1): Mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
-        (a) Fulfilment of 4.1.1 and Art.15-PRRC, Art.52-Conformity assessment, Ax.VII 4.9-Changes to NB-certified devices
-        (b) Fulfilment of 7.2.1(c) and Annex I (GSPR)
+        
+        (a) 4.1.1 per Art.15-PRRC, Art.52-Conformity assessment, Ax.VII 4.9-Changes to NB-certified devices
+        (b) 7.2.1(c) and Ax.I (GSPR)
         (c) 5—Management Responsibility
         (d) 6—Resource Management
-        (e) Fulfilment of 7.1, RM per Ax.I-3
-        (f) Fulfilment of 7.2.1(c), Clinical Evaluation per Art. 61 and Annex XIV
+        (e) 7.1-RM per Ax.I-3
+        (f) 7.2.1(c)-Clinical Evaluation per Art. 61 and Ax.XIV
         (g) 7—Product Realisation
-        (h) 7.2.1(c)—UDI verification per Art. 27(3) and Art. 29
-        (i) 8.2.1—PMS per Art. 10(10) and Art. 83
-        (j) 8.3.3—Stakeholder communication per Art. 10(12)
-        (k) 8.2.1—Vigilance per Art. 10(13) and Art. 87-88
+        (h) 7.2.1(c)—UDI verification per Art.27(3) and Art.29
+        (i) 8.2.1—PMS per Art. 10(10) and Art.83
+        (j) 8.3.3—Stakeholder communication per Art.10(12)
+        (k) 8.2.1—Vigilance per Art.10(13) and Art.87-88
         (l) 8.5.2 and 8.5.3—CAPA
         (m) 8—Measurement, analysis and improvement
-        - Art. 10.9(2): Def of the QMS scope which, according to 4.2.2 of the Standard, has to be documented in the QM. 
+
+        - Art. 10.9(2): Def of the QMS scope which, according to 4.2.2- , has to be documented in the QM. 
 
         `,
-        e: `This is proved by implementing a QMS per ISO 13485 covering (a)-(m). Used to ensure devices in series production remain in conformity with MDR. See QMS Step 0-7.`},
+        e: `This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure devices in series production remain in conformity with MDR. See QMS Step 0-7.`},
     
       { t: 'Step 2.6) Plan PMS activities',
         r: `
