@@ -11,12 +11,7 @@
  * e: beskriver vad outputen gör och vad den används till 
  */
 
-import { SOP_DATA1 } from './sopData1.js';
-import { SOP_DATA2 } from './sopData2.js';
-import { SOP_DATA5 } from './sopData5.js';
-import { SOP_DATA6 } from './sopData6.js';
-import { SOP_DATA8 } from './sopData8.js';
-
+import { SOP_DATA } from './sopData.js';
 export const QMS_DATA = [
 
 /************************************************** STEP 0 ********************************************/
