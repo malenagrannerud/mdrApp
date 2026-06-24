@@ -38,8 +38,7 @@ Using a dataset from FDA MAUDE of the most frequently reported products and manu
 ## FUTURE STEPS
 
 ### QA/RA
-- [ ] Add GSPR checklist
-- [ ] Expand PMS & vigilance workflows (MDR Art. 83–92)
+- [ ] Add dependencies between MDR outputs and QMS inputs 
 - [ ] Add fictive Audit checklists
 
 ### PMS Data Analysis
