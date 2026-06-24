@@ -49,17 +49,17 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     
         { t: 'Step 1.1) Compile the Qualification Rationale ', 
           r: 'Art. 2(1): Contains the definition of a medical device. ',
-          e: `This rationale proves that the product is eligible for, and must carry, a CE mark according to MDR.`},
+          e: `This rationale proves that the product is eligible for, and must carry, a CE mark according to MDR ➔`,
+          sop: TD_DATA.DD},
        
         { t: 'Step 1.2) Compile the Statement of Intended Purpose ', 
           r: 'Art. 2(1): Contains the definition of a medical device. ',
-          e: `This statement defines what the product does, who it is for, and how it cures or treats a medical condition.`},
+          e: `This statement defines what the product does, who it is for, and how it cures or treats a medical condition ➔`,
+          sop: TD_DATA.DD},
         
         { t: 'Step 1.3) Compile the Device Classification Rationale', 
           r: 'Annex VIII: Go trough the rules to determine risk class.',
-          e: `This statement justifies risk class (I, IIa, IIb, III) which will determine if a NB must audit the product. 
-          
-          Step 1.1), 1.2) and 1.3) result in the document ➔`, 
+          e: `This statement justifies risk class (I, IIa, IIb, III) which will determine if a NB must audit the product ➔`, 
           sop: TD_DATA.DD},
 
         { t: ' ', 
@@ -105,7 +105,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: ' ', 
         e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,},
 
-        { t: 'Step 2.1) Set up design and manufacturing processes',
+        { t: 'Step 2.1) Describe the design and manufacturing processes',
         r: 'Art. 10.1 & 10.9(g): "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
         e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
         sop: TD_DATA.MF_P },

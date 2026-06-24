@@ -36,7 +36,7 @@ The purpose of this document is to formally qualify and classify the device unde
   
   MF_P: {
     id: 'DOC-02',
-    title: '📄 Manufacturing_process_description_product_X.pdf',
+    title: '📄 Manufacturing_process_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -62,7 +62,7 @@ This procedure defines the methods used to control the design, development, and 
 
   RM: {
     id: 'DOC-03',
-    title: '📄 RM_procedure_product_X.pdf',
+    title: '📄 RM_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -97,7 +97,7 @@ Establishes the process for conducting clinical evaluations to maintain continuo
 
   PMS_PROCESS: {
     id: 'DOC-05',
-    title: '📄 PMS_procedure_product_X.pdf',
+    title: '📄 PMS_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -108,7 +108,7 @@ Establishes proactive post-market monitoring loops to systematically harvest dat
 
   PRRC_APPOINT: {
     id: 'DOC-06',
-    title: '📄 PRRC_appointment_&_mandate_letter_product_X.pdf',
+    title: '📄 PRRC_product_X.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
@@ -126,7 +126,7 @@ The official board-signed mandate certifying the appointment of the Person Respo
         // Anropas av sop: TD_DATA.TD_PROCESS (Sparas i: 📁 TECHNICAL DOCUMENTATION Root)
   TD_PROCESS: {
     id: 'DOC',
-    title: '📄 Technical_documentation_compilation_procedure.pdf',
+    title: '📄 Technical_documentation_procedure.pdf',
     version: '1.0',
     owner: 'R&D',
     content: `
