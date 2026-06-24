@@ -124,10 +124,12 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
         { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
         r: 'Art. 10.4, 10.6, 10.7 & 10.8',
-        e: `Use the 7-chapter structure as a project deliverables tracker on the critical path. The process must enforce a final alignment check for vocabulary and state-of-the-art arguments, alongside a change history log for NB compliance ➔ `,
+        e: `Use the 7-chapter structure as a project deliverables tracker on the critical path. 
+        The process must enforce a final alignment check for vocabulary and state-of-the-art arguments, 
+        alongside a change history log for NB compliance ➔ `,
         sop: TD_DATA.TD_PROCESS },
 
-      { t: 'Step 2.5) Build a Quality Management System (QMS) manual',
+      { t: 'Step 2.5) Build a QMS manual',
         r: 'Art. 10.9',
         e: `Non-product specific document. Created in QMS path. See QMS path ➔ Step 0` }, 
 
