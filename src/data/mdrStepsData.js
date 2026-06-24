@@ -153,6 +153,7 @@ export const MDR_DATA = [
         - MEDDEV 2.7/1 rev.4: Basis for the process — more detail than Ax XIV
         - ISO 13485 §7.3.7 Design Validation
         - ISO 14155 Clinical Investigations
+        
         `,
         e: `This is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
 
