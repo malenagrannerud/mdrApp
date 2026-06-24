@@ -4,6 +4,11 @@
  * 
  */
 
+/**
+ * t: output: vad du ska göra kort
+ * e: beskrive vad outputen gör och vad den används till 
+ */
+
 import { MDCG_DATA } from './mdcgData.js';
 import { DOC_DATA } from './docData.js';
 import { TD_DATA } from './tdData.js';
@@ -11,8 +16,7 @@ import { TD_DATA } from './tdData.js';
 export const MDR_DATA = [
 
 /***********************  STEP 0 ****************************************/
-{  
-    id: 'm0',
+{  id: 'm0',
     title: 'Introduction',
     desc: 'A Roadmap to CE Marking Medical Devices According to MDR 2017/745',
     checklist: [
@@ -22,7 +26,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
 
       {t: 'Resulting File Structure', 
        e: `
-
 📁 PRODUCT X
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION 
@@ -36,13 +39,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   },
 
   /**********************  STEP 1 ****************************************/
-    {  
-
-/**
- * t: output: vad du ska göra kort
- * e: beskrive vad outputen gör och vad den används till 
- */
-      id: 'm1',
+    {     id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
       checklist: [
 
@@ -93,8 +90,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     },
 
   /**********************  STEP 2 ****************************************/
-  {   
-    id: 'm2',
+  { id: 'm2',
     title: 'Step 2) Establish processes and resources',
     desc: 'This step establishes the corporate infrastructure and processes required to comply with MDR ',
     checklist: [
@@ -112,17 +108,15 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         e: `This document establishes the ISO 14971 framework to identify and control hazards across the lifecycle. It must integrate post-market data (Art. 83-86) and include a dedicated human factors/usability sub-process following EN 62366 ➔ `,
         sop: TD_DATA.RM },
 
-            {  t: 'Step 2.3) Establish a Clinical Evaluation Process (CEP)',
+        { t: 'Step 2.3) Establish a Clinical Evaluation Process (CEP)',
         r: 'Art. 10.3, Art. 61 & Annex XIV Part A',
         e: `This document defines a 5-stage methodology (Plan, Identify, Appraise, Analyse, Report) based on Annex XIV and MEDDEV 2.7/1. It must explicitly govern the Clinical Evaluation Plan (CEP), PMCF Plan, and PMCF Evaluation Reports ➔ `,
         sop: TD_DATA.CLIN_EVAL},
 
-
-            { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
+        { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
         r: 'Art. 10.4, 10.6, 10.7 & 10.8',
         e: `Use the 7-chapter structure as a project deliverables tracker on the critical path. The process must enforce a final alignment check for vocabulary and state-of-the-art arguments, alongside a change history log for NB compliance ➔ `,
         sop: TD_DATA.TD_PROCESS },
-
 
       { t: 'Step 2.5) Build a Quality Management System (QMS) manual',
         r: 'Art. 10.9',
@@ -137,23 +131,17 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         r: 'Art. 10.11',
         e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 2` },
 
-      { 
-        t: 'Step 2.8) Establish corrective action and recall process',
+      { t: 'Step 2.8) Establish corrective action and recall process',
         r: 'Art. 10.12',
-        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` 
-      }, 
+        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` }, 
 
-      { 
-        t: 'Step 2.9) Set up Vigilance process, including serious incident reporting',
+      { t: 'Step 2.9) Set up Vigilance process, including serious incident reporting',
         r: 'Art. 10.13',
-        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` 
-      }, 
+        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` }, 
 
-      { 
-        t: 'Step 2.10) Define regulatory authority interaction process',
+      {  t: 'Step 2.10) Define regulatory authority interaction process',
         r: 'Art. 10.14',
-        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 2` 
-      }, 
+        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 2` }, 
 
       { t: 'Step 2.11) Arrange legal liability and damage compensation',
         r: 'Art. 10.16',
@@ -164,15 +152,11 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         e: 'This document assigns individual legal responsibility, used to officially designate the person who signs off on device releases ➔ ',
         sop: TD_DATA.PRRC_APPOINT },
 
-      { 
-        t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
-        e: `Non-product specific matrix. Maintained in corporate HR/Vendor records. See QMS path ➔ Step 2` 
-      }, 
+      { t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
+        e: `Non-product specific matrix. Maintained in corporate HR/Vendor records. See QMS path ➔ Step 2` }, 
 
-      { 
-        t: ' ',
-        e: '💡 For guidance on clinical evaluation - go to Step 4' 
-      },
+      { t: ' ',
+        e: '💡 For guidance on clinical evaluation - go to Step 4' },
 
       { t: 'Resulting File Structure', 
         e: `
@@ -190,11 +174,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 6-V&V
         📄 CEP_product_X.pdf
       📁 7-PMS 
-        📄 PMS_procedure_product_X.pdf `,
-      },
+        📄 PMS_procedure_product_X.pdf `,},
         
       { t: 'Guidance Documents from the MDCG' },
-
       { t: ' ', 
         e: 'UDI GUIDANCE'  },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
@@ -211,30 +193,21 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_2018_4 },
       { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
 
-      { 
-        t: ' ', 
-        e: 'PMS GUIDANCE' 
-      },
+      { t: ' ', 
+        e: 'PMS GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2025_10 },
       { mdcg: MDCG_DATA.MDCG_2022_21 },
 
       { t: ' ', 
-        e: 'VIGILANCE GUIDANCE' 
-      },
+        e: 'VIGILANCE GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2024_1 },
       { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
 
-      { 
-        t: ' ', 
-        e: 'PRRC GUIDANCE' 
-      },
+      { t: ' ', 
+        e: 'PRRC GUIDANCE'  },
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
     ]  
   },
-
-
-
-
     /**********************  STEP 3 ****************************************/
   {
     id: 'm3',
@@ -314,8 +287,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.SCHEER_GUIDELINES }
     ]
   },
-
-  /**********************  STEP 4 ****************************************/
 
   /**********************  STEP 4 ****************************************/
   {
@@ -552,7 +523,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     ]
   },
 
-
   /**********************  STEP 7 ****************************************/
   { id: 'm7',
     title: 'Step 7) Register the device and the manufacturer',
@@ -628,37 +598,28 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   },
 
       /**********************  STEP 8 ****************************************/
-  {
-    id: 'm8',
+  { id: 'm8',
     title: 'Step 8) Complete the conformity assessment',
     desc: 'Select an authorized Notified Body and pass the mandatory QMS and technical documentation audits to secure official EU compliance certification.',
     checklist: [
       
-      { 
-        t: 'Step 8.1) Evaluate alternative conformity assessment routes and select a Designated Notified Body via NANDO',
+      { t: 'Step 8.1) Evaluate alternative conformity assessment routes and select a Designated Notified Body via NANDO',
         r: 'Art. 52',
-        e: `This activity audits Notified Body capabilities using the EU Commission's NANDO database to ensure the chosen registrar is designated for your product code and risk tier.` 
-      },
+        e: `This activity audits Notified Body capabilities using the EU Commission's NANDO database to ensure the chosen registrar is designated for your product code and risk tier.` },
 
-      { 
-        t: 'Step 8.2) Execute full quality management system assessment under Annex IX Chapter I criteria',
+      { t: 'Step 8.2) Execute full quality management system assessment under Annex IX Chapter I criteria',
         r: 'Annex IX Ch. I',
         e: `This audit verifies compliance across the manufacturer's corporate quality workflows. Success yields the official EU Quality Management System Certificate ➔ `,
-        sop: TD_DATA.QMS_CERT 
-      },
+        sop: TD_DATA.QMS_CERT },
 
-      { 
-        t: 'Step 8.3) Pass product-specific Technical Documentation review under Annex IX Chapter II parameters',
+      { t: 'Step 8.3) Pass product-specific Technical Documentation review under Annex IX Chapter II parameters',
         r: 'Annex IX Ch. II',
         e: `This audit assesses the product-specific technical file (folders 1–6). Success yields the official EU Technical Documentation Assessment Certificate ➔ `,
-        sop: TD_DATA.TD_CERT 
-      },
+        sop: TD_DATA.TD_CERT },
 
-      { 
-        t: 'Step 8.4) Implement alternative assessment certification routes for outsourced or custom-made devices if applicable',
+      { t: 'Step 8.4) Implement alternative assessment certification routes for outsourced or custom-made devices if applicable',
         r: 'Annex X, XI & XIII',
-        e: `This fallback check tracks special routes (EU type-examination certificates via Annex X, or Product Verification certificates via Annex XI Part B, or Custom-Made controls via Annex XIII).` 
-      },
+        e: `This fallback check tracks special routes (EU type-examination certificates via Annex X, or Product Verification certificates via Annex XI Part B, or Custom-Made controls via Annex XIII).` },
 
       { t: 'Resulting File Structure', 
         e: `
@@ -691,45 +652,32 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       } // KORRIGERING: Endast de 2 nya certifikatsfilerna från detta steg har adderats till Mapp 1.
     ]
   },
-
-
-      /**********************  STEP 9 ****************************************/
-  {
-    id: 'm9',
+/**********************  STEP 9 ****************************************/
+  { id: 'm9',
     title: 'Step 9) Complete the final administrative procedures before launch',
     desc: 'Finalize legal declarations, complete national language packaging requirements, and verify importer/distributor operational records.',
     checklist: [
       
-      { 
-        t: 'Step 9.1) Finalize and sign the official EU Declaration of Conformity',
+      { t: 'Step 9.1) Finalize and sign the official EU Declaration of Conformity',
         r: 'Annex IV & Annex VI Sec. 2.2',
         e: `This document establishes the sole legal responsibility of the manufacturer. It must include all required language versions for target distribution countries before commercialization ➔ `,
-        sop: TD_DATA.DOC_CONF 
-      },
+        sop: TD_DATA.DOC_CONF },
 
-      { 
-        t: 'Step 9.2) Finalize manufacturer registration and transfer technical tokens to the Authorised Representative',
+      { t: 'Step 9.2) Finalize manufacturer registration and transfer technical tokens to the Authorised Representative',
         r: 'Art. 11',
-        e: `This activity transfers the finalized Technical Documentation, Notified Body certificates, and registration confirmations to the EU AR to enable their mandatory mandate listing.` 
-      },
+        e: `This activity transfers the finalized Technical Documentation, Notified Body certificates, and registration confirmations to the EU AR to enable their mandatory mandate listing.` },
 
-      { 
-        t: 'Step 9.3) Provide the designated EU Importer with the signed DoC and device labeling data',
+      { t: 'Step 9.3) Provide the designated EU Importer with the signed DoC and device labeling data',
         r: 'Art. 13',
-        e: `This transfer provides the Importer with verified artwork, UDI parameters, and signed legal declarations required for custom borders and regulatory lot tracking.` 
-      },
+        e: `This transfer provides the Importer with verified artwork, UDI parameters, and signed legal declarations required for custom borders and regulatory lot tracking.`  },
 
-      { 
-        t: 'Step 9.4) Deliver localized language packaging, instructions, and importer data to supply chain Distributors',
+      { t: 'Step 9.4) Deliver localized language packaging, instructions, and importer data to supply chain Distributors',
         r: 'Art. 14',
-        e: `This activity verifies that initial supply chain distributors receive national language versions of the packaging, instructions for use (IFU), and correct Importer address attachments.` 
-      },
+        e: `This activity verifies that initial supply chain distributors receive national language versions of the packaging, instructions for use (IFU), and correct Importer address attachments.`  },
 
-      { 
-        t: 'Step 9.5) Publish localized packaging artwork and technical instructions on the corporate website',
+      { t: 'Step 9.5) Publish localized packaging artwork and technical instructions on the corporate website',
         r: 'Annex I Sec. 23.1',
-        e: `This action uploads and publishes all target national language iterations of the device instructions and labeling to the public corporate website.` 
-      },
+        e: `This action uploads and publishes all target national language iterations of the device instructions and labeling to the public corporate website.` },
 
       { t: 'Resulting File Structure', 
         e: `
@@ -766,7 +714,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_LANGUAGE_REQUIREMENTS }
     ]
   },
-  /**********************  STEP 10 ****************************************/
+/**********************  STEP 10 ****************************************/
   {
     id: 'm10',
     title: 'Step 10) Fulfil the ongoing obligations in the post launch phase',
@@ -862,5 +810,3 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     ]  
   }
 ];
-
-
