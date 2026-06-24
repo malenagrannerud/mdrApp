@@ -161,7 +161,7 @@ export const MDR_DATA = [
 
   { t: 'Step 2.4) Establish SOPs for dev and maintenance of TD, UDI and DoC',
   r: `
-  - Art. 10.4: Mfs shall draw up and keep up to date TD. See TD content: Ax II and III.
+  - Art. 10.4: Mfs shall draw up and keep up to date TD with content per Ax II and III.
   - Art. 10.6: UDI system
   - Art. 10.7: DoC
   - Art. 10.8: Change history log for NB surveillance
@@ -176,27 +176,28 @@ export const MDR_DATA = [
 
       { t: 'Step 2.5) Build a QMS according to ISO 13485:2016',
         r: `
-        - Art. 10.9(1): Mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
+        - Art.10.9(1): Mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
         
-        (a) 4.1.1 per Art.15-PRRC, Art.52-Conformity assessment, Ax.VII 4.9-Changes to NB-certified devices
-        (b) 7.2.1(c) and Ax.I (GSPR)
+        (a) 4.1.1 per Art.15-PRRC, Art.52, Ax.VII(4.9)
+        (b) 7.2.1(c) and Ax.I
         (c) 5—Management Responsibility
         (d) 6—Resource Management
         (e) 7.1-RM per Ax.I-3
         (f) 7.2.1(c)-Clinical Evaluation per Art. 61 and Ax.XIV
         (g) 7—Product Realisation
         (h) 7.2.1(c)—UDI verification per Art.27(3) and Art.29
-        (i) 8.2.1—PMS per Art. 10(10) and Art.83
+        (i) 8.2.1—PMS per Art.10(10) and Art.83
         (j) 8.3.3—Stakeholder communication per Art.10(12)
         (k) 8.2.1—Vigilance per Art.10(13) and Art.87-88
         (l) 8.5.2 and 8.5.3—CAPA
         (m) 8—Measurement, analysis and improvement
 
-        - Art. 10.9(2): Def of the QMS scope which, according to 4.2.2- , has to be documented in the QM. 
+        - Art.10.9(2): Def. of the QMS scope which, according to 4.2.2, has to be documented in the QM. 
 
         `,
-        e: `This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure devices in series production remain in conformity with MDR. See QMS Step 0-7.`},
+        e: `This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure MD in series production remain in conformity with MDR. See QMS Step 0-7.`},
     
+
       { t: 'Step 2.6) Plan PMS activities',
         r: `
         Art. 10.10: "Mfs shall establish, document, implement and maintain a PMS system.
@@ -219,26 +220,26 @@ export const MDR_DATA = [
 
       { t: 'Step 2.9) Set up Vigilance process',
         r: `
-        Art. 10.13: "Mfs shall establish, document, implement and maintain a system for vigilance
+        Art. 10.13: Mfs shall establish, document, implement and maintain a system for vigilance
         `,
         e: `Implement serious incident reporting (15 days), FSCA, and trend monitoring per Art. 87-92. See QMS Step 7.2. ➔`},
 
       { t: 'Step 2.10) Define regulatory authority interaction process',
         r: `
-        Art. 10.14: "Mfs shall establish, document, implement and maintain a system for communication with CAs.
+        Art. 10.14: Mfs shall establish, document, implement and maintain a system for communication with CAs.
         
         `,
         e: `Implement process for CA queries, Helsinki Procedure, and unannounced audits. See QMS Step 7.4. ➔`},
 
       { t: 'Step 2.11) Arrange legal liability and damage compensation',
         r: `
-        Art. 10.16: "Mfs shall have measures in place to provide sufficient financial coverage for potential liability.
+        Art. 10.16: Mfs shall have measures for sufficient financial coverage for pot. liability.
         `,
         e: `Secure product liability insurance. Maintain in corporate archive. ➔`},
 
       { t: 'Step 2.12) Appoint PRRC',
         r:`
-        Art. 15: "Mfs shall have at least one PRRC with requisite expertise.
+        Art. 15: Mfs shall have at least one PRRC.
         `,
         e: `Formally appoint PRRC via signed mandate letter. PRRC oversees batch release, TD, PMS, and vigilance. Original in QMS, copy in TD 1-DEVICE. See QMS Step 2.2. ➔`},
 
