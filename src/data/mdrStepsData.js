@@ -121,7 +121,7 @@ export const MDR_DATA = [
       { t: ' ', 
         e: `Read through Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed. If not, subcontracting is an option.`},
 
-      { t: 'Step 2.1) Implement design and manufacturing processes',
+      { t: 'Step 2.1) Implement a design and manufacturing SOP',
         r: `
         - Art. 10.1: "Mfs shall ensure that the MD have been designed & mfed according to MDR."
         - Art. 10.9(g): "The QMS shall address… product realisation: planning, D&D, production and service provision."
@@ -132,7 +132,7 @@ export const MDR_DATA = [
 
 
 
-      { t: 'Step 2.2) Implement a RM process',
+      { t: 'Step 2.2) Implement a RM SOP',
         r: `
         - Art. 10.2: "Mfs shall establish, document, implement and maintain RM as in Ax I, section 3."
         - Ax I: RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (includes Art. 83-86 )→ Amend controls if necessary.
@@ -145,7 +145,7 @@ export const MDR_DATA = [
 
 
 
-      { t: 'Step 2.3) Implement a CEV process',
+      { t: 'Step 2.3) Implement a CEV SOP',
         r: `
         - Art. 10.3: Mfs shall establish, document, implement and maintain a system for CEV.
         - Art. 61: A CEV must be defined and methodologic: (a) critical evaluation of literature and (b) CIs, (c) treatment options
@@ -159,24 +159,44 @@ export const MDR_DATA = [
 
 
 
+  { t: 'Step 2.4) Establish SOPs for dev and maintenance of TD, UDI and DoC',
+  r: `
+  - Art. 10.4: Mfs shall draw up and keep up to date TD. See TD content: Ax II and III.
+  - Art. 10.6: UDI system
+  - Art. 10.7: DoC
+  - Art. 10.8: Change history log for NB surveillance
+  - Ax II (1-6): TD content with pre-market records 
+  - Ax III (7): TD content with post-market plans 
+  - Ax IX 4.10: Mf shall inform NB of planned substantial changes to QMS or device-range. NB verifies QMS still meets Section 2.3, or re-assesses."
+  - Ax X 5.2: Mf shall inform NB of planned substantial changes to approved type. NB verifies certificate still valid, or re-assesses.
+
+  `,
+  e: `This step is proved by implementing a SOP that uses the TD structure as deliverables, with change history log. The process is used to compile and maintain the TD, for NB submission and surveillance. See QMS Step 7.1.`
+},
+
+      { t: 'Step 2.5) Build a QMS according to ISO 13485:2016',
+        r: `
+        - Art. 10.9(1): Mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
+        (a) Fulfilment of 4.1.1 and Art.15-PRRC, Art.52-Conformity assessment, Ax.VII 4.9-Changes to NB-certified devices
+        (b) Fulfilment of 7.2.1(c) and Annex I (GSPR)
+        (c) 5—Management Responsibility
+        (d) 6—Resource Management
+        (e) Fulfilment of 7.1, RM per Ax.I-3
+        (f) Fulfilment of 7.2.1(c), Clinical Evaluation per Art. 61 and Annex XIV
+        (g) 7—Product Realisation
+        (h) 7.2.1(c)—UDI verification per Art. 27(3) and Art. 29
+        (i) 8.2.1—PMS per Art. 10(10) and Art. 83
+        (j) 8.3.3—Stakeholder communication per Art. 10(12)
+        (k) 8.2.1—Vigilance per Art. 10(13) and Art. 87-88
+        (l) 8.5.2 and 8.5.3—CAPA
+        (m) 8—Measurement, analysis and improvement
+        - Art. 10.9(2): Def of the QMS scope which, according to 4.2.2 of the Standard, has to be documented in the QM. 
+        `,
+        e: `This is proved by implementing a QMS per ISO 13485 covering all (a)-(m). Used to ensure devices in series production remain in conformity with MDR. See QMS Step 0-7.`},
+      
 
 
-
-
-      { t: 'Step 2.4) Establish TD, UDI and DoC processes',
-        r: `Art. 10.4: "Mfs shall draw up and keep up to date technical documentation."\nArt. 10.6-10.8: UDI system, DoC, change history.`,
-        e: `Implement a process for compiling and maintaining the 7-chapter TD structure. Enforce vocabulary alignment, state-of-the-art arguments, and change history log. See QMS Step 7.1. ➔`},
-
-
-
-
-
-        
-      { t: 'Step 2.5) Build a QMS',
-        r: 'Art. 10.9: "Mfs shall establish, document, implement and maintain a QMS."',
-        e: `Build the full Quality Management System per ISO 13485. Covers all processes in (a)-(m). See QMS Step 0-7. ➔`},
-
-      { t: 'Step 2.6) Plan PMS activities',
+{ t: 'Step 2.6) Plan PMS activities',
         r: 'Art. 10.10: "Mfs shall establish, document, implement and maintain a PMS system."',
         e: `Implement proactive market feedback loops to gather real-world safety data post-launch. See QMS Step 7.2. ➔`},
 
