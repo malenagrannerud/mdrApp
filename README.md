@@ -38,7 +38,7 @@ Using a dataset from FDA MAUDE of the most frequently reported products and manu
 ## FUTURE STEPS
 
 ### QA/RA
-- [ ] Add dependencies between MDR outputs and QMS inputs 
+- [ ] Add documentation dependencies between MDR & QMS 
 - [ ] Add fictive Audit checklists
 - [ ] Add clickable abbreviations
 
