@@ -108,77 +108,65 @@ export const MDR_DATA = [
   /**********************  STEP 2 ****************************************/
   { id: 'm2',
     title: 'Step 2) Establish processes and resources',
-    desc: 'This step establishes the corporate infrastructure and processes required to comply with MDR ',
+    desc: 'Output in this step are QMS processes required by Art. 10. ',
     checklist: [
        
       { t: ' ', 
-        e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,},
+        e: `Read through Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed. If not, subcontracting is an option.`},
 
-        { t: 'Step 2.1) Implement design and manufacturing processes',
-        r: `Art. 10.1: "... Mfs shall ensure that the MD have been designed & mfed according to MDR."
-        Art 10.9(g): "The QMS shall address… (g) product realisation, including planning, D&D, production and service provision"`,
-        e: `This is proved by following ISO Ch7 - Product Realization.  `},
+      { t: 'Step 2.1) Implement design and manufacturing processes',
+        r: `Art. 10.1: "Mfs shall ensure that the MD have been designed & mfed according to MDR."\nArt. 10.9(g): "The QMS shall address… product realisation, including planning, D&D, production and service provision."`,
+        e: `This is proved by implementing ISO 13485 Section 7 — Product Realisation. See QMS Step 4 & 5. ➔`},
 
+      { t: 'Step 2.2) Implement a RM process',
+        r: `Art. 10.2: "Mfs shall establish, document, implement and maintain a system for RM."\nAnnex I Ch. I (2-9): Reduce risks as far as possible, state of the art, human factors, transport/storage, benefit-risk outweighs residual risks.`,
+        e: `Implement ISO 14971 as company-wide process. Assign roles, define document formats (FMEA, risk matrix, report). Integrate post-market data (Art. 83-86) and usability (EN 62366). See QMS Step 4.2. ➔`},
 
-        { t: 'Step 2.2) Implement a RM process',
-        r: `Art. 10.2: "Mfs shall establish, document, implement and maintain a system for RM as described in Annex I Ch. I (2-9)."
-        \nAnnex I Ch. I (2-9): Reduce risks as far as possible, state of the art measures, human factors, transport/storage, benefit-risk outweighs residual risks. `,
-        e: `This document establishes the ISO 14971 framework to identify and control hazards across the lifecycle. 
-        It must integrate post-market data (Art. 83-86) and its recommended to include a usability sub-process, EN 62366. 
-        See SOP in QMS how this document is produced. 
-        ➔ `,
-        sop: TD_DATA.RM },
+      { t: 'Step 2.3) Establish a clinical evaluation process',
+        r: `Art. 10.3: "Mfs shall establish, document, implement and maintain a system for clinical evaluation."\nArt. 61 & Annex XIV Part A: 5-stage methodology.`,
+        e: `Implement a process for Plan, Identify, Appraise, Analyse, Report per Annex XIV and MEDDEV 2.7/1. Governs CEP, PMCF Plan, and PMCF Evaluation Reports. See QMS Step 4.3. ➔`},
 
-        { t: 'Step 2.3) Establish a CEP',
-        r: 'Art. 10.3, Art. 61 & Annex XIV Part A',
-        e: `This document defines a 5-stage methodology (Plan, Identify, Appraise, Analyse, Report) based on Annex XIV and MEDDEV 2.7/1. It must explicitly govern the Clinical Evaluation Plan (CEP), PMCF Plan, and PMCF Evaluation Reports ➔ `,
-        sop: TD_DATA.CLIN_EVAL},
+      { t: 'Step 2.4) Establish TD, UDI and DoC processes',
+        r: `Art. 10.4: "Mfs shall draw up and keep up to date technical documentation."\nArt. 10.6-10.8: UDI system, DoC, change history.`,
+        e: `Implement a process for compiling and maintaining the 7-chapter TD structure. Enforce vocabulary alignment, state-of-the-art arguments, and change history log. See QMS Step 7.1. ➔`},
 
-        { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
-        r: 'Art. 10.4, 10.6, 10.7 & 10.8',
-        e: `The process must enforce a final alignment check for vocabulary and state-of-the-art arguments, 
-        alongside a change history log for NB compliance ➔ `,
-        sop: TD_DATA.TD_PROCESS },
-
-      { t: 'Step 2.5) Build a QMS manual',
-        r: 'Art. 10.9',
-        e: `Non-product specific document. See QMS path ` }, 
+      { t: 'Step 2.5) Build a QMS',
+        r: 'Art. 10.9: "Mfs shall establish, document, implement and maintain a QMS."',
+        e: `Build the full Quality Management System per ISO 13485. Covers all processes in (a)-(m). See QMS Step 0-7. ➔`},
 
       { t: 'Step 2.6) Plan PMS activities',
-        r: 'Art. 10.10',
-        e: 'This document establishes proactive market feedback loops, used to gather real-world safety data after the product is released ➔ ',
-        sop: TD_DATA.PMS_PROCESS  },
+        r: 'Art. 10.10: "Mfs shall establish, document, implement and maintain a PMS system."',
+        e: `Implement proactive market feedback loops to gather real-world safety data post-launch. See QMS Step 7.2. ➔`},
 
-      { t: 'Step 2.7) Create labelling development process, including translations',
-        r: 'Art. 10.11',
-        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 2` },
+      { t: 'Step 2.7) Create labelling development process',
+        r: 'Art. 10.11: "Mfs shall establish, document, implement and maintain a system for labelling."',
+        e: `Implement process for creating IFU, labels, translations per Annex I Ch. III. See QMS Step 5.4. ➔`},
 
       { t: 'Step 2.8) Establish corrective action and recall process',
-        r: 'Art. 10.12',
-        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` }, 
+        r: 'Art. 10.12: "Mfs shall establish, document, implement and maintain a system for corrective and preventive actions."',
+        e: `Implement CAPA process including recall procedures. See QMS Step 6.2. ➔`},
 
-      { t: 'Step 2.9) Set up Vigilance process, including serious incident reporting',
-        r: 'Art. 10.13',
-        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 3` }, 
+      { t: 'Step 2.9) Set up Vigilance process',
+        r: 'Art. 10.13: "Mfs shall establish, document, implement and maintain a system for vigilance."',
+        e: `Implement serious incident reporting (15 days), FSCA, and trend monitoring per Art. 87-92. See QMS Step 7.2. ➔`},
 
-      {  t: 'Step 2.10) Define regulatory authority interaction process',
-        r: 'Art. 10.14',
-        e: `Non-product specific process. Created in QMS path. See QMS path ➔ Step 2` }, 
+      { t: 'Step 2.10) Define regulatory authority interaction process',
+        r: 'Art. 10.14: "Mfs shall establish, document, implement and maintain a system for communication with CAs."',
+        e: `Implement process for CA queries, Helsinki Procedure, and unannounced audits. See QMS Step 7.4. ➔`},
 
       { t: 'Step 2.11) Arrange legal liability and damage compensation',
-        r: 'Art. 10.16',
-        e: `Non-product specific setup. Maintained in corporate archive. See QMS path ➔ Step 2` }, 
+        r: 'Art. 10.16: "Mfs shall have measures in place to provide sufficient financial coverage for potential liability."',
+        e: `Secure product liability insurance. Maintain in corporate archive. ➔`},
 
-      { t: 'Step 2.12) Appoint PRRC to oversee regulatory compliance',
-        r: 'Art. 15',
-        e: 'This document assigns individual legal responsibility, used to officially designate the person who signs off on device releases ➔ ',
-        sop: TD_DATA.PRRC_APPOINT },
+      { t: 'Step 2.12) Appoint PRRC',
+        r: 'Art. 15: "Mfs shall have at least one PRRC with requisite expertise."',
+        e: `Formally appoint PRRC via signed mandate letter. PRRC oversees batch release, TD, PMS, and vigilance. Original in QMS, copy in TD 1-DEVICE. See QMS Step 2.2. ➔`},
 
-      { t: 'Step 2.13) Secure access to technical, safety, clinical, quality and regulatory expertise',
-        e: `Non-product specific matrix. Maintained in corporate HR/Vendor records. See QMS path ➔ Step 2` }, 
+      { t: 'Step 2.13) Secure access to required expertise',
+        e: `Ensure access to technical, safety (risk), clinical, quality, and regulatory experts. Document in HR competence matrix. See QMS Step 3.1. ➔`},
 
       { t: ' ',
-        e: '💡 For guidance on clinical evaluation - go to Step 4' },
+        e: '💡 For guidance on clinical evaluation — go to Step 4' },
 
       { t: 'Resulting File Structure', 
         e: `
@@ -197,8 +185,7 @@ export const MDR_DATA = [
       },
         
       { t: 'Guidance Documents from the MDCG' },
-      { t: ' ', 
-        e: 'UDI GUIDANCE'  },
+      { t: ' ', e: 'UDI GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
       { mdcg: MDCG_DATA.MDCG_2021_19 },
       { mdcg: MDCG_DATA.MDCG_2021_10 },
@@ -212,19 +199,13 @@ export const MDR_DATA = [
       { mdcg: MDCG_DATA.MDCG_2018_5 },
       { mdcg: MDCG_DATA.MDCG_2018_4 },
       { mdcg: MDCG_DATA.MDCG_2018_3_REV1 },
-
-      { t: ' ', 
-        e: 'PMS GUIDANCE' },
+      { t: ' ', e: 'PMS GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2025_10 },
       { mdcg: MDCG_DATA.MDCG_2022_21 },
-
-      { t: ' ', 
-        e: 'VIGILANCE GUIDANCE' },
+      { t: ' ', e: 'VIGILANCE GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2024_1 },
       { mdcg: MDCG_DATA.MDCG_2023_3_REV2 },
-
-      { t: ' ', 
-        e: 'PRRC GUIDANCE'  },
+      { t: ' ', e: 'PRRC GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2019_7_REV1 }
     ]  
   },
