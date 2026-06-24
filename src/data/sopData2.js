@@ -1,11 +1,11 @@
 /**
  * @file sopData2.js
- * @description Quality Manual, Management Responsibility, and Resource Management SOPs - Steps 2, 3, 4
+ * @description Quality Manual, Management Framework, and Resource Management SOPs - Steps 2, 3
  */
 
 export const SOP_DATA2 = {
 
-  // ------------------ STEP 2: QUALITY MANUAL ------------------
+  // ------------------ STEP 2.1: QUALITY MANUAL ------------------
   QUALITY_MANUAL: {
     id: 'QM-001',
     title: '📄 Quality_Manual.pdf',
@@ -41,7 +41,7 @@ The following ISO 13485:2016 requirements are excluded with justification:
 
 ## 6. PROCESS INTERACTION MAP
 The QMS processes are grouped into three implementation phases:
-- Phase 1 (Foundation): Document control, management responsibility, resource management
+- Phase 1 (Foundation): Document control, management framework, resource management
 - Phase 2 (Product Realization): Design control, risk management, clinical evaluation, operations
 - Phase 3 (Oversight): Measurement/analysis, CAPA, regulatory affairs
 
@@ -54,125 +54,82 @@ The QMS processes are grouped into three implementation phases:
     `.trim()
   },
 
-  // ------------------ STEP 3.1: QUALITY POLICY & OBJECTIVES ------------------
-  SOP_QUALITY_POLICY: {
+  // ------------------ STEP 2.2: MANAGEMENT FRAMEWORK ------------------
+  SOP_MANAGEMENT_FRAMEWORK: {
     id: 'SOP-MGMT-001',
-    title: '📄 SOP-Quality_Policy_and_Objectives.pdf',
+    title: '📄 SOP-Management_Framework.pdf',
     version: '1.0',
     owner: 'Top Management / QA',
     content: `
 ## 1. PURPOSE
-The purpose of this SOP is to define the process for establishing, communicating, and reviewing the Quality Policy and measurable Quality Objectives in accordance with ISO 13485:2016 §5.3 and §5.4.1.
+The purpose of this SOP is to consolidate management responsibilities required by ISO 13485:2016 §5.3, §5.4.1, §5.5, §5.6 and MDR 2017/745 Article 15 into a single controlled document. It defines the corporate Quality Policy, measurable Quality Objectives, organizational roles including formal PRRC appointment, and the annual Management Review framework.
 
 ## 2. SCOPE
-Applies to the corporate Quality Policy and all departmental and product-specific Quality Objectives.
+Applies to top management, all department heads, and the appointed PRRC.
 
 ## 3. RESPONSIBILITY
 [TABLE_START]
 
 | Role | Responsibility |
-| Top Management | Approve Quality Policy and authorize Quality Objectives |
-| QA | Draft Quality Policy, coordinate objective setting, and monitor progress |
-| Department Heads | Propose and track departmental objectives |
-[TABLE_END]
-
-## 4. PROCEDURE
-[TABLE_START]
-
-| Phase | Actions | Responsible | Record |
-| 1-Draft | Draft Quality Policy stating commitment to regulatory compliance and customer satisfaction. | QA | Quality_Policy_Draft |
-| 2-Review | Management reviews policy for alignment with strategic direction. | Top Management | Management_Review_Minutes |
-| 3-Approve | CEO signs and dates the Quality Policy. | Top Management | Signed_Quality_Policy |
-| 4-Communicate | Distribute policy to all employees. Post in common areas and eQMS. | QA | Training_Record |
-| 5-Objectives | Establish SMART quality objectives for each department. | QA + Dept Heads | Quality_Objectives_Matrix.xlsx |
-| 6-Monitor | Review objective performance quarterly. Update as needed. | QA | Quarterly_Review_Report |
-[TABLE_END]
-
-## 5. REVISION HISTORY
-[TABLE_START]
-
-| Rev. | Date | Description of Change | Author |
-| 1.0 | 2026-06-24 | Initial release | QA |
-[TABLE_END]
-    `.trim()
-  },
-
-  // ------------------ STEP 3.2: ROLES & PRRC ------------------
-  SOP_ROLES_PRRC: {
-    id: 'SOP-MGMT-002',
-    title: '📄 SOP-Roles_Responsibility_and_PRRC_Appointment.pdf',
-    version: '1.0',
-    owner: 'Top Management / QA',
-    content: `
-## 1. PURPOSE
-The purpose of this SOP is to define organizational roles, responsibilities, and authorities within the QMS, and to formalize the appointment of the Person Responsible for Regulatory Compliance (PRRC) in accordance with ISO 13485:2016 §5.5 and MDR 2017/745 Article 15.
-
-## 2. SCOPE
-Applies to all personnel whose work affects product quality or regulatory compliance.
-
-## 3. RESPONSIBILITY
-[TABLE_START]
-
-| Role | Responsibility |
-| Top Management | Approve organizational structure, appoint PRRC, and provide adequate resources |
+| CEO / Top Management | Approve Quality Policy, sign PRRC mandate, chair Management Review, and authorize resources |
+| QA Manager | Draft policy, coordinate objectives, compile Management Review inputs, and document minutes |
 | PRRC | Oversee regulatory compliance per MDR Art. 15(3) |
-| QA | Maintain organizational chart and job descriptions |
+| Department Heads | Propose and track departmental objectives, present performance data at Management Review |
 [TABLE_END]
 
-## 4. PRRC MANDATE (MDR Art. 15)
+## 4. PART A — QUALITY POLICY (ISO 13485 §5.3)
+[COMPANY NAME] is committed to designing, manufacturing, and delivering safe and effective medical devices that meet or exceed customer expectations and comply with all applicable regulatory requirements including ISO 13485:2016 and MDR 2017/745.
+
+Top management commits to:
+- Maintaining an effective Quality Management System
+- Establishing and reviewing measurable Quality Objectives
+- Providing adequate resources for QMS implementation
+- Driving continuous improvement through data-driven decisions
+- Communicating this policy to all employees
+
+Signed: _________________ (CEO)  Date: _______________
+
+## 5. PART B — QUALITY OBJECTIVES (ISO 13485 §5.4.1)
 [TABLE_START]
 
-| Duty | Description |
-| Conformity Verification | Ensure that conformity of devices is appropriately checked before batch release |
-| Technical Documentation | Ensure that TD and DoC are drawn up and maintained |
-| Post-Market Surveillance | Ensure that PMS obligations are complied with |
-| Vigilance Reporting | Ensure that serious incident reporting obligations are fulfilled |
+| Objective | Metric | Target | Responsible | Review |
+| Customer satisfaction | Complaint rate | <1% of units sold | Customer Service | Quarterly |
+| Product quality | Batch rejection rate | <0.5% | QA | Monthly |
+| On-time delivery | Order fulfillment | >95% | Operations | Monthly |
+| Regulatory compliance | Audit NC count | 0 major NCs | QA / RA | Per audit |
+| Supplier performance | Defect rate | <2% | Purchasing | Quarterly |
+| Training completion | Training records up to date | 100% | HR | Quarterly |
+[TABLE_END]
+
+## 6. PART C — ROLES & PRRC APPOINTMENT (ISO 13485 §5.5, MDR Art. 15)
+[TABLE_START]
+
+| PRRC Duty (MDR Art. 15) | Description |
+| Conformity Verification | Ensure device conformity is checked before batch release |
+| Technical Documentation | Ensure TD and DoC are drawn up and maintained |
+| Post-Market Surveillance | Ensure PMS obligations are complied with |
+| Vigilance Reporting | Ensure serious incident reporting obligations are fulfilled |
 | High-Risk Devices | For Class III/custom-made: ensure SSCP is issued (Art. 32) |
 [TABLE_END]
 
-## 5. PROCEDURE
+PRRC Appointment:
+Name: _________________
+Title: _________________
+Signed: _________________ (CEO)  Date: _______________
+Signed: _________________ (PRRC)  Date: _______________
+
+## 7. PART D — MANAGEMENT REVIEW (ISO 13485 §5.6)
 [TABLE_START]
 
 | Phase | Actions | Responsible | Record |
-| 1-Org Chart | Create and maintain organizational chart showing QMS roles. | QA | Organizational_Chart |
-| 2-PRRC Appointment | Top Management appoints PRRC via signed mandate letter. | Top Management | PRRC_Mandate_Letter |
-| 3-Job Descriptions | Define qualifications and responsibilities for all QMS roles. | QA + Dept Heads | Job_Descriptions |
-| 4-Communication | Ensure personnel are aware of their QMS responsibilities. | QA | Training_Records |
+| 1-Schedule | Schedule Management Review at least annually. | QA | Meeting_Invitation |
+| 2-Inputs | Compile: audit results, customer feedback, process performance, CAPA status, PMS data, previous actions, changes, recommendations. | QA | Management_Review_Pack |
+| 3-Conduct | Review QMS performance, identify gaps, and approve improvement actions. | Top Management | Meeting_Minutes |
+| 4-Outputs | Document decisions on QMS improvements, resource needs, and policy changes. | QA | Management_Review_Output |
+| 5-Follow-up | Track and verify completion of action items. | QA | Action_Item_Log |
 [TABLE_END]
 
-## 6. REVISION HISTORY
-[TABLE_START]
-
-| Rev. | Date | Description of Change | Author |
-| 1.0 | 2026-06-24 | Initial release | QA |
-[TABLE_END]
-    `.trim()
-  },
-
-  // ------------------ STEP 3.3: MANAGEMENT REVIEW ------------------
-  SOP_MANAGEMENT_REVIEW: {
-    id: 'SOP-MGMT-003',
-    title: '📄 SOP-Management_Review.pdf',
-    version: '1.0',
-    owner: 'Top Management / QA',
-    content: `
-## 1. PURPOSE
-The purpose of this SOP is to define the process for conducting periodic Management Reviews to evaluate the continuing suitability, adequacy, and effectiveness of the QMS in accordance with ISO 13485:2016 §5.6.
-
-## 2. SCOPE
-Applies to all scheduled and ad-hoc Management Reviews of the QMS.
-
-## 3. RESPONSIBILITY
-[TABLE_START]
-
-| Role | Responsibility |
-| Top Management | Chair review meetings and authorize resource allocation |
-| QA | Prepare meeting agenda, compile data inputs, and document minutes |
-| PRRC | Present regulatory compliance status |
-| Department Heads | Present departmental performance data |
-[TABLE_END]
-
-## 4. INPUTS (ISO 13485 §5.6.2)
+## 8. MANAGEMENT REVIEW INPUTS (ISO 13485 §5.6.2)
 [TABLE_START]
 
 | Input | Source |
@@ -185,32 +142,21 @@ Applies to all scheduled and ad-hoc Management Reviews of the QMS.
 | Recommendations for improvement | All departments |
 [TABLE_END]
 
-## 5. PROCEDURE
-[TABLE_START]
-
-| Phase | Actions | Responsible | Record |
-| 1-Schedule | Schedule Management Reviews at least annually. | QA | Meeting_Invitation |
-| 2-Prepare | Compile input data from all departments. | QA | Management_Review_Pack |
-| 3-Conduct | Review QMS performance, identify gaps, and approve improvement actions. | Top Management | Meeting_Minutes |
-| 4-Output | Document decisions on QMS improvements, resource needs, and policy changes. | QA | Management_Review_Output |
-| 5-Follow-up | Track and verify completion of action items. | QA | Action_Item_Log |
-[TABLE_END]
-
-## 6. OUTPUTS (ISO 13485 §5.6.3)
+## 9. MANAGEMENT REVIEW OUTPUTS (ISO 13485 §5.6.3)
 - Improvements needed to maintain QMS effectiveness
 - Resource requirements
 - Any changes to Quality Policy or Objectives
 
-## 7. REVISION HISTORY
+## 10. REVISION HISTORY
 [TABLE_START]
 
 | Rev. | Date | Description of Change | Author |
-| 1.0 | 2026-06-24 | Initial release | QA |
+| 1.0 | 2026-06-24 | Initial release — consolidates SOP_QUALITY_POLICY, SOP_ROLES_PRRC, and SOP_MANAGEMENT_REVIEW | QA |
 [TABLE_END]
     `.trim()
   },
 
-  // ------------------ STEP 4.1: COMPETENCE & TRAINING ------------------
+  // ------------------ STEP 3.1: COMPETENCE & TRAINING ------------------
   SOP_COMPETENCE_TRAINING: {
     id: 'SOP-RES-001',
     title: '📄 SOP-Competence_and_Training.pdf',
@@ -254,7 +200,7 @@ Applies to all personnel whose work affects product quality or QMS performance.
     `.trim()
   },
 
-  // ------------------ STEP 4.2: INFRASTRUCTURE & IT ------------------
+  // ------------------ STEP 3.2: INFRASTRUCTURE & IT ------------------
   SOP_INFRASTRUCTURE_IT: {
     id: 'SOP-RES-002',
     title: '📄 SOP-Infrastructure_and_IT_Environment.pdf',
