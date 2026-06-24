@@ -308,16 +308,16 @@ export const QMS_DATA = [
       desc: 'Build the regulatory infrastructure for CE marking, submissions, and post-market compliance. Owned by Regulatory Affairs under PRRC oversight.',
       checklist: [
 
-        { t: '8.1) Create a SOP for Technical Documentation Compilation (MDR Annex II & III)',
-          e: 'This SOP defines who compiles the Technical Documentation and when final review gates are executed, to package design outputs into a submission-ready format and ensure alignment with MDR Annex II and III requirements.' 
+        { t: '8.1) Create a SOP for Technical Documentation (TD) Compilation (MDR Annex II & III)',
+          e: 'This SOP defines who compiles the TD and when final review gates are executed, to package design outputs into a submission-ready format and ensure alignment with MDR Annex II and III requirements.' 
         },
 
         { t: '8.2) Create a SOP for EUDAMED & UDI Registration (MDR Art. 29-31)', 
-          e: 'This SOP defines who registers economic operators and devices in EUDAMED and when registration data must be updated, to secure SRN issuance and maintain accurate UDI/Device data modules.' 
+          e: 'This SOP defines who registers economic operators and devices in EUDAMED and when registration data must be updated, to secure SRN issuance and maintain UDI/Device data modules.' 
         },
 
         { t: '8.3) Create a SOP for NB communication  (MDR Art. 52, Annex IX)',
-          e: 'This SOP defines who manages Notified Body interactions and when submission dossiers are transmitted, to coordinate audits, respond to non-conformities, and maintain valid CE certificates.' 
+          e: 'This SOP defines who manages NB interactions and when submission dossiers are transmitted, to coordinate audits, respond to non-conformities, and maintain valid CE certificates.' 
         },
 
         { t: '8.4) Create a SOP for PMS (MDR Art. 83-86)',
