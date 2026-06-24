@@ -191,6 +191,7 @@ export const MDR_DATA = [
         (l) 8.5.2 and 8.5.3—CAPA
         (m) 8—Measurement, analysis and improvement
         - Art. 10.9(2): Def of the QMS scope which, according to 4.2.2 of the Standard, has to be documented in the QM. 
+        
         `,
         e: `This is proved by implementing a QMS per ISO 13485 covering all (a)-(m). Used to ensure devices in series production remain in conformity with MDR. See QMS Step 0-7.`},
       
