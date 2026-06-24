@@ -125,9 +125,9 @@ export const MDR_DATA = [
 
       { t: 'Step 2.2) Implement a RM process',
         r: `
-        - Art. 10.2: "Mfs shall establish, document, implement and maintain RM as in Annex I, section 3."
+        - Art. 10.2: "Mfs shall establish, document, implement and maintain RM as in Ax I, section 3."
         
-        - Annex I Ch. I (2-9): RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (includes Art. 83-86 )→ Amend controls if necessary.
+        - Ax I: RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (includes Art. 83-86 )→ Amend controls if necessary.
         
         - Art. 83-86: Mfs shall have a PMS system, plan and report (class I) or PSUR (class IIa and up)
         `,
