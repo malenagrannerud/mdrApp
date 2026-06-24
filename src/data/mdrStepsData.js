@@ -22,7 +22,6 @@ import { DOC_DATA } from './docData.js';
 import { TD_DATA } from './tdData.js';
 
 export const MDR_DATA = [
-
 /***********************  STEP 0 ****************************************/
 {  id: 'm0',
     title: 'Introduction',
