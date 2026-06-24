@@ -43,7 +43,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   /**********************  STEP 1 ****************************************/
     {     id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
-      desc: '  ',
+      desc: ' This step decides conformity route of the product  ',
       checklist: [
 
         {t: ' '}, 
@@ -55,7 +55,8 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
        
         { t: 'Step 1.2) Compile the Statement of Intended Purpose ', 
           r: 'Art. 2(1): Contains the definition of a medical device. ',
-          e: `This statement defines what the product does, who it is for, and how it cures or treats a medical condition ➔`,
+          e: `
+          This statement defines what the product does, who it is for, and how it cures or treats a medical condition ➔`,
           sop: TD_DATA.DD},
         
         { t: 'Step 1.3) Compile the Device Classification Rationale', 
