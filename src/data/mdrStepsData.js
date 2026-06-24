@@ -26,10 +26,10 @@ export const MDR_DATA = [
       DEPENDENCIES WITH QMS
       Some outputs from the steps in the MDR path are product specific and placed in the TD tree, and may have governing SOPs in QMS path.
       `}, 
-        
 
       {t: 'Resulting File Structure', 
        e: `
+
 📁 PRODUCT X
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION 
@@ -49,27 +49,40 @@ export const MDR_DATA = [
       title: 'Step 1) Decide the intended use and classification',
       desc: ' This step decides conformity route of the product  ',
       checklist: [
-
-        {t: ' '}, 
-    
-        { t: 'Step 1.1) Compile the Qualification Rationale ', 
-          r: 'Art. 2(1): Contains the definition of a medical device. ',
-          e: `This rationale proves that the product is eligible for, and must carry, a CE mark according to MDR ➔`,
-          sop: TD_DATA.DD},
-       
-        { t: 'Step 1.2) Compile the Statement of Intended Purpose ', 
-          r: 'Art. 2(1): Contains the definition of a medical device. ',
+        { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and statement (d) principle of use and mode of action', 
+          r: `
+          - Art. 2(1): The definition of a MD
+          - Art. 2(12): The definition of intended purpose
+          - Ax II 1(1): TD
+          `,
           e: `
-          This statement defines what the product does, who it is for, and how it cures or treats a medical condition ➔`,
+          Read the articles and compile the statements. These are required in the TD according to Ax II 1(1)`,
           sop: TD_DATA.DD},
         
-        { t: 'Step 1.3) Compile the Device Classification Rationale', 
-          r: 'Annex VIII: Go trough the rules to determine risk class.',
+
+        { t: 'Step 1.2) Compile the MD qualification rationale ', 
+          r: `
+          - Answer questionnaire on : https://eumdr.com/medical-device-rationale/
+          
+          `,
+          e: `This rationale proves that the product is eligible for, and must carry, a CE mark according to MDR ➔`,
+          sop: TD_DATA.DD},
+        
+
+        { t: 'Step 1.3) Compile the (b) risk classification rational', 
+          r: `
+          - Art. 51: Devices shall be classifyed (shall be as in Ax VIII), taking into account intended purpose and inherent risks. 
+          - Ax VIII: Rules to determine risk class.
+          
+          `,
           e: `This statement justifies risk class (I, IIa, IIb, III) which will determine if a NB must audit the product ➔`, 
           sop: TD_DATA.DD},
 
+
+
         { t: ' ', 
-          e: `💡 If you can not classify the future product: request a decision from the CA according to the Helsinki Procedure.`}, 
+          e: `💡 Step 1) also applies to devices offered in EU via the internet (Art. 6), including diagnostic or therapeutic services.
+          💡 If you can not classify the future product: request a decision from the CA according to the Helsinki Procedure.`}, 
 
         {t: 'Resulting File Structure', 
          e: `
@@ -101,11 +114,10 @@ export const MDR_DATA = [
         { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }, 
       ]
     },
-
   /**********************  STEP 2 ****************************************/
   { id: 'm2',
     title: 'Step 2) Establish processes and resources',
-    desc: 'Output in this step are QMS processes required by Art. 10. ',
+    desc: 'Outputs in this step are basically the QMS of the company ',
     checklist: [
        
       { t: ' ', 
@@ -301,7 +313,6 @@ export const MDR_DATA = [
           ]
         }
       },
-
       { t: 'Guidance Documents from the MDCG & SCHEER' },
       { mdcg: MDCG_DATA.MDCG_2024_13 },
       { mdcg: MDCG_DATA.MDCG_2021_8 },
