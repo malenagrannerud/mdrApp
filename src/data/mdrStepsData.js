@@ -34,7 +34,9 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 4-GSPR 
     📁 5-RISK MANAGEMENT 
     📁 6-V&V
-    📁 7-PMS` }
+    📁 7-PMS`,
+       files: {}
+      }
     ]
   },
 
@@ -68,13 +70,18 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
   📁 PRODUCT X
   📁 TECHNICAL DOCUMENTATION
     📁 1-DEVICE DESCRIPTION
-    📄 Device_description_and_rationale.pdf
     📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
     📁 3-DESIGN & MANUFACTURING INFO
     📁 4-GSPR 
     📁 5-RISK MANAGEMENT 
     📁 6-V&V
-    📁 7-PMS `,}, 
+    📁 7-PMS `,
+         files: {
+           '1-DEVICE DESCRIPTION': [
+             { sop: TD_DATA.DD, indent: '    ' }
+           ]
+         }
+        }, 
         
         { t: 'Guidance Documents from the MDCG' },
         { mdcg: MDCG_DATA.INFOGRAPHIC },
@@ -164,17 +171,32 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 TECHNICAL DOCUMENTATION
       📁 1-DEVICE DESCRIPTION
         📄 Device_description_&_rationale_product_X.pdf
-        📄 PRRC_appointment_&_mandate_letter_product_X.pdf
+       
       📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
       📁 3-DESIGN & MANUFACTURING INFO
-        📄 Manufacturing_process_description_product_X.pdf
       📁 4-GSPR 
       📁 5-RISK MANAGEMENT 
-        📄 RM_procedure_product_X.pdf
       📁 6-V&V
-        📄 CEP_product_X.pdf
       📁 7-PMS 
-        📄 PMS_procedure_product_X.pdf `,},
+         `,
+        files: {
+          '1-DEVICE DESCRIPTION': [
+            { sop: TD_DATA.PRRC_APPOINT, indent: '    ' }
+          ],
+          '3-DESIGN & MANUFACTURING INFO': [
+            { sop: TD_DATA.MF_P, indent: '    ' }
+          ],
+          '5-RISK MANAGEMENT': [
+            { sop: TD_DATA.RM, indent: '    ' }
+          ],
+          '6-V&V': [
+            { sop: TD_DATA.CLIN_EVAL, indent: '    ' }
+          ],
+          '7-PMS': [
+            { sop: TD_DATA.PMS_PROCESS, indent: '    ' }
+          ]
+        }
+      },
         
       { t: 'Guidance Documents from the MDCG' },
       { t: ' ', 
@@ -275,6 +297,14 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         📄 CEP_product_X.pdf
       📁 7-PMS 
         📄 PMS_procedure_product_X.pdf `,
+        files: {
+          '2-INFO TO BE SUPPLIED BY THE MANUFACTURER': [
+            { sop: TD_DATA.LABEL_PACK, indent: '    ' }
+          ],
+          '4-GSPR': [
+            { sop: TD_DATA.GSPR_MATRIX, indent: '    ' }
+          ]
+        }
       },
 
       { t: 'Guidance Documents from the MDCG & SCHEER' },
@@ -350,6 +380,14 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 7-PMS 
         📄 PMS_procedure_product_X.pdf
         📄 PMCF_plan_product_X.pdf `,
+        files: {
+          '6-V&V': [
+            { sop: TD_DATA.CER_REPORT, indent: '    ' }
+          ],
+          '7-PMS': [
+            { sop: TD_DATA.PMCF_PLAN, indent: '    ' }
+          ]
+        }
       }, 
 
       { t: 'Guidance Documents from the MDCG' },
@@ -380,10 +418,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.MDCG_2020_7 }
     ]
   },
-
-
-
-    /**********************  STEP 5 ****************************************/
 
   /**********************  STEP 5 ****************************************/
   {
@@ -436,7 +470,15 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 7-PMS 
         📄 PMS_procedure_product_X.pdf
         📄 PMCF_plan_product_X.pdf `,
-      }, // KORRIGERING: Endast de 2 nya filerna från detta steg har adderats till trädet på sina exakta platser.
+        files: {
+          'PRODUCT A': [
+            { sop: TD_DATA.TF_INDEX, indent: '  ' }
+          ],
+          '1-DEVICE DESCRIPTION': [
+            { sop: TD_DATA.UDI_PLAN, indent: '    ' }
+          ]
+        }
+      },
 
       { t: 'Guidance Documents from the MDCG' },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
@@ -455,8 +497,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     ]
   },
 
-
-    /**********************  STEP 6 ****************************************/
   /**********************  STEP 6 ****************************************/
   {
     id: 'm6',
@@ -513,7 +553,12 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 7-PMS 
         📄 PMS_procedure_product_X.pdf
         📄 PMCF_plan_product_X.pdf `,
-      }, // KORRIGERING: Endast den nya matrisen har lagts till i Mapp 3 i filträdet.
+        files: {
+          '3-DESIGN & MANUFACTURING INFO': [
+            { sop: TD_DATA.DIST_MATRIX, indent: '    ' }
+          ]
+        }
+      },
 
       { t: 'Guidance Documents from the MDCG' },
       { mdcg: MDCG_DATA.MDCG_2025_4 },
@@ -579,6 +624,14 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 7-PMS 
         📄 PMS_procedure_product_X.pdf
         📄 PMCF_plan_product_X.pdf `,
+        files: {
+          'PRODUCT A': [
+            { sop: TD_DATA.EUDAMED_REC, indent: '  ' }
+          ],
+          '1-DEVICE DESCRIPTION': [
+            { sop: TD_DATA.EMDN_DATA, indent: '    ' }
+          ]
+        }
       }, 
 
       { t: 'Guidance Documents from the MDCG' },
@@ -597,7 +650,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     ]
   },
 
-      /**********************  STEP 8 ****************************************/
+  /**********************  STEP 8 ****************************************/
   { id: 'm8',
     title: 'Step 8) Complete the conformity assessment',
     desc: 'Select an authorized Notified Body and pass the mandatory QMS and technical documentation audits to secure official EU compliance certification.',
@@ -649,10 +702,17 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 7-PMS 
         📄 PMS_procedure_product_X.pdf
         📄 PMCF_plan_product_X.pdf `,
-      } // KORRIGERING: Endast de 2 nya certifikatsfilerna från detta steg har adderats till Mapp 1.
+        files: {
+          '1-DEVICE DESCRIPTION': [
+            { sop: TD_DATA.QMS_CERT, indent: '    ' },
+            { sop: TD_DATA.TD_CERT, indent: '    ' }
+          ]
+        }
+      }
     ]
   },
-/**********************  STEP 9 ****************************************/
+
+  /**********************  STEP 9 ****************************************/
   { id: 'm9',
     title: 'Step 9) Complete the final administrative procedures before launch',
     desc: 'Finalize legal declarations, complete national language packaging requirements, and verify importer/distributor operational records.',
@@ -708,13 +768,19 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 7-PMS 
         📄 PMS_procedure_product_X.pdf
         📄 PMCF_plan_product_X.pdf `,
-      }, // KORRIGERING: Endast den slutgiltiga guld-filen (Signed DoC) har adderats till Mapp 2 i filträdet.
+        files: {
+          '2-INFO TO BE SUPPLIED BY THE MANUFACTURER': [
+            { sop: TD_DATA.DOC_CONF, indent: '    ' }
+          ]
+        }
+      },
 
       { t: 'Guidance Documents from the MDCG' },
       { mdcg: MDCG_DATA.MDCG_LANGUAGE_REQUIREMENTS }
     ]
   },
-/**********************  STEP 10 ****************************************/
+
+  /**********************  STEP 10 ****************************************/
   {
     id: 'm10',
     title: 'Step 10) Fulfil the ongoing obligations in the post launch phase',
@@ -726,7 +792,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: '10.2) PMCF is being performed and the clinical evaluation is being updated', 
         e: `Conduct the planned PMCF activities according to Annex XIV, Part B. Use real-world outcomes to update the Clinical Evaluation Report (Art. 10.3).` },
 
-      { t: '10.3) Up-to-date technical documentation, including AR’s copy and history of changes', 
+      { t: '10.3) Up-to-date technical documentation, including ARs copy and history of changes', 
         e: `Technical documentation must be kept up to date according to Annex II and III. Maintain a full history log of changes for national authority audits (Art. 10.4 & 10.8).` },
 
       { t: '10.4) The QMS covers all required processes and is being reviewed and updated', 
@@ -783,6 +849,12 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
         📄 PMCF_plan_product_X.pdf
         📄 PSUR_Report_product_X.pdf
         📄 Periodic_Vigilance_and_Trend_Log_product_X.pdf `,
+        files: {
+          '7-PMS': [
+            { sop: TD_DATA.PSUR_REPORT, indent: '    ' },
+            { sop: TD_DATA.VIGILANCE_LOG, indent: '    ' }
+          ]
+        }
       }, 
         
       { t: 'Guidance Documents from the MDCG & Templates' },
@@ -804,7 +876,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { mdcg: MDCG_DATA.FSN_TEMPLATE_REV1 },
       { mdcg: MDCG_DATA.FSN_CUSTOMER_REPLY_REV1 },
       { mdcg: MDCG_DATA.FSN_DISTRIBUTOR_REPLY_REV1 },
-      { mdcg: MDCG_DATA.FSN_Q&A },
+      { mdcg: MDCG_DATA.FSN_Q_A },
       { mdcg: MDCG_DATA.TREND_REPORT_V12_11 },
       { mdcg: MDCG_DATA.PSR_FORM_V12_11 }
     ]  

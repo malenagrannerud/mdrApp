@@ -9,7 +9,7 @@ export const TD_DATA = {
   // ------------------ STEP 1 FILE (📁 1-DEVICE DESCRIPTION) ------------------
   DD: {
     id: 'DOC-01', 
-    title: '📄 Device_description_&_rationale.pdf',
+    title: '📄 Device_description_&_rationale_product_X.pdf',
     version: '1.0', 
     owner: 'R&D',
     content: `
@@ -379,7 +379,7 @@ Official EU Quality Management System Certificate issued by the designated Notif
 Official EU Technical Documentation Assessment Certificate issued by the designated Notified Body under MDR Annex IX Chapter II (Section 4.9) [MDR 2017/745].
 
 ## 2. Technical File Verification
-- Certifies that the device technical documentation (folders 1–6) meets full safety and performance criteria of Annex II and Annex III.
+- Certifies that the device technical documentation (folders 1 to 6) meets full safety and performance criteria of Annex II and Annex III.
 - Provides the unique technical identification token enabling legal batch release.
     `.trim()
   },
