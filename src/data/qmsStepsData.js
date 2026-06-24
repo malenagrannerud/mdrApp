@@ -54,9 +54,17 @@ export const QMS_DATA = [
      SOPs describe who does what and when (operational workflows), while WIs describe how to execute specific tasks step-by-step.
 
     Level 4. Forms & Records
-    Provides objective evidence of actions taken, documenting what was done, when, and by whom to ensure full regulatory traceability.`},
+    Provides objective evidence of actions taken, documenting what was done, when, and by whom to ensure full regulatory traceability.
     
-   
+
+    REFERERENCES
+
+    
+
+
+
+
+   `},
     { t: ' Resulting File Structure ', 
       e: `
 
