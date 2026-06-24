@@ -2,6 +2,16 @@
  * @file mdrStepsData.js
  * @description Regulatoriska steg för MDR-efterlevnad.
  * 
+ * Skrivsätt;	Betyder
+ * 
+ * Art.2(1); Article 2, paragraph 1
+ * Art.10(9)(g);	Article 10, paragraph 9, sub-paragraph (g)
+ * Ax.I;	Annex I
+ * Ax.I.3;	Annex I, section 3
+ * Ax.II.1(1);	Annex II, chapter 1, paragraph 1
+ * Ax.IX.4.10;	Annex IX, chapter I, section 4.10
+ * Ax.XIV.A;	Annex XIV, Part A
+ * 
  * t: output: vad du ska göra kort
  * r: regulatoriska referenser 
  * e: beskriver hur outputen är bevisad och vad den används till 
