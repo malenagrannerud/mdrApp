@@ -294,19 +294,19 @@ export const MDR_DATA = [
   {
     id: 'm3',
     title: 'Step 3) Minimise the risks and fulfil the GSPR',
-    desc: 'All devices must comply with the general safety and performance requirements set out in MDR Annex I.',
+    desc: 'All devices must comply with the GSPR set out in MDR Ax.I.',
     checklist: [
       
       { 
-        t: 'Step 3.1) Execute risk management activities and benefit-risk evaluation',
-        r: 'Art. 5.2, Annex I Ch. I',
+        t: 'Step 3.1) Execute RM activities and benefit-risk evaluation',
+        r: 'Art.5.2, Ax.I Ch. I',
         e: `This activity updates the product safety profiles. It ensures that all design hazards are reduced as far as possible and legally outweighed by the claimed medical benefits ➔ `,
         sop: TD_DATA.RM 
       },
 
       { 
         t: 'Step 3.2) Compile the GSPR checklist and applicability matrix',
-        r: 'Annex I Ch. II',
+        r: 'Ax.I Ch.II',
         e: `This document creates a requirements checklist, mapping every applicable Annex I requirement to specific development testing evidence and design parameters ➔ `,
         sop: TD_DATA.GSPR_MATRIX 
       },
