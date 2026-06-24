@@ -789,7 +789,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { e: 'SUPPLY CHAIN INTERRUPTION GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2024_16 },
       { mdcg: MDCG_DATA.MDCG_2024_16_ANNEX },
-      { mdcg: MDCG_DATA.MDCG_SUPPLY_Q&A_REV1 },
+      { mdcg: MDCG_DATA.MDCG_SUPPLY_Q_A_REV1 },
 
       { e: 'POST MARKET SURVEILLANCE GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2022_21 },

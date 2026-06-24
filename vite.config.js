@@ -3,6 +3,12 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  css: {
+    transformer: 'postcss',  // Tvinga PostCSS istället för Lightning CSS
+  },
+  build: {
+    cssMinify: 'lightningcss', // Behåll lightningcss för minifiering
+  },
   server: {
     proxy: {
       '/api/fda': {
