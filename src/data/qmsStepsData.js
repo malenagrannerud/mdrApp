@@ -106,50 +106,19 @@ export const QMS_DATA = [
 },
 
 /************************************************** STEP 2 ********************************************/
+
 { id: 'step2', 
-      title: 'Phase 1: Step 2) Create the Quality Manual & Scope',
-      desc: 'Define the QMS scope, structure, and exclusions. Runs in parallel with Steps 1, 3, 4.',
+      title: 'Phase 1: Step 2) Create the management framework',
+      desc: 'Define the QMS scope, structure, exclusions, quality policy, organizational roles (including PRRC), and management review cycles. Runs in parallel with Steps 1, 3, 4.',
       checklist: [
         { t: '2.1) Generate the Quality Manual (4.2.2 Quality manual)', 
-          e: 'The QM describes what the QMS covers and why. It is used as a starting document for anyone who wants to understand the company. This can be the NB, auditors, new employees and external parties. It is also used to motivate exclusions.', 
+          e: 'The QM describes what the QMS covers and why. It defines the QMS scope, structure, process interaction map, and justifies any ISO 13485 exclusions. It is the starting document for NB auditors, new employees, and external parties.', 
           sop: SOP_DATA2.QUALITY_MANUAL 
         },
 
-        { t: 'Resulting File Structure', 
-          e: `
-    
-📁 ISO 13485-QMS
-  📁 4-QMS
-  📁 5-MANAGEMENT RESPONSIBILITY
-  📁 6-RESOURCE MANAGEMENT
-  📁 7-PRODUCT REALIZATION
-  📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
-  files: { '4-QMS': 
-           [{ sop: SOP_DATA2.QUALITY_MANUAL, indent: '    ' }],
-          }
-        }       
-      ]
-    },
-
-/************************************************** STEP 3 ********************************************/
-    
-{ id: 'step3', 
-      title: 'Phase 1: Step 3) Establish Management Responsibility', 
-      desc: 'Ensure executive management commitment, formalize roles, and establish review cycles. Runs in parallel with Steps 1, 2, 4.',
-      checklist: [
-        { t: '3.1) Create a SOP for Quality Policy & Objectives (5.3 Quality policy & 5.4.1 Quality objectives)', 
-          e: 'This SOP defines who drafts quality objectives and when management signs them, to align the organization with corporate quality commitments and measure QMS performance.',
-          sop: SOP_DATA2.SOP_QUALITY_POLICY
-        },
-        
-        { t: '3.2) Create a SOP for Roles & Appoint PRRC (5.5 Responsibility, authority and communication & MDR Art. 15)', 
-          e: 'This SOP defines who appoints regulatory roles and when the organizational chart is updated, to secure formal PRRC assignment and fulfill legal EU MDR requirements.',
-          sop: SOP_DATA2.SOP_ROLES_PRRC
-        },
- 
-        { t: '3.3) Create a SOP for Management Review (5.6 Management review)', 
-          e: 'This SOP defines who conducts executive reviews and when they are scheduled, to evaluate audits and complaints to ensure continuous suitability and effectiveness of the QMS.',
-          sop: SOP_DATA2.SOP_MANAGEMENT_REVIEW
+        { t: '2.2) Establish Management Framework (5.3, 5.4.1, 5.5, 5.6 & MDR Art. 15)', 
+          e: 'This SOP covers Quality Policy, measurable objectives, PRRC appointment, and annual Management Review. It proves to auditors that management is committed, a PRRC exists, and that the QMS is systematically reviewed. Without it → ISO 13485 §5 fails → no CE marking',
+          sop: SOP_DATA2.SOP_MANAGEMENT_FRAMEWORK
         },
         
         { t: 'Resulting File Structure', 
@@ -162,13 +131,14 @@ export const QMS_DATA = [
   📁 7-PRODUCT REALIZATION
   📁 8-MEASUREMENT, ANALYSIS & IMPROVEMENT`,
   files: {
+    '4-QMS': [
+      { sop: SOP_DATA2.QUALITY_MANUAL, indent: '    ' }
+    ],
     '5-MANAGEMENT RESPONSIBILITY': [
-      { sop: SOP_DATA2.SOP_QUALITY_POLICY, indent: '  ' },
-      { sop: SOP_DATA2.SOP_ROLES_PRRC, indent: '  ' },
-      { sop: SOP_DATA2.SOP_MANAGEMENT_REVIEW, indent: '  ' }
+      { sop: SOP_DATA2.SOP_MANAGEMENT_FRAMEWORK, indent: '  ' }
     ]
   }
-        }
+        }       
       ]
     },
 
@@ -224,6 +194,8 @@ export const QMS_DATA = [
       e: 'This SOP defines who performs clinical assessments and when device validation is executed, to gather clinical evidence and confirm that the device meets its intended use and user needs safely.', 
       sop: SOP_DATA5.SOP_CLINICAL_EVALUATION 
     },
+
+// lägg till design transfer
         
     { t: '5.4) Create a SOP for Design Change Control (7.3.9 Control of design and development changes)',
       e: 'This SOP defines who reviews engineering modifications and when product changes are approved post-launch, to prevent unintended quality degradation and verify that modifications do not impact device safety.', 
@@ -270,7 +242,7 @@ export const QMS_DATA = [
       title: 'Phase 2: Step 6) Establish Operations, Procurement & Traceability', 
       desc: 'Secure control over suppliers, product delivery, customer requirements, and measurement tools. Runs in parallel with Step 5.',
       checklist: [
-        { t: '6.1) Create a SOP for Purchasing & Supplier Control (7.4 Purchasing)',
+        { t: '6.1) Create a SOP for Purchasing, Supplier Control & Supplier Evaluation (7.4 Purchasing)',
           e: 'This SOP defines who evaluates external vendors and when supplier audits are performed, to maintain the Approved Supplier List (ASL) and ensure materials meet regulatory requirements.',
           sop: SOP_DATA6.SOP_008_SUPPLIER_MANAGEMENT,
         },
@@ -363,7 +335,7 @@ export const QMS_DATA = [
           sop: SOP_DATA8.SOP_EUDAMED_UDI
         },
 
-        { t: '8.3) Create a SOP for Notified Body Communication & Submissions (MDR Art. 52, Annex IX)',
+        { t: '8.3) Create a SOP for NB communication (MDR Art. 52, Annex IX)',
           e: 'This SOP defines who manages NB interactions and when submission dossiers are transmitted, to coordinate audits, respond to non-conformities, and maintain valid CE certificates.',
           sop: SOP_DATA8.SOP_NB_COMMUNICATION
         },
@@ -377,6 +349,10 @@ export const QMS_DATA = [
           e: 'This SOP defines who evaluates product incidents and when regulatory authorities must be notified, to secure legally mandated 15-day serious incident reporting, manage Field Safety Corrective Actions (FSCA), and track trend analyses.',
           sop: SOP_DATA8.SOP_VIGILANCE
         },
+
+        // lägg till regulatory intelligence
+
+        // lägg till CA interaction
        
         { t: 'Resulting File Structure', 
           e: `
