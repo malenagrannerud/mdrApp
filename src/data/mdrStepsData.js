@@ -21,8 +21,15 @@ export const MDR_DATA = [
     desc: 'A Roadmap to CE Marking Medical Devices According to MDR 2017/745',
     checklist: [
       { t: 'OVERVIEW',
-        e: `This introduction step will provide an empty file structure, to be be filled with required documents as the steps progresses. 
-Folder names come from the MDR Annex II & III. Folders 1-6 contains records from the pre market phase, and folder 7 contains plans for PMS activities.` }, 
+        e: `This MDR roadmap provides deliverables to build a compliant Quality Management System (QMS), covering all clauses in ISO 13485.     
+      
+      TIME DEPENDENCIES
+      Steps are grouped so that sub steps can be done in parallel.
+   
+      DEPENDENCIES WITH QMS
+      Some outputs from the steps in the MDR path are product specific and placed in the TD tree, and may have governing SOPs in QMS path.
+      `}, 
+        
 
       {t: 'Resulting File Structure', 
        e: `
@@ -107,31 +114,35 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       { t: ' ', 
         e: `For the following steps, read trough Art. 10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed.`,},
 
-        { t: 'Step 2.1) Describe the design and manufacturing processes',
-        r: 'Art. 10.1 & 10.9(g): "When putting a device into service, a mfr. shall ensure that they have been designed & manufactured according to MDR."',
-        e: `This step is translated by following ISO 13485, Ch 7 - Product Realization for design processes, and the entire ISO 13485 for manufacturing processes. This step prove controlled production ➔`,
-        sop: TD_DATA.MF_P },
-      
-        { t: 'Step 2.2) Implement a risk management (RM) process',
-        r: 'Art. 10.2 & Annex I Ch. I (2-9)',
-        e: `This document establishes the ISO 14971 framework to identify and control hazards across the lifecycle. It must integrate post-market data (Art. 83-86) and include a dedicated human factors/usability sub-process following EN 62366 ➔ `,
+        { t: 'Step 2.1) Implement design and manufacturing processes',
+        r: `Art. 10.1: "... Mfs shall ensure that the MD have been designed & mfed according to MDR."
+        Art 10.9(g): "The QMS shall address… (g) product realisation, including planning, D&D, production and service provision"`,
+        e: `This is proved by following ISO Ch7 - Product Realization.  `},
+
+
+        { t: 'Step 2.2) Implement a RM process',
+        r: `Art. 10.2: "Mfs shall establish, document, implement and maintain a system for RM as described in Annex I Ch. I (2-9)."
+        \nAnnex I Ch. I (2-9): Reduce risks as far as possible, state of the art measures, human factors, transport/storage, benefit-risk outweighs residual risks. `,
+        e: `This document establishes the ISO 14971 framework to identify and control hazards across the lifecycle. 
+        It must integrate post-market data (Art. 83-86) and its recommended to include a usability sub-process, EN 62366. 
+        See SOP in QMS how this document is produced. 
+        ➔ `,
         sop: TD_DATA.RM },
 
-        { t: 'Step 2.3) Establish a Clinical Evaluation Process (CEP)',
+        { t: 'Step 2.3) Establish a CEP',
         r: 'Art. 10.3, Art. 61 & Annex XIV Part A',
         e: `This document defines a 5-stage methodology (Plan, Identify, Appraise, Analyse, Report) based on Annex XIV and MEDDEV 2.7/1. It must explicitly govern the Clinical Evaluation Plan (CEP), PMCF Plan, and PMCF Evaluation Reports ➔ `,
         sop: TD_DATA.CLIN_EVAL},
 
         { t: 'Step 2.4) Develop and maintain TD, UDI and DoC processes',
         r: 'Art. 10.4, 10.6, 10.7 & 10.8',
-        e: `Use the 7-chapter structure as a project deliverables tracker on the critical path. 
-        The process must enforce a final alignment check for vocabulary and state-of-the-art arguments, 
+        e: `The process must enforce a final alignment check for vocabulary and state-of-the-art arguments, 
         alongside a change history log for NB compliance ➔ `,
         sop: TD_DATA.TD_PROCESS },
 
       { t: 'Step 2.5) Build a QMS manual',
         r: 'Art. 10.9',
-        e: `Non-product specific document. Created in QMS path. See QMS path ➔ Step 0` }, 
+        e: `Non-product specific document. See QMS path ` }, 
 
       { t: 'Step 2.6) Plan PMS activities',
         r: 'Art. 10.10',
@@ -175,7 +186,6 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
     📁 TECHNICAL DOCUMENTATION
       📁 1-DEVICE DESCRIPTION
         📄 Device_description_&_rationale_product_X.pdf
-       
       📁 2-INFO TO BE SUPPLIED BY THE MANUFACTURER
       📁 3-DESIGN & MANUFACTURING INFO
       📁 4-GSPR 
@@ -183,23 +193,7 @@ Folder names come from the MDR Annex II & III. Folders 1-6 contains records from
       📁 6-V&V
       📁 7-PMS 
          `,
-        files: {
-          '1-DEVICE DESCRIPTION': [
-            { sop: TD_DATA.PRRC_APPOINT, indent: '    ' }
-          ],
-          '3-DESIGN & MANUFACTURING INFO': [
-            { sop: TD_DATA.MF_P, indent: '    ' }
-          ],
-          '5-RISK MANAGEMENT': [
-            { sop: TD_DATA.RM, indent: '    ' }
-          ],
-          '6-V&V': [
-            { sop: TD_DATA.CLIN_EVAL, indent: '    ' }
-          ],
-          '7-PMS': [
-            { sop: TD_DATA.PMS_PROCESS, indent: '    ' }
-          ]
-        }
+        files: { }
       },
         
       { t: 'Guidance Documents from the MDCG' },

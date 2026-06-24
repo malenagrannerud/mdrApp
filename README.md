@@ -40,6 +40,7 @@ Using a dataset from FDA MAUDE of the most frequently reported products and manu
 ### QA/RA
 - [ ] Add dependencies between MDR outputs and QMS inputs 
 - [ ] Add fictive Audit checklists
+- [ ] Add clickable abbreviations
 
 ### PMS Data Analysis
 - [ ] Integrate interactive data visualizations (charts) for adverse event trends
