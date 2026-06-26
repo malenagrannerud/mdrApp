@@ -112,14 +112,15 @@ export const MDR_DATA = [
         { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }, 
       ]
     },
-  /**********************  STEP 2 ****************************************/
+    
+  /****************************************  STEP 2 ****************************************/
   { id: 'm2',
     title: 'Step 2) Establish processes and resources',
     desc: 'Outputs in this step are the QMS of the company ',
     checklist: [
-       
-      { t: ' ', 
-        e: `Read through Art.10: "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
+      { t: ' ', e: `Read through Art.10: "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
+
+/****************************************  STEP 2.1 ****************************************/
 
       { t: 'Step 2.1) Implement a design and manufacturing SOP',
         r: `
@@ -129,6 +130,7 @@ export const MDR_DATA = [
           `,
         e: `This step is proved by implementing ISO 13485 §7 — Product Realisation. See QMS Step 4 & 5. `},
 
+/****************************************  STEP 2.2 ****************************************/
       { t: 'Step 2.2) Implement a RM SOP',
         r: `
         - Art.10(2): "Mf shall establish, document, implement and maintain RM as in Ax.I.3."
@@ -137,6 +139,7 @@ export const MDR_DATA = [
         `,
         e: `This is proved by implementing ISO 14971. Since ISO 14971 say what to be done but not by how ➔ RM activities (FMEA, risk matrix, report) must be assigned to different compentecies. It is recommended to include Human factor & usability EN 62366 to cover related risks. See QMS Step 4.2. `},
 
+/****************************************  STEP 2.3 ****************************************/
       { t: 'Step 2.3) Implement a CEV SOP',
         r: `
         - Art.10(3): Mfs shall establish, document, implement and maintain a system for CEV.
@@ -150,18 +153,20 @@ export const MDR_DATA = [
         `,
         e: `This step is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
 
+/****************************************  STEP 2.4 ****************************************/
       { t: 'Step 2.4) Establish SOPs for dev and maintenance of TD, UDI and DoC',
         r: `
-        - Art.10(4): Mfs shall draw up and keep up to date TD with content per Ax.II and Ax.III.
-        - Art.10(6): UDI system
-        - Art.10(7): DoC
-        - Art.10(8): Change history log for NB surveillance
-        - Ax.II (1-6): TD content with pre-market records 
-        - Ax.III (7): TD content with post-market plans 
+        - Art.10(4, 6, 7, 8): Mfs shall draw up and keep up to date TD with content per Ax.II and Ax.III, (UDI system, DoC and Change history log for NB surveillance)
+        - Ax.II (1-6) & Ax.III (7): TD content with pre-market records & TD content with post-market plans 
         - Ax.IX.I.4.10: Mf shall inform NB of planned substantial changes to QMS or device-range. NB verifies QMS still meets Section 2.3, or re-assesses.
         - Ax.X.5.2: Mf shall inform NB of planned substantial changes to approved type. NB verifies certificate still valid, or re-assesses.
         `,
-        e: `This step is proved by implementing a SOP that uses the TD structure as deliverables, with change history log. The process is used to compile and maintain the TD, for NB submission and surveillance. See QMS Step 7.1.`},
+        e: `This step is proved by implementing a SOP that uses the TD structure as deliverables, with change history log. The process is used to compile and maintain the TD for NB submission and surveillance. See QMS Step 7.1.`},
+
+
+
+
+/****************************************  STEP 2.5 ****************************************/
 
       { t: 'Step 2.5) Build a QMS according to ISO 13485:2016',
         r: `
