@@ -49,6 +49,7 @@ export const MDR_DATA = [
       title: 'Step 1) Decide the intended use and classification',
       desc: ' This step decides conformity route of the product. (a)-(d) is requred for the TD  ',
       checklist: [
+        
         { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and (d) principle of use and mode of action', 
           r: `
           - Art.2(1) and Art.2(12): The definition of a MD and the definition of intended purpose
@@ -67,7 +68,7 @@ export const MDR_DATA = [
 
         { t: 'Step 1.3) Compile the (b) risk classification rational', 
           r: `
-          - Art.51: Devices shall be classified according to Ax.VIII, taking into account intended purpose and inherent risks. 
+          - Art.51(1): Devices shall be classified per Ax.VIII, taking into account intended purpose and inherent risks. 
           - Ax.VIII: Rules to determine risk class.
           
           `,
@@ -75,7 +76,7 @@ export const MDR_DATA = [
 
         { t: ' ', 
           e: `💡 Step 1) also applies to devices offered in EU via the internet (Art.6), including diagnostic or therapeutic services.
-          💡 If you can not classify the future product: request a decision from the CA according to the Helsinki Procedure.`}, 
+          💡 If you cant classify the product: request a decision from the CA according to the Helsinki Procedure.`}, 
 
         {t: 'Resulting File Structure', 
          e: `

@@ -9,7 +9,7 @@ export const DOC_DATA = {
     title: 'ARTICLE 51 - Classification of devices',
     content: `
 
-1. Devices shall be divided into classes I, IIa, IIb and III per Ax.VIII., taking into account intended purpose and inherent risks. 
+1. Devices shall be divided into classes per Ax.VIII., taking into account intended purpose and inherent risks. 
 2. A dispute between mf and NB when applying Ax.VIII, shall be referred to the CA of the MS where the mf has its RPOB. 
 Where the mf has no RPOB in the EU and has not designated an AR, the matter shall be referred to the CA of the MS where the 
 AR referred to in the last indent of point (b) of the second paragraph of Section 2.2 of Ax.IX has its RPOB. 
@@ -20,134 +20,58 @@ of the MS that designated the NB.
 The CA of the MS where the mf has its RPOB shall notify MDCG and the EU COM of its decision. 
 The decision shall be made available upon request.
 
-3. At the request of a MS, COM shall after consulting MDCG, decide, by means of IAs, on:
+3. At the request of a MS, EU COM shall after consulting MDCG, decide, by means of IAs, on:
 (a)	application of Ax.VIII to a given device, category or group of devices, to determine their classification;
 (b)	that a device, category or group of devices, shall for public health reasons based on new scientific evidence, 
 or based on information from vigilance and market surveillance activities, be reclassified by way of derogation from Ax.VIII.
 
-4. COM may, on its own initiative and after consulting MDCG, decide by means of IAs on the issues in points (a) and (b) of §3.
+4. The EU COM may, on its own initiative and after consulting MDCG, decide by means of IAs on the issues in points (a) and (b) of §3.
 5. To ensure uniform application of Ax.VIII, taking account of relevant scientific opinions of relevant scientific committees, COM may adopt IAs to resolve issues of divergent interpretation and practical application.
 6. The IAs referred to in §3, §4 and §5 shall be adopted in accordance with the examination procedure in Art.114(3).
 
-
-
-
-
-
-
     `.trim()
   },
 
-  ART_61: {
-    title: 'ART. 61 - CLINICAL EVALUATION',
-    content: `# ABBREVIATIONS
+Art_61: {
+    title:'Article 61 - Clinical evaluation ',
+    content: `
+1. Confirmation of conformity with GSPR (Ax.I) under normal conditions of intended use, evaluation of undesirable side-effects, and acceptability of the BRR in Ax.I.1 and 1.8, shall be based on clinical data providing sufficient clinical evidence, and relevant data as in Ax.III.
+- The mf shall specify and justify the level of clinical evidence necessary to demonstrate conformity with relevant GSPR. That level shall be appropriate to the characteristics of the device and its intended purpose.
+- To that end, mfs shall plan, conduct and document a CEV in this Art. and Ax.XIV.A.
 
-Benefit-risk-ratio (BRR)
-Clinical evaluation plan (CEP)
-Clinical evaluation report (CER)
-Clinical investigation (CI)
-General safety and performance requirements (GSPR)
-Post-market clinical follow-up (PMCF)
+2. For class III and IIb devices under Art.54.1.(b), the mf may, prior to its CEV/CI, consult an expert panel (Art.106) to review the mf's clinical development strategy and CI proposals. The mf shall consider the panel's views and document them in the CER (§12). The mf may not invoke any rights to the panel's views regarding future conformity assessment.
 
+3. A CEV shall follow a defined, methodologically sound procedure based on:
+(a) critical evaluation of relevant scientific literature on safety, performance, design characteristics and intended purpose, provided that:
+  - the intended purpose is equivalent to the device to which the data relate (Ax.XIV.3), and
+  - the data adequately demonstrate compliance with relevant GSPR;
+(b) critical evaluation of all available CIs, considering whether performed under Art.62-80, acts under Art.81, and Ax.XV;
+(c) consideration of available alternative options, if any.
 
-# CHAPTER 1 - CLINICAL EVALUATION
+4. For implantable and class III devices, CIs shall be performed, except if:
+- the device is a modification of one already marketed by the same mf,
+- equivalence to the marketed device is demonstrated per Ax.XIV.3 and endorsed by the NB, and
+- the CEV of the marketed device sufficiently demonstrates conformity of the modified device.
+The NB shall check that the PMCF plan is appropriate and includes post-market studies. CIs need not be performed in the cases under §6.
 
-## 1.   
-Confirmation of 
-1) conformity with GSPR (Annex 1) under normal conditions of intended use, and the 
-2) evaluation of undesirable side-effects and of 
-3) the acceptability of the BRR in Annex 1.1 and 1.8, 
-shall be based on clinical data providing sufficient clinical evidence, and relevant data as in Annex 3.
+5. A mf of a device equivalent to one not mf'd by him may rely on §4 to omit a CI provided that:
+- the two mfs have a contract granting the second mf full ongoing access to the TD, and
+- the original CEV complied with this Regulation,
+and the second mf provides clear evidence thereof to the NB.
 
-The mfr shall specify and justify the level of clinical evidence necessary to demonstrate conformity with relevant GSPR. 
-That level of clinical evidence shall be appropriate in view of the characteristics of the device and its intended purpose.
+6. The CI requirement under §4 shall not apply to:
+- (a) implantable/class III devices lawfully placed on the market under Directive 90/385/EEC or 93/42/EEC, where the CEV is based on sufficient clinical data and complies with relevant product-specific CS (where available); or
+- (b) sutures, staples, dental fillings, dental braces, tooth crowns, screws, wedges, plates, wires, pins, clips or connectors, where the CEV is based on sufficient clinical data and complies with relevant product-specific CS (where available).
+7. Cases where §4 is not applied via §6 shall be justified by the mf in the CER and by the NB in the CEV assessment report.
+8. The EU COM may, where justified by well-established technologies (similar to those in §6(b)) used in other devices, or to protect health/safety/public health, adopt delegated acts under Art.115 to amend the list of exempted devices in Art.52(4) sub§2 and §6(b), adding or removing implantable/class III devices.
+9. For products without an intended medical purpose (Ax.XVI), the requirement to demonstrate clinical benefit shall mean demonstrating device performance. CEVs shall be based on safety data from PMS, PMCF, and where applicable, specific CI. CIs shall be performed unless reliance on clinical data from an analogous MD is duly justified.
+10. Without prejudice to §4, where demonstration of GSPR conformity based on clinical data is not deemed appropriate, the mf shall justify based on risk management and the specifics of device-human body interaction, intended clinical performance, and mf's claims. The mf shall substantiate in the TD (Ax.II) why non-clinical testing methods alone (performance evaluation, bench testing, pre-clinical evaluation) are adequate.
+11. The CEV and its documentation shall be updated throughout the device life cycle with clinical data from the PMCF plan (Ax.XIV.B) and PMS plan (Art.84). For class III and implantable devices, the PMCF evaluation report and, if indicated, the summary of safety and clinical performance (Art.32) shall be updated at least annually.
+12. The CEV, its results and clinical evidence shall be documented in a CER (Ax.XIV.4), which shall be part of the TD (Ax.II), except for custom-made devices.
+13. Where necessary to ensure uniform application of Ax.XIV, the EU COM may adopt IAs to resolve divergent interpretation and practical application. These IAs shall be adopted per the examination procedure in Art.114(3).
 
-To that end, mfrs shall 
-- plan, 
-- conduct and 
-- document 
-a clinical evaluation in this Art. and Annex XIV.A.
-
-## 2.   
-For class III and IIb devices referred to in Art. 54.1.(b), the mfr may, prior to its clinical evaluation and/or investigation, consult an expert panel (see Art. 106), 
-to review the mfrs intended clinical development strategy and proposals for CI. The mfr shall consider the panels views and document them in the CER referred to in §12 of this Art.
-
-The mfr may not invoke any rights to the views expressed by the expert panel with regard to any future conformity assessment procedure.
-
-## 3.   
-A clinical evaluation shall follow a defined and methodologically sound procedure based on (a), (b) and (c):
-(a) a critical evaluation of the relevant scientific literature currently available relating to the 
-  - safety, 
-  - performance, 
-  - design characteristics and 
-  - intended purpose of the device, 
-  where the following conditions are satisfied:
-  — it is demonstrated that the intended purpose is equivalent to the device to which the data relate according to Section 3 of Annex XIV, and
-  — the data adequately demonstrate compliance with the relevant GSPR;
-(b) a critical evaluation of the results of all available CIs, taking duly into consideration whether the investigations were performed under Art. 62 to 80, 
-any acts adopted pursuant to Art. 81, and Annex XV; and
-(c) a consideration of available alternative options for that purpose, if any.
-
-## 4. 
-In the case of implantable devices and class III devices, CIs shall be performed, except if:
-— the device has been designed by modifications of a device already marketed by the same mfr,
-— the modified device has been demonstrated by the mfr to be equivalent to the marketed device, in accordance with Annex XIV.3 and this demonstration has been endorsed by the NB, and
-— the clinical evaluation of the marketed device is sufficient to demonstrate conformity of the modified device with the relevant safety and performance requirements.
-
-In this case, the notified body shall check that the PMCF plan is appropriate and includes post market studies to demonstrate the safety and performance of the device.
-In addition, clinical investigations need not be performed in the cases referred to in §6.
-
-## 5.   
-A mfr of a device demonstrated to be equivalent to an already marketed device not mfred by him, may also rely on §4 in order not to perform a clinical investigation provided that the following conditions are fulfilled in addition to what is required in that §:
-
-— the two manufacturers have a contract in place that explicitly allows the manufacturer of the second device full access to the technical documentation on an ongoing basis, and
-— the original clinical evaluation has been performed in compliance with the requirements of this Regulation,
-
-and the mfr of the second device provides clear evidence thereof to the notified body.
-
-## 6.   
-The requirement to perform CIs pursuant to §4 shall not apply to implantable devices and class III devices:
-
-(a) which have been lawfully placed on the market or put into service in accordance with Directive 90/385/EEC or Directive 93/42/EEC and for which the clinical evaluation:
-
-— is based on sufficient clinical data, and
-— is in compliance with the relevant product-specific CS for the clinical evaluation of that kind of device, where such a CS is available; or
-
-(b) that are sutures, staples, dental fillings, dental braces, tooth crowns, screws, wedges, plates, wires, pins, clips or connectors for which the clinical evaluation is based on sufficient clinical data and is in compliance with the relevant product-specific CS, where such a CS is available.
-
-## 7.   
-Cases in which paragraph 4 is not applied by virtue of paragraph 6 shall be justified in the clinical evaluation report by the manufacturer and in the clinical evaluation assessment report by the notified body.
-
-## 8.   
-Where justified in view of well-established technologies, similar to those used in the exempted devices listed in point (b) of paragraph 6 of this Article, being used in other devices, or where justified in order to protect the health and safety of patients, users or other persons or other aspects of public health, the Commission is empowered to adopt delegated acts in accordance with Article 115 to amend the list of exempted devices referred to in the second subparagraph of Article 52(4) and in point (b) of paragraph 6 of this Article, by adding other types of implantable or class III devices to that list or removing devices therefrom.
-
-## 9.   
-In the case of the products without an intended medical purpose listed in Annex XVI, the requirement to demonstrate a clinical benefit in accordance with this Chapter and Annexes XIV and XV shall be understood as a requirement to demonstrate the performance of the device. Clinical evaluations of those products shall be based on relevant data concerning safety, including data from post-market surveillance, PMCF, and, where applicable, specific clinical investigation. Clinical investigations shall be performed for those products unless reliance on existing clinical data from an analogous medical device is duly justified.
-
-## 10.   
-Without prejudice to §4, where the demonstration of conformity with GSPR based on clinical data is not deemed appropriate, adequate justification for any such exception shall be given based on the results of the mfrs risk management and on consideration of the specifics of the interaction between the device and the human body, the clinical performance intended and the claims of the mfr. In such a case, the mfr shall duly substantiate in the TD as in Annex II why it considers a demonstration of conformity with GSPR that is based on the results of 
-- non-clinical testing methods alone, including 
-  - performance evaluation, 
-  - bench testing and 
-  - pre-clinical evaluation, 
-to be adequate.
-
-## 11.   
-The clinical evaluation and its documentation shall be updated throughout the life cycle of the device concerned with clinical data obtained from the implementation of the mfrs PMCF plan in accordance with Part B of Annex XIV and the PMS plan referred to in Article 84.
-
-For class III devices and implantable devices, the PMCF evaluation report and, if indicated, the summary of safety and clinical performance referred to in Article 32 shall be updated at least annually with such data.
-
-## 12.   
-The clinical evaluation, its results and the clinical evidence derived from it shall be documented in a CER as in Section 4 of Annex XIV, which, except for custom-made devices, shall be part of the TD referred to in Ax.II relating to the device concerned.
-
-## 13.   
-Where necessary to ensure the uniform application of Annex XIV, the Commission may, having due regard to technical and scientific progress, adopt implementing acts to the extent necessary to resolve issues of divergent interpretation and of practical application. Those implementing acts shall be adopted in accordance with the examination procedure referred to in Article 114(3).
-
-
-    `.trim()
+`.trim()
   },
-
- 
 
   /**************************************************************************************************/ 
   AX_I: {
