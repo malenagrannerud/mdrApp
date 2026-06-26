@@ -5,7 +5,38 @@
 
 export const DOC_DATA = {
 
+ ART_51: {
+    title: 'ARTICLE 51 - Classification of devices',
+    content: `
 
+1. Devices shall be divided into classes I, IIa, IIb and III per Ax.VIII., taking into account intended purpose and inherent risks. 
+2. A dispute between mf and NB when applying Ax.VIII, shall be referred to the CA of the MS where the mf has its RPOB. 
+Where the mf has no RPOB in the EU and has not designated an AR, the matter shall be referred to the CA of the MS where the 
+AR referred to in the last indent of point (b) of the second paragraph of Section 2.2 of Ax.IX has its RPOB. 
+
+Where the NB is established in a MS other than that of the mf, the CA shall adopt its decision after consultation with the CA 
+of the MS that designated the NB.
+
+The CA of the MS where the mf has its RPOB shall notify MDCG and the EU COM of its decision. 
+The decision shall be made available upon request.
+
+3. At the request of a MS, COM shall after consulting MDCG, decide, by means of IAs, on:
+(a)	application of Ax.VIII to a given device, category or group of devices, to determine their classification;
+(b)	that a device, category or group of devices, shall for public health reasons based on new scientific evidence, 
+or based on information from vigilance and market surveillance activities, be reclassified by way of derogation from Ax.VIII.
+
+4. COM may, on its own initiative and after consulting MDCG, decide by means of IAs on the issues in points (a) and (b) of §3.
+5. To ensure uniform application of Ax.VIII, taking account of relevant scientific opinions of relevant scientific committees, COM may adopt IAs to resolve issues of divergent interpretation and practical application.
+6. The IAs referred to in §3, §4 and §5 shall be adopted in accordance with the examination procedure in Art.114(3).
+
+
+
+
+
+
+
+    `.trim()
+  },
 
   ART_61: {
     title: 'ART. 61 - CLINICAL EVALUATION',
@@ -107,7 +138,7 @@ The clinical evaluation and its documentation shall be updated throughout the li
 For class III devices and implantable devices, the PMCF evaluation report and, if indicated, the summary of safety and clinical performance referred to in Article 32 shall be updated at least annually with such data.
 
 ## 12.   
-The clinical evaluation, its results and the clinical evidence derived from it shall be documented in a CER as in Section 4 of Annex XIV, which, except for custom-made devices, shall be part of the TD referred to in Annex II relating to the device concerned.
+The clinical evaluation, its results and the clinical evidence derived from it shall be documented in a CER as in Section 4 of Annex XIV, which, except for custom-made devices, shall be part of the TD referred to in Ax.II relating to the device concerned.
 
 ## 13.   
 Where necessary to ensure the uniform application of Annex XIV, the Commission may, having due regard to technical and scientific progress, adopt implementing acts to the extent necessary to resolve issues of divergent interpretation and of practical application. Those implementing acts shall be adopted in accordance with the examination procedure referred to in Article 114(3).
@@ -120,8 +151,9 @@ Where necessary to ensure the uniform application of Annex XIV, the Commission m
 
   /**************************************************************************************************/ 
   AX_I: {
-    title: 'ANNEX 1 - GENERAL SAFETY AND PERFORMANCE REQUIREMENTS',
-    content: `# ABBREVIATIONS
+    title: 'AX.1 - GENERAL SAFETY AND PERFORMANCE REQUIREMENTS',
+    content: `
+# ABBREVIATIONS
 Risk management system (RMS)
 Risk management plan (RMP)
 
@@ -142,38 +174,127 @@ Mfrs shall establish, implement, document and maintain a RMS, a continuous itera
 (f) based on the evaluation of the impact of the information in point (e), if necessary amend control measures in line with the requirements of Section 4.
 
 
-
-
 ## 8.   
 All 
 - known and foreseeable risks and any 
 - undesirable side-effects
 shall be minimised and acceptable when weighed against benefits to the patient/user arising from the achieved performance of the device during normal conditions of use.
 
-
-
-
-
 # CHAPTER II - REQUIREMENTS REGARDING DESIGN AND MANUFACTURE
+    `.trim()
+  },
+  
+/*************************  AX.II *************************************************************************/ 
+
+    AX_II: {
+    title: 'AX.II - TD',
+    content: `
+
+The TD and, if applicable, the summary thereof to be drawn up by the mf 
+shall be presented in a clear, organised, readily searchable and unambiguous manner and 
+shall include in particular the elements listed in this Annex.
+
+# 1. DEVICE DESCRIPTION AND SPECIFICATION, INCLUDING VARIANTS AND ACCESSORIES
+
+1.1. Device description and specification
+
+(a)	product or trade name and a general description of the device including its intended purpose and intended users;
+(b)	the Basic UDI-DI as referred to in Part C of Annex VI assigned by
+the manufacturer to the device in question, as soon as identificationof this device becomes based on a UDI system, or otherwise a clear
+identification by means of product code, catalogue number or otherunambiguous reference allowing traceability;
+(c)	the intended patient population and medical conditions to be
+diagnosed, treated and/or monitored and other considerations such
+as patient selection criteria, indications, contra-indications,
+warnings;
+(d)	principles of operation of the device and its mode of action, scientifically demonstrated if necessary;
+(e)	the rationale for the qualification of the product as a device;
+(f)	the risk class of the device and the justification for the classification
+rule(s) applied in accordance with Annex VIII;
+(g)	an explanation of any novel features;
+(h)	a description of the accessories for a device, other devices and otherproducts that are not devices, which are intended to be used in
+combination with it;
+(i)	a description or complete list of the various configurations/variants
+of the device that are intended to be made available on the market;
+(j)	a general description of the key functional elements, e.g. its parts/
+components (including software if appropriate), its formulation, its
+composition, its functionality and, where relevant, its qualitative and quantitative composition. Where appropriate, this shall include
+labelled pictorial representations (e.g. diagrams, photographs, and
+drawings), clearly indicating key parts/components, including
+sufficient explanation to understand the drawings and diagrams;
+(k)	a description of the raw materials incorporated into key functional
+elements and those making either direct contact with the human
+body or indirect contact with the body, e.g., during extracorporeal
+circulation of body fluids;
+(l)	technical specifications, such as features, dimensions and
+performance attributes, of the device and any variants/
+configurations and accessories that would typically appear in the
+product specification made available to the user, for example in
+brochures, catalogues and similar publications.
 
 
+1.2. Reference to previous and similar generations of the device
+
+(a)	an overview of the previous generation or generations of the deviceproduced by the manufacturer, where such devices exist;
+(b)	an overview of identified similar devices available on the Union or
+international markets, where such devices exist.
 
 
+2. INFORMATION TO BE SUPPLIED BY THE MF
 
+A complete set of:
+—	the label or labels on the device and on its packaging, such as single unit packaging, sales packaging, transport packaging in case of
+specific management conditions, in the languages accepted in the
+Member States where the device is envisaged to be sold; and
+—	the instructions for use in the languages accepted in the Member States where the device is envisaged to be sold.
 
+3. DESIGN AND MANUFACTURING INFORMATION
 
+(a)	information to allow the design stages applied to the device to be
+understood;
+(b)	complete information and specifications, including the
+manufacturing processes and their validation, their adjuvants, the
+continuous monitoring and the final product testing. Data shall be
+fully included in the technical documentation;
+(c)	identification of all sites, including suppliers and sub-contractors,
+where design and manufacturing activities are performed.
 
+4. GENERAL SAFETY AND PERFORMANCE REQUIREMENTS
+
+The documentation shall contain information for the demonstration of conformity with the GSPR set out in Ax.I that are applicable to the device taking into account its intended purpose, and shall include a justification, validation and verification of the solutions adopted to meet those requirements. The demonstration of conformity shall include:
+
+(a)	the general safety and performance requirements that apply to the
+device and an explanation as to why others do not apply;
+(b)	the method or methods used to demonstrate conformity with each
+applicable general safety and performance requirement;
+(c)	the harmonised standards, CS or other solutions applied; and
+(d)	the precise identity of the controlled documents offering evidence of conformity with each harmonised standard, CS or other method
+applied to demonstrate conformity with the general safety and
+performance requirements. The information referred to under this
+point shall incorporate a cross-reference to the location of such
+evidence within the full technical documentation and, if applicable,
+the summary technical documentation.
+
+5. BENEFIT-RISK ANALYSIS AND RISK MANAGEMENT
+
+The documentation shall contain information on:
+
+(a)	the benefit-risk analysis referred to in Sections 1 and 8 of Annex I,
+and
+(b)	the solutions adopted and the results of the risk management
+referred to in Section 3 of Annex I.
 
 
 
     `.trim()
   },
 
+
   /**********************************************************************************************/ 
 
  AX_III: {
-    title:'ANNEX III - TECHNICAL DOCUMENTATION ON POST-MARKET SURVEILLANCE',
-    content: `The TD on PMS to be drawn up by the mfr in Art. 83 to 86 shall be presented in a 
+    title:'ANNEX III - TD ON PMS',
+    content: `
+The TD on PMS to be drawn up by the mf in Art.83 to 86 shall be presented in a 
 - clear, 
 - organised, 
 - readily searchable and unambiguous manner and 
@@ -290,5 +411,138 @@ The conclusions of the PMCF evaluation report shall be taken into account for th
 
 
 `.trim()
+  }, 
+
+
+
+
+ AX_VIII: {
+    title:'Ax.VIII - Classification rules ',
+    content: `
+# CHAPTER I - Definitions
+
+1. DURATION OF USE
+1.1. Transient - normally intended for continuous use < 60 minutes.
+1.2. Short term - normally intended for continuous use between 60 minutes and 30 days.
+1.3. Long term - normally intended for continuous use > 30 days.
+
+2. INVASIVE AND ACTIVE DEVICES
+2.1. Body orifice - any natural opening in the body, external surface of the eyeball, or permanent artificial opening (e.g. stoma).
+2.2. Surgically invasive device - an invasive device penetrating inside the body through the surface of the body (including through mucous membranes of body orifices with aid/in context of surgical operation), or producing penetration other than through a body orifice.
+2.3. Reusable surgical instrument - instrument for cutting, drilling, sawing, scratching, scraping, clamping, retracting, clipping or similar procedures, without connection to an active device, intended by mf to be reused after cleaning, disinfection and sterilisation.
+2.4. Active therapeutic device - active device used alone or with other devices to support, modify, replace or restore biological functions/structures for treatment/alleviation of illness, injury or disability.
+2.5. Active device for diagnosis and monitoring - active device used alone or with other devices to supply information for detecting, diagnosing, monitoring or treating physiological conditions, health states, illnesses or congenital deformities.
+2.6. Central circulatory system - arteriae pulmonales, aorta ascendens, arcus aortae, aorta descendens to bifurcatio aortae, arteriae coronariae, arteria carotis communis, arteria carotis externa, arteria carotis interna, arteriae cerebrales, truncus brachiocephalicus, venae cordis, venae pulmonales, vena cava superior, vena cava inferior.
+2.7. Central nervous system - brain, meninges and spinal cord.
+2.8. Injured skin or mucous membrane - skin or mucous membrane with pathological change, change following disease, or wound.
+
+# CHAPTER II - Implementing rules
+
+3.1. Classification shall be governed by the intended purpose of the devices.
+3.2. If used in combination, classification rules shall apply separately to each device. Accessories for a MD and for Annex XVI products shall be classified in their own right separately from the device they are used with.
+3.3. SW driving or influencing use of a device shall fall within the same class as the device. Independent SW shall be classified in its own right.
+3.4. If not intended solely/principally for a specific body part, classification shall be based on the most critical specified use.
+3.5. If several rules/sub-rules apply, the strictest rule resulting in the highest classification shall apply.
+3.6. Continuous use means: (a) entire duration without regard to temporary interruption/removal (determined relative to duration before/after); (b) accumulated use where mf intends immediate replacement with same type.
+3.7. Direct diagnosis = device provides diagnosis by itself or provides decisive information for diagnosis.
+
+# CHAPTER III - Classification rules
+
+4. NON-INVASIVE DEVICES
+4.1. Rule 1 - All non-invasive devices are class I, unless otherwise specified below.
+4.2. Rule 2 - Non-invasive devices for channelling/storing blood, body liquids, cells/tissues, liquids/gases for eventual infusion/administration/introduction into body are class IIa if:
+- connectable to class IIa/IIb/III active device; or
+- intended for channelling/storing blood/body liquids or organs/parts of organs/body cells/tissues (except blood bags).
+Blood bags are class IIb. All other cases: class I.
+
+4.3. Rule 3 - Non-invasive devices modifying biological/chemical composition of human tissues/cells, blood, body liquids or liquids for implantation/administration are class IIb.
+Exception: filtration, centrifugation, gas/heat exchange = class IIa.
+Non-invasive devices consisting of substances intended in vitro in direct contact with human cells/tissues/organs taken from body or used with human embryos before implantation/administration are class III.
+
+4.4. Rule 4 - Non-invasive devices contacting injured skin/mucous membrane are:
+- class I if mechanical barrier, compression or absorption of exudates;
+- class IIb if for injuries breaching dermis/mucous membrane healing only by secondary intent;
+- class IIa if for managing micro-environment of injured skin/mucous membrane;
+- class IIa in all other cases.
+This rule also applies to invasive devices contacting injured mucous membrane.
+
+5. INVASIVE DEVICES
+
+5.1. Rule 5 - Invasive devices for body orifices (non-surgical) not connected to active device or connected to class I active device are:
+- class I if transient use;
+- class IIa if short-term use (except oral cavity to pharynx, ear canal to eardrum, nasal cavity = class I);
+- class IIb if long-term use (except oral cavity to pharynx, ear canal to eardrum, nasal cavity not absorbed by mucous membrane = class IIa).
+Connected to class IIa/IIb/III active device = class IIa.
+
+5.2. Rule 6 - Surgically invasive devices for transient use are class IIa unless:
+- specifically control/diagnose/monitor/correct heart/central circulatory system defect through direct contact = class III;
+- reusable surgical instruments = class I;
+- direct contact with heart/central circulatory system/CNS = class III;
+- supply ionising radiation energy = class IIb;
+- biological effect or wholly/mainly absorbed = class IIb;
+- administer medicinal products via delivery system in potentially hazardous manner = class IIb.
+
+5.3. Rule 7 - Surgically invasive devices for short-term use are class IIa unless:
+- specifically control/diagnose/monitor/correct heart/central circulatory system defect through direct contact = class III;
+- direct contact with heart/central circulatory system/CNS = class III;
+- supply ionizing radiation energy = class IIb;
+- biological effect or wholly/mainly absorbed = class III;
+- undergo chemical change in body (except placed in teeth) = class IIb;
+- administer medicines = class IIb.
+
+5.4. Rule 8 - Implantable and long-term surgically invasive devices are class IIb unless:
+- placed in teeth = class IIa;
+- direct contact with heart/central circulatory system/CNS = class III;
+- biological effect or wholly/mainly absorbed = class III;
+- undergo chemical change in body (except placed in teeth) = class III;
+- administer medicinal products = class III;
+- active implantable devices/accessories = class III;
+- breast implants/surgical meshes = class III;
+- total/partial joint replacements (except ancillary components: screws, wedges, plates, instruments) = class III;
+- spinal disc replacements or implantables contacting spinal column (except screws, wedges, plates, instruments) = class III.
+
+6. ACTIVE DEVICES
+
+6.1. Rule 9 - Active therapeutic devices administering/exchanging energy are class IIa (class IIb if potentially hazardous considering nature/density/site of energy).
+Active devices controlling/monitoring class IIb active therapeutic devices or directly influencing their performance = class IIb.
+Active devices emitting ionizing radiation for therapy (including control/monitor/direct influence) = class IIb.
+Active devices controlling/monitoring/directly influencing active implantable devices = class III.
+6.2. Rule 10 - Active devices for diagnosis and monitoring are class IIa if:
+- supply energy absorbed by body (except visible spectrum illumination = class I);
+- image in vivo radiopharmaceutical distribution; or
+- allow direct diagnosis/monitoring of vital physiological processes.
+Class IIb if monitoring vital physiological parameters where variations could cause immediate danger (e.g. cardiac performance, respiration, CNS activity) or diagnosis in immediate danger situations.
+Active devices emitting ionizing radiation for diagnostic/therapeutic radiology (including interventional devices and control/monitor/direct influence) = class IIb.
+6.3. Rule 11 - SW providing info for diagnosis/therapy decisions is class IIa, except class III if decisions may cause death/irreversible deterioration, or class IIb if may cause serious deterioration/surgical intervention.
+SW monitoring physiological processes is class IIa, except class IIb if monitoring vital parameters where variations could cause immediate danger.
+All other SW is class I.
+6.4. Rule 12 - Active devices administering/removing medicinal products, body liquids or substances to/from body are class IIa (class IIb if potentially hazardous considering substance nature, body part, application mode).
+6.5. Rule 13 - All other active devices are class I.
+
+# 7. SPECIAL RULES
+
+7.1. Rule 14 - Devices incorporating a medicinal product (per Directive 2001/83/EC Art.1(2), including human blood/plasma derivative per Art.1(10)) with ancillary action are class III.
+7.2. Rule 15 - Contraceptive/STD prevention devices are class IIb (class III if implantable or long-term invasive).
+7.3. Rule 16 - Devices for disinfecting/cleaning/rinsing/hydrating contact lenses are class IIb.
+Devices for disinfecting/sterilising MDs are class IIa (class IIb if disinfecting solutions/washer-disinfectors for invasive devices as final processing).
+Not applicable to devices cleaning non-contact-lens devices by physical action only.
+7.4. Rule 17 - Devices for recording X-ray diagnostic images are class IIa.
+7.5. Rule 18 - Devices using non-viable human/animal tissues/cells/derivatives are class III, unless animal-origin non-viable contacting intact skin only.
+7.6. Rule 19 - Devices with nanomaterial are:
+- class III if high/medium internal exposure potential;
+- class IIb if low internal exposure potential;
+- class IIa if negligible internal exposure potential.
+7.7. Rule 20 - Invasive devices for body orifices (non-surgical) administering medicinal products by inhalation are class IIa (class IIb if mode of action essentially impacts product efficacy/safety or treating life-threatening conditions).
+7.8. Rule 21 - Devices composed of substances introduced via body orifice/applied to skin and absorbed/locally dispersed are:
+- class III if systemically absorbed to achieve intended purpose;
+- class III if achieving purpose in stomach/lower GI tract and systemically absorbed;
+- class IIa if applied to skin/nasal/oral cavity (to pharynx) achieving purpose there;
+- class IIb in all other cases.
+
+7.9. Rule 22 - Active therapeutic devices with integrated diagnostic function significantly determining patient management (e.g. closed loop systems, automated external defibrillators) = class III.
+
+`.trim()
   }
+
+  
 };

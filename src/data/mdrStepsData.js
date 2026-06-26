@@ -58,11 +58,11 @@ export const MDR_DATA = [
       title: 'Step 1) Decide the intended use and classification',
       desc: ' This step decides conformity route of the product. (a)-(d) is requred for the TD  ',
       checklist: [
-        { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and statement (d) principle of use and mode of action', 
+        { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and statement and (d) principle of use and mode of action', 
           r: `
           - Art.2(1): The definition of a MD
           - Art.2(12): The definition of intended purpose
-          - Ax.II.1(1): TD
+          - Ax.II.1.1: TD, Device description and specification
           `,
           e: `
           Read the articles and compile the statements. These are required in the TD according to Ax.II.1(1) ➔`,
