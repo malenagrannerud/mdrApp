@@ -49,20 +49,18 @@ export const MDR_DATA = [
       title: 'Step 1) Decide the intended use and classification',
       desc: ' This step decides conformity route of the product. (a)-(d) is requred for the TD  ',
       checklist: [
-        { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and statement and (d) principle of use and mode of action', 
+        { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and (d) principle of use and mode of action', 
           r: `
-          - Art.2(1): The definition of a MD
-          - Art.2(12): The definition of intended purpose
+          - Art.2(1) and Art.2(12 : The definition of a MD and the definition of intended purpose
           - Ax.II.1.1: TD, Device description and specification
           `,
-          e: `
-          Read the articles and compile the statements. These are required in the TD according to Ax.II.1(1) ➔`,
+          e: `Read the articles and compile the statements. Step 1.1 is required in the TD per Ax.II.1(1) ➔`,
           sop: TD_DATA.DD},
         
 
         { t: 'Step 1.2) Compile the MD qualification rationale ', 
           r: `
-          - Answer questionnaire on : https://eumdr.com/medical-device-rationale/
+          - Answer the questionnaire on : https://eumdr.com/medical-device-rationale/
           
           `,
           e: `This rationale proves that the product must carry a CE mark according to MDR ➔`,
@@ -112,7 +110,7 @@ export const MDR_DATA = [
         { mdcg: MDCG_DATA.HELSINKI_PROCEDURE }, 
       ]
     },
-    
+
   /****************************************  STEP 2 ****************************************/
   { id: 'm2',
     title: 'Step 2) Establish processes and resources',
