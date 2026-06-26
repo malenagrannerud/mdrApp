@@ -74,7 +74,7 @@ export const MDR_DATA = [
           - Answer questionnaire on : https://eumdr.com/medical-device-rationale/
           
           `,
-          e: `This rationale proves that the product is eligible for, and must carry, a CE mark according to MDR ➔`,
+          e: `This rationale proves that the product must carry a CE mark according to MDR ➔`,
           sop: TD_DATA.DD},
         
 
