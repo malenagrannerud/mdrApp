@@ -81,7 +81,7 @@ export const MDR_DATA = [
         { t: 'Step 1.3) Compile the (b) risk classification rational', 
           r: `
           - Art.51: Devices shall be classified according to Ax.VIII, taking into account intended purpose and inherent risks. 
-          - Ax.VIII: Rules to determine risk class (I, IIa, IIb, III).
+          - Ax.VIII: Rules to determine risk class.
           
           `,
           e: `Read the articles and classify the MD. This will determine if a NB must audit the product ➔`, 
