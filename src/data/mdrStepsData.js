@@ -148,7 +148,7 @@ export const MDR_DATA = [
         - ISO 13485 §7.3.7 Design Validation
         - ISO 14155 Clinical Investigations
         `,
-        e: `This is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
+        e: `This step is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
 
       { t: 'Step 2.4) Establish SOPs for dev and maintenance of TD, UDI and DoC',
         r: `
