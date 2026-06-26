@@ -238,7 +238,6 @@ The TD shall include info for the demonstration of conformity with the GSPR set 
 # 5. BENEFIT-RISK ANALYSIS AND RISK MANAGEMENT
 
 The TD shall include:
-
 - the benefit-risk analysis referred to in Sections 1 and 8 of Annex I, and
 - the solutions adopted and the results of the risk management referred to in Section 3 of Annex I.
 
@@ -299,48 +298,44 @@ Ax_III: {
     title:'Ax.III - Technical Documentation on Post-Market Surveillance',
     content: `
 
-The mf shall draw up a PMS plan in accordance with Art.84. The PMS plan shall be part of the TD (Ax.II).
+The TD on PMS to be drawn up by the mf in accordance with Art.83 to 86 shall be presented in a clear, organised, readily searchable and unambiguous manner and shall include the elements described in this Annex.
 
-# 1. PMS PLAN
+# 1.1. The PMS plan
 
-The PMS plan shall address the collection and utilization of available information, in particular:
+The mf shall prove in a PMS plan that it complies with the obligation referred to in Art.83.
 
-(a)	information concerning serious incidents, including information from PSURs, and field safety corrective actions;
-(b)	records referring to non-serious incidents and data on any undesirable side-effects;
-(c)	information from trend reporting;
-(d)	relevant specialist or technical literature, databases and/or registers;
-(e)	information, including feedbacks and complaints, provided by users, distributors and importers; and
-(f)	publicly available information about similar MDs.
+(a) The PMS plan shall address the collection and utilization of available info, in particular:
+- info concerning serious incidents, including info from PSURs, and field safety corrective actions;
+- records referring to non-serious incidents and data on any undesirable side-effects;
+- info from trend reporting;
+- relevant specialist or technical literature, databases and/or registers;
+- info, including feedbacks and complaints, provided by users, distributors and importers; and
+- publicly available info about similar MDs.
 
-The PMS plan shall cover at least:
+(b) The PMS plan shall cover at least:
+- a proactive and systematic process to collect any info referred to in point (a). The process shall allow a correct characterisation of the performance of the devices and shall also allow a comparison to be made between the device and similar products available on the market;
+- effective and appropriate methods and processes to assess the collected data;
+- suitable indicators and threshold values that shall be used in the continuous reassessment of the benefit-risk analysis and of the risk management as referred to in Section 3 of Ax.I;
+- effective and appropriate methods and tools to investigate complaints and analyse market-related experience collected in the field;
+- methods and protocols to manage the events subject to the trend report as provided for in Art.88, including the methods and protocols to be used to establish any statistically significant increase in the frequency or severity of incidents as well as the observation period;
+- methods and protocols to communicate effectively with CA, NB, economic operators and users;
+- reference to procedures to fulfil the mf's obligations laid down in Art.83, 84 and 86;
+- systematic procedures to identify and initiate appropriate measures including corrective actions;
+- effective tools to trace and identify devices for which corrective actions might be necessary; and
+- a PMCF plan as referred to in Part B of Ax.XIV, or a justification as to why a PMCF is not applicable.
 
-(a)	a proactive and systematic process to collect any information referred to in the first paragraph. This process shall allow a correct characterisation of the performance of the devices and shall also allow a comparison to be made between the device and similar products available on the market;
-(b)	effective and appropriate methods and processes to assess the collected data;
-(c)	suitable indicators and threshold values that shall be used in the continuous reassessment of the benefit-risk analysis and of the risk management (Annex I.3);
-(d)	effective and appropriate methods and tools to investigate complaints and analyse market-related experience collected in the field;
-(e)	methods and protocols to manage the events subject to the trend report (Art.88), including the methods and protocols to be used to establish any statistically significant increase in the frequency or severity of incidents as well as the observation period;
-(f)	methods and protocols to communicate effectively with CA, NB, economic operators and users;
-(g)	reference to procedures to fulfil the mf's obligations laid down in Articles 83, 84 and 86;
-(h)	systematic procedures to identify and initiate appropriate measures including corrective actions;
-(i)	effective tools to trace and identify devices for which corrective actions might be necessary; and
-(j)	a PMCF plan as referred to in Part B of Annex XIV, or a justification as to why a PMCF is not applicable.
+# 1.2. The PSUR referred to in Art.86 and the PMS report referred to in Art.85
 
-# 2. PMS REPORT
+The PSUR shall contain at least:
+- a summary of the results and conclusions of the analyses of the PMS data gathered as a result of the PMS plan referred to in Section 1.1;
+- a rationale and description of any preventive and corrective actions taken;
+- the conclusions of the benefit-risk determination as referred to in Art.86(3);
+- the main findings of the PMCF as referred to in Part B of Ax.XIV; and
+- the volume of sales of the device and an estimated evaluation of the population exposed to the device and, where practicable, the usage frequency of the device.
 
 The PMS report (Art.85) shall contain at least:
-
-(a)	a summary of the results and conclusions of the analyses of the PMS data gathered as a result of the PMS plan referred to in Section 1;
-(b)	a rationale and description of any preventive and corrective actions taken.
-
-# 3. PERIODIC SAFETY UPDATE REPORT (PSUR)
-
-The PSUR (Art.86) shall contain at least:
-
-(a)	a summary of the results and conclusions of the analyses of the PMS data gathered as a result of the PMS plan referred to in Section 1;
-(b)	a rationale and description of any preventive and corrective actions taken;
-(c)	the conclusions of the benefit-risk determination as referred to in Art.86(3);
-(d)	the main findings of the PMCF as referred to in Part B of Annex XIV; and
-(e)	the volume of sales of the device and an estimated evaluation of the population exposed to the device and, where practicable, the usage frequency of the device.
+- a summary of the results and conclusions of the analyses of the PMS data gathered as a result of the PMS plan referred to in Section 1.1;
+- a rationale and description of any preventive and corrective actions taken.
 
 `.trim()
   },
