@@ -186,104 +186,108 @@ shall be minimised and acceptable when weighed against benefits to the patient/u
   
 /*************************  AX.II *************************************************************************/ 
 
-    AX_II: {
-    title: 'AX.II - TD',
+ Ax_II: {
+    title:'Ax.II - Technical Documentation',
     content: `
 
-The TD and, if applicable, the summary thereof to be drawn up by the mf 
-shall be presented in a clear, organised, readily searchable and unambiguous manner and 
-shall include in particular the elements listed in this Annex.
+The mf shall draw up the TD. The TD shall demonstrate compliance of the device with the requirements of this Regulation.
+The TD shall cover the following elements:
 
-# 1. DEVICE DESCRIPTION AND SPECIFICATION, INCLUDING VARIANTS AND ACCESSORIES
+# 1. DEVICE DESCRIPTION AND SPECIFICATION
 
 1.1. Device description and specification
-
-(a)	product or trade name and a general description of the device including its intended purpose and intended users;
-(b)	the Basic UDI-DI as referred to in Part C of Annex VI assigned by
-the manufacturer to the device in question, as soon as identificationof this device becomes based on a UDI system, or otherwise a clear
-identification by means of product code, catalogue number or otherunambiguous reference allowing traceability;
-(c)	the intended patient population and medical conditions to be
-diagnosed, treated and/or monitored and other considerations such
-as patient selection criteria, indications, contra-indications,
-warnings;
-(d)	principles of operation of the device and its mode of action, scientifically demonstrated if necessary;
-(e)	the rationale for the qualification of the product as a device;
-(f)	the risk class of the device and the justification for the classification
-rule(s) applied in accordance with Annex VIII;
-(g)	an explanation of any novel features;
-(h)	a description of the accessories for a device, other devices and otherproducts that are not devices, which are intended to be used in
-combination with it;
-(i)	a description or complete list of the various configurations/variants
-of the device that are intended to be made available on the market;
-(j)	a general description of the key functional elements, e.g. its parts/
-components (including software if appropriate), its formulation, its
-composition, its functionality and, where relevant, its qualitative and quantitative composition. Where appropriate, this shall include
-labelled pictorial representations (e.g. diagrams, photographs, and
-drawings), clearly indicating key parts/components, including
-sufficient explanation to understand the drawings and diagrams;
-(k)	a description of the raw materials incorporated into key functional
-elements and those making either direct contact with the human
-body or indirect contact with the body, e.g., during extracorporeal
-circulation of body fluids;
-(l)	technical specifications, such as features, dimensions and
-performance attributes, of the device and any variants/
-configurations and accessories that would typically appear in the
-product specification made available to the user, for example in
-brochures, catalogues and similar publications.
-
+The TD shall include:
+- name or trade name, a general description of the device, its intended purpose and intended users/population;
+- Basic UDI-DI as referred to in Part C of Annex VI, or any other clear identification in terms of identification code, catalogue number or other unambiguous reference allowing traceability;
+- the intended patient population, medical condition to be diagnosed, treated and/or monitored, other considerations such as patient selection criteria, indications, contra-indications, warnings;
+- principles of operation of the device and, where appropriate, the scientific concepts proven (mode of action) and its mode of action, if scientifically proven;
+- the reason for the qualification of the product as a device (rationale);
+- the risk class and the justification for the classification rule(s) applied under Annex VIII;
+- explanation of any novel features;
+- description of the accessories, other devices and other products that are not devices, which are intended to be used in combination with it;
+- description or complete list of the various configurations/variants of the device that will be made available;
+- a general description of the key functional elements, e.g. its parts/components, including software if appropriate, its formulation, its composition, its functionality and, where relevant, its qualitative and quantitative composition. Where relevant, this includes labelled pictorial representations (e.g. photographs, drawings) clearly indicating key parts/components, including sufficient explanation to understand the photographs and drawings;
+- a description of the raw materials incorporated into key functional elements and those making either direct contact with the human body or indirect contact with the body, e.g. during extracorporeal circulation of body fluids;
+- technical specifications (whether features, dimensions, performance attributes) of the device and any variants/configurations and accessories appearing in the information supplied (Annex I.III).
 
 1.2. Reference to previous and similar generations of the device
+- An overview of the previous generations of the device produced by the mf, where such devices exist.
+- An overview of identified similar devices available on the EU or international markets, where such devices exist.
 
-(a)	an overview of the previous generation or generations of the deviceproduced by the manufacturer, where such devices exist;
-(b)	an overview of identified similar devices available on the Union or
-international markets, where such devices exist.
+# 2. INFORMATION TO BE SUPPLIED BY THE MF
 
+The TD shall include:
+- the label or labels on the device and on its packaging, such as single unit packaging, sales packaging, transport packaging in case of specific management conditions, in the languages accepted in the Member States where the device is envisaged to be sold; and
+- the instructions for use in the languages accepted in the Member States where the device is envisaged to be sold.
 
-2. INFORMATION TO BE SUPPLIED BY THE MF
+# 3. DESIGN AND MANUFACTURING INFORMATION
 
-A complete set of:
-—	the label or labels on the device and on its packaging, such as single unit packaging, sales packaging, transport packaging in case of
-specific management conditions, in the languages accepted in the
-Member States where the device is envisaged to be sold; and
-—	the instructions for use in the languages accepted in the Member States where the device is envisaged to be sold.
+The TD shall include:
+- information to allow the design stages applied to the device to be understood;
+- complete information and specifications, including the manufacturing processes and their validation, their adjuvants, the continuous monitoring and the final product testing. Data shall be fully included in the TD.
+- identification of all sites, including suppliers and sub-contractors, where design and manufacturing activities are performed.
 
-3. DESIGN AND MANUFACTURING INFORMATION
+# 4. GENERAL SAFETY AND PERFORMANCE REQUIREMENTS
 
-(a)	information to allow the design stages applied to the device to be
-understood;
-(b)	complete information and specifications, including the
-manufacturing processes and their validation, their adjuvants, the
-continuous monitoring and the final product testing. Data shall be
-fully included in the technical documentation;
-(c)	identification of all sites, including suppliers and sub-contractors,
-where design and manufacturing activities are performed.
-
-4. GENERAL SAFETY AND PERFORMANCE REQUIREMENTS
-
-The documentation shall contain information for the demonstration of conformity with the GSPR set out in Ax.I that are applicable to the device taking into account its intended purpose, and shall include a justification, validation and verification of the solutions adopted to meet those requirements. The demonstration of conformity shall include:
-
-(a)	the general safety and performance requirements that apply to the
-device and an explanation as to why others do not apply;
-(b)	the method or methods used to demonstrate conformity with each
-applicable general safety and performance requirement;
+The TD shall include info for the demonstration of conformity with the GSPR set out in Ax.I that apply to the device. That demonstration shall include:
+(a)	the GSPR that apply to the device and an explanation as to why others do not apply;
+(b)	the method or methods used to demonstrate conformity with each applicable GSPR;
 (c)	the harmonised standards, CS or other solutions applied; and
-(d)	the precise identity of the controlled documents offering evidence of conformity with each harmonised standard, CS or other method
-applied to demonstrate conformity with the general safety and
-performance requirements. The information referred to under this
-point shall incorporate a cross-reference to the location of such
-evidence within the full technical documentation and, if applicable,
-the summary technical documentation.
+(d)	the precise identity of the controlled documents offering evidence of conformity with each harmonised standard, CS or other method applied to demonstrate conformity with the GSPR. This shall include a cross-reference to the location of such evidence within the full TD and, where applicable, the summary TD.
 
-5. BENEFIT-RISK ANALYSIS AND RISK MANAGEMENT
+# 5. BENEFIT-RISK ANALYSIS AND RISK MANAGEMENT
 
-The documentation shall contain information on:
+The TD shall include:
 
-(a)	the benefit-risk analysis referred to in Sections 1 and 8 of Annex I,
-and
-(b)	the solutions adopted and the results of the risk management
-referred to in Section 3 of Annex I.
+- the benefit-risk analysis referred to in Sections 1 and 8 of Annex I, and
+- the solutions adopted and the results of the risk management referred to in Section 3 of Annex I.
 
+# 6. PRODUCT VERIFICATION AND VALIDATION
 
+The TD shall contain the results and critical analyses of all verifications and validation tests and/or studies undertaken to demonstrate conformity of the device with the requirements of this Regulation, in particular the applicable GSPR.
+
+## 6.1. Pre-clinical and clinical data
+
+(a)	results of tests: functional, ex vivo, in vitro, in silico, performance, animal, biological/physical/chemical/ microbiological safety evaluation;
+(b)	all relevant published scientific literature regarding the safety, performance, design characteristics and intended purpose of the device;
+(c)	the clinical evaluation plan and clinical evaluation report in accordance with Art.61 and Part A of Annex XIV;
+(d)	the PMCF plan and PMCF evaluation report, or a justification as to why a PMCF is not applicable (Part B of Annex XIV).
+
+## 6.2. Additional information for specific devices
+
+The TD shall include, where relevant, detailed information regarding:
+
+(a)	devices containing tissues/cells of human/animal origin or their derivatives (Annex I.II.8);
+(b)	devices composed of substances or combinations of substances that are intended to be introduced into the human body and that are absorbed by or locally dispersed in the human body (Annex I.II.10);
+(c)	devices containing carcinogenic, mutagenic or toxic to reproduction (CMR) substances or endocrine-disrupting substances (Annex I.II.10.4);
+(d)	sterile condition, packaging validation and sterilisation methods;
+(e)	devices placed on the market with a measuring function.
+
+# 7. POST-MARKET SURVEILLANCE (PMS)
+
+The PMS plan drawn up in accordance with Art.84 shall be included in the TD. Unless otherwise justified, the TD shall include the PMS report referred to in Art.85 (class I) or the PSUR referred to in Art.86 (class IIa, IIb and III).
+
+# 8. ADDITIONAL INFORMATION FOR SPECIFIC DEVICES
+
+## 8.1. Combination products (drug-device)
+Where a device incorporates, as an integral part, a substance which, if used separately, would be considered a medicinal product (Art.1(8) and Art.117), the TD shall include:
+- information on the ancillary action of that substance and a justification for its incorporation;
+- relevant data on the verification of the safety, quality and usefulness of the substance, taking account of the intended purpose of the device.
+
+## 8.2. Devices manufactured using tissues or cells of human or animal origin, or their derivatives
+
+For devices manufactured utilising tissues or cells of human or animal origin, or their derivatives, which are non-viable or rendered non-viable, the TD shall include in addition to the information according to Directive 2001/83/EC and Regulation (EC) No 1394/2007, where relevant, the following:
+
+- the information on the origin, the processing and the preservation and the testing of the tissues and cells;
+- for tissues and cells of animal origin, detailed documentation on the compliance with Regulation (EC) No 1069/2009 (health rules as regards animal by-products) including risk assessment procedures;
+- documentation on traceability of all materials from the donor to the finished device.
+
+## 8.3. Devices incorporating or consisting of nanomaterial
+
+For devices incorporating or consisting of nanomaterial (Art.2(18)), the TD shall include:
+
+- identification of the nanomaterials, including the specification of their chemical composition, size, size distribution and other physical and chemical characteristics;
+- an assessment of the risk associated with the use of nanomaterial.
 
     `.trim()
   },
@@ -291,43 +295,55 @@ referred to in Section 3 of Annex I.
 
   /**********************************************************************************************/ 
 
- AX_III: {
-    title:'ANNEX III - TD ON PMS',
+Ax_III: {
+    title:'Ax.III - Technical Documentation on Post-Market Surveillance',
     content: `
-The TD on PMS to be drawn up by the mf in Art.83 to 86 shall be presented in a 
-- clear, 
-- organised, 
-- readily searchable and unambiguous manner and 
-- shall include in particular the elements described in this Annex.
 
-## 1.1. The PMS plan drawn up in accordance with Article 84.
-The mfr shall prove in a PMS plan that it complies with the obligation in Article 83.
+The mf shall draw up a PMS plan in accordance with Art.84. The PMS plan shall be part of the TD (Ax.II).
 
-(a) The PMS plan shall address the collection and utilization of available information, in particular:
-— information concerning serious incidents, including information from PSURs, and field safety corrective actions;
-— records referring to non-serious incidents and data on any undesirable side-effects;
-— information from trend reporting;
-— relevant specialist or technical literature, databases and/or registers;
-— information, including feedbacks and complaints, provided by users, distributors and importers; and
-— publicly available information about similar medical devices.
+# 1. PMS PLAN
 
-(b) The PMS plan shall cover at least:
-— a proactive and systematic process to collect any information in (a). The process shall allow a correct characterisation of the performance of the devices and shall also allow a comparison to be made between the device and similar products available on the market
-— effective and appropriate methods and processes to assess the collected data;
-— suitable indicators and threshold values that shall be used in the continuous reassessment of the benefit-risk analysis and of the risk management as referred to in Section 3 of Annex I;
-— effective and appropriate methods and tools to investigate complaints and analyse market-related experience collected in the field;
-— methods and protocols to manage the events subject to the trend report as provided for in Article 88, including the methods and protocols to be used to establish any statistically significant increase in the frequency or severity of incidents as well as the observation period;
-— methods and protocols to communicate effectively with competent authorities, notified bodies, economic operators and users;
-— reference to procedures to fulfil the manufacturers obligations laid down in Articles 83, 84 and 86;
-— systematic procedures to identify and initiate appropriate measures including corrective actions;
-— effective tools to trace and identify devices for which corrective actions might be necessary; and
-— a PMCF plan as referred to in Part B of Annex XIV, or a justification as to why a PMCF is not applicable.
+The PMS plan shall address the collection and utilization of available information, in particular:
 
-## 1.2. 
-The PSUR in Article 86 and the post-market surveillance report referred to in Article 85.
+(a)	information concerning serious incidents, including information from PSURs, and field safety corrective actions;
+(b)	records referring to non-serious incidents and data on any undesirable side-effects;
+(c)	information from trend reporting;
+(d)	relevant specialist or technical literature, databases and/or registers;
+(e)	information, including feedbacks and complaints, provided by users, distributors and importers; and
+(f)	publicly available information about similar MDs.
+
+The PMS plan shall cover at least:
+
+(a)	a proactive and systematic process to collect any information referred to in the first paragraph. This process shall allow a correct characterisation of the performance of the devices and shall also allow a comparison to be made between the device and similar products available on the market;
+(b)	effective and appropriate methods and processes to assess the collected data;
+(c)	suitable indicators and threshold values that shall be used in the continuous reassessment of the benefit-risk analysis and of the risk management (Annex I.3);
+(d)	effective and appropriate methods and tools to investigate complaints and analyse market-related experience collected in the field;
+(e)	methods and protocols to manage the events subject to the trend report (Art.88), including the methods and protocols to be used to establish any statistically significant increase in the frequency or severity of incidents as well as the observation period;
+(f)	methods and protocols to communicate effectively with CA, NB, economic operators and users;
+(g)	reference to procedures to fulfil the mf's obligations laid down in Articles 83, 84 and 86;
+(h)	systematic procedures to identify and initiate appropriate measures including corrective actions;
+(i)	effective tools to trace and identify devices for which corrective actions might be necessary; and
+(j)	a PMCF plan as referred to in Part B of Annex XIV, or a justification as to why a PMCF is not applicable.
+
+# 2. PMS REPORT
+
+The PMS report (Art.85) shall contain at least:
+
+(a)	a summary of the results and conclusions of the analyses of the PMS data gathered as a result of the PMS plan referred to in Section 1;
+(b)	a rationale and description of any preventive and corrective actions taken.
+
+# 3. PERIODIC SAFETY UPDATE REPORT (PSUR)
+
+The PSUR (Art.86) shall contain at least:
+
+(a)	a summary of the results and conclusions of the analyses of the PMS data gathered as a result of the PMS plan referred to in Section 1;
+(b)	a rationale and description of any preventive and corrective actions taken;
+(c)	the conclusions of the benefit-risk determination as referred to in Art.86(3);
+(d)	the main findings of the PMCF as referred to in Part B of Annex XIV; and
+(e)	the volume of sales of the device and an estimated evaluation of the population exposed to the device and, where practicable, the usage frequency of the device.
+
 `.trim()
   },
-
 
 
   AX_XIV: {

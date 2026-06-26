@@ -51,11 +51,10 @@ export const MDR_DATA = [
       checklist: [
         { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and (d) principle of use and mode of action', 
           r: `
-          - Art.2(1) and Art.2(12 : The definition of a MD and the definition of intended purpose
+          - Art.2(1) and Art.2(12): The definition of a MD and the definition of intended purpose
           - Ax.II.1.1: TD, Device description and specification
           `,
-          e: `Read the articles and compile the statements. Step 1.1 is required in the TD per Ax.II.1(1) ➔`,
-          sop: TD_DATA.DD},
+          e: `Read the articles and compile the statements. Output of Step 1.1) is required in the TD per Ax.II.1(1) ➔`,sop: TD_DATA.DD},
         
 
         { t: 'Step 1.2) Compile the MD qualification rationale ', 
@@ -63,8 +62,7 @@ export const MDR_DATA = [
           - Answer the questionnaire on : https://eumdr.com/medical-device-rationale/
           
           `,
-          e: `This rationale proves that the product must carry a CE mark according to MDR ➔`,
-          sop: TD_DATA.DD},
+          e: `This rationale proves that the product must carry a CE mark according to MDR ➔`, sop: TD_DATA.DD},
         
 
         { t: 'Step 1.3) Compile the (b) risk classification rational', 
@@ -73,8 +71,7 @@ export const MDR_DATA = [
           - Ax.VIII: Rules to determine risk class.
           
           `,
-          e: `Read the articles and classify the MD. This will determine if a NB must audit the product ➔`, 
-          sop: TD_DATA.DD},
+          e: `Read the articles and classify the MD. This will determine if a NB must audit the product ➔`, sop: TD_DATA.DD},
 
         { t: ' ', 
           e: `💡 Step 1) also applies to devices offered in EU via the internet (Art.6), including diagnostic or therapeutic services.
@@ -116,7 +113,7 @@ export const MDR_DATA = [
     title: 'Step 2) Establish processes and resources',
     desc: 'Outputs in this step are the QMS of the company ',
     checklist: [
-      { t: ' ', e: `Read through Art.10: "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
+      { t: ' ', e: `Read Art.10: "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
 
 /****************************************  STEP 2.1 ****************************************/
 
@@ -152,6 +149,7 @@ export const MDR_DATA = [
         e: `This step is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
 
 /****************************************  STEP 2.4 ****************************************/
+
       { t: 'Step 2.4) Establish SOPs for dev and maintenance of TD, UDI and DoC',
         r: `
         - Art.10(4, 6, 7, 8): Mfs shall draw up and keep up to date TD with content per Ax.II and Ax.III, (UDI system, DoC and Change history log for NB surveillance)
@@ -160,9 +158,6 @@ export const MDR_DATA = [
         - Ax.X.5.2: Mf shall inform NB of planned substantial changes to approved type. NB verifies certificate still valid, or re-assesses.
         `,
         e: `This step is proved by implementing a SOP that uses the TD structure as deliverables, with change history log. The process is used to compile and maintain the TD for NB submission and surveillance. See QMS Step 7.1.`},
-
-
-
 
 /****************************************  STEP 2.5 ****************************************/
 
@@ -187,7 +182,9 @@ export const MDR_DATA = [
         - Art.10(9)(2): Def. of the QMS scope which, according to §4.2.2, has to be documented in the QM. 
         `,
         e: `This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure MD in series production remain in conformity with MDR. See QMS Step 0-7.`},
-    
+
+        /****************************************  STEP 2.6 ****************************************/
+
 
       { t: 'Step 2.6) Plan PMS activities',
         r: `
