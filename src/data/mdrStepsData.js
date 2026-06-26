@@ -2,15 +2,6 @@
  * @file mdrStepsData.js
  * @description Regulatoriska steg för MDR-efterlevnad.
  * 
- * Skrivsätt;	Betyder
- * 
- * Art.2(1); Article 2, paragraph 1
- * Art.10(9)(g);	Article 10, paragraph 9, sub-paragraph (g)
- * Ax.I;	Annex I
- * Ax.I.3;	Annex I, section 3
- * Ax.II.1(1);	Annex II, chapter 1, paragraph 1
- * Ax.IX.4.10;	Annex IX, chapter I, section 4.10
- * Ax.XIV.A;	Annex XIV, Part A
  * 
  * t: output: vad du ska göra kort
  * r: regulatoriska referenser 
@@ -128,7 +119,7 @@ export const MDR_DATA = [
     checklist: [
        
       { t: ' ', 
-        e: `Read through Art.10: "General obligations of manufacturers". Consider if your company has or must recruit the expertise needed. If not, subcontracting is an option.`},
+        e: `Read through Art.10: "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
 
       { t: 'Step 2.1) Implement a design and manufacturing SOP',
         r: `
@@ -136,11 +127,11 @@ export const MDR_DATA = [
         - Art.10(9)(g): "The QMS shall address… product realisation: planning, D&D, production and service provision."
           
           `,
-        e: `This is proved by implementing ISO 13485 §7 — Product Realisation. See QMS Step 4 & 5. `},
+        e: `This step is proved by implementing ISO 13485 §7 — Product Realisation. See QMS Step 4 & 5. `},
 
       { t: 'Step 2.2) Implement a RM SOP',
         r: `
-        - Art.10(2): "Mfs shall establish, document, implement and maintain RM as in Ax.I.3."
+        - Art.10(2): "Mf shall establish, document, implement and maintain RM as in Ax.I.3."
         - Ax.I.3: RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (Art.83-86) → Amend controls if necessary.
         - Art.83-86: Mfs shall have a PMS system, plan and report (class I) or PSUR (class IIa and up)
         `,
