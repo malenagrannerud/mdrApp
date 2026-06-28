@@ -49,14 +49,14 @@ ART_6: {
 ART_10: {
   chapter:'CH.II MAKING AVAILABLE ON THE MARKET AND PUTTING INTO SERVICE OF DEVICES, OBLIGATIONS OF ECONOMIC OPERATORS, REPROCESSING, CE MARKING, FREE MOVEMENT ', 
   title: 'Article 10. General obligations of manufacturers',
-  title_short: 'Art.2(12)',
+  title_short: ' ',
   content: `
 
 1. When placing devices on the market or putting them into service, mfs shall ensure they have been designed and manufactured in accordance with this Regulation.
 
 2. Mfs shall establish, document, implement and maintain a RMS as described in **Ax.I.3**.
 
-3. Mfs shall conduct a CEV in accordance with **Art.61** and **Ax.XIV**, including PMCF.
+3. Mfs shall conduct a CEV in accordance with *Art.61** and **Ax.XIV**, including PMCF.
 
 4. Mfs of devices other than custom-made devices shall draw up and keep up to date TD for those devices. The TD shall allow the conformity of the device with this Regulation to be assessed. The TD shall include the elements in **Ax.II** and **Ax.III**.
 
@@ -265,20 +265,17 @@ The TD shall include:
 - An overview of identified similar devices available on the EU or international markets, where such devices exist.
 
 # 2. INFORMATION TO BE SUPPLIED BY THE MF
-
 The TD shall include:
 - the label or labels on the device and on its packaging, such as single unit packaging, sales packaging, transport packaging in case of specific management conditions, in the languages accepted in the Member States where the device is envisaged to be sold; and
 - the instructions for use in the languages accepted in the Member States where the device is envisaged to be sold.
 
 # 3. DESIGN AND MANUFACTURING INFORMATION
-
 The TD shall include:
 - information to allow the design stages applied to the device to be understood;
 - complete information and specifications, including the manufacturing processes and their validation, their adjuvants, the continuous monitoring and the final product testing. Data shall be fully included in the TD.
 - identification of all sites, including suppliers and sub-contractors, where design and manufacturing activities are performed.
 
 # 4. GSPR
-
 The TD shall include info for the demonstration of conformity with the GSPR set out in Ax.I that apply to the device. That demonstration shall include:
 (a)	the GSPR that apply to the device and an explanation as to why others do not apply;
 (b)	the method or methods used to demonstrate conformity with each applicable GSPR;
@@ -286,7 +283,6 @@ The TD shall include info for the demonstration of conformity with the GSPR set 
 (d)	the precise identity of the controlled documents offering evidence of conformity with each harmonised standard, CS or other method applied to demonstrate conformity with the GSPR. This shall include a cross-reference to the location of such evidence within the full TD and, where applicable, the summary TD.
 
 # 5. BENEFIT-RISK ANALYSIS AND RISK MANAGEMENT
-
 The TD shall include:
 - the benefit-risk analysis referred to in Sections 1 and 8 of Annex I, and
 - the solutions adopted and the results of the risk management referred to in Section 3 of Annex I.
@@ -299,14 +295,11 @@ The TD shall include:
 
 AX_III: {
     title:'Annex III. Technical documentation on post-market surveillance',
-    content: `
-
-The TD on PMS to be drawn up by the mf in accordance with Art.83 to 86 shall be presented in a clear, organised, readily searchable and unambiguous manner and shall include the elements described in this Annex.
+    content: `The TD on PMS to be drawn up by the mf in accordance with Art.83 to 86 shall be presented in a clear, organised, readily searchable and unambiguous manner and shall include the elements described in this Annex.
 
 # 1.1. The PMS plan drawn up in accordance with Art.84.
 
 The mf shall prove in a PMS plan that it complies with the obligation referred to in Art.83.
-
 (a) The PMS plan shall address the collection and utilization of available info, in particular:
 - info concerning serious incidents, including info from PSURs, and field safety corrective actions;
 - records referring to non-serious incidents and data on any undesirable side-effects;
@@ -328,7 +321,6 @@ The mf shall prove in a PMS plan that it complies with the obligation referred t
 - a PMCF plan as referred to in Part B of Ax.XIV, or a justification as to why a PMCF is not applicable.
 
 # 1.2. The PSUR referred to in Art.86 and the PMS report referred to in Art.85
-
 The PSUR shall contain at least:
 - a summary of the results and conclusions of the analyses of the PMS data gathered as a result of the PMS plan referred to in Section 1.1;
 - a rationale and description of any preventive and corrective actions taken;
@@ -347,8 +339,7 @@ The PMS report (Art.85) shall contain at least:
   AX_XIV: {
     title: 'Annex XIV. Clinical evaluation and PMCF ',
     content: `# PART A - CLINICAL EVALUATION
-1.   
-To plan, continuously conduct and document a clinical evaluation, manufacturers shall:
+1. To plan, continuously conduct and document a clinical evaluation, mfs shall:
 (a) establish and update a CEP, which shall include at least:
 - an identification of the GSPR that require support from relevant clinical data;
 — a specification of the intended purpose of the device;
@@ -364,8 +355,7 @@ To plan, continuously conduct and document a clinical evaluation, manufacturers 
 (d) generate, through properly designed CIs in accordance with the clinical development plan, any new or additional clinical data necessary to address outstanding issues; and
 (e) analyse all relevant clinical data in order to reach conclusions about the safety and clinical performance of the device including its clinical benefits.
 
-2.   
-The clinical evaluation shall be 
+2. The clinical evaluation shall be 
 - thorough and objective, and 
 - take into account both favourable and unfavourable data. 
 Its depth and extent shall be proportionate and appropriate to the 
@@ -375,8 +365,7 @@ Its depth and extent shall be proportionate and appropriate to the
 - risks 
 of the device in question, as well as to the manufacturer's claims in respect of the device.
 
-3.   
-A clinical evaluation may be based on clinical data relating to a device for which equivalence to the device in question can be demonstrated. The following technical, biological and clinical characteristics shall be taken into consideration for the demonstration of equivalence:
+3. A CEV may be based on clinical data relating to a device for which equivalence to the device in question can be demonstrated. The following technical, biological and clinical characteristics shall be taken into consideration for the demonstration of equivalence:
 
 — Technical: the device is of similar design; is used under similar conditions of use; has similar specifications and properties including physicochemical properties such as intensity of energy, tensile strength, viscosity, surface characteristics, wavelength and software algorithms; uses similar deployment methods, where relevant; has similar principles of operation and critical performance requirements;
 — Biological: the device uses the same materials or substances in contact with the same human tissues or body fluids for a similar kind and duration of contact and similar release characteristics of substances, including degradation products and leachables;
@@ -401,7 +390,7 @@ Both favourable and unfavourable data considered in the clinical evaluation shal
 (d) ensuring the continued acceptability of the benefit-risk ratio referred to in Sections 1 and 9 of Annex I, and
 (e) identifying possible systematic misuse or off-label use of the device, with a view to verifying that the intended purpose is correct.
 
-6.2.   The PMCF plan shall include at least:
+6.2. The PMCF plan shall include at least:
 (a) the general methods and procedures of the PMCF to be applied, such as gathering of clinical experience gained, feedback from users, screening of scientific literature and of other sources of clinical data;
 (b) the specific methods and procedures of PMCF to be applied, such as evaluation of suitable registers or PMCF studies;
 (c) a rationale for the appropriateness of the methods and procedures referred to in points (a) and (b);
@@ -411,11 +400,9 @@ Both favourable and unfavourable data considered in the clinical evaluation shal
 (g) reference to any relevant CS, harmonised standards when used by the manufacturer, and relevant guidance on PMCF; and
 (h) a detailed and adequately justified time schedule for PMCF activities (e.g. analysis of PMCF data and reporting) to be undertaken by the manufacturer.
 
-## 7.   
-The mfr shall analyse the findings of the PMCF and document the results in a PMCF evaluation report that shall be part of the CER and the TD.
+7. The mfr shall analyse the findings of the PMCF and document the results in a PMCF evaluation report that shall be part of the CER and the TD.
 
-## 8.   
-The conclusions of the PMCF evaluation report shall be taken into account for the clinical evaluation in Art. 61 and Part A of this Annex and in the risk management referred to in Section 3 of Annex I. If, through the PMCF, the need for preventive and/or corrective measures has been identified, the manufacturer shall implement them.
+8. The conclusions of the PMCF evaluation report shall be taken into account for the clinical evaluation in Art. 61 and Part A of this Annex and in the risk management referred to in Section 3 of Annex I. If, through the PMCF, the need for preventive and/or corrective measures has been identified, the manufacturer shall implement them.
 
 
 
@@ -448,7 +435,6 @@ The conclusions of the PMCF evaluation report shall be taken into account for th
 2.8. Injured skin or mucous membrane - skin or mucous membrane with pathological change, change following disease, or wound.
 
 # CHAPTER II - Implementing rules
-
 3.1. Classification shall be governed by the intended purpose of the devices.
 3.2. If used in combination, classification rules shall apply separately to each device. Accessories for a MD and for Annex XVI products shall be classified in their own right separately from the device they are used with.
 3.3. SW driving or influencing use of a device shall fall within the same class as the device. Independent SW shall be classified in its own right.
@@ -458,7 +444,6 @@ The conclusions of the PMCF evaluation report shall be taken into account for th
 3.7. Direct diagnosis = device provides diagnosis by itself or provides decisive information for diagnosis.
 
 # CHAPTER III - Classification rules
-
 4. NON-INVASIVE DEVICES
 4.1. Rule 1 - All non-invasive devices are class I, unless otherwise specified below.
 4.2. Rule 2 - Non-invasive devices for channelling/storing blood, body liquids, cells/tissues, liquids/gases for eventual infusion/administration/introduction into body are class IIa if:
@@ -478,7 +463,6 @@ Non-invasive devices consisting of substances intended in vitro in direct contac
 This rule also applies to invasive devices contacting injured mucous membrane.
 
 5. INVASIVE DEVICES
-
 5.1. Rule 5 - Invasive devices for body orifices (non-surgical) not connected to active device or connected to class I active device are:
 - class I if transient use;
 - class IIa if short-term use (except oral cavity to pharynx, ear canal to eardrum, nasal cavity = class I);
@@ -513,7 +497,6 @@ Connected to class IIa/IIb/III active device = class IIa.
 - spinal disc replacements or implantables contacting spinal column (except screws, wedges, plates, instruments) = class III.
 
 6. ACTIVE DEVICES
-
 6.1. Rule 9 - Active therapeutic devices administering/exchanging energy are class IIa (class IIb if potentially hazardous considering nature/density/site of energy).
 Active devices controlling/monitoring class IIb active therapeutic devices or directly influencing their performance = class IIb.
 Active devices emitting ionizing radiation for therapy (including control/monitor/direct influence) = class IIb.

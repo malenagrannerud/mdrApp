@@ -19,7 +19,9 @@ export const MDR_DATA = [
     desc: 'A Roadmap to CE Marking Medical Devices According to MDR 2017/745',
     checklist: [
       { t: 'OVERVIEW',
-        e: `This MDR roadmap provides deliverables to CE marking a medical device. Steps are grouped so that sub steps can be done in parallel.
+        e: `This MDR roadmap provides deliverables to CE marking a medical device. 
+        Steps are grouped so that sub steps can be done in parallel.
+        Files that are product specific are collected in the technical dossier, and process specific files belong to the QMS Path.
      
       `}, 
 
@@ -95,13 +97,13 @@ export const MDR_DATA = [
     title: 'Step 2) Establish processes and resources',
     desc: 'Outputs in this step are delivered as processes (SOPs) in the QMS of the company',
     checklist: [
-      { t: ' ', e: `Read Art.10: "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
+      { t: ' ', e: `Read **Art.10** : "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
 
 /****************************************  STEP 2.1 ****************************************/
 
-      { t: 'Step 2.1) Implement a design and manufacturing SOPs',
+      { t: 'Step 2.1) Implement design and manufacturing SOPs',
         e: `Mfs shall ensure that the MD have been designed & manufactured according to MDR, as per **Art.10(1)**. This is done by implementing a QMS, that shall address planning, D&D, production and service provision as per **Art.10(9)(g)**.
-        Demonstate compliance for Step 2.1) by implementing ISO 13485 §7 — Product Realisation processes, to the QMS. See QMS Path, Step 4) & Step 5). `},
+        Demonstate compliance for this step by implementing ISO 13485 §7 — Product Realisation processes, to the QMS. See QMS Path, Step 4) & Step 5). `},
 
 /****************************************  STEP 2.2 ****************************************/
       { t: 'Step 2.2) Implement RM SOPs',
@@ -110,23 +112,22 @@ export const MDR_DATA = [
 Since ISO 14971 specifies what to be done but not by how ➔ RM activities must be assigned to compentecies. 
 It is also recommended to include EN 62366 - Human factor & usability, to cover related risks to human factors. 
         
-Demonstate compliance for Step 2.2) by implementing ISO 14971, EN 62366 and specify roles and processes that include RM. See QMS Path, Step 4.2. 
+Demonstate compliance for this step by implementing ISO 14971 and EN 62366 to the SOPs in QMS Path, Step 4.2. Also, specify roles, tasks and processes that include RM. 
 `},
 
 /****************************************  STEP 2.3 ****************************************/
-      { t: 'Step 2.3) Implement a CEV SOP',
-        r: `
-        - Art.10(3): Mfs shall establish, document, implement and maintain a system for CEV.
-        - Art.61: A CEV must be defined and methodologic: (a) critical evaluation of literature and (b) CIs, (c) treatment options
-        - Ax.XIV.A: Defines the clinical process — CEP → identify data → appraise data → analyse data → CER
-        - Ax.XIV.B.6: PMCF Plan
-        - Ax.XIV.B.7: PMCF Evaluation Report
-        - MEDDEV 2.7/1 rev.4: Basis for the process — more detail than Ax.XIV
-        - ISO 13485 §7.3.7 Design Validation
-        - ISO 14155 Clinical Investigations
-        
-        `,
-        e: `This step is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Path, Step 4.3).`},
+    { t: 'Step 2.3) Implement CEV SOPs',
+      e: `Mfs shall establish, document, implement and maintain a system for CEV as per **Art.10(3)**. 
+      As required by **Art.61**, a CEV must be defined and methodologic, based on 
+      - (a) critical evaluation of literature, 
+      - (b) CIs, and 
+      - (c) treatment options.
+
+The clinical process is defined in **Ax.XIV.A** (CEP ➔ identify data ➔ appraise data ➔ analyse data ➔ CER). Furthermore, a PMCF Plan is required by **Ax.XIV.B.6** and a PMCF Evaluation Report by **Ax.XIV.B.7**. 
+
+MEDDEV 2.7/1 rev.4 serves as the basis for the process and provides more detail than **Ax.XIV**. The process also maps to ISO 13485 §7.3.7 Design Validation and ISO 14155 Clinical Investigations.
+
+Demonstrate compliance for this step by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP for CEV. See QMS Path, Step 4.3).`},
 
 /****************************************  STEP 2.4 ****************************************/
 
