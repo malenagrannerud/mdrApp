@@ -151,26 +151,23 @@ Demonstrate compliance for this step by implementing SOPs that uses the TD struc
 
       { t: 'Step 2.5) Build a QMS according to ISO 13485:2016',
         e: `
-        According to **Art.10(9)**,  mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
+        According to **Art.10(9)**,  mfs shall establish, document, implement and maintain a QMS. It shall address at least (a)-(m)
         
-        (a) 4.1.1 per Art.15-PRRC, Art.52, Ax.VII.4.9
-        (b) 7.2.1(c) and Ax.I
-        (c) 5—Management Responsibility
-        (d) 6—Resource Management
-        (e) 7.1—RM per Ax.I.3
-        (f) 7.2.1(c)—Clinical Evaluation per Art.61 and Ax.XIV
-        (g) 7—Product Realisation
-        (h) 7.2.1(c)—UDI verification per Art.27(3) and Art.29
-        (i) 8.2.1—PMS per Art.10(10) and Art.83
-        (j) 8.3.3—Stakeholder communication per Art.10(12)
-        (k) 8.2.1—Vigilance per Art.10(13) and Art.87-88
-        (l) 8.5.2 and §8.5.3—CAPA
-        (m) 8—Measurement, analysis and improvement
+(a) a strategy for regulatory compliance, including conformity assessment procedures and management of modifications;
+(b) identification of applicable GSPRs and options to address them;
+(c) management responsibility;
+(d) resource management, including selection and control of suppliers and sub-contractors;
+(e) risk management as set out in **Ax.I.3**;
+(f) clinical evaluation in accordance with **Art.61** and **Ax.XIV**, including PMCF;
+(g) product realisation, including planning, design, development, production and service provision;
+(h) verification of UDI assignments under **Art.27(3)** and ensuring consistency and validity of information under **Art.29**;
+(i) setting-up, implementation and maintenance of a PMS system under **Art.83**;
+(j) communication with CAs, NBs, economic operators, customers and other stakeholders;
+(k) processes for reporting serious incidents and FSCAs in the context of vigilance;
+(l) management of CAPA and verification of their effectiveness;
+(m) processes for monitoring and measurement of output, data analysis and product improvement.
 
-        - Art.10(9)(2): Def. of the QMS scope which, according to §4.2.2, has to be documented in the QM. 
-        
-        
-        This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure MD in series production remain in conformity with MDR. See QMS Step 0-7.`},
+Demonstrate compliance by implementing a QMS per ISO 13485 covering (a)-(m), to demonstrate that MD in series production remain in conformity with MDR. See QMS Path Step 0-7).`},
 
         /****************************************  STEP 2.6 ****************************************/
 
