@@ -104,7 +104,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* KORT 1: TOPP PRODUKTER */}
-        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter 2024" subtitle="Sorterat efter flest antal incidentrapporter">
+        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter till FDA 2024" subtitle="Sorterat efter flest antal incidentrapporter">
           
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -121,7 +121,7 @@ export default function Dashboard() {
         </PBICard>
 
         {/* KORT 2: TOPP TILLVERKARE */}
-        <PBICard title="Topp 10 Rapporterade Tillverkare 2024" subtitle="Rensade från suffix som Inc, LLC och Ltd">
+        <PBICard title="Topp 10 Rapporterade Tillverkare till FDA 2024" subtitle=" ">
          
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
