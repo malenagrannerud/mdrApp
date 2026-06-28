@@ -27,8 +27,7 @@ export function findRefData(name) {
   if (clean.toLowerCase().startsWith('art.')) {
     const key = clean
       .replace(/^Art\.\s?/i, 'ART_')
-      .replace(/\(/g, '_')
-      .replace(/\)/g, '');
+      .replace(/\(.*\)/, '');  // ← tar bort (1) helt
     return DOC_DATA[key] || null;
   }
 

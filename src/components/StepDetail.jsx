@@ -1,6 +1,15 @@
 /**
- * src/components/StepDetail.jsx 
- * Skapar detaljvyn för ett valt steg.
+ * @file src/components/StepDetail.jsx
+ * @description Detaljvy för ett valt MDR- eller QMS-steg.
+ * 
+ * ChecklistItem — renderar t, r, e, sop, doc, mdcg, filstruktur och under-checklistor rekursivt.
+ * parseInlineRefs används för att göra **Art.2(1)** och **Ax.II** klickbara inline.
+ * 
+ * @param {object} selected - Det valda steget från MDR_DATA eller QMS_DATA
+ * @param {function} onOpenSop - Öppnar SOP-popup
+ * @param {function} onOpenMdcg - Öppnar MDCG-popup
+ * @param {function} onOpenDoc - Öppnar dokument-popup
+ * @param {function} onOpenRef - Öppnar artikel/annex-popup från inline-referenser
  */
 
 import React from 'react';

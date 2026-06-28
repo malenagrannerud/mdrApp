@@ -35,9 +35,7 @@ by the manufacturer in the clinical evaluation.
 },
 
  ART_51: {
-    title: 'Article 51. Classification of devices',
-    title_short: ' ',
-    content_short: ' ', 
+    title: 'V - Classification and conformity assessment - Article 51. Classification of devices',
     content: `
 
 1. Devices shall be divided into classes per Ax.VIII., taking into account intended purpose and inherent risks. 
@@ -63,7 +61,7 @@ or based on information from vigilance and market surveillance activities, be re
     `.trim()
   },
 
-Art_61: {
+ART_61: {
     title:'Article 61. Clinical evaluation ',
     title_short: ' Art.61',
     content_short: 'Art.61 ', 
@@ -112,7 +110,7 @@ and the second mf provides clear evidence thereof to the NB.
 
 
   /******************************AX 1   ********************************************************************/ 
-  Ax_I: {
+  AX_I: {
     title: 'Annex I. General safety and performance requirements',
     title_short: 'Ax.I - GSPR ',
     content_short: ' ', 
@@ -147,7 +145,7 @@ shall be minimised and acceptable when weighed against benefits to the patient/u
   
 /*************************  AX.II *************************************************************************/ 
 
- Ax_II: {
+ AX_II: {
     title:'Annex II. Technical documentation',
     title_short: 'Ax.II',
     content: `
@@ -209,7 +207,7 @@ The TD shall include:
 
   /**********************************************************************************************/ 
 
-Ax_III: {
+AX_III: {
     title:'Annex III. Technical documentation on post-market surveillance',
     content: `
 
