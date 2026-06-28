@@ -19,13 +19,8 @@ export const MDR_DATA = [
     desc: 'A Roadmap to CE Marking Medical Devices According to MDR 2017/745',
     checklist: [
       { t: 'OVERVIEW',
-        e: `This MDR roadmap provides deliverables to build a compliant Quality Management System (QMS), covering all clauses in ISO 13485.     
-      
-      TIME DEPENDENCIES
-      Steps are grouped so that sub steps can be done in parallel.
-   
-      DEPENDENCIES WITH QMS
-      Some outputs from the steps in the MDR path are product specific and placed in the TD tree, and may have governing SOPs in QMS path.
+        e: `This MDR roadmap provides deliverables to CE mark a medical device. Steps are grouped so that sub steps can be done in parallel.
+     
       `}, 
 
       {t: 'Resulting File Structure', 
