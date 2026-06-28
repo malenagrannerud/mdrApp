@@ -110,53 +110,6 @@ p {
   margin-bottom: 0.5rem;
 }
 
-
-/***************** END SOP Texter *******/
-.document-link {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  color: #1e40af !important; /* Tailwind blue-700 */
-  font-size: 0.875rem !important; /* 14px */
-  
-  /* KORRIGERING: Ändrat från inherit till samma linjära MONO-stack som dokumenten */
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-  font-weight: bold !important; 
-  font-style: normal !important;
-  
-  background: none !important;
-  border: none !important;
-  
-  border-radius: 0px !important; 
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  
-  padding: 0 !important;
-  margin: 0 !important;
-  cursor: pointer !important;
-  text-align: left !important;
-  line-height: 1.2 !important;
-}
-
-.inline-ref-link {
-  color: #2563eb;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.inline-ref-link:hover {
-  color: #1d4ed8;
-  background: #eff6ff;
-  border-radius: 2px;
-}
-
-
-.document-link span {
-  text-decoration: underline !important;
-}
-
 /* Denna tvingar pop-upen att lägga sig över precis allt annat på skärmen */
 .sop-modal-overlay {
   position: fixed !important;
@@ -207,6 +160,66 @@ p {
   font-weight: 700 !important;
   color: #0f172a !important;
 }
+/***************** END SOP Texter *******/
+
+
+
+
+
+
+/***************** LÄNKAR *******/
+
+.document-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  color: #1e40af !important; /* Tailwind blue-700 */
+  font-size: 0.8rem !important; /* 14px */
+  
+  /* KORRIGERING: Ändrat från inherit till samma linjära MONO-stack som dokumenten */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-weight: 600;
+  font-style: normal !important;
+  
+  background: none !important;
+  border: none !important;
+  
+  border-radius: 0px !important; 
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  line-height: 1.2 !important;
+}
+
+.inline-ref-link {
+  color: #eb25c3;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8em;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0 2px;
+  margin: 0 -2px;
+}
+
+.inline-ref-link:hover {
+  color: #881282;
+  background: #eff6ff;
+}
+
+.document-link span {
+  text-decoration: underline !important;
+}
+
+
+
+
+
 
 
 /* 1. PAGE LAYOUT */
