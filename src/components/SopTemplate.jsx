@@ -42,7 +42,6 @@ const SopTemplate = ({ title, id, version, owner, content, image, onClose }) => 
 
         {/* Innehåll */}
         <div className="flex-1 overflow-y-auto p-12 bg-white">
-          {/* Använd biblioteket här för att rendera texten och placera bilden rätt */}
           <SopRenderer content={content} image={image} title={title} />
         </div>
 
