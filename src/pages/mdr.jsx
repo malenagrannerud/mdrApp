@@ -11,8 +11,8 @@ import StepDetail from '../components/StepDetail';
 
 export default function MdrPage() {
   const [selected, setSelected] = useState(MDR_DATA[0]);
-  const [activeDoc, setActiveDoc] = useState(null);  // För både MDCG och DOC
-  const [docType, setDocType] = useState(null);      // 'mdcg' eller 'doc'
+  const [activeDoc, setActiveDoc] = useState(null);
+  const [docType, setDocType] = useState(null);
 
   const handleOpenDoc = (data, type) => {
     setActiveDoc(data);
@@ -21,12 +21,8 @@ export default function MdrPage() {
 
   return (
     <>
-      {/* 1. Själva sidan */}
       <div className="page-layout">
-     
-
         <div className="grid grid-cols-12 gap-12 max-w-7xl mx-auto">
-          {/* Steg-lista */}
           <div className="col-span-4 space-y-4">
             {MDR_DATA.map((step, idx) => (
               <div 
@@ -45,18 +41,17 @@ export default function MdrPage() {
             ))}
           </div>
 
-          {/* Detalj-vy */}
           <div className="col-span-8">
             <StepDetail 
               selected={selected} 
               onOpenMdcg={(mdcg) => handleOpenDoc(mdcg, 'mdcg')}
               onOpenDoc={(doc) => handleOpenDoc(doc, 'doc')}
+              onOpenRef={(ref) => handleOpenDoc(ref, 'doc')}  // <-- LÄGG TILL
             />
           </div>
         </div>
       </div>
 
-      {/* 2. POP-UP för dokument */}
       {activeDoc && docType === 'mdcg' && (
         <MdcgTemplate {...activeDoc} onClose={() => setActiveDoc(null)} />
       )}

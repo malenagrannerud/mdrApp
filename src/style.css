@@ -138,6 +138,19 @@ p {
   line-height: 1.2 !important;
 }
 
+.inline-ref-link {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.inline-ref-link:hover {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-radius: 2px;
+}
 
 
 .document-link span {

@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-export default function Link({ type, data, label, onOpenSop, onOpenDoc, onOpenMdcg }) {
+export default function Link({ type, data, label, onOpenSop, onOpenDoc, onOpenMdcg, onOpenRef }) {
   if (!data) return null;
   
   const handleClick = (e) => {
@@ -14,11 +14,13 @@ export default function Link({ type, data, label, onOpenSop, onOpenDoc, onOpenMd
     if (type === 'sop') onOpenSop?.(data);
     else if (type === 'doc') onOpenDoc?.(data);
     else if (type === 'mdcg') onOpenMdcg?.(data);
+    else if (type === 'ref') onOpenRef?.(data);  // <-- LÄGG TILL DENNA
+
   };
 
   return (
     <a href="#" onClick={handleClick} className="document-link">
-      {label || data.title}
+      {label || data.title_short|| data.title }
     </a>
   );
 }
