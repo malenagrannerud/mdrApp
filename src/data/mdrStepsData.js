@@ -46,13 +46,14 @@ export const MDR_DATA = [
       checklist: [
         
         { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and (d) principle of use and mode of action', 
-          e: `Read the articles **Art.2(1)** and **Art.2(12)** on the definitions of a MD and the intended purpose. Compile the statements (a), (c) and (d), and store in the TD as required in **Ax.II.1(1)** ➔`,
+          e: `
+          Read the articles **Art.2(1)** and **Art.2(12)** on the definitions of a MD and the intended purpose. Compile the statements (a), (c) and (d), and store in the TD as required in **Ax.II.1.1** ➔`,
           sop: TD_DATA.DD},
         
 
         { t: 'Step 1.2) Compile the MD qualification rationale ', 
           r: `
-          - Answer the questionnaire on : https://eumdr.com/medical-device-rationale/
+          Answer the questionnaire on : https://eumdr.com/medical-device-rationale/
           
           `,
           e: `This rationale proves that the product must carry a CE mark according to MDR ➔`, sop: TD_DATA.DD},

@@ -5,35 +5,25 @@
 
 export const DOC_DATA = {
 
-
-
   ART_2_1: {
-  title: 'Article 2(1) - Definition of medical device',
+  title: 'Article 2(1). Definition of medical device',
   title_short: 'Art.2(1)',
-  content_short: 'Definition of medical device',
+  content_short: 'Definition of a medical device',
   content: `
 'medical device' means any instrument, apparatus, appliance, software, 
 implant, reagent, material or other article intended by the manufacturer 
 to be used, alone or in combination, for human beings for one or more of 
 the following specific medical purposes:
 
-— diagnosis, prevention, monitoring, prediction, prognosis, treatment or 
-  alleviation of disease,
-— diagnosis, monitoring, treatment, alleviation of, or compensation for, 
-  an injury or disability,
-— investigation, replacement or modification of the anatomy or of a 
-  physiological or pathological process or state,
-— providing information by means of in vitro examination of specimens 
-  derived from the human body, including organ, blood and tissue donations,
-
-and which does not achieve its principal intended action by pharmacological, 
-immunological or metabolic means, in or on the human body, but which may be 
-assisted in its function by such means.
+— diagnosis, prevention, monitoring, prediction, prognosis, treatment or alleviation of disease,
+— diagnosis, monitoring, treatment, alleviation of, or compensation for, an injury or disability,
+— investigation, replacement or modification of the anatomy or of a physiological or pathological process or state,
+— providing info by means of in vitro examination of specimens derived from the human body, including organ, blood and tissue donations, and which does not achieve its principal intended action by pharmacological, immunological or metabolic means, in or on the human body, but which may be assisted in its function by such means.
   `.trim()
 },
 
 ART_2_12: {
-  title: 'Article 2(12) - Definition of intended purpose',
+  title: 'Article 2(12). Definition of intended purpose',
   title_short: 'Art.2(12)',
   content_short: 'Definition of intended purpose',
   content: `
@@ -45,7 +35,7 @@ by the manufacturer in the clinical evaluation.
 },
 
  ART_51: {
-    title: 'Article 51 - Classification of devices',
+    title: 'Article 51. Classification of devices',
     title_short: ' ',
     content_short: ' ', 
     content: `
@@ -74,8 +64,8 @@ or based on information from vigilance and market surveillance activities, be re
   },
 
 Art_61: {
-    title:'Article 61 - Clinical evaluation ',
-    title_short: ' ',
+    title:'Article 61. Clinical evaluation ',
+    title_short: ' Art.61',
     content_short: 'Art.61 ', 
     content: `
 1. Confirmation of conformity with GSPR (Ax.I) under normal conditions of intended use, evaluation of undesirable side-effects, and acceptability of the BRR in Ax.I.1 and 1.8, shall be based on clinical data providing sufficient clinical evidence, and relevant data as in Ax.III.
@@ -116,10 +106,15 @@ and the second mf provides clear evidence thereof to the NB.
 `.trim()
   },
 
-  /**************************************************************************************************/ 
-  AX_I: {
-    title: 'Annex 1 - General safety and performance requirements',
-    title_short: 'Ax.1 - GSPR ',
+
+
+
+
+
+  /******************************AX 1   ********************************************************************/ 
+  Ax_I: {
+    title: 'Annex I. General safety and performance requirements',
+    title_short: 'Ax.I - GSPR ',
     content_short: ' ', 
     content: `
 
@@ -153,7 +148,8 @@ shall be minimised and acceptable when weighed against benefits to the patient/u
 /*************************  AX.II *************************************************************************/ 
 
  Ax_II: {
-    title:'Ax.II - Technical Documentation',
+    title:'Annex II. Technical documentation',
+    title_short: 'Ax.II',
     content: `
 
 The mf shall draw up the TD. The TD shall demonstrate compliance of the device with the requirements of this Regulation.
@@ -193,7 +189,7 @@ The TD shall include:
 - complete information and specifications, including the manufacturing processes and their validation, their adjuvants, the continuous monitoring and the final product testing. Data shall be fully included in the TD.
 - identification of all sites, including suppliers and sub-contractors, where design and manufacturing activities are performed.
 
-# 4. GENERAL SAFETY AND PERFORMANCE REQUIREMENTS
+# 4. GSPR
 
 The TD shall include info for the demonstration of conformity with the GSPR set out in Ax.I that apply to the device. That demonstration shall include:
 (a)	the GSPR that apply to the device and an explanation as to why others do not apply;
@@ -207,53 +203,6 @@ The TD shall include:
 - the benefit-risk analysis referred to in Sections 1 and 8 of Annex I, and
 - the solutions adopted and the results of the risk management referred to in Section 3 of Annex I.
 
-# 6. PRODUCT VERIFICATION AND VALIDATION
-
-The TD shall contain the results and critical analyses of all verifications and validation tests and/or studies undertaken to demonstrate conformity of the device with the requirements of this Regulation, in particular the applicable GSPR.
-
-## 6.1. Pre-clinical and clinical data
-
-(a)	results of tests: functional, ex vivo, in vitro, in silico, performance, animal, biological/physical/chemical/ microbiological safety evaluation;
-(b)	all relevant published scientific literature regarding the safety, performance, design characteristics and intended purpose of the device;
-(c)	the clinical evaluation plan and clinical evaluation report in accordance with Art.61 and Part A of Annex XIV;
-(d)	the PMCF plan and PMCF evaluation report, or a justification as to why a PMCF is not applicable (Part B of Annex XIV).
-
-## 6.2. Additional information for specific devices
-
-The TD shall include, where relevant, detailed information regarding:
-
-(a)	devices containing tissues/cells of human/animal origin or their derivatives (Annex I.II.8);
-(b)	devices composed of substances or combinations of substances that are intended to be introduced into the human body and that are absorbed by or locally dispersed in the human body (Annex I.II.10);
-(c)	devices containing carcinogenic, mutagenic or toxic to reproduction (CMR) substances or endocrine-disrupting substances (Annex I.II.10.4);
-(d)	sterile condition, packaging validation and sterilisation methods;
-(e)	devices placed on the market with a measuring function.
-
-# 7. POST-MARKET SURVEILLANCE (PMS)
-
-The PMS plan drawn up in accordance with Art.84 shall be included in the TD. Unless otherwise justified, the TD shall include the PMS report referred to in Art.85 (class I) or the PSUR referred to in Art.86 (class IIa, IIb and III).
-
-# 8. ADDITIONAL INFORMATION FOR SPECIFIC DEVICES
-
-## 8.1. Combination products (drug-device)
-Where a device incorporates, as an integral part, a substance which, if used separately, would be considered a medicinal product (Art.1(8) and Art.117), the TD shall include:
-- information on the ancillary action of that substance and a justification for its incorporation;
-- relevant data on the verification of the safety, quality and usefulness of the substance, taking account of the intended purpose of the device.
-
-## 8.2. Devices manufactured using tissues or cells of human or animal origin, or their derivatives
-
-For devices manufactured utilising tissues or cells of human or animal origin, or their derivatives, which are non-viable or rendered non-viable, the TD shall include in addition to the information according to Directive 2001/83/EC and Regulation (EC) No 1394/2007, where relevant, the following:
-
-- the information on the origin, the processing and the preservation and the testing of the tissues and cells;
-- for tissues and cells of animal origin, detailed documentation on the compliance with Regulation (EC) No 1069/2009 (health rules as regards animal by-products) including risk assessment procedures;
-- documentation on traceability of all materials from the donor to the finished device.
-
-## 8.3. Devices incorporating or consisting of nanomaterial
-
-For devices incorporating or consisting of nanomaterial (Art.2(18)), the TD shall include:
-
-- identification of the nanomaterials, including the specification of their chemical composition, size, size distribution and other physical and chemical characteristics;
-- an assessment of the risk associated with the use of nanomaterial.
-
     `.trim()
   },
 
@@ -261,12 +210,12 @@ For devices incorporating or consisting of nanomaterial (Art.2(18)), the TD shal
   /**********************************************************************************************/ 
 
 Ax_III: {
-    title:'Ax.III - Technical Documentation on Post-Market Surveillance',
+    title:'Annex III. Technical documentation on post-market surveillance',
     content: `
 
 The TD on PMS to be drawn up by the mf in accordance with Art.83 to 86 shall be presented in a clear, organised, readily searchable and unambiguous manner and shall include the elements described in this Annex.
 
-# 1.1. The PMS plan
+# 1.1. The PMS plan drawn up in accordance with Art.84.
 
 The mf shall prove in a PMS plan that it complies with the obligation referred to in Art.83.
 
@@ -308,7 +257,7 @@ The PMS report (Art.85) shall contain at least:
 
 
   AX_XIV: {
-    title: 'ANNEX XIV - CLINICAL EVALUATION AND PMCF',
+    title: 'Annex XIV. Clinical evaluation and PMCF ',
     content: `# PART A - CLINICAL EVALUATION
 1.   
 To plan, continuously conduct and document a clinical evaluation, manufacturers shall:
@@ -352,14 +301,11 @@ Both favourable and unfavourable data considered in the clinical evaluation shal
 
 # PART B - POST-MARKET CLINICAL FOLLOW-UP
 
-5.   
-PMCF shall be understood to be a continuous process that updates the clinical evaluation referred to in Article 61 and Part A of this Annex and shall be addressed in the manufacturer's post-market surveillance plan. When conducting PMCF, the manufacturer shall proactively collect and evaluate clinical data from the use in or on humans of a device which bears the CE marking and is placed on the market or put into service within its intended purpose as referred to in the relevant conformity assessment procedure, with the aim of confirming the safety and performance throughout the expected lifetime of the device, of ensuring the continued acceptability of identified risks and of detecting emerging risks on the basis of factual evidence.
+5. PMCF shall be understood to be a continuous process that updates the clinical evaluation referred to in Article 61 and Part A of this Annex and shall be addressed in the manufacturer's post-market surveillance plan. When conducting PMCF, the manufacturer shall proactively collect and evaluate clinical data from the use in or on humans of a device which bears the CE marking and is placed on the market or put into service within its intended purpose as referred to in the relevant conformity assessment procedure, with the aim of confirming the safety and performance throughout the expected lifetime of the device, of ensuring the continued acceptability of identified risks and of detecting emerging risks on the basis of factual evidence.
 
-6.   
-PMCF shall be performed pursuant to a documented method laid down in a PMCF plan.
+6. PMCF shall be performed pursuant to a documented method laid down in a PMCF plan.
 
-6.1. 
-The PMCF plan shall specify the methods and procedures for proactively collecting and evaluating clinical data with the aim of:
+6.1. The PMCF plan shall specify the methods and procedures for proactively collecting and evaluating clinical data with the aim of:
 
 (a) confirming the safety and performance of the device throughout its expected lifetime,
 (b) identifying previously unknown side-effects and monitoring the identified side-effects and contraindications,
@@ -394,7 +340,7 @@ The conclusions of the PMCF evaluation report shall be taken into account for th
 
 
  AX_VIII: {
-    title:'Ax.VIII - Classification rules ',
+    title:'Annex VIII. Classification rules ',
     content: `
 # CHAPTER I - Definitions
 
@@ -497,7 +443,6 @@ All other SW is class I.
 6.5. Rule 13 - All other active devices are class I.
 
 # 7. SPECIAL RULES
-
 7.1. Rule 14 - Devices incorporating a medicinal product (per Directive 2001/83/EC Art.1(2), including human blood/plasma derivative per Art.1(10)) with ancillary action are class III.
 7.2. Rule 15 - Contraceptive/STD prevention devices are class IIb (class III if implantable or long-term invasive).
 7.3. Rule 16 - Devices for disinfecting/cleaning/rinsing/hydrating contact lenses are class IIb.
