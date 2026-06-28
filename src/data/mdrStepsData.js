@@ -74,7 +74,7 @@ export const MDR_DATA = [
     📁 7-PMS `,
          files: {
            '1-DEVICE DESCRIPTION': [
-             { sop: TD_DATA.DD, indent: '    ' }
+             { sop: TD_DATA.DD, indent: '        ' }
            ]
          }
         }, 
