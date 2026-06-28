@@ -58,17 +58,24 @@ ART_10: {
 
 3. Mfs shall conduct a CEV in accordance with *Art.61** and **Ax.XIV**, including PMCF.
 
-4. Mfs of devices other than custom-made devices shall draw up and keep up to date TD for those devices. The TD shall allow the conformity of the device with this Regulation to be assessed. The TD shall include the elements in **Ax.II** and **Ax.III**.
+4. Mfs of devices other than custom-made devices shall draw up and keep up to date TD for those devices. 
+The TD shall allow the conformity of the device with this Regulation to be assessed. 
+The TD shall include the elements in **Ax.II** and **Ax.III**.
 
 The Commission may adopt delegated acts in accordance with **Art.115** amending **Ax.II** and **Ax.III**.
 
-5. Mfs of custom-made devices shall draw up, keep up to date and keep available for CAs documentation as in **Ax.XIII.2**.
+5. Mfs of custom-made devices shall draw up, keep up to date and keep available for CAs documentation 
+as in **Ax.XIII.2**.
 
-6. Where compliance has been demonstrated following the applicable conformity assessment procedure, mfs of devices other than custom-made or investigational devices shall draw up an EU DoC in accordance with **Art.19** and affix the CE marking in accordance with **Art.20**.
+6. Where compliance has been demonstrated following the applicable conformity assessment procedure, 
+mfs of devices other than custom-made or investigational devices shall draw up an EU DoC in accordance with **Art.19** 
+and affix the CE marking in accordance with **Art.20**.
 
 7. Mfs shall comply with the UDI obligations in **Art.27** and the registration obligations in **Art.29** and **Art.31**.
 
-8. Mfs shall keep the TD, the EU DoC and any relevant certificate, including amendments and supplements, issued under **Art.56**, available for CAs for at least 10 years after the last device covered by the DoC has been placed on the market. For implantable devices, the period shall be at least 15 years.
+8. Mfs shall keep the TD, the EU DoC and any relevant certificate, including amendments and supplements, issued under **Art.56**, 
+available for CAs for at least 10 years after the last device covered by the DoC has been placed on the market. 
+For implantable devices, the period shall be at least 15 years.
 
 Upon request by a CA, the mf shall provide the TD in its entirety or a summary.
 

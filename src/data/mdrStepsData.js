@@ -78,7 +78,6 @@ export const MDR_DATA = [
            ]
          }
         }, 
-        
         { t: 'Guidance Documents from the MDCG' },
         { mdcg: MDCG_DATA.INFOGRAPHIC },
         { mdcg: MDCG_DATA.MDCG_2021_24 },
@@ -119,33 +118,40 @@ Demonstate compliance for this step by implementing ISO 14971 and EN 62366 to th
     { t: 'Step 2.3) Implement CEV SOPs',
       e: `Mfs shall establish, document, implement and maintain a system for CEV as per **Art.10(3)**. 
       As required by **Art.61**, a CEV must be defined and methodologic, based on 
-      - (a) critical evaluation of literature, 
-      - (b) CIs, and 
-      - (c) treatment options.
+    (a) critical evaluation of literature, 
+    (b) CIs, and 
+    (c) treatment options.
 
-The clinical process is defined in **Ax.XIV.A** (CEP ➔ identify data ➔ appraise data ➔ analyse data ➔ CER). Furthermore, a PMCF Plan is required by **Ax.XIV.B.6** and a PMCF Evaluation Report by **Ax.XIV.B.7**. 
+- The clinical process is defined in **Ax.XIV.A** (CEP ➔ identify data ➔ appraise data ➔ analyse data ➔ CER). 
+- Furthermore, a PMCF Plan is required by **Ax.XIV.B.6** and a PMCF Evaluation Report by **Ax.XIV.B.7**. 
+- See MEDDEV 2.7/1 rev.4 for more detail than **Ax.XIV**. 
+- This SOP also map to ISO 13485 §7.3.7 Design Validation, and ISO 14155 Clinical Investigations.
 
-MEDDEV 2.7/1 rev.4 serves as the basis for the process and provides more detail than **Ax.XIV**. The process also maps to ISO 13485 §7.3.7 Design Validation and ISO 14155 Clinical Investigations.
-
-Demonstrate compliance for this step by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP for CEV. See QMS Path, Step 4.3).`},
+Demonstrate compliance for this step by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOPs for CEV. See QMS Path, Step 4.3).`},
 
 /****************************************  STEP 2.4 ****************************************/
+{ t: 'Step 2.4) Establish SOPs for dev and maintenance of TD, UDI and DoC',
+  e: `Mfs shall draw up and keep up to date TD including
+  - Pre-market records as specified in **Ax.II** and 
+  - Post-market plans as detailed **Ax.III**
+  
+  The TD documentation shall include 
+  - TD as required by **Art.10(4)**,
+  - DoC as required by **Art.10(6)**, 
+  - the UDI system as required by **Art.10(7)**,
+  - a Change history log for NB surveillance, where documents must be saved after the products end of life, **Art.10(8)**.
 
-      { t: 'Step 2.4) Establish SOPs for dev and maintenance of TD, UDI and DoC',
-        r: `
-        - Art.10(4, 6, 7, 8): Mfs shall draw up and keep up to date TD with content per Ax.II and Ax.III, (UDI system, DoC and Change history log for NB surveillance)
-        - Ax.II (1-6) & Ax.III (7): TD content with pre-market records & TD content with post-market plans 
-        - Ax.IX.I.4.10: Mf shall inform NB of planned substantial changes to QMS or device-range. NB verifies QMS still meets Section 2.3, or re-assesses.
-        - Ax.X.5.2: Mf shall inform NB of planned substantial changes to approved type. NB verifies certificate still valid, or re-assesses.
-        
-        `,
-        e: `This step is proved by implementing a SOP that uses the TD structure as deliverables, with change history log. The process is used to compile and maintain the TD for NB submission and surveillance. See QMS Step 7.1.`},
+Furthermore, mfs must manage substantial changes. According to **Ax.IX.I.4.10**, the mf shall inform the NB of planned substantial changes to the QMS or device-range, 
+and the NB will verify if the QMS still meets Section 2.3 or perform a re-assessment. 
+Similarly, **Ax.X.5.2** dictates that the mf shall inform the NB of planned substantial changes to an approved type to verify if the certificate remains valid.
+
+Demonstrate compliance for this step by implementing SOPs that uses the TD structure as deliverables, including a change history log. See QMS Path, Step 7.1).`},
 
 /****************************************  STEP 2.5 ****************************************/
 
       { t: 'Step 2.5) Build a QMS according to ISO 13485:2016',
-        r: `
-        - Art.10(9)(1): Mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
+        e: `
+        According to **Art.10(9)**,  mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
         
         (a) 4.1.1 per Art.15-PRRC, Art.52, Ax.VII.4.9
         (b) 7.2.1(c) and Ax.I
@@ -163,8 +169,8 @@ Demonstrate compliance for this step by implementing ISO 13485 §7.3.7, ISO 1415
 
         - Art.10(9)(2): Def. of the QMS scope which, according to §4.2.2, has to be documented in the QM. 
         
-        `,
-        e: `This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure MD in series production remain in conformity with MDR. See QMS Step 0-7.`},
+        
+        This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure MD in series production remain in conformity with MDR. See QMS Step 0-7.`},
 
         /****************************************  STEP 2.6 ****************************************/
 
@@ -179,37 +185,36 @@ Demonstrate compliance for this step by implementing ISO 13485 §7.3.7, ISO 1415
         r: `
         Art.10(11): "Mfs shall establish, document, implement and maintain a system for labelling."
         `,
-        e: `Implement process for creating IFU, labels, translations per Ax.I.III. See QMS Step 5.4. ➔`},
+        e: `Implement process for creating IFU, labels, translations per Ax.I.III. See QMS Step 5.4. `},
 
       { t: 'Step 2.8) Establish corrective action and recall process',
         r: `
         Art.10(12): "Mfs shall establish, document, implement and maintain a system for corrective and preventive actions."
         `,
-        e: `Implement CAPA process including recall procedures. See QMS Step 6.2. ➔`},
+        e: `Implement CAPA process including recall procedures. See QMS Step 6.2. `},
 
       { t: 'Step 2.9) Set up Vigilance process',
         r: `
         Art.10(13): Mfs shall establish, document, implement and maintain a system for vigilance.
         `,
-        e: `Implement serious incident reporting (15 days), FSCA, and trend monitoring per Art.87-92. See QMS Step 7.2. ➔`},
+        e: `Implement serious incident reporting (15 days), FSCA, and trend monitoring per Art.87-92. See QMS Step 7.2. `},
 
       { t: 'Step 2.10) Define regulatory authority interaction process',
         r: `
         Art.10(14): Mfs shall establish, document, implement and maintain a system for communication with CAs.
         `,
-        e: `Implement process for CA queries, Helsinki Procedure, and unannounced audits. See QMS Step 7.4. ➔`},
+        e: `Implement process for CA queries, Helsinki Procedure, and unannounced audits. See QMS Step 7.4. `},
 
       { t: 'Step 2.11) Arrange legal liability and damage compensation',
         r: `
         Art.10(16): Mfs shall have measures for sufficient financial coverage for pot. liability.
         `,
-        e: `Secure product liability insurance. Maintain in corporate archive. ➔`},
+        e: `Secure product liability insurance. Maintain in corporate archive. `},
 
-      { t: 'Step 2.12) Appoint PRRC',
-        r: `
-        Art.15: Mfs shall have at least one PRRC.
-        `,
-        e: `Formally appoint PRRC via signed mandate letter. PRRC oversees batch release, TD, PMS, and vigilance. Original in QMS, copy in TD 1-DEVICE. See QMS Step 2.2. ➔`},
+      { t: 'Step 2.12) Appoint a PRRC',
+        e: ` According to **Art.15** mfs shall assign at least one PRRC.
+        A PRRC oversees batch release, TD, PMS, and vigilance. 
+        Demonstrate compliance by keeping one signed mandate letter in the QMS, See QMS Path, and a copy in TD 1-DEVICE DESCRIPTION. `},
 
       { t: 'Step 2.13) Secure access to required expertise',
         e: `Ensure access to technical, safety (risk), clinical, quality, and regulatory experts. Document in HR competence matrix. See QMS Step 3.1. ➔`},
