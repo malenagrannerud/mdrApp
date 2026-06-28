@@ -42,7 +42,7 @@ export const MDR_DATA = [
   /**********************  STEP 1 ****************************************/
     {     id: 'm1',
       title: 'Step 1) Decide the intended use and classification',
-      desc: ' This step decides conformity route of the product. Statements (a)-(d) is requred for the TD',
+      desc: ' This step decides the conformity route of the product. Statements (a)-(d) is requred for the TD',
       checklist: [
         
         { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and (d) principle of use and mode of action', 
@@ -50,14 +50,13 @@ export const MDR_DATA = [
           sop: TD_DATA.DD},
         
         { t: 'Step 1.2) Compile the MD qualification rationale ', 
-          e: `Answer the questionnaire at: https://eumdr.com/medical-device-rationale/ and compile the rationale. 
-          It proves if the product must carry a CE mark according to MDR ➔`, sop: TD_DATA.DD},
+          e: `Answer the questionnaire at: https://eumdr.com/medical-device-rationale/ and compile the rationale. Step 1.2) proves if the product must carry a CE mark according to MDR ➔`, sop: TD_DATA.DD},
 
         { t: 'Step 1.3) Compile the (b) risk classification rationale', 
           e: `Read **Art.51(1)** and classify the MD as per **Ax.VIII**. This will determine if a NB must audit the product ➔`, sop: TD_DATA.DD},
 
         { t: ' ', 
-          e: `💡 Step 1) also applies to devices offered in EU via the internet **Art.6**, including diagnostic or therapeutic services.
+          e: `💡 Step 1) also applies to devices offered in EU via the internet, see 2015/1535 **Art.6**, including diagnostic or therapeutic services.
           💡 If you cant classify the product: request a decision from the CA according to the Helsinki Procedure.`}, 
 
         {t: 'Resulting File Structure', 
