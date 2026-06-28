@@ -93,19 +93,15 @@ export const MDR_DATA = [
   /****************************************  STEP 2 ****************************************/
   { id: 'm2',
     title: 'Step 2) Establish processes and resources',
-    desc: 'Outputs in this step are the QMS of the company ',
+    desc: 'Outputs in this step are delivered as processes (SOPs) in the QMS of the company',
     checklist: [
       { t: ' ', e: `Read Art.10: "General obligations of manufacturers". Consider if your company has or must recruit expertise needed.`},
 
 /****************************************  STEP 2.1 ****************************************/
 
-      { t: 'Step 2.1) Implement a design and manufacturing SOP',
-        r: `
-        - Art.10(1): "Mfs shall ensure that the MD have been designed & mfed according to MDR."
-        - Art.10(9)(g): "The QMS shall address… product realisation: planning, D&D, production and service provision."
-          
-          `,
-        e: `This step is proved by implementing ISO 13485 §7 — Product Realisation. See QMS Step 4 & 5. `},
+      { t: 'Step 2.1) Implement a design and manufacturing SOPs',
+        e: `Mfs shall ensure that the MD have been designed & manufactured according to MDR, as per **Art.10(1)**. This is done by implementing a QMS, that shall address planning, D&D, production and service provision as per **Art.10(9)(g)**.
+        Demonstate compliance for Step 2.1) by implementing ISO 13485 §7 — Product Realisation processes, to the QMS. See QMS PATH Step 4) & Step 5). `},
 
 /****************************************  STEP 2.2 ****************************************/
       { t: 'Step 2.2) Implement a RM SOP',
@@ -235,8 +231,8 @@ export const MDR_DATA = [
         files: { }
       },
         
-      { t: 'Guidance Documents from the MDCG' },
-      { t: ' ', e: 'UDI GUIDANCE' },
+      { t: 'Guidance Documents from the MDCG' ,
+        e: 'UDI GUIDANCE' },
       { mdcg: MDCG_DATA.MDCG_2022_7 },
       { mdcg: MDCG_DATA.MDCG_2021_19 },
       { mdcg: MDCG_DATA.MDCG_2021_10 },

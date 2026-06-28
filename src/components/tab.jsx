@@ -32,7 +32,7 @@ export default function TabBar({ currentPage, onPageChange }) {
           currentPage === 'qms' ? 'bg-blue-700 text-white border-blue-700' : 'bg-slate-900 text-slate-400 border-slate-900 hover:border-slate-700'
         }`}
       >
-        QMS (ISO 13485)
+        QMS Path
       </button>
 
       <button

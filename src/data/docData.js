@@ -38,20 +38,94 @@ ART_6: {
   title: '2015/1535 Article 6. Distance sales',
   title_short: 'Art.2(12)',
   content: `
-
-
 1.   A device offered by means of information society services, as defined in Art.1(1) (b) of Directive (EU) 2015/1535 - the EU Notification Directive for technical regulations, to a natural or legal person established in the Union shall comply with this Regulation.
-
 2.   Without prejudice to national law regarding the exercise of the medical profession, a device that is not placed on the market but used in the context of a commercial activity, whether paymed or free, for the provision of a diagnostic or therapeutic service offered by means of information society services as defined in point (b) of Art.1(1) of Directive (EU) 2015/1535 or by other means of communication, directly or through intermediaries, to a natural or legal person established in the Union shall comply with this Regulation.
-
 3.   Upon request by a CA, any natural or legal person offering a device as in 1. or a service as in 2. shall make available a copy of the EU DoC.
-
 4.   A Member State may, on grounds of protection of public health, require a provider of information society services, as defined in Art.1(1) (b) of Directive (EU) 2015/1535, to cease its activity.
   `.trim()
 },
 
+
+ART_10: {
+  chapter:'CH.II MAKING AVAILABLE ON THE MARKET AND PUTTING INTO SERVICE OF DEVICES, OBLIGATIONS OF ECONOMIC OPERATORS, REPROCESSING, CE MARKING, FREE MOVEMENT ', 
+  title: 'Article 10. General obligations of manufacturers',
+  title_short: 'Art.2(12)',
+  content: `
+
+1. When placing devices on the market or putting them into service, mfs shall ensure they have been designed and manufactured in accordance with this Regulation.
+
+2. Mfs shall establish, document, implement and maintain a RMS as described in **Ax.I.3**.
+
+3. Mfs shall conduct a CEV in accordance with **Art.61** and **Ax.XIV**, including PMCF.
+
+4. Mfs of devices other than custom-made devices shall draw up and keep up to date TD for those devices. The TD shall allow the conformity of the device with this Regulation to be assessed. The TD shall include the elements in **Ax.II** and **Ax.III**.
+
+The Commission may adopt delegated acts in accordance with **Art.115** amending **Ax.II** and **Ax.III**.
+
+5. Mfs of custom-made devices shall draw up, keep up to date and keep available for CAs documentation as in **Ax.XIII.2**.
+
+6. Where compliance has been demonstrated following the applicable conformity assessment procedure, mfs of devices other than custom-made or investigational devices shall draw up an EU DoC in accordance with **Art.19** and affix the CE marking in accordance with **Art.20**.
+
+7. Mfs shall comply with the UDI obligations in **Art.27** and the registration obligations in **Art.29** and **Art.31**.
+
+8. Mfs shall keep the TD, the EU DoC and any relevant certificate, including amendments and supplements, issued under **Art.56**, available for CAs for at least 10 years after the last device covered by the DoC has been placed on the market. For implantable devices, the period shall be at least 15 years.
+
+Upon request by a CA, the mf shall provide the TD in its entirety or a summary.
+
+A mf outside the Union shall ensure its AR has the necessary documentation permanently available to fulfil the tasks in **Art.11(3)**.
+
+9. Mfs shall ensure procedures exist to keep series production in conformity with this Regulation. Changes in device design or characteristics and changes in harmonised standards or CS shall be adequately taken into account. Mfs of devices other than investigational devices shall establish, document, implement, maintain, keep up to date and continually improve a QMS that ensures compliance with this Regulation, proportionate to risk class and device type.
+
+The QMS shall cover all parts of the mf's organisation dealing with quality of processes, procedures and devices. It shall govern structure, responsibilities, procedures, processes and management resources to achieve compliance.
+
+The QMS shall address at least:
+
+(a) a strategy for regulatory compliance, including conformity assessment procedures and management of modifications;
+(b) identification of applicable GSPRs and options to address them;
+(c) management responsibility;
+(d) resource management, including selection and control of suppliers and sub-contractors;
+(e) risk management as set out in **Ax.I.3**;
+(f) clinical evaluation in accordance with **Art.61** and **Ax.XIV**, including PMCF;
+(g) product realisation, including planning, design, development, production and service provision;
+(h) verification of UDI assignments under **Art.27(3)** and ensuring consistency and validity of information under **Art.29**;
+(i) setting-up, implementation and maintenance of a PMS system under **Art.83**;
+(j) communication with CAs, NBs, economic operators, customers and other stakeholders;
+(k) processes for reporting serious incidents and FSCAs in the context of vigilance;
+(l) management of CAPA and verification of their effectiveness;
+(m) processes for monitoring and measurement of output, data analysis and product improvement.
+
+10. Mfs shall implement and keep up to date the PMS system in accordance with **Art.83**.
+
+11. Mfs shall ensure the device is accompanied by the information set out in **Ax.I.23** in an official Union language(s) determined by the MS where the device is made available to the user or patient. Label particulars shall be indelible, easily legible and clearly comprehensible to the intended user or patient.
+
+12. Mfs who consider or have reason to believe that a device placed on the market is not in conformity with this Regulation shall immediately take the necessary corrective action to bring it into conformity, withdraw it or recall it. They shall inform distributors, the AR and importers.
+
+Where the device presents a serious risk, mfs shall immediately inform the CAs of the MSs in which they made the device available and the NB that issued a certificate under **Art.56**, of the non-compliance and any corrective action taken.
+
+13. Mfs shall have a system for recording and reporting incidents and FSCAs as described in **Art.87** and **Art.88**.
+
+14. Mfs shall, upon request by a CA, provide all information and documentation necessary to demonstrate conformity, in an official Union language. The CA of the MS where the mf has its RPOB may require free samples or access to the device. Mfs shall cooperate with a CA on any corrective action taken.
+
+If the mf fails to cooperate or provides incomplete or incorrect information, the CA may prohibit or restrict the device on its national market, withdraw it or recall it.
+
+If a CA considers a device has caused damage, it shall facilitate provision of the information to the potentially injured patient or user, their successor, health insurance company or other affected third parties, without prejudice to data protection and intellectual property rules.
+
+The CA need not comply with this where disclosure is ordinarily dealt with in legal proceedings.
+
+15. Where mfs have devices designed or manufactured by another person, that person's identity shall be part of the information submitted under **Art.30(1)**.
+
+16. Natural or legal persons may claim compensation for damage caused by a defective device under applicable Union and national law.
+
+Mfs shall, proportionate to risk class, device type and enterprise size, have measures in place for sufficient financial coverage in respect of their potential liability under Directive 85/374/EEC, without prejudice to more protective national measures.
+
+
+
+`.trim()
+},
+
  ART_51: {
-    title: 'V - Classification and conformity assessment - Article 51. Classification of devices',
+  chapter: 'CH.V - CLASSIFICATION AND CONFORMITY ASSESSMENT',
+  title: 'Article 51. Classification of devices',
    title_short: ' ',
   content_short: ' ',
     content: `
