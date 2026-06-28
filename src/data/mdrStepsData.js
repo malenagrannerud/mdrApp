@@ -54,6 +54,7 @@ export const MDR_DATA = [
           r: `
           - Art.2(1) and Art.2(12): The definition of a MD and the definition of intended purpose
           - Ax.II.1.1: TD, Device description and specification
+
           `,
           e: `Read the articles and compile the statements. Output of Step 1.1) is required in the TD per Ax.II.1(1) ➔`,sop: TD_DATA.DD},
         
@@ -132,6 +133,7 @@ export const MDR_DATA = [
         - Art.10(2): "Mf shall establish, document, implement and maintain RM as in Ax.I.3."
         - Ax.I.3: RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (Art.83-86) → Amend controls if necessary.
         - Art.83-86: Mfs shall have a PMS system, plan and report (class I) or PSUR (class IIa and up)
+        
         `,
         e: `This is proved by implementing ISO 14971. Since ISO 14971 say what to be done but not by how ➔ RM activities (FMEA, risk matrix, report) must be assigned to different compentecies. It is recommended to include Human factor & usability EN 62366 to cover related risks. See QMS Step 4.2. `},
 
@@ -146,6 +148,7 @@ export const MDR_DATA = [
         - MEDDEV 2.7/1 rev.4: Basis for the process — more detail than Ax.XIV
         - ISO 13485 §7.3.7 Design Validation
         - ISO 14155 Clinical Investigations
+        
         `,
         e: `This step is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
 
@@ -157,6 +160,7 @@ export const MDR_DATA = [
         - Ax.II (1-6) & Ax.III (7): TD content with pre-market records & TD content with post-market plans 
         - Ax.IX.I.4.10: Mf shall inform NB of planned substantial changes to QMS or device-range. NB verifies QMS still meets Section 2.3, or re-assesses.
         - Ax.X.5.2: Mf shall inform NB of planned substantial changes to approved type. NB verifies certificate still valid, or re-assesses.
+        
         `,
         e: `This step is proved by implementing a SOP that uses the TD structure as deliverables, with change history log. The process is used to compile and maintain the TD for NB submission and surveillance. See QMS Step 7.1.`},
 
@@ -181,6 +185,7 @@ export const MDR_DATA = [
         (m) §8—Measurement, analysis and improvement
 
         - Art.10(9)(2): Def. of the QMS scope which, according to §4.2.2, has to be documented in the QM. 
+        
         `,
         e: `This step is proved by implementing a QMS per ISO 13485 covering (a)-(m), to ensure MD in series production remain in conformity with MDR. See QMS Step 0-7.`},
 
