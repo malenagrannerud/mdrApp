@@ -101,17 +101,17 @@ export const MDR_DATA = [
 
       { t: 'Step 2.1) Implement a design and manufacturing SOPs',
         e: `Mfs shall ensure that the MD have been designed & manufactured according to MDR, as per **Art.10(1)**. This is done by implementing a QMS, that shall address planning, D&D, production and service provision as per **Art.10(9)(g)**.
-        Demonstate compliance for Step 2.1) by implementing ISO 13485 §7 — Product Realisation processes, to the QMS. See QMS PATH Step 4) & Step 5). `},
+        Demonstate compliance for Step 2.1) by implementing ISO 13485 §7 — Product Realisation processes, to the QMS. See QMS Path, Step 4) & Step 5). `},
 
 /****************************************  STEP 2.2 ****************************************/
-      { t: 'Step 2.2) Implement a RM SOP',
-        r: `
-        - Art.10(2): "Mf shall establish, document, implement and maintain RM as in Ax.I.3."
-        - Ax.I.3: RM is a continuous iterative process throughout the lifecycle. Plan → Identify → Estimate → Control → Update from PMS data (Art.83-86) → Amend controls if necessary.
-        - Art.83-86: Mfs shall have a PMS system, plan and report (class I) or PSUR (class IIa and up)
+      { t: 'Step 2.2) Implement RM SOPs',
+        e: `Mfs shall establish, document, implement and maintain a RM as per **Art.10(2)**, and described in **Ax.I.3**. This can be done by implementing ISO 14971 -  Device Risk Management. 
+
+Since ISO 14971 specifies what to be done but not by how ➔ RM activities must be assigned to compentecies. 
+It is also recommended to include EN 62366 - Human factor & usability, to cover related risks to human factors. 
         
-        `,
-        e: `This is proved by implementing ISO 14971. Since ISO 14971 say what to be done but not by how ➔ RM activities (FMEA, risk matrix, report) must be assigned to different compentecies. It is recommended to include Human factor & usability EN 62366 to cover related risks. See QMS Step 4.2. `},
+Demonstate compliance for Step 2.2) by implementing ISO 14971, EN 62366 and specify roles and processes that include RM. See QMS Path, Step 4.2. 
+`},
 
 /****************************************  STEP 2.3 ****************************************/
       { t: 'Step 2.3) Implement a CEV SOP',
@@ -126,7 +126,7 @@ export const MDR_DATA = [
         - ISO 14155 Clinical Investigations
         
         `,
-        e: `This step is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Step 4.3.`},
+        e: `This step is proved by implementing ISO 13485 §7.3.7, ISO 14155 and MEDDEV 2.7/1 in the SOP in QMS Path, Step 4.3).`},
 
 /****************************************  STEP 2.4 ****************************************/
 
