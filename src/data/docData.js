@@ -36,6 +36,8 @@ by the manufacturer in the clinical evaluation.
 
  ART_51: {
     title: 'V - Classification and conformity assessment - Article 51. Classification of devices',
+   title_short: ' ',
+  content_short: ' ',
     content: `
 
 1. Devices shall be divided into classes per Ax.VIII., taking into account intended purpose and inherent risks. 
@@ -148,9 +150,7 @@ shall be minimised and acceptable when weighed against benefits to the patient/u
  AX_II: {
     title:'Annex II. Technical documentation',
     title_short: 'Ax.II',
-    content: `
-
-The mf shall draw up the TD. The TD shall demonstrate compliance of the device with the requirements of this Regulation.
+    content: `The mf shall draw up the TD. The TD shall demonstrate compliance of the device with the requirements of this Regulation.
 The TD shall cover the following elements:
 
 # 1. DEVICE DESCRIPTION AND SPECIFICATION
