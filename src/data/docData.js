@@ -34,6 +34,22 @@ by the manufacturer in the clinical evaluation.
   `.trim()
 },
 
+ART_6: {
+  title: '2015/1535 Article 6. Distance sales',
+  title_short: 'Art.2(12)',
+  content: `
+
+
+1.   A device offered by means of information society services, as defined in Art.1(1) (b) of Directive (EU) 2015/1535 - the EU Notification Directive for technical regulations, to a natural or legal person established in the Union shall comply with this Regulation.
+
+2.   Without prejudice to national law regarding the exercise of the medical profession, a device that is not placed on the market but used in the context of a commercial activity, whether paymed or free, for the provision of a diagnostic or therapeutic service offered by means of information society services as defined in point (b) of Art.1(1) of Directive (EU) 2015/1535 or by other means of communication, directly or through intermediaries, to a natural or legal person established in the Union shall comply with this Regulation.
+
+3.   Upon request by a CA, any natural or legal person offering a device as in 1. or a service as in 2. shall make available a copy of the EU DoC.
+
+4.   A Member State may, on grounds of protection of public health, require a provider of information society services, as defined in Art.1(1) (b) of Directive (EU) 2015/1535, to cease its activity.
+  `.trim()
+},
+
  ART_51: {
     title: 'V - Classification and conformity assessment - Article 51. Classification of devices',
    title_short: ' ',

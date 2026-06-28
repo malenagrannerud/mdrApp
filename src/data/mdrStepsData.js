@@ -57,7 +57,7 @@ export const MDR_DATA = [
           e: `Read **Art.51(1)** and classify the MD as per **Ax.VIII**. This will determine if a NB must audit the product ➔`, sop: TD_DATA.DD},
 
         { t: ' ', 
-          e: `💡 Step 1) also applies to devices offered in EU via the internet (Art.6), including diagnostic or therapeutic services.
+          e: `💡 Step 1) also applies to devices offered in EU via the internet **Art.6**, including diagnostic or therapeutic services.
           💡 If you cant classify the product: request a decision from the CA according to the Helsinki Procedure.`}, 
 
         {t: 'Resulting File Structure', 
