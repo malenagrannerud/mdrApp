@@ -19,7 +19,7 @@ export const MDR_DATA = [
     desc: 'A Roadmap to CE Marking Medical Devices According to MDR 2017/745',
     checklist: [
       { t: 'OVERVIEW',
-        e: `This MDR roadmap provides deliverables to CE mark a medical device. Steps are grouped so that sub steps can be done in parallel.
+        e: `This MDR roadmap provides deliverables to CE marking a medical device. Steps are grouped so that sub steps can be done in parallel.
      
       `}, 
 
@@ -46,12 +46,8 @@ export const MDR_DATA = [
       checklist: [
         
         { t: 'Step 1.1) Compile the (a) statement of intended purpose and users, (c) statement of patient population and (d) principle of use and mode of action', 
-          r: `
-          - Art.2(1) and Art.2(12): The definition of a MD and the definition of intended purpose
-          - Ax.II.1.1: TD, Device description and specification
-
-          `,
-          e: `Read the articles and compile the statements. Output of Step 1.1) is required in the TD per Ax.II.1(1) ➔`,sop: TD_DATA.DD},
+          e: `Read the articles **Art.2(1)** and **Art.2(12)** on the definitions of a MD and the intended purpose. Compile the statements (a), (c) and (d), and store in the TD as required in **Ax.II.1(1)** ➔`,
+          sop: TD_DATA.DD},
         
 
         { t: 'Step 1.2) Compile the MD qualification rationale ', 
@@ -165,19 +161,19 @@ export const MDR_DATA = [
         r: `
         - Art.10(9)(1): Mfs shall establish, document, implement and maintain a QMS. It shall address (a)-(m)
         
-        (a) §4.1.1 per Art.15-PRRC, Art.52, Ax.VII.4.9
-        (b) §7.2.1(c) and Ax.I
-        (c) §5—Management Responsibility
-        (d) §6—Resource Management
-        (e) §7.1—RM per Ax.I.3
-        (f) §7.2.1(c)—Clinical Evaluation per Art.61 and Ax.XIV
-        (g) §7—Product Realisation
-        (h) §7.2.1(c)—UDI verification per Art.27(3) and Art.29
-        (i) §8.2.1—PMS per Art.10(10) and Art.83
-        (j) §8.3.3—Stakeholder communication per Art.10(12)
-        (k) §8.2.1—Vigilance per Art.10(13) and Art.87-88
-        (l) §8.5.2 and §8.5.3—CAPA
-        (m) §8—Measurement, analysis and improvement
+        (a) 4.1.1 per Art.15-PRRC, Art.52, Ax.VII.4.9
+        (b) 7.2.1(c) and Ax.I
+        (c) 5—Management Responsibility
+        (d) 6—Resource Management
+        (e) 7.1—RM per Ax.I.3
+        (f) 7.2.1(c)—Clinical Evaluation per Art.61 and Ax.XIV
+        (g) 7—Product Realisation
+        (h) 7.2.1(c)—UDI verification per Art.27(3) and Art.29
+        (i) 8.2.1—PMS per Art.10(10) and Art.83
+        (j) 8.3.3—Stakeholder communication per Art.10(12)
+        (k) 8.2.1—Vigilance per Art.10(13) and Art.87-88
+        (l) 8.5.2 and §8.5.3—CAPA
+        (m) 8—Measurement, analysis and improvement
 
         - Art.10(9)(2): Def. of the QMS scope which, according to §4.2.2, has to be documented in the QM. 
         

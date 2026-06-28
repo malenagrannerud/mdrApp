@@ -1,32 +1,18 @@
 /**
  * src/components/StepDetail.jsx 
  * Skapar detaljvyn för ett valt steg.
- * 
  */
 
 import React from 'react';
 import Link from './Link';
+import { parseInlineRefs } from '../helpers/parseInlineRefs.jsx';
 
-/**
- * Hjälpfunktion som visar SOPar osv i filstrukturen
- * 
- */
 const extractFolderName = (line) => {
   const match = line.match(/📁\s+(.+)/);
   return match ? match[1].trim() : null;
 };
 
-
-/**
- * ChecklistItem: komponent som renderar en punkt i en checklista.
- * Den hanterar allt innehåll för ett specifikt delsteg (sub-step) och fattar beslut baserat på datan:
- * - Om texten har (emoji (📁) && 'files'-objekt) --> interaktivt filträd .
- * - Om det finns länkdata för 'sop', 'doc' eller 'mdcg' (som sträng eller array) --> <Link />-komponenter.
- * - Om punkten har en egen under-checklista ('checklist'), anropar komponenten sig själv rekursivt.
- * 
- */
-
-const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
+const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc, onOpenRef }) => {
 
   const renderTreeStructure = (text, files) => {
     if (!text) return null;
@@ -45,8 +31,6 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
               {hasFiles && fileMap[folderName].map((file, j) => {
                 const indent = file.indent || '  ';
                 
-                // Vi skapar ett modifierat data-objekt där vi lägger till indraget direkt på titeln
-                // så att din existerande <Link /> kan rendera det identiskt.
                 if (file.sop) {
                   const modifiedSop = { ...file.sop, title: `${indent}${file.sop.title}` };
                   return <Link key={j} type="sop" data={modifiedSop} onOpenSop={onOpenSop} onOpenDoc={onOpenDoc} onOpenMdcg={onOpenMdcg} />;
@@ -63,7 +47,6 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
               })}
             </div>
           );
-
         })}
       </div>
     );
@@ -72,20 +55,15 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
   return (
     <div className={item.t ? 'pt-8' : 'pt-0'}>
       
-      {item.t && <h4 className="headingSubStep">{item.t}</h4>}
-      {item.r && <p className="article-ref section-text whitespace-pre-line">{item.r}</p>}
+      {item.t && <h4 className="headingSubStep">{parseInlineRefs(item.t, onOpenRef)}</h4>}
+      {item.r && <p className="article-ref section-text whitespace-pre-line">{parseInlineRefs(item.r, onOpenRef)}</p>}
       
       {item.e && (
         item.e.includes('📁') && item.files ? (
           renderTreeStructure(item.e, item.files)
         ) : (
-
-          /**
-           *  Visar text så som jag skriver med whitespace och radbrytningar 
-           * 
-          */
           <p className={item.e.includes('📁') ? 'tree-structure font-mono text-sm whitespace-pre-wrap' : 'section-text whitespace-pre-line'}>
-            {item.e}
+            {parseInlineRefs(item.e, onOpenRef)}
           </p>
         )
       )}
@@ -128,7 +106,8 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
               item={subItem} 
               onOpenSop={onOpenSop} 
               onOpenMdcg={onOpenMdcg} 
-              onOpenDoc={onOpenDoc} 
+              onOpenDoc={onOpenDoc}
+              onOpenRef={onOpenRef}
             />
           ))}
         </div>
@@ -137,7 +116,7 @@ const ChecklistItem = ({ item, onOpenSop, onOpenMdcg, onOpenDoc }) => {
   );
 };
 
-const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
+const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc, onOpenRef }) => {
 
   return (
     <div className="bg-white border-4 border-slate-900 p-12 animate-in fade-in duration-500 rounded-none">
@@ -155,7 +134,8 @@ const StepDetail = ({ selected, onOpenSop, onOpenMdcg, onOpenDoc }) => {
             item={item} 
             onOpenSop={onOpenSop} 
             onOpenMdcg={onOpenMdcg} 
-            onOpenDoc={onOpenDoc} 
+            onOpenDoc={onOpenDoc}
+            onOpenRef={onOpenRef}
           />
         ))}
       </div>

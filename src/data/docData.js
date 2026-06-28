@@ -5,8 +5,49 @@
 
 export const DOC_DATA = {
 
+
+
+  ART_2_1: {
+  title: 'Article 2(1) - Definition of medical device',
+  title_short: 'Art.2(1)',
+  content_short: 'Definition of medical device',
+  content: `
+'medical device' means any instrument, apparatus, appliance, software, 
+implant, reagent, material or other article intended by the manufacturer 
+to be used, alone or in combination, for human beings for one or more of 
+the following specific medical purposes:
+
+— diagnosis, prevention, monitoring, prediction, prognosis, treatment or 
+  alleviation of disease,
+— diagnosis, monitoring, treatment, alleviation of, or compensation for, 
+  an injury or disability,
+— investigation, replacement or modification of the anatomy or of a 
+  physiological or pathological process or state,
+— providing information by means of in vitro examination of specimens 
+  derived from the human body, including organ, blood and tissue donations,
+
+and which does not achieve its principal intended action by pharmacological, 
+immunological or metabolic means, in or on the human body, but which may be 
+assisted in its function by such means.
+  `.trim()
+},
+
+ART_2_12: {
+  title: 'Article 2(12) - Definition of intended purpose',
+  title_short: 'Art.2(12)',
+  content_short: 'Definition of intended purpose',
+  content: `
+'intended purpose' means the use for which a device is intended according 
+to the data supplied by the manufacturer on the label, in the instructions 
+for use or in promotional or sales materials or statements and as specified 
+by the manufacturer in the clinical evaluation.
+  `.trim()
+},
+
  ART_51: {
-    title: 'ARTICLE 51 - Classification of devices',
+    title: 'Article 51 - Classification of devices',
+    title_short: ' ',
+    content_short: ' ', 
     content: `
 
 1. Devices shall be divided into classes per Ax.VIII., taking into account intended purpose and inherent risks. 
@@ -34,6 +75,8 @@ or based on information from vigilance and market surveillance activities, be re
 
 Art_61: {
     title:'Article 61 - Clinical evaluation ',
+    title_short: ' ',
+    content_short: 'Art.61 ', 
     content: `
 1. Confirmation of conformity with GSPR (Ax.I) under normal conditions of intended use, evaluation of undesirable side-effects, and acceptability of the BRR in Ax.I.1 and 1.8, shall be based on clinical data providing sufficient clinical evidence, and relevant data as in Ax.III.
 - The mf shall specify and justify the level of clinical evidence necessary to demonstrate conformity with relevant GSPR. That level shall be appropriate to the characteristics of the device and its intended purpose.
@@ -75,16 +118,16 @@ and the second mf provides clear evidence thereof to the NB.
 
   /**************************************************************************************************/ 
   AX_I: {
-    title: 'AX.1 - GENERAL SAFETY AND PERFORMANCE REQUIREMENTS',
+    title: 'Annex 1 - General safety and performance requirements',
+    title_short: 'Ax.1 - GSPR ',
+    content_short: ' ', 
     content: `
-# ABBREVIATIONS
-Risk management system (RMS)
-Risk management plan (RMP)
+
 
 # CHAPTER I - GENERAL REQUIREMENTS
 
 ## 1.   
-Devices shall achieve the performance intended by their manufacturer and shall be designed and manufactured in such a way that, during normal conditions of use, they are suitable for their intended purpose. They shall be safe and effective and shall not compromise the clinical condition or the safety of patients, or the safety and health of users or, where applicable, other persons, provided that any risks which may be associated with their use constitute acceptable risks when weighed against the benefits to the patient and are compatible with a high level of protection of health and safety, taking into account the generally acknowledged state of the art.
+Devices shall achieve the performance intended by their mf and shall be designed and manufactured in such a way that, during normal conditions of use, they are suitable for their intended purpose. They shall be safe and effective and shall not compromise the clinical condition or the safety of patients, or the safety and health of users or, where applicable, other persons, provided that any risks which may be associated with their use constitute acceptable risks when weighed against the benefits to the patient and are compatible with a high level of protection of health and safety, taking into account the generally acknowledged state of the art.
 
 
 ## 3.
@@ -94,9 +137,8 @@ Mfrs shall establish, implement, document and maintain a RMS, a continuous itera
 (b) identify and analyse the known and foreseeable hazards associated with each device;
 (c) estimate and evaluate the risks associated with, and occurring during, the intended use and during reasonably foreseeable misuse;
 (d) eliminate or control the risks referred to in point (c) in accordance with the requirements of Section 4;
-(e) evaluate the impact of information from the production phase and, in particular, from the post-market surveillance system, on hazards and the frequency of occurrence thereof, on estimates of their associated risks, as well as on the overall risk, benefit-risk ratio and risk acceptability; and
-(f) based on the evaluation of the impact of the information in point (e), if necessary amend control measures in line with the requirements of Section 4.
-
+(e) evaluate the impact of info from the production phase and, in particular, from the PMS system, on hazards and the frequency of occurrence thereof, on estimates of their associated risks, as well as on the overall risk, benefit-risk ratio and risk acceptability; and
+(f) based on the evaluation of the impact of the information in (e), if necessary amend control measures in line with the requirements of Section 4.
 
 ## 8.   
 All 

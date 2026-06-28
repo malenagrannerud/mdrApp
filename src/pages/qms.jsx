@@ -1,24 +1,19 @@
-
 {/* QMS.jsx */}
-
-
-
 
 import React, { useState } from 'react';
 import { QMS_DATA } from '../data/qmsStepsData';
 import SopTemplate from '../components/SopTemplate';
+import DocTemplate from '../components/DocTemplate';  // <-- LÄGG TILL
 import StepDetail from '../components/StepDetail';
 
 export default function QmsPage() {
   const [selected, setSelected] = useState(QMS_DATA[0]);
   const [activeSop, setActiveSop] = useState(null);
+  const [activeRef, setActiveRef] = useState(null);  // <-- LÄGG TILL
 
   return (
     <>
-      {/* 1. Själva sidan som går att skrolla i */}
       <div className="page-layout">
-
-
         <div className="grid grid-cols-12 gap-12 max-w-7xl mx-auto">
           <div className="col-span-4 space-y-4">
             {QMS_DATA.map((step, idx) => (
@@ -29,22 +24,27 @@ export default function QmsPage() {
           </div>
           <div className="col-span-8">
             <StepDetail 
-            selected={selected} 
-            onOpenSop={(sop) => {
-              setActiveSop(sop);
-            }} 
+              selected={selected} 
+              onOpenSop={(sop) => setActiveSop(sop)}
+              onOpenRef={(ref) => setActiveRef(ref)}  // <-- LÄGG TILL
             />
           </div>
         </div>
       </div>
 
-      {/* 2. POP-UPEN som visar SOP: */}
+      {/* SOP-popup */}
       {activeSop && (
         <SopTemplate {...activeSop} onClose={() => setActiveSop(null)} />
       )}
+
+      {/* Artikel/Annex-popup */}
+      {activeRef && (
+        <DocTemplate
+          title={activeRef.title}
+          content={activeRef.content}
+          onClose={() => setActiveRef(null)}
+        />
+      )}
     </>
-
-
-
   );
 }
