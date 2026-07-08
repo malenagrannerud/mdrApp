@@ -1,7 +1,11 @@
 /**
  * filter_bulk.js
  * 
- * Rensar och aggregerar produkt- och tillverkardata från src/data/DEVICE2024.txt
+ * Sida för ETL (Extract, Transform, Load), minneshantering, datakvalitet och molndatabaser
+ * 
+ * 
+ * 
+ * Rensar och aggregerar data från src/data/DEVICE2024.txt
  * och laddar upp i snabba bulk-batcher till Supabase med Service Role-rättigheter.
  */
 
