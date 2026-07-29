@@ -1,5 +1,5 @@
 /**
- * filter_bulk.js
+ * scripts/filter_bulk.js
  * 
  * Sida för ETL (Extract, Transform, Load), minneshantering, datakvalitet och molndatabaser
  * 
@@ -11,9 +11,11 @@
 
 import fs from 'fs'
 import readline from 'readline'
-import 'dotenv/config' // <--- Laddar dina hemliga nycklar från .env-filen automatiskt!
+import 'dotenv/config'
 
 console.log('🚀 Startar inläsning och städning av src/data/DEVICE2024.txt...')
+
+const startTime = Date.now()
 
 const rl = readline.createInterface({
   input: fs.createReadStream('src/data/DEVICE2024.txt'), 
@@ -111,7 +113,7 @@ rl.on('close', async () => {
     process.exit(1);
   }
 
-  // Initiera klienten säkert med ADMIN-nyckeln från din .env
+  // Initiera klienten säkert med ADMIN-nyckeln från .env
   const supabase = createClient(
     'https://kgoxvplsaceqdvorqsle.supabase.co', 
     process.env.SUPABASE_SERVICE_ROLE_KEY, // Läses säkert in här!
@@ -163,6 +165,9 @@ rl.on('close', async () => {
 
   await uploadInBatches('product_stats', allProducts, 'product_code')
   await uploadInBatches('manufacturer_stats', allManufacturers, 'name')
+
+const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
+console.log(`\n⏱️  Total körtid: ${elapsed} sekunder`)
 
   console.log('\n🎉 ALL DATA STÄDAD OCH UPPLADDAD TILL SUPABASE!')
 })

@@ -1,7 +1,5 @@
 # MDR COMPLIANCE WEB APP
 
-
-
 ## ABOUT
 This web app contains 
 - MDR Steps: EU 2017/745 compliance workflows
@@ -33,6 +31,8 @@ Using a dataset from FDA MAUDE of the most frequently reported products and manu
 - **Trend Spotting:** How manufacturers can monitor industry-wide product failures and common safety risks.
 - **Competitor & Market Analysis:** How to filter and benchmark data to see which product categories generate the most incident reports.
 - **Proactive Risk Management:** How data analysis feeds back into Clinical Evaluations and PMS planning to improve device safety before issues occur.
+
+Run the test : bash-  node scripts/filter_bulk.js
 
 
 ## FUTURE STEPS
