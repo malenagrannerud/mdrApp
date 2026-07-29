@@ -1,9 +1,10 @@
-# MDR COMPLIANCE WEB APP
+# Medical Device Regulation COMPLIANCE WEB APP
 
 ## ABOUT
 This web app contains 
 - MDR Steps: EU 2017/745 compliance workflows
 - QMS Steps: ISO 13485:2016 implementation workflows
+- Dashboard: Showing post market data 
 
 with the aim of guiding cross-functional teams such as manufacturers, Quality and regulatory experts, Data Analysists, and Stakeholders to align on regulatory milestones and what these processes may look like in practice. 
 
@@ -12,15 +13,14 @@ with the aim of guiding cross-functional teams such as manufacturers, Quality an
 
 
 ## METHODS AND RESULTS
-
 ### MDR Steps
 The complex legal text of the EU 2017/745 regulation was transformed into a roadmap. Users gain a visual understanding of the CE-marking journey. 
 
 ### QMS Steps
 The core requirements of ISO 13485:2016 were mapped into a step-by-step implementation guide. The interface focuses on the practical setup of a QMS, highlighting SOPs and WIs. Startups and manufacturers get a roadmap to understand how to build a compliant, audit-ready QMS.
 
-### PMS Data Analysis
-Using a dataset from FDA MAUDE of the most frequently reported products and manufacturers from 2024, this module illustrates:
+### Dashboard
+Using data from FDA MAUDE of the most frequently reported products and manufacturers from 2024, this module illustrates:
 - **Trend Spotting:** How manufacturers can monitor industry-wide product failures and common safety risks.
 - **Competitor & Market Analysis:** How to filter and benchmark data to see which product categories generate the most incident reports.
 - **Proactive Risk Management:** How data analysis feeds back into Clinical Evaluations and PMS planning to improve device safety before issues occur.
@@ -28,10 +28,9 @@ Using a dataset from FDA MAUDE of the most frequently reported products and manu
 ### Steps in how the dashboard was created
 
 ### STEP 0 - Download data
-
 1. Go to FDA MAUDE: https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download
 
-2. Download a zipped raw  
+2. Download a raw file  
 ``` bash
 mkdir -p src/data
 cd src/data
@@ -47,23 +46,18 @@ wc -l src/data/DEVICE2024.txt
 ```
 
 ### STEP 1 - Create empty tables in Supabase
-
-bronze_reports, silver_reports, product_stats, manufacturer_stats
-
-
-run the code in Supabase
+bronze_reports, silver_reports, product_stats, manufacturer_stats. Run the code in Supabase
 
 ```supabase
 -- ============================================================
 -- Medallion architecture schema for FDA MAUDE (DEVICE2024)
--- Bronze -> Silver -> Gold
 -- ============================================================
 
 -- ------------------------------------------------------------
 -- BRONZE: raw, unfiltered, immutable, append-only.
--- Everything from the source file including bad
--- rows (missing product code, junk manufacturer, duplicates).
--- Nothing is dropped or corrected at this stage.
+-- Everything from the source file including bad rows 
+-- (missing product code, junk manufacturer, duplicates).
+-- Nothing is dropped or corrected. 
 -- ------------------------------------------------------------
 create table if not exists bronze_reports (
   id bigint generated always as identity primary key,
@@ -80,7 +74,6 @@ create table if not exists bronze_reports (
 -- duplicates from the source system are expected and kept as-is.
 create index if not exists idx_bronze_report_key on bronze_reports (report_key);
 create index if not exists idx_bronze_source_file on bronze_reports (_source_file);
-
 
 -- ------------------------------------------------------------
 -- SILVER: cleaned, typed, deduplicated, normalized.
@@ -99,7 +92,6 @@ create table if not exists silver_reports (
 create index if not exists idx_silver_product_code on silver_reports (product_code);
 create index if not exists idx_silver_manufacturer on silver_reports (manufacturer_name);
 
-
 -- ------------------------------------------------------------
 -- GOLD: aggregated, business-ready. Unchanged from your
 -- existing tables -- these are what the dashboard reads.
@@ -117,8 +109,6 @@ create table if not exists manufacturer_stats (
   count integer not null
 );
 ```
-
-Make sure raw data are not public
 
 ### STEP 2 - Install python
 ```bash

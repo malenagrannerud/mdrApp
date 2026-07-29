@@ -80,7 +80,7 @@ def main() -> None:
                 val = fields[idx].strip()
                 return val or None
 
-            # Bronze keeps EVERYTHING, including empty/junk values.
+            # Bronze --> keep everything including empty/junk values.
             buffer.append({
                 "report_key": get(col_idx["reportKey"]),
                 "product_code_raw": get(col_idx["productCode"]),
