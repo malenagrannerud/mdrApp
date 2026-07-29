@@ -11,6 +11,11 @@ with the aim of guiding cross-functional teams such as manufacturers, Quality an
 ## LIVE DEMO
 [mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
 
+## Quick Run
+```bash
+npm run dev
+```
+
 
 ## METHODS AND RESULTS
 ### MDR Steps
@@ -48,7 +53,7 @@ wc -l src/data/DEVICE2024.txt
 ### STEP 1 - Create empty tables in Supabase
 bronze_reports, silver_reports, product_stats, manufacturer_stats. Run the code in Supabase
 
-```supabase
+```sql
 -- ============================================================
 -- Medallion architecture schema for FDA MAUDE (DEVICE2024)
 -- ============================================================
@@ -70,8 +75,6 @@ create table if not exists bronze_reports (
   _source_file text not null
 );
 
--- Bronze is append-only: no unique constraint on report_key here,
--- duplicates from the source system are expected and kept as-is.
 create index if not exists idx_bronze_report_key on bronze_reports (report_key);
 create index if not exists idx_bronze_source_file on bronze_reports (_source_file);
 
@@ -93,8 +96,7 @@ create index if not exists idx_silver_product_code on silver_reports (product_co
 create index if not exists idx_silver_manufacturer on silver_reports (manufacturer_name);
 
 -- ------------------------------------------------------------
--- GOLD: aggregated, business-ready. Unchanged from your
--- existing tables -- these are what the dashboard reads.
+-- GOLD: aggregated, business-ready, what the dashboard reads.
 -- ------------------------------------------------------------
 create table if not exists product_stats (
   product_code text primary key,
@@ -114,78 +116,65 @@ create table if not exists manufacturer_stats (
 ```bash
 pip install -r python_medal/requirements.txt
 ```
-Verify 
+Verify: 
 ```bash
 python -c "from supabase import create_client; print('OK')"
 ```
 
 ### Step 3 - Run Bronze
 ```bash
-python python_medal/1-bronze_load.py
+python python_medal/1_bronze_load.py
 ```
 Verify: 
 - See "Bronze klar", 
-- See a filled bronze_reports in Supabase with wc-1 rows
-- Check one row, make sure not empty
-
+- See a filled bronze_reports array in Supabase with wc-1 rows and heck one row, make sure not empty
 
 ### Step 4 - Run Silver
 ```bash
-python python_medal/2-silver_transform.py
+python python_medal/2_silver_transform.py
 ```
+Reads from bronze_reports, cleanses/dedupes/normalizes, writes to silver_reports.
 
-Läser från bronze_reports, rensar/dedup:ar/normaliserar, skriver till silver_reports.
-
-Verifiera:
-
+Verify: 
 - Terminalen skriver ut en rapport: antal borttagna (saknar produktkod / ogiltig tillverkare / dubbletter) och antal kvar
-- I Supabase Table Editor → silver_reports: radantalet ska vara mindre än Bronze (eftersom skräp/dubbletter försvann)
-- Kör denna SQL-fråga i SQL Editor för att dubbelkolla att inga dubbletter finns kvar:
+- In Supabase Table Editor → silver_reports: nr of rows shall be < nr of rows in Bronze (since cleaned rows should be removed)
+- Run this SQL-enquiery in SQL Editor and check so duplicates are reomved:
+
 ```sql
 SELECT report_key, COUNT(*) 
 FROM silver_reports 
 GROUP BY report_key 
 HAVING COUNT(*) > 1;
 ```
-Ska ge 0 rader tillbaka. Om den ger träffar har något gått fel i dedup-logiken.
+Shall return 0 rows, else the dedup logic is wrong. 
 
 ### Step 5 - Run Gold
-
 ```bash
-python python_medal/3-gold_aggregate.py
+python python_medal/3_gold_aggregate.py
 ```
-Läser från silver_reports, aggregerar till product_stats och manufacturer_stats.
+Reads from silver_reports, aggregates to product_stats and manufacturer_stats.
 
-Verifiera:
+Verify: I Supabase → product_stats: ska innehålla en rad per unik produktkod.  Kör:
 
-I Supabase → product_stats: ska innehålla en rad per unik produktkod (tusentals rader, inte miljontals). Kör:
 ```sql
 SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
 ```
-Ska visa dina topp-10 mest rapporterade produkter — samma typ av siffror som redan syns i din dashboard idag.
 
 ### STEP 6 — See dashboard 
-Din Dashboard.jsx läser redan från product_stats/manufacturer_stats — de tabellerna har exakt samma struktur som innan
+Dashboard.jsx reads and displays top 10 most reported data from the tables product_stats and manufacturer_stats from Supabase
 
 Verify: Inspect plots
-```bash
-npm run dev
-```
-
 
 ## FUTURE STEPS
-
 ### QA/RA
 - [ ] Add documentation dependencies between MDR & QMS 
 - [ ] Add fictive Audit checklists
 - [ ] Add clickable abbreviations
-
 ### PMS Data Analysis
 
 
 
 ## CONTACT
-
 Malena Grannerud 
 malena.grannerud@gmail.com
 https://www.linkedin.com/in/malena-grannerud

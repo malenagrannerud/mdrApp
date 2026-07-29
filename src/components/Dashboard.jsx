@@ -23,14 +23,14 @@ export default function Dashboard() {
       setLoading(true)
       setError(null)
       try {
-        // HÄMTNING 1: Motsvarar SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
+        // Reads product stats from Supabase, ordered by total_reports descending, limited to top 10
         const productsHook = await supabase
           .from('product_stats')
           .select('*')
           .order('total_reports', { ascending: false })
           .limit(10)
 
-        // HÄMTNING 2: Motsvarar SELECT * FROM manufacturer_stats ORDER BY count DESC LIMIT 10;
+        // Reads manufacturer stats from Supabase, ordered by count descending, limited to top 10
         const manufacturersHook = await supabase
           .from('manufacturer_stats')
           .select('*')
