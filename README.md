@@ -53,8 +53,7 @@ bronze_reports, silver_reports, product_stats, manufacturer_stats
 
 run the code in Supabase
 
-```
-
+```supabase
 -- ============================================================
 -- Medallion architecture schema for FDA MAUDE (DEVICE2024)
 -- Bronze -> Silver -> Gold
@@ -62,7 +61,7 @@ run the code in Supabase
 
 -- ------------------------------------------------------------
 -- BRONZE: raw, unfiltered, immutable, append-only.
--- Everything from the source file lands here, including bad
+-- Everything from the source file including bad
 -- rows (missing product code, junk manufacturer, duplicates).
 -- Nothing is dropped or corrected at this stage.
 -- ------------------------------------------------------------
@@ -121,7 +120,67 @@ create table if not exists manufacturer_stats (
 
 Make sure raw data are not public
 
+### STEP 2 - Install python
+```bash
+pip install -r python_medal/requirements.txt
+```
+Verify 
+```bash
+python -c "from supabase import create_client; print('OK')"
+```
 
+### Step 3 - Run Bronze
+```bash
+python python_medal/1-bronze_load.py
+```
+Verify: 
+- See "Bronze klar", 
+- See a filled bronze_reports in Supabase with wc-1 rows
+- Check one row, make sure not empty
+
+
+### Step 4 - Run Silver
+```bash
+python python_medal/2-silver_transform.py
+```
+
+Läser från bronze_reports, rensar/dedup:ar/normaliserar, skriver till silver_reports.
+
+Verifiera:
+
+- Terminalen skriver ut en rapport: antal borttagna (saknar produktkod / ogiltig tillverkare / dubbletter) och antal kvar
+- I Supabase Table Editor → silver_reports: radantalet ska vara mindre än Bronze (eftersom skräp/dubbletter försvann)
+- Kör denna SQL-fråga i SQL Editor för att dubbelkolla att inga dubbletter finns kvar:
+```sql
+SELECT report_key, COUNT(*) 
+FROM silver_reports 
+GROUP BY report_key 
+HAVING COUNT(*) > 1;
+```
+Ska ge 0 rader tillbaka. Om den ger träffar har något gått fel i dedup-logiken.
+
+### Step 5 - Run Gold
+
+```bash
+python python_medal/3-gold_aggregate.py
+```
+Läser från silver_reports, aggregerar till product_stats och manufacturer_stats.
+
+Verifiera:
+
+I Supabase → product_stats: ska innehålla en rad per unik produktkod (tusentals rader, inte miljontals). Kör:
+```sql
+SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
+```
+Ska visa dina topp-10 mest rapporterade produkter — samma typ av siffror som redan syns i din dashboard idag.
+
+### STEP 6 — See dashboard 
+Din Dashboard.jsx läser redan från product_stats/manufacturer_stats — de tabellerna har exakt samma struktur som innan
+
+Verify: Inspect plots
+```bash
+npm run dev
+```
 
 
 ## FUTURE STEPS

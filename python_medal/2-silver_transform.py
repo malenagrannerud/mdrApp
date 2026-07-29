@@ -1,0 +1,148 @@
+"""
+2_silver_transform.py
+
+SILVER LAYER
+Reads raw rows from bronze_reports, cleans them, and writes
+one deduplicated, normalized row per report_key into silver_reports.
+
+Rules applied here:
+    - Drop rows with no product code
+    - Drop rows with invalid/junk manufacturer values
+    - Deduplicate by report_key (keep first seen)
+    - Normalize manufacturer names (strip legal suffixes, punctuation)
+    - Merge known manufacturer name variants
+"""
+
+import os
+import re
+import time
+
+from dotenv import load_dotenv
+from supabase import create_client
+
+load_dotenv()
+
+PAGE_SIZE = 5000
+WRITE_BATCH_SIZE = 1000
+SUPABASE_URL = "https://kgoxvplsaceqdvorqsle.supabase.co"
+
+INVALID_VALUES = {"NI", "UNK", "*", "N/A", "NA", "UNKNOWN", "NO INFORMATION", "?", "NONE"}
+
+MANUFACTURER_MERGES = {
+    "NOBEL BIOCARE GÖTEBORG": "NOBEL BIOCARE",
+    "MEDTRONIC MINIMED": "MEDTRONIC",
+    "MEDTRONIC PUERTO RICO OPERATIONS": "MEDTRONIC",
+    "AIZU OLYMPUS": "OLYMPUS",
+    "SHIRAKAWA OLYMPUS": "OLYMPUS",
+}
+
+SUFFIX_RE = re.compile(r"\s(inc|llc|ltd|co|corp|corporation|as|ag|gmbh|sa|ab)$", re.IGNORECASE)
+
+service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+if not service_role_key:
+    raise SystemExit("❌ Fel: SUPABASE_SERVICE_ROLE_KEY saknas i din .env-fil!")
+
+supabase = create_client(SUPABASE_URL, service_role_key)
+
+
+def is_invalid_value(name: str | None) -> bool:
+    if not name:
+        return True
+    cleaned = name.strip()
+    return cleaned.upper() in INVALID_VALUES or len(cleaned) < 2
+
+
+def normalize_manufacturer(name: str | None) -> str:
+    if not name:
+        return ""
+    cleaned = name.replace(",", " ").replace(".", " ")
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    cleaned = SUFFIX_RE.sub("", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    return cleaned
+
+
+def merge_known_duplicates(name: str) -> str:
+    return MANUFACTURER_MERGES.get(name.upper(), name)
+
+
+def main() -> None:
+    print("🚀 [SILVER] Läser rådata från bronze_reports och rensar...")
+    start_time = time.time()
+
+    seen_keys: set[str] = set()
+    silver_rows: list[dict] = []
+
+    removed_no_product_code = 0
+    removed_bad_manufacturer = 0
+    removed_duplicate = 0
+    total_read = 0
+
+    offset = 0
+    while True:
+        response = (
+            supabase.table("bronze_reports")
+            .select("report_key, product_code_raw, brand_name_raw, generic_name_raw, manufacturer_raw")
+            .range(offset, offset + PAGE_SIZE - 1)
+            .execute()
+        )
+        page = response.data
+        if not page:
+            break
+
+        total_read += len(page)
+
+        for row in page:
+            if not row["product_code_raw"]:
+                removed_no_product_code += 1
+                continue
+            if is_invalid_value(row["manufacturer_raw"]):
+                removed_bad_manufacturer += 1
+                continue
+            if row["report_key"] in seen_keys:
+                removed_duplicate += 1
+                continue
+            seen_keys.add(row["report_key"])
+
+            manufacturer = merge_known_duplicates(normalize_manufacturer(row["manufacturer_raw"]))
+
+            brand = row["brand_name_raw"]
+            generic = row["generic_name_raw"]
+
+            silver_rows.append({
+                "report_key": row["report_key"],
+                "product_code": row["product_code_raw"],
+                "brand_name": re.sub(r"\s+", " ", brand).strip().upper() if not is_invalid_value(brand) else None,
+                "generic_name": re.sub(r"\s+", " ", generic).strip().upper() if not is_invalid_value(generic) else None,
+                "manufacturer_name": manufacturer or None,
+            })
+
+        if total_read % 500000 < PAGE_SIZE:
+            print(f"  ⏳ Läst {total_read:,} rader från Bronze...")
+
+        offset += PAGE_SIZE
+        if len(page) < PAGE_SIZE:
+            break
+
+    print(f"\n📤 Skriver {len(silver_rows):,} rensade rader till silver_reports...")
+    for i in range(0, len(silver_rows), WRITE_BATCH_SIZE):
+        batch = silver_rows[i:i + WRITE_BATCH_SIZE]
+        try:
+            supabase.table("silver_reports").upsert(batch, on_conflict="report_key").execute()
+        except Exception as exc:  # noqa: BLE001
+            print(f"  ❌ Fel vid upsert i silver_reports: {exc}")
+
+    elapsed = time.time() - start_time
+    print("\n=== 📊 Silver-rapport ===")
+    print(f"  Lästa rader från Bronze:         {total_read:,}")
+    print(f"  Borttagna (saknar produktkod):   {removed_no_product_code:,}")
+    print(f"  Borttagna (ogiltig tillverkare):  {removed_bad_manufacturer:,}")
+    print(f"  Borttagna (dubbletter):           {removed_duplicate:,}")
+    pct = (len(silver_rows) / total_read * 100) if total_read else 0
+    print(f"  Behållna unika rader i Silver:    {len(silver_rows):,} ({pct:.1f}%)")
+    print(f"  ⏱️  Total körtid: {elapsed:.1f} sekunder")
+    print("\n🎉 SILVER KLAR. Kör nu: python 3_gold_aggregate.py")
+
+
+if __name__ == "__main__":
+    main()
