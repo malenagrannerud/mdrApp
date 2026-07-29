@@ -2,6 +2,8 @@
  * Post-Market Surveillance Dashboard
  * 
  * Hämtar och visualiserar städad DEVICE2024-data direkt från Supabase.
+ * 
+ * 
  */
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -9,29 +11,6 @@ import { Loader, ShieldAlert, Factory } from 'lucide-react'
 import PBICard from './PBICard'
 import { supabase } from '../lib/supabase'
 
-const PRODUCT_CATEGORY = {
-
-  'DZE': { category: 'Dental Implant, Root-Form', class: '2' },
-  'QBJ': { category: 'Continuous Glucose Monitor, Factory Calibrated', class: '2' },
-  'QFG': { category: 'ACE-Enabled Insulin Infusion Pump', class: '2' },
-  'OZP': { category: 'Automated Insulin Dosing, Single Hormonal Control', class: '3' },
-  'BZD': { category: 'Ventilator, Non-Continuous (Respirator)', class: '2' },
-  'FRN': { category: 'Infusion Pump, General', class: '2' },
-  'FPA': { category: 'IV Administration Set', class: '2' },
-  'QLG': { category: 'Continuous Glucose Monitor, Standalone', class: '2' },
-  'LGW': { category: 'Spinal Cord Stimulator, Totally Implanted', class: '3' },
-  'FTR': { category: 'Silicone Breast Implant', class: '3' },
-  'DTB': { category: 'Pacemaker Electrode, Permanent', class: '3' },
-  'LWS': { category: 'Implantable Defibrillator, Non-CRT', class: '3' },
-  'PQF': { category: 'Glucose Sensor, Invasive, Non-Adjunctive', class: '3' },
-  'NVN': { category: 'Drug-Eluting Pacemaker Electrode', class: '3' },
-  'CBK': { category: 'Ventilator, Continuous, Facility Use', class: '2' },
-  'OZD': { category: 'Temporary Left Heart Support Blood Pump', class: '3' },
-  'LZG': { category: 'Insulin Infusion Pump, Patch', class: '2' },
-  'OYC': { category: 'Insulin Pump with Invasive Glucose Sensor', class: '3' },
-  'MKJ': { category: 'Automated External Defibrillator, Non-Wearable', class: '3' },
-  'MGB': { category: 'Vascular Hemostasis Device', class: '3' },
-}
 
 export default function Dashboard() {
   const [productData, setProductData] = useState([])
