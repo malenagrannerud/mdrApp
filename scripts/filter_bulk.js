@@ -1,7 +1,7 @@
 /**
  * scripts/filter_bulk.js
  * 
- * Sida för ETL (Extract, Transform, Load), minneshantering, datakvalitet och molndatabaser
+ * Sida för ETL , minneshantering, datakvalitet och molndatabaser
  * 
  * 
  * 
