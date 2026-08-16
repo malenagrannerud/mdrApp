@@ -1,4 +1,6 @@
-## Steps in how the dashboard was created
+# ETL Pipeline: Medallion Architecture
+
+This document describes the data pipeline that powers the Post-Market Surveillance Dashboard. It takes raw FDA MAUDE adverse event data and transforms it into clean, aggregated tables that the dashboard reads from.
 
 ### STEP 0 - Download data
 1. Go to FDA MAUDE: https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download

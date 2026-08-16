@@ -81,9 +81,10 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        
         {/* KORT 1: TOPP PRODUKTER */}
-        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter till FDA 2024" subtitle="Sorterat efter flest antal incidentrapporter">
-          
+        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter till FDA 2024" subtitle="">
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={productChartData} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
