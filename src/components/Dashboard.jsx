@@ -66,9 +66,8 @@ export default function Dashboard() {
 
   // JS-Transformering: Mappa produktkoder till deras riktiga kategorinamn för diagrammet
   const productChartData = productData.map(p => ({
-    category: PRODUCT_CATEGORY[p.product_code]?.category || `Kod: ${p.product_code}`,
-    reports: p.total_reports,
-    brand: p.brand_name || 'Okänt märke'
+  category: p.brand_name || p.generic_name || `Kod: ${p.product_code}`,    reports: p.total_reports,
+  brand: p.brand_name || 'Okänt märke'
   }))
 
   // Formateringshjälp för stora tal (t.ex. 340691 -> 340 691)
