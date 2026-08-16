@@ -26,3 +26,4 @@ node_modules
 src/data/DEVICE*.txt
 src/data/*.zip
 src/data/mdrfoi*.txt
+.env
