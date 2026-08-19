@@ -1,11 +1,15 @@
 """
-3_gold_aggregate.py
+3_silver_to_gold.py
 
 GOLD LAYER
-Reads cleaned rows from silver_reports and aggregates them into
-the business-ready tables the dashboard reads from:
-    - product_stats       (one row per product code, with top brand/manufacturer)
-    - manufacturer_stats  (total report count per manufacturer)
+
+Mål: Läsa renad data från silver_reports och aggregera den till de
+verksamhetsanpassade tabeller Dashboard.jsx faktiskt läser:
+    - product_stats       (en rad per produktkod, med representativt varumärke/tillverkare)
+    - manufacturer_stats  (totalt antal rapporter per tillverkare)
+
+Input:  silver_reports (Supabase)
+Output: product_stats, manufacturer_stats (Supabase)
 """
 
 import os
@@ -29,6 +33,7 @@ supabase = create_client(SUPABASE_URL, service_role_key)
 
 
 def upload_in_batches(table_name: str, rows: list[dict], on_conflict: str) -> None:
+    """Skriver rader batchvis till en Gold-tabell med upsert (idempotent)."""
     print(f"\n📤 Startar bulk-upload för [{table_name}] ({len(rows):,} rader)...")
     for i in range(0, len(rows), WRITE_BATCH_SIZE):
         batch = rows[i:i + WRITE_BATCH_SIZE]
@@ -44,13 +49,18 @@ def main() -> None:
     print("🚀 [GOLD] Läser Silver-data och aggregerar...")
     start_time = time.time()
 
-    # product_code -> { count, brands: Counter, generics: Counter, manufacturers: Counter }
+    # product_code -> { antal rapporter, samt en Counter per fält som
+    # räknar hur ofta varje värde förekommit för just den produktkoden }.
+    # defaultdict + lambda: slipper kolla "finns koden redan" manuellt —
+    # ett nytt tomt bokförings-objekt skapas automatiskt vid första träffen.
     product_info: dict[str, dict] = defaultdict(lambda: {
         "count": 0,
         "brands": Counter(),
         "generics": Counter(),
         "manufacturers": Counter(),
     })
+    # Separat räknare: totalt antal rapporter per tillverkare, oavsett
+    # vilken produkt — svarar på en annan fråga än product_info gör.
     manufacturer_totals: Counter = Counter()
 
     total_read = 0
@@ -69,6 +79,9 @@ def main() -> None:
 
         total_read += len(page)
 
+        # Vi räknar båda dimensionerna (per produkt OCH per tillverkare)
+        # i samma genomläsning av Silver, istället för att läsa datan
+        # två gånger — en optimering som blir viktig när Silver är stor.
         for row in page:
             code = row["product_code"]
             info = product_info[code]
@@ -91,6 +104,9 @@ def main() -> None:
     print("\n📦 Transformerar produktdata...")
     all_products = []
     for code, info in product_info.items():
+        # most_common(1): väljer det VANLIGAST förekommande värdet, inte
+        # bara första bästa. Mer statistiskt robust — en enstaka felstavad
+        # eller sen rapport påverkar inte vilket namn som visas i Gold.
         top_brand = info["brands"].most_common(1)
         top_generic = info["generics"].most_common(1)
         top_mfr = info["manufacturers"].most_common(1)

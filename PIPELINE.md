@@ -1,28 +1,88 @@
 # ETL Pipeline: Medallion Architecture
 
-This document describes the data pipeline that powers the Post-Market Surveillance Dashboard. It takes raw FDA MAUDE adverse event data and transforms it into clean, aggregated tables that the dashboard reads from.
+Detta projekt transformerar rådata (FDA MAUDE) till aggregerad, dashboard-klar
+data via en medaljong-arkitektur: bronze → silver → gold, byggd med Python och
+Postgres (via Supabase).
 
-### STEP 0 - Download data
-1. Go to FDA MAUDE: https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download
+## Pipeline-steg
 
-2. Download a raw file  
-``` bash
+1. `1_bronze_ingest.py` — Läser rådata från DEVICE2024.txt, sparar i bronze_reports.
+2. `2_bronze_to_silver.py` — Rensar, validerar, normaliserar och dedupar, sparar i silver_reports.
+3. `3_silver_to_gold.py` — Aggregerar till product_stats och manufacturer_stats, som Dashboard.jsx läser.
+
+### Regler för Bronze-lagret
+
+- Append-only (immutability). Ingen rad uppdateras eller raderas.
+- Skräprader (saknad produktkod, "UNKNOWN" tillverkare, dubbletter) sparas 
+- Varje rad berikas med `_inserted_at` och `_source_file` för spårbarhet.
+
+### Regler för Silver-lagret
+
+- Rader utan produktkod eller med skräpvärde som tillverkare kastas.
+- En rad per unikt `report_key` (deduplicering, första förekomsten vinner).
+- Tillverkarnamn normaliseras (skiljetecken/mellanslag städas, juridiska suffix tas bort) och kända varianter slås ihop via en manuell lista.
+- Skrivs med `upsert` — säkert att köra om (idempotent).
+
+### Regler för Gold-lagret
+
+- En rad per produktkod i `product_stats`, med totalt antal rapporter samt vanligast förekommande varumärke/generiskt namn/tillverkare.
+- En rad per tillverkare i `manufacturer_stats`, med totalt antal rapporter oavsett produkt.
+
+[ Source: FDA MAUDE - DEVICE2024.txt ] (API, DB, Filer)
+       │
+       ▼  (Ingestering / Inlastning)
+┌─────────────────────────────────────────┐
+│              BRONZE LAGER               │
+│  - Raw Data                            │
+│  - Historik sparas (Append-only)        │
+│  - Inga filter eller tvätt              │
+└─────────────────────────────────────────┘
+       │
+       ▼  (Tvätt, Validering, Strukturering)
+┌─────────────────────────────────────────┐
+│              SILVER LAGER               │
+│  - Renad och validerad data             │
+│  - Berikad (Enriched)                   │
+│  - Gemensamt format (T.ex. Delta/Parquet)│
+└─────────────────────────────────────────┘
+       │
+       ▼  (Aggregering, Affärslogik)
+┌─────────────────────────────────────────┐
+│               GOLD LAGER                │
+│  - Verksamhetsanpassad data             │
+│  - Aggregerad och snabb                 │
+│  - Klar för rapportering                │
+└─────────────────────────────────────────┘
+       │
+       ├───────────────────┬───────────────────┐
+       ▼                   ▼                   ▼
+[ Power BI / Tableau ]   [ AI / ML Modeller ]   [ Ad-hoc Analys ]
+
+
+
+
+
+
+## Steg för att köra pipelinen
+
+### Steg 0 — Ladda ner data
+1. Gå till FDA MAUDE: https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download
+2. Ladda ner en rådatafil:
+```bash
 mkdir -p src/data
 cd src/data
 curl -O https://www.accessdata.fda.gov/MAUDE/ftparea/device2024.zip
 unzip device2024.zip
 cd ../..
 ```
-
-3. Open in bash to inspect. Displays 3 first rows
-```bash 
+3. Inspektera i bash:
+```bash
 head -3 src/data/DEVICE2024.txt
 wc -l src/data/DEVICE2024.txt
 ```
 
-### STEP 1 - Create empty tables in Supabase
-bronze_reports, silver_reports, product_stats, manufacturer_stats. Run the code in Supabase
-
+### Steg 1 — Skapa tabeller i Supabase
+Kör SQL-schemat för `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats` i Supabase SQL Editor 
 ```sql
 -- ============================================================
 -- Medallion architecture schema for FDA MAUDE (DEVICE2024)
@@ -35,7 +95,7 @@ bronze_reports, silver_reports, product_stats, manufacturer_stats. Run the code 
 -- Nothing is dropped or corrected. 
 -- ------------------------------------------------------------
 create table if not exists bronze_reports (
-  id bigint generated always as identity primary key,
+  id bigint generated always as identity primary key, 
   report_key text,
   product_code_raw text,
   brand_name_raw text,
@@ -82,55 +142,42 @@ create table if not exists manufacturer_stats (
 );
 ```
 
-### STEP 2 - Install python
+
+
+
+### Steg 2 — Installera Python-beroenden
 ```bash
 pip install -r python_medal/requirements.txt
-```
-Verify: 
-```bash
 python -c "from supabase import create_client; print('OK')"
 ```
 
-### Step 3 - Run Bronze
+### Steg 3 — Kör Bronze
 ```bash
-python python_medal/1_bronze_load.py
+python python_medal/1_bronze_ingest.py
 ```
-Verify: 
-- See "Bronze klar", 
-- See a filled bronze_reports array in Supabase with wc-1 rows and heck one row, make sure not empty
+Verifiera: konsolen visar "BRONZE KLAR", `bronze_reports` är fylld i Supabase.
 
-### Step 4 - Run Silver
+### Steg 4 — Kör Silver
 ```bash
-python python_medal/2_silver_transform.py
+python python_medal/2_bronze_to_silver.py
 ```
-Reads from bronze_reports, cleanses/dedupes/normalizes, writes to silver_reports.
-
-Verify: 
-- Terminalen skriver ut en rapport: antal borttagna (saknar produktkod / ogiltig tillverkare / dubbletter) och antal kvar
-- In Supabase Table Editor → silver_reports: nr of rows shall be < nr of rows in Bronze (since cleaned rows should be removed)
-- Run this SQL-enquiery in SQL Editor and check so duplicates are reomved:
-
+Verifiera: `silver_reports` har färre rader än `bronze_reports`. Kontrollera att inga dubbletter finns kvar:
 ```sql
-SELECT report_key, COUNT(*) 
-FROM silver_reports 
-GROUP BY report_key 
+SELECT report_key, COUNT(*)
+FROM silver_reports
+GROUP BY report_key
 HAVING COUNT(*) > 1;
 ```
-Shall return 0 rows, else the dedup logic is wrong. 
+Ska returnera 0 rader.
 
-### Step 5 - Run Gold
+### Steg 5 — Kör Gold
 ```bash
-python python_medal/3_gold_aggregate.py
+python python_medal/3_silver_to_gold.py
 ```
-Reads from silver_reports, aggregates to product_stats and manufacturer_stats.
-
-Verify: I Supabase → product_stats: ska innehålla en rad per unik produktkod.  Kör:
-
+Verifiera:
 ```sql
 SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
 ```
 
-### STEP 6 — See dashboard 
-Dashboard.jsx reads and displays top 10 most reported data from the tables product_stats and manufacturer_stats from Supabase
-
-Verify: Inspect plots
+### Steg 6 — Se dashboarden
+`Dashboard.jsx` läser topp 10 från `product_stats` och `manufacturer_stats` och renderar dem som diagram.

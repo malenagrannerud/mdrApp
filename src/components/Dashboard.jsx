@@ -1,7 +1,7 @@
 /**
  * Post-Market Surveillance Dashboard
  * 
- * Hämtar och visualiserar städad DEVICE2024-data direkt från Supabase.
+ * Hämtar och visualiserar städad DEVICE2024-data från Supabase.
  * 
  * 
  */
@@ -84,7 +84,7 @@ export default function Dashboard() {
         
         
         {/* KORT 1: TOPP PRODUKTER */}
-        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter till FDA 2024" subtitle="">
+        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter till FDA 2024" subtitle=" ">
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={productChartData} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
