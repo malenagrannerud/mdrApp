@@ -28,35 +28,34 @@ Postgres (via Supabase).
 - En rad per produktkod i `product_stats`, med totalt antal rapporter samt vanligast förekommande varumärke/generiskt namn/tillverkare.
 - En rad per tillverkare i `manufacturer_stats`, med totalt antal rapporter oavsett produkt.
 
-[ Source: FDA MAUDE - DEVICE2024.txt ] (API, DB, Filer)
+[ Source: FDA MAUDE - DEVICE2024.txt ] ( kan vara API, DB, Filer)
        │
-       ▼  (Ingestering / Inlastning)
+       ▼  (Ingestering: 1_bronze_ingest.py)
 ┌─────────────────────────────────────────┐
-│              BRONZE LAGER               │
-│  - Raw Data                            │
+│ BRONZE LAGER | bronze_reports (Supabase)│
+│  - Raw Data                             │
 │  - Historik sparas (Append-only)        │
 │  - Inga filter eller tvätt              │
 └─────────────────────────────────────────┘
        │
-       ▼  (Tvätt, Validering, Strukturering)
+       ▼  (2_bronze_to_silver.py)
 ┌─────────────────────────────────────────┐
-│              SILVER LAGER               │
-│  - Renad och validerad data             │
-│  - Berikad (Enriched)                   │
-│  - Gemensamt format (T.ex. Delta/Parquet)│
+│ SILVER LAGER | silver_reports (Supabase)│
+│  - Renad, validerad, deduplicerad data  │
+│  - Tillvesnamn normaliserade            │
 └─────────────────────────────────────────┘
        │
-       ▼  (Aggregering, Affärslogik)
+       ▼  (3_silver_to_gold.py)
 ┌─────────────────────────────────────────┐
-│               GOLD LAGER                │
-│  - Verksamhetsanpassad data             │
+│ GOLD LAGER                │
+│  - product_stats, manufacturer_stats    │
 │  - Aggregerad och snabb                 │
 │  - Klar för rapportering                │
 └─────────────────────────────────────────┘
        │
        ├───────────────────┬───────────────────┐
        ▼                   ▼                   ▼
-[ Power BI / Tableau ]   [ AI / ML Modeller ]   [ Ad-hoc Analys ]
+[ Dashboard (Power BI) ][ AI / ML Modeller ][ Ad-hoc Analys ]
 
 
 
@@ -92,7 +91,6 @@ Kör SQL-schemat för `bronze_reports`, `silver_reports`, `product_stats`, `manu
 -- BRONZE: raw, unfiltered, immutable, append-only.
 -- Everything from the source file including bad rows 
 -- (missing product code, junk manufacturer, duplicates).
--- Nothing is dropped or corrected. 
 -- ------------------------------------------------------------
 create table if not exists bronze_reports (
   id bigint generated always as identity primary key, 
@@ -107,6 +105,11 @@ create table if not exists bronze_reports (
 
 create index if not exists idx_bronze_report_key on bronze_reports (report_key);
 create index if not exists idx_bronze_source_file on bronze_reports (_source_file);
+
+-- Gör bronze_reports 100% immutable och append-only på databasnivå.
+CREATE RULE protect_bronze_updates AS ON UPDATE TO bronze_reports DO INSTEAD NOTHING;
+CREATE RULE protect_bronze_deletes AS ON DELETE TO bronze_reports DO INSTEAD NOTHING;
+-- "run without RLS" (eftersom vårt SQL-skript aktiverar och hanterar RLS manuellt via kommandona i slutet av filen
 
 -- ------------------------------------------------------------
 -- SILVER: cleaned, typed, deduplicated, normalized.

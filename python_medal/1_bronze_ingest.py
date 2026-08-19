@@ -2,7 +2,7 @@
 """
 BRONZE LAYER
  
-Mål: Läsa in den råa DEVICE2024.txt-filen, oförändrad, till tabellen
+Mål: Läsa in den råa DEVICE2024.txt-filen till tabellen
 bronze_reports i Supabase (Postgres).
  
 Input:  src/data/DEVICE2024.txt
@@ -15,6 +15,7 @@ Regler för Bronze (medvetna designval, inte glömda features):
       report_key). 
     - Metadatakolumner (_inserted_at, _source_file) läggs till
       för spårbarhet, men innehållet i raden rörs inte.
+
     - Append-only: kör man skriptet igen på en ny källfil läggs
       nya rader till, inget skrivs över. 
       
@@ -34,31 +35,38 @@ load_dotenv()
  
 SOURCE_FILE = "src/data/DEVICE2024.txt"
 # Antal rader vi samlar i minnet innan vi skickar en batch till Supabase.
-# En insert per rad hade gett en nätverksrundtur per rad (extremt långsamt
+# En insert per rad hade gett en nätverksrundtur per rad (långsamt
 # för hundratusentals rader) — batching gör en rundtur per 1000 rader istället.
 BATCH_SIZE = 1000
 SUPABASE_URL = "https://kgoxvplsaceqdvorqsle.supabase.co"
  
-# Service role-nyckeln ger full skrivbehörighet förbi Row Level Security.
+# Service role-nyckeln ger skrivbehörighet förbi RLS.
 # Den ska ALDRIG committas till git — bara finnas i lokal .env eller i
 # CI/CD-miljöns secret-hantering. Skriptet vägrar starta om den saknas,
 # hellre än att krascha längre in i körningen.
+
 service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 if not service_role_key:
     raise SystemExit("❌ Fel: SUPABASE_SERVICE_ROLE_KEY saknas i din .env-fil!")
  
 supabase = create_client(SUPABASE_URL, service_role_key)
  
- 
+
 def insert_batch(rows: list[dict]) -> int:
+
     """
-    Skickar en batch rader till bronze_reports.
+    Skickar en batch till bronze_reports.
  
-    Returnerar antalet rader som faktiskt sparades. Om insert misslyckas
+    Returnerar antalet sparade rader. Om insert misslyckas
     (t.ex. nätverksfel eller Supabase-limit) fångas felet här så att HELA
     körningen inte kraschar på grund av en enda trasig batch — vi hellre
     loggar felet och fortsätter med nästa batch.
+
+    APPEND ONLY: Använder endast insert(), ingen upsert(). 
     """
+
+
+
     if not rows:
         return 0
     try:
@@ -108,24 +116,28 @@ def main() -> None:
             # troligen för att fritextfält i datan annars hade kunnat
             # innehålla kommatecken och trasa sönder kolumnindelningen.
             fields = line.split("|")
- 
+
+
+
+           
             def get(idx: int) -> str | None:
-                """
-                Hämtar ett fältvärde säkert på givet index.
+            """
+            Hämtar ett fältvärde säkert på givet index.
  
-                Returnerar None om kolumnen saknades i headern (idx == -1)
-                eller om raden har färre fält än förväntat (trasig rad).
-                Tomma strängar normaliseras också till None, så att
-                "saknas" alltid representeras på samma sätt i databasen.
-                """
+            Returnerar None om kolumnen saknades i headern (idx == -1)
+            eller om raden har färre fält än förväntat (trasig rad).
+            Tomma strängar normaliseras också till None, så att
+            "saknas" alltid representeras på samma sätt i databasen.
+            """
                 if idx < 0 or idx >= len(fields):
                     return None
                 val = fields[idx].strip()
                 return val or None
  
-            # Bronze-principen: spara ALLT som det är, inklusive tomma
-            # eller skräpvärden. Ingen filtrering eller tvätt sker här —
-            # det är medvetet uppskjutet till Silver-lagret.
+
+
+            # Bronze-principen: spara data som det är, + tomma rader eller skräpvärden. 
+            # IMMUTABLE: bara getter, inge setter
             buffer.append({
                 "report_key": get(col_idx["reportKey"]),
                 "product_code_raw": get(col_idx["productCode"]),
@@ -134,7 +146,6 @@ def main() -> None:
                 "manufacturer_raw": get(col_idx["manufacturerRaw"]),
                 "_source_file": SOURCE_FILE,
             })
- 
             count += 1
  
             # När bufferten är full: skicka den som en batch och töm den.
