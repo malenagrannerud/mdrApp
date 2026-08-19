@@ -14,8 +14,7 @@ Regler för Bronze (medvetna designval, inte glömda features):
       (saknad produktkod, "UNKNOWN" som tillverkare, dubbla
       report_key). 
     - Metadatakolumner (_inserted_at, _source_file) läggs till
-      för spårbarhet, men innehållet i raden rörs inte.
-
+      för spårbarhet, innehållet i raden rörs ej.
     - Append-only: kör man skriptet igen på en ny källfil läggs
       nya rader till, inget skrivs över. 
       
@@ -53,7 +52,6 @@ supabase = create_client(SUPABASE_URL, service_role_key)
  
 
 def insert_batch(rows: list[dict]) -> int:
-
     """
     Skickar en batch till bronze_reports.
  
@@ -64,8 +62,6 @@ def insert_batch(rows: list[dict]) -> int:
 
     APPEND ONLY: Använder endast insert(), ingen upsert(). 
     """
-
-
 
     if not rows:
         return 0
@@ -168,10 +164,10 @@ def main() -> None:
     elapsed = time.time() - start_time
     print("\n=== 📊 Bronze-rapport ===")
     print(f"  Totalt lästa rader (exkl. header): {count - 1:,}")
-    print(f"  Totalt sparade rader i bronze_reports: {inserted:,}")
-    print("  Alla rader sparade oförändrade, inklusive ev. skräprader (det är Silvers jobb att rensa).")
+    print(f"  Totalt sparade rader i bronze_reports (Supabase): {inserted:,}")
+    print("  Alla rader sparade oförändrade + skräprader.")
     print(f"  ⏱️  Total körtid: {elapsed:.1f} sekunder")
-    print("\n🎉 BRONZE KLAR. Kör nu: python 2_silver_transform.py")
+    print("\n🎉 BRONZE KLAR. Kör nu: python 2_bronze_to_silver.py")
  
  
 if __name__ == "__main__":
