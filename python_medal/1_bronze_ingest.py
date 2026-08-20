@@ -1,9 +1,6 @@
 
 """
-1_bronze_ingest.py
-
-
-BRONZE LAYER
+1_bronze_ingest.py - BRONZE LAYER
  
 Mål: Läsa in den råa DEVICE2024.txt-filen till tabellen
 bronze_reports i Supabase (Postgres).

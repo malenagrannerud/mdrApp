@@ -1,7 +1,6 @@
 """
-3_silver_to_gold.py
+3_silver_to_gold.py - GOLD LAYER
 
-GOLD LAYER
 Mål: Läser renad data från silver_reports, aggregerar till
 product_stats och manufacturer_stats.
 

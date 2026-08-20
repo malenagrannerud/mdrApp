@@ -1,7 +1,5 @@
 """
-2_bronze_to_silver.py
-
-SILVER LAYER
+2_bronze_to_silver.py - SILVER LAYER
 
 Mål: Läser rådata från bronze_reports, rensar och normaliserar,
 skriver deduplicerad, validerad data till silver_reports.
