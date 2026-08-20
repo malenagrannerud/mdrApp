@@ -2,134 +2,67 @@
 3_silver_to_gold.py
 
 GOLD LAYER
+Mål: Läser renad data från silver_reports, aggregerar till
+product_stats och manufacturer_stats.
 
-Mål: Läsa renad data från silver_reports och aggregera den till de
-verksamhetsanpassade tabeller Dashboard.jsx faktiskt läser:
-    - product_stats       (en rad per produktkod, med representativt varumärke/tillverkare)
-    - manufacturer_stats  (totalt antal rapporter per tillverkare)
-
-Input:  silver_reports (Supabase)
-Output: product_stats, manufacturer_stats (Supabase)
+Input: silver_reports
+Output: product_stats, manufacturer_stats (till Supabase/Postgres)
 """
 
-import os
-import time
-from collections import Counter, defaultdict
+from db import get_supabase_client
+from batch_writer import upload_in_batches
+from pagination import fetch_all_paginated
+from timing import timed_run
+from pipeline_logging import get_logger
+from cleaning import is_invalid_value, normalize_manufacturer, merge_known_duplicates, clean_text_field
 
-from dotenv import load_dotenv
-from supabase import create_client
-
-load_dotenv()
-
-PAGE_SIZE = 5000
-WRITE_BATCH_SIZE = 1000
-SUPABASE_URL = "https://kgoxvplsaceqdvorqsle.supabase.co"
-
-service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-if not service_role_key:
-    raise SystemExit("❌ Fel: SUPABASE_SERVICE_ROLE_KEY saknas i din .env-fil!")
-
-supabase = create_client(SUPABASE_URL, service_role_key)
-
-
-def upload_in_batches(table_name: str, rows: list[dict], on_conflict: str) -> None:
-    """Skriver rader batchvis till en Gold-tabell med upsert (idempotent)."""
-    print(f"\n📤 Startar bulk-upload för [{table_name}] ({len(rows):,} rader)...")
-    for i in range(0, len(rows), WRITE_BATCH_SIZE):
-        batch = rows[i:i + WRITE_BATCH_SIZE]
-        try:
-            supabase.table(table_name).upsert(batch, on_conflict=on_conflict).execute()
-            done = min(i + WRITE_BATCH_SIZE, len(rows))
-            print(f"  ✅ [{table_name}] Skickat {done:,} rader.")
-        except Exception as exc:  # noqa: BLE001
-            print(f"  ❌ Fel i batch {i // WRITE_BATCH_SIZE + 1}: {exc}")
+logger = get_logger(__name__)
+supabase = get_supabase_client()
 
 
 def main() -> None:
-    print("🚀 [GOLD] Läser Silver-data och aggregerar...")
-    start_time = time.time()
+    logger.info("[SILVER] Läser rådata från bronze_reports och rensar...")
 
-    # product_code -> { antal rapporter, samt en Counter per fält som
-    # räknar hur ofta varje värde förekommit för just den produktkoden }.
-    # defaultdict + lambda: slipper kolla "finns koden redan" manuellt —
-    # ett nytt tomt bokförings-objekt skapas automatiskt vid första träffen.
-    product_info: dict[str, dict] = defaultdict(lambda: {
-        "count": 0,
-        "brands": Counter(),
-        "generics": Counter(),
-        "manufacturers": Counter(),
-    })
-    # Separat räknare: totalt antal rapporter per tillverkare, oavsett
-    # vilken produkt — svarar på en annan fråga än product_info gör.
-    manufacturer_totals: Counter = Counter()
+    seen_keys: set[str] = set()
+    silver_rows: list[dict] = []
+    stats = {"no_product_code": 0, "bad_manufacturer": 0, "duplicate": 0}
 
-    total_read = 0
-    offset = 0
-
-    while True:
-        response = (
-            supabase.table("silver_reports")
-            .select("product_code, brand_name, generic_name, manufacturer_name")
-            .range(offset, offset + PAGE_SIZE - 1)
-            .execute()
-        )
-        page = response.data
-        if not page:
-            break
-
-        total_read += len(page)
-
-        # Vi räknar båda dimensionerna (per produkt OCH per tillverkare)
-        # i samma genomläsning av Silver, istället för att läsa datan
-        # två gånger — en optimering som blir viktig när Silver är stor.
+    def process_page(page: list[dict]) -> None:
         for row in page:
-            code = row["product_code"]
-            info = product_info[code]
-            info["count"] += 1
+            if not row["product_code_raw"]:
+                stats["no_product_code"] += 1
+                continue
+            if is_invalid_value(row["manufacturer_raw"]):
+                stats["bad_manufacturer"] += 1
+                continue
+            if row["report_key"] in seen_keys:
+                stats["duplicate"] += 1
+                continue
+            seen_keys.add(row["report_key"])
 
-            if row["brand_name"]:
-                info["brands"][row["brand_name"]] += 1
-            if row["generic_name"]:
-                info["generics"][row["generic_name"]] += 1
-            if row["manufacturer_name"]:
-                info["manufacturers"][row["manufacturer_name"]] += 1
-                manufacturer_totals[row["manufacturer_name"]] += 1
+            silver_rows.append({
+                "report_key": row["report_key"],
+                "product_code": row["product_code_raw"],
+                "brand_name": clean_text_field(row["brand_name_raw"]),
+                "generic_name": clean_text_field(row["generic_name_raw"]),
+                "manufacturer_name": merge_known_duplicates(normalize_manufacturer(row["manufacturer_raw"])) or None,
+            })
 
-        offset += PAGE_SIZE
-        if len(page) < PAGE_SIZE:
-            break
+    with timed_run("SILVER"):
+        total_read = fetch_all_paginated(
+            supabase, "bronze_reports",
+            "report_key, product_code_raw, brand_name_raw, generic_name_raw, manufacturer_raw",
+            on_page=process_page,
+        )
 
-    print(f"  Lästa rader från Silver: {total_read:,}")
+        logger.info("Skriver %s rensade rader till silver_reports...", f"{len(silver_rows):,}")
+        upload_in_batches(supabase, "silver_reports", silver_rows, on_conflict="report_key")
 
-    print("\n📦 Transformerar produktdata...")
-    all_products = []
-    for code, info in product_info.items():
-        # most_common(1): väljer det VANLIGAST förekommande värdet, inte
-        # bara första bästa. Mer statistiskt robust — en enstaka felstavad
-        # eller sen rapport påverkar inte vilket namn som visas i Gold.
-        top_brand = info["brands"].most_common(1)
-        top_generic = info["generics"].most_common(1)
-        top_mfr = info["manufacturers"].most_common(1)
-        all_products.append({
-            "product_code": code,
-            "total_reports": info["count"],
-            "brand_name": top_brand[0][0] if top_brand else None,
-            "generic_name": top_generic[0][0] if top_generic else None,
-            "manufacturer_name": top_mfr[0][0] if top_mfr else None,
-        })
-
-    print("📦 Transformerar tillverkardata...")
-    all_manufacturers = [{"name": name, "count": count} for name, count in manufacturer_totals.items()]
-
-    upload_in_batches("product_stats", all_products, "product_code")
-    upload_in_batches("manufacturer_stats", all_manufacturers, "name")
-
-    elapsed = time.time() - start_time
-    print("\n=== 📊 Gold-rapport ===")
-    print(f"  Produktkoder aggregerade: {len(all_products):,}")
-    print(f"  Tillverkare aggregerade:  {len(all_manufacturers):,}")
-    print(f"  ⏱️  Total körtid: {elapsed:.1f} sekunder")
-    print("\n🎉 GOLD KLAR. Dashboarden kan nu läsa product_stats / manufacturer_stats direkt.")
+    pct = (len(silver_rows) / total_read * 100) if total_read else 0
+    logger.info("SILVER KLAR — %s lästa, %s borttagna (kod: %s, tillverkare: %s, dubblett: %s), %s kvar (%.1f%%).",
+                f"{total_read:,}", f"{sum(stats.values()):,}",
+                stats["no_product_code"], stats["bad_manufacturer"], stats["duplicate"],
+                f"{len(silver_rows):,}", pct)
 
 
 if __name__ == "__main__":
