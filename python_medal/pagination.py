@@ -7,7 +7,6 @@ Gold (läser Silver) — båda hade tidigare identisk while-loop-kod.
 """
 
 from typing import Callable
-
 from config import READ_PAGE_SIZE
 
 
