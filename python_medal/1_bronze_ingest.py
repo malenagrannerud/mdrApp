@@ -21,29 +21,53 @@ Regler för Bronze:
       Silver lagret ansvarar för att deduplicera.
 """
 
+
+# Steg 1: Hämta alla verktyg vi behöver
 from db import get_supabase_client
 from batch_writer import upload_in_batches
 from timing import timed_run
 from pipeline_logging import get_logger
 from config import SOURCE_FILE, WRITE_BATCH_SIZE
 
+# Steg 2: Skapa verktyg för att logga och ansluta
 logger = get_logger(__name__)
 supabase = get_supabase_client()
 
 
+# Steg 3: Huvudfunktionen - allt börjar här
 def main() -> None:
+
+    # 3.1. LÄS FIL
     logger.info("[BRONZE] Läser in rådata från %s...", SOURCE_FILE)
 
-    col_idx = {}
-    buffer: list[dict] = []
-    count = 0
-    inserted = 0
+    # Steg 3.2: Skapa variabler för att hålla reda på allt
+    col_idx = {}                # "reportKey" → 0, "productCode" → 1, ...
+    buffer: list[dict] = []     # Lista som samlar rader (max 1000 st)
+    count = 0                   # Hur många rader har vi läst från filen?
+    inserted = 0                # Hur många rader har vi sparat i databasen?
+
+   # Steg 3.3: Starta timern - vi vill veta hur lång tid Bronze tar
 
     with timed_run("BRONZE"):
-        with open(SOURCE_FILE, encoding="utf-8", errors="replace") as f:
-            for line_num, line in enumerate(f):
-                line = line.rstrip("\n")
+        # Steg 7: Öppna filen DEVICE2024.txt för läsning
 
+        with open(SOURCE_FILE, encoding="utf-8", errors="replace") as f:
+# encoding="utf-8"  → rätt teckenkodning
+            # errors="replace"  → om konstiga tecken, ersätt med � (kraschar inte)
+
+
+
+            # Steg 8: Gå igenom filen rad för rad, time = 0 sek ....
+            for line_num, line in enumerate(f):
+
+                # line_num = 0, 1, 2, 3, ... (radnummer)
+                # line = texten på raden
+                                
+                # Steg 8a: Ta bort Enter-tecknet i slutet
+                line = line.rstrip("\n")
+                # "ABC123|DeviceX|BrandY\n" → "ABC123|DeviceX|BrandY"
+                  
+                # Steg 9: Är detta första raden? (rubriker)
                 if line_num == 0:
                     headers = [h.strip() for h in line.split("|")]
                     col_idx = {
@@ -75,6 +99,8 @@ def main() -> None:
 
                 count += 1
 
+
+# 3. INSERT 
                 if len(buffer) >= WRITE_BATCH_SIZE:
                     inserted += upload_in_batches(supabase, "bronze_reports", buffer)
                     buffer = []
