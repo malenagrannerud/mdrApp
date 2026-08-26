@@ -8,14 +8,14 @@
 
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://kgoxvplsaceqdvorqsle.supabase.co'
+//  Hämtar URL och Anon Key dynamiskt från din .env via Vite
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-/**
- * Supabase anonym publik nyckel.
- * Säker att exponera i frontend (begränsad av RLS).
- * @constant {string}
- */
-const supabaseAnonKey = 'sb_publishable_rdmGgZU7C_hFS5QtQUrQsg_zRoStrnN'
+// Säkerhetskoll så att appen varnar om du glömt starta om din lokala server efter .env-ändring
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Fel: Supabase miljövariabler saknas! Kontrollera din .env-fil och starta om npm run dev.')
+}
 
 /**
  * Supabase-klientinstans.

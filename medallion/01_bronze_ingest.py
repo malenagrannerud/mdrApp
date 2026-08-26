@@ -1,10 +1,12 @@
 """
 01_bronze_ingest.py — BRONZE LAYER (EXTRACT + LOAD)
 
-Mål: Läsa in DEVICE2024.txt och skriva rakt in i bronze_reports.
+Mål: Läsa DEVICE2024.txt och skriva till bronze_reports i Supabase.
 Ingenting rensas, korrigeras eller deduplicieras här — det är Silvers jobb.
 
 Lägger till inserted_at och _source_file för att kunna spåra när och varifrån varje rad kom.
+
+OBS! Fyll ej Supabase minne eller Codespace minne!!!!!!!!!!
 
 """
 import os
@@ -21,11 +23,13 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 # ============================================================
 load_dotenv()
 
-SUPABASE_URL = "https://maojzvwygiaxpvkmtnts.supabase.co"
 SOURCE_FILE = "data/DEVICE2024.txt"
 WRITE_BATCH_SIZE = 1000
 MAX_RETRIES = 3
 RETRY_BACKOFF_SECONDS = 2  # dubblas för varje nytt försök: 2s, 4s, 8s
+
+# 🔥 FÖRBÄTTRING: Gräns för att säkra att nya Supabase inte blir fullt under ELT-körning
+MAX_ROWS_LIMIT = 20000 
 
 # ============================================================
 # LOGGNING 
@@ -39,19 +43,24 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ============================================================
-# SUPABASE-KLIENT 
+# SUPABASE-KLIENT (Hämtar nu både URL och KEY från .env)
 # ============================================================
 
 def get_supabase_client():
     """
-    Skapar en Supabase-klient med service role-nyckeln från .env.
-    Avbryter körningen med tydligt felmeddelande om nyckeln saknas,
-    hellre än att krascha längre in i skriptet med ett svårtolkat auth-fel.
+    Skapar en Supabase-klient med inställningar från .env.
+    Avbryter körningen med tydligt felmeddelande om värden saknas.
     """
+    # 🔥 FÖRBÄTTRING: Hämtar nu URL dynamiskt från din .env-fil istället för att hårdkoda den gamla!
+    supabase_url = os.environ.get("SUPABASE_URL")
     service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    
+    if not supabase_url:
+        raise SystemExit("❌ Fel: SUPABASE_URL saknas i din .env-fil!")
     if not service_role_key:
         raise SystemExit("❌ Fel: SUPABASE_SERVICE_ROLE_KEY saknas i din .env-fil!")
-    return create_client(SUPABASE_URL, service_role_key)
+        
+    return create_client(supabase_url, service_role_key)
 
 supabase = get_supabase_client()
 
@@ -62,8 +71,7 @@ supabase = get_supabase_client()
 class BronzeRow(BaseModel):
     """
     Validerar bara FORMEN på en rad — att fälten är text eller saknas.
-    Kollar INTE om innehållet är giltigt (t.ex. "UNKNOWN" som tillverkare
-    eller saknad produktkod) — det är Silvers ansvar, inte Bronze.
+    Kollar ej om innehållet giltigt t.ex. "UNKNOWN" som tillverkare etc: Silvers ansvar, inte Bronze.
     """
     model_config = ConfigDict(populate_by_name=True)
 
@@ -78,38 +86,66 @@ class BronzeRow(BaseModel):
 # BATCH-SKRIVNING MED RETRY + BACKOFF 
 # ============================================================
 
-def upload_in_batches(rows: list[dict], batch_size: int = WRITE_BATCH_SIZE) -> int:
+# ORIGINALKOD BEHÅLLS OCH KOMMENTERAS BORT HÄR:
+# def upload_in_batches(rows: list[dict], batch_size: int = WRITE_BATCH_SIZE) -> int:
+#     """
+#     Skriver rader till bronze_reports i batchar, med retry+backoff
+#     om en batch misslyckas (t.ex. tillfälligt nätverksfel mot Supabase).
+#     Ger upp en batch efter MAX_RETRIES försök och fortsätter med resten,
+#     så att en trasig batch inte kraschar hela körningen.
+#     Returnerar antal rader som faktiskt sparades.
+#     """
+#     inserted = 0
+#     for i in range(0, len(rows), batch_size):
+#         batch = rows[i:i + batch_size]
+#         attempt = 0
+#         while attempt < MAX_RETRIES:
+#             try:
+#                 supabase.table("bronze_reports").insert(batch).execute()
+#                 inserted += len(batch)
+#                 break
+#             except Exception as exc:  # noqa: BLE001
+#                 attempt += 1
+#                 if attempt >= MAX_RETRIES:
+#                     logger.error(
+#                         "❌ Batch misslyckades efter %s försök, hoppas över (%s rader): %s",
+#                         MAX_RETRIES, len(batch), exc,
+#                     )
+#                 else:
+#                     wait = RETRY_BACKOFF_SECONDS * (2 ** (attempt - 1))
+#                     logger.warning(
+#                         "⚠️ Batch misslyckades (försök %s/%s), försöker igen om %ss: %s",
+#                         attempt, MAX_RETRIES, wait, exc,
+#                     )
+#                     time.sleep(wait)
+#     return inserted
+
+
+# 🔥 NY MINNESSÄKRA FUNKTION (Tar emot en ren batch i taget, sparar inget i RAM):
+def upload_single_batch(batch: list[dict]) -> int:
     """
-    Skriver rader till bronze_reports i batchar, med retry+backoff
-    om en batch misslyckas (t.ex. tillfälligt nätverksfel mot Supabase).
-    Ger upp en batch efter MAX_RETRIES försök och fortsätter med resten,
-    så att en trasig batch inte kraschar hela körningen.
-    Returnerar antal rader som faktiskt sparades.
+    Skriver exakt EN batch till Supabase. Releasar minnet direkt efteråt.
     """
-    inserted = 0
-    for i in range(0, len(rows), batch_size):
-        batch = rows[i:i + batch_size]
-        attempt = 0
-        while attempt < MAX_RETRIES:
-            try:
-                supabase.table("bronze_reports").insert(batch).execute()
-                inserted += len(batch)
-                break
-            except Exception as exc:  # noqa: BLE001
-                attempt += 1
-                if attempt >= MAX_RETRIES:
-                    logger.error(
-                        "❌ Batch misslyckades efter %s försök, hoppas över (%s rader): %s",
-                        MAX_RETRIES, len(batch), exc,
-                    )
-                else:
-                    wait = RETRY_BACKOFF_SECONDS * (2 ** (attempt - 1))
-                    logger.warning(
-                        "⚠️ Batch misslyckades (försök %s/%s), försöker igen om %ss: %s",
-                        attempt, MAX_RETRIES, wait, exc,
-                    )
-                    time.sleep(wait)
-    return inserted
+    attempt = 0
+    while attempt < MAX_RETRIES:
+        try:
+            supabase.table("bronze_reports").insert(batch).execute()
+            return len(batch)
+        except Exception as exc:  # noqa: BLE001
+            attempt += 1
+            if attempt >= MAX_RETRIES:
+                logger.error(
+                    "❌ Batch misslyckades efter %s försök, hoppas över (%s rader): %s",
+                    MAX_RETRIES, len(batch), exc,
+                )
+            else:
+                wait = RETRY_BACKOFF_SECONDS * (2 ** (attempt - 1))
+                logger.warning(
+                    "⚠️ Batch misslyckades (försök %s/%s), försöker igen om %ss: %s",
+                    attempt, MAX_RETRIES, wait, exc,
+                )
+                time.sleep(wait)
+    return 0
 
 # ============================================================
 # HUVUDFUNKTION
@@ -117,6 +153,7 @@ def upload_in_batches(rows: list[dict], batch_size: int = WRITE_BATCH_SIZE) -> i
 
 def main() -> None:
     logger.info("[BRONZE] Läser in rådata från %s...", SOURCE_FILE)
+    logger.info("[BRONZE] Säkrad maxgräns: %s rader (Skyddar Supabase-minnet)", MAX_ROWS_LIMIT)
 
     col_idx: dict[str, int] = {}
     buffer: list[dict] = []
@@ -125,7 +162,15 @@ def main() -> None:
     invalid = 0
     start = time.time()
 
-    with open(SOURCE_FILE, encoding="utf-8", errors="replace") as f:
+    # Säkra sökvägen om du kör inifrån eller utanför mappen
+    actual_source = SOURCE_FILE
+    if not os.path.exists(actual_source):
+        if os.path.exists(f"medallion/{SOURCE_FILE}"):
+            actual_source = f"medallion/{SOURCE_FILE}"
+        else:
+            raise SystemExit(f"❌ Fel: Hittade inte källfilen på {SOURCE_FILE}")
+
+    with open(actual_source, encoding="utf-8", errors="replace") as f:
         for line_num, line in enumerate(f):
             line = line.rstrip("\n")
 
@@ -156,7 +201,7 @@ def main() -> None:
                 "brand_name_raw": get(col_idx["brandName"]),
                 "generic_name_raw": get(col_idx["genericName"]),
                 "manufacturer_raw": get(col_idx["manufacturerRaw"]),
-                "_source_file": SOURCE_FILE,
+                "_source_file": actual_source,
             }
 
             try:
@@ -168,14 +213,31 @@ def main() -> None:
 
             count += 1
 
-            if len(buffer) >= WRITE_BATCH_SIZE:
-                inserted += upload_in_batches(buffer)
-                buffer = []
-                if inserted % 50000 < WRITE_BATCH_SIZE:
-                    logger.info("[BRONZE] Skrev %s rader totalt (läst: %s)", f"{inserted:,}", f"{count:,}")
+            # ORIGINALKOD KOMMENTERAS BORT HÄR:
+            # if len(buffer) >= WRITE_BATCH_SIZE:
+            #     inserted += upload_in_batches(buffer)
+            #     buffer = []
+            #     if inserted % 50000 < WRITE_BATCH_SIZE:
+            #         logger.info("[BRONZE] Skrev %s rader totalt (läst: %s)", f"{inserted:,}", f"{count:,}")
 
-    if buffer:
-        inserted += upload_in_batches(buffer)
+            # 🔥 NYA MINNESSÄKRA BATCH-LOOPEN:
+            if len(buffer) >= WRITE_BATCH_SIZE:
+                inserted += upload_single_batch(buffer)
+                buffer = []  # Tömmer listan DIREKT för att frigöra RAM i Codespaces
+                logger.info("[BRONZE] Skrev %s rader totalt (läst: %s)", f"{inserted:,}", f"{count:,}")
+
+            # 🔥 SÄKERHETSAVBROTT: Stoppa innan Supabase blir fullt
+            if inserted >= MAX_ROWS_LIMIT:
+                logger.info("[BRONZE] Nådde %s rader. Avbryter inläsning för att spara lagring på gratisnivån.", MAX_ROWS_LIMIT)
+                break
+
+    # ORIGINALKOD KOMMENTERAS BORT HÄR:
+    # if buffer:
+    #     inserted += upload_in_batches(buffer)
+
+    # 🔥 NY SISTA BATCH (Skickar resterna om vi inte slog i limit exakt):
+    if buffer and inserted < MAX_ROWS_LIMIT:
+        inserted += upload_single_batch(buffer)
 
     elapsed = time.time() - start
     logger.info(

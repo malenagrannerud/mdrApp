@@ -132,7 +132,14 @@ BEGIN
 
     GET DIAGNOSTICS written = ROW_COUNT;
 
-    RETURN QUERY SELECT written;
+    -- ============================================================
+    -- FÖRBÄTTRING: KOMMENTERAT BORT SYNTAXFEL OCH ERSATT
+    -- ============================================================
+    -- RETURN QUERY SELECT written; 
+    
+    rows_written := written;
+    RETURN NEXT;
+    -- ============================================================
 END;
 $$ LANGUAGE plpgsql;
 

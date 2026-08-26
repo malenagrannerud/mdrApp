@@ -1,7 +1,6 @@
 -- ============================================================
 -- 00_create_tables.sql
--- Klistra in detta i Supabase SQL Editor och kör för att skapa tabellerna.
--- Medallion-arkitektur för FDA MAUDE (DEVICE2024)
+-- Klistra in detta i Supabase SQL Editor
 -- Skapar bronze_reports, silver_reports, product_stats, manufacturer_stats
 -- Säker att köra flera gånger — inget kraschar vid omkörning.
 -- ============================================================

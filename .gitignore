@@ -23,9 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 node_modules
-src/data/DEVICE*.txt
 src/data/*.zip
 src/data/mdrfoi*.txt
 .env
-medallion/data/DEVICE2024.txt
 medallion/data/DEVICE2024.txt
