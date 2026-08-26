@@ -1,10 +1,8 @@
 /**
  * 
  * lib/supabase.js
- * 
  * Supabase-klient för MAUDE PMS-dashboard.
- * 
- * Skapar en anslutning till Supabase PostgreSQL-databasen.
+ * Hämtar product_stats och manufacturer_stats från Supabase PostgreSQL-databasen.
  * 
  */
 
