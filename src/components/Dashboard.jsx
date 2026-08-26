@@ -3,7 +3,6 @@
  * 
  * Hämtar och visualiserar städad DEVICE2024-data från Supabase.
  * 
- * 
  */
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
