@@ -9,5 +9,5 @@ SUPABASE_URL = "https://kgoxvplsaceqdvorqsle.supabase.co"
 
 SOURCE_FILE = "src/data/DEVICE2024.txt"
 
-READ_PAGE_SIZE = 5000    # rader per läsning från Supabase (paginering)
-WRITE_BATCH_SIZE = 1000  # rader per skrivning till Supabase (batching)
+READ_PAGE_SIZE = 1000    # rader per läsning från Supabase (paginering)
+WRITE_BATCH_SIZE = 100  # rader per skrivning till Supabase (batching)
