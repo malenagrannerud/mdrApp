@@ -2,11 +2,11 @@
 01_bronze_ingest.py — BRONZE LAYER (EXTRACT + LOAD)
 
 Mål: Läsa DEVICE2024.txt och skriva till bronze_reports i Supabase.
-Ingenting rensas, korrigeras eller deduplicieras här — det är Silvers jobb.
 
+Ingenting rensas, korrigeras eller deduplicieras här — det är Silvers jobb.
 Lägger till inserted_at och _source_file för att kunna spåra när och varifrån varje rad kom.
 
-OBS! Fyll ej Supabase minne eller Codespace minne!!!!!!!!!!
+
 
 """
 import os
