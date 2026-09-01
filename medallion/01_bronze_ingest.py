@@ -1,13 +1,8 @@
 """
-01_bronze_ingest.py — BRONZE LAYER (EXTRACT + LOAD)
+01_bronze_ingest.py 
 
-Mål: Läsa DEVICE2024.txt och skriva till bronze_reports i Supabase.
-
-Ingenting rensas, korrigeras eller deduplicieras här — det är Silvers jobb.
-Lägger till inserted_at och _source_file för att kunna spåra när och varifrån varje rad kom.
-
-
-
+MÅL: Läsa DEVICE2024.txt och skriva till bronze_reports i Supabase.
+Ingen data ändras. Lägger till inserted_at och _source_file för att kunna spåra när och varifrån varje rad kom.
 """
 import os
 import time
@@ -31,10 +26,10 @@ RETRY_BACKOFF_SECONDS = 2  # dubblas för varje nytt försök: 2s, 4s, 8s
 # 🔥 FÖRBÄTTRING: Gräns för att säkra att nya Supabase inte blir fullt under ELT-körning
 MAX_ROWS_LIMIT = 20000 
 
+
 # ============================================================
 # LOGGNING 
 # ============================================================
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -42,14 +37,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 # ============================================================
 # SUPABASE-KLIENT (Hämtar nu både URL och KEY från .env)
 # ============================================================
-
 def get_supabase_client():
     """
     Skapar en Supabase-klient med inställningar från .env.
-    Avbryter körningen med tydligt felmeddelande om värden saknas.
+    Avbryter körningen med felmeddelande om värden saknas.
     """
     # 🔥 FÖRBÄTTRING: Hämtar nu URL dynamiskt från din .env-fil istället för att hårdkoda den gamla!
     supabase_url = os.environ.get("SUPABASE_URL")
@@ -61,13 +56,12 @@ def get_supabase_client():
         raise SystemExit("❌ Fel: SUPABASE_SERVICE_ROLE_KEY saknas i din .env-fil!")
         
     return create_client(supabase_url, service_role_key)
-
 supabase = get_supabase_client()
+
 
 # ============================================================
 # VALIDERINGSMODELL 
 # ============================================================
-
 class BronzeRow(BaseModel):
     """
     Validerar bara FORMEN på en rad — att fälten är text eller saknas.
@@ -85,7 +79,6 @@ class BronzeRow(BaseModel):
 # ============================================================
 # BATCH-SKRIVNING MED RETRY + BACKOFF 
 # ============================================================
-
 # ORIGINALKOD BEHÅLLS OCH KOMMENTERAS BORT HÄR:
 # def upload_in_batches(rows: list[dict], batch_size: int = WRITE_BATCH_SIZE) -> int:
 #     """
@@ -121,7 +114,7 @@ class BronzeRow(BaseModel):
 #     return inserted
 
 
-# 🔥 NY MINNESSÄKRA FUNKTION (Tar emot en ren batch i taget, sparar inget i RAM):
+# Minnessäkra för Supabase: Tar emot en batch i taget, sparar inget i RAM
 def upload_single_batch(batch: list[dict]) -> int:
     """
     Skriver exakt EN batch till Supabase. Releasar minnet direkt efteråt.
@@ -147,10 +140,10 @@ def upload_single_batch(batch: list[dict]) -> int:
                 time.sleep(wait)
     return 0
 
+
 # ============================================================
 # HUVUDFUNKTION
 # ============================================================
-
 def main() -> None:
     logger.info("[BRONZE] Läser in rådata från %s...", SOURCE_FILE)
     logger.info("[BRONZE] Säkrad maxgräns: %s rader (Skyddar Supabase-minnet)", MAX_ROWS_LIMIT)
@@ -213,29 +206,18 @@ def main() -> None:
 
             count += 1
 
-            # ORIGINALKOD KOMMENTERAS BORT HÄR:
-            # if len(buffer) >= WRITE_BATCH_SIZE:
-            #     inserted += upload_in_batches(buffer)
-            #     buffer = []
-            #     if inserted % 50000 < WRITE_BATCH_SIZE:
-            #         logger.info("[BRONZE] Skrev %s rader totalt (läst: %s)", f"{inserted:,}", f"{count:,}")
-
-            # 🔥 NYA MINNESSÄKRA BATCH-LOOPEN:
+            # MINNESSÄKRA BATCH-LOOPEN:
             if len(buffer) >= WRITE_BATCH_SIZE:
                 inserted += upload_single_batch(buffer)
                 buffer = []  # Tömmer listan DIREKT för att frigöra RAM i Codespaces
                 logger.info("[BRONZE] Skrev %s rader totalt (läst: %s)", f"{inserted:,}", f"{count:,}")
 
-            # 🔥 SÄKERHETSAVBROTT: Stoppa innan Supabase blir fullt
+            # SÄKERHETSAVBROTT: Stoppa innan Supabase blir fullt
             if inserted >= MAX_ROWS_LIMIT:
                 logger.info("[BRONZE] Nådde %s rader. Avbryter inläsning för att spara lagring på gratisnivån.", MAX_ROWS_LIMIT)
                 break
 
-    # ORIGINALKOD KOMMENTERAS BORT HÄR:
-    # if buffer:
-    #     inserted += upload_in_batches(buffer)
-
-    # 🔥 NY SISTA BATCH (Skickar resterna om vi inte slog i limit exakt):
+    # SISTA BATCH (Skickar resterna om vi inte slog i limit exakt):
     if buffer and inserted < MAX_ROWS_LIMIT:
         inserted += upload_single_batch(buffer)
 
@@ -244,7 +226,6 @@ def main() -> None:
         "BRONZE KLAR — %s rader lästa, %s sparade, %s ogiltiga hoppades över (%.1f sekunder).",
         f"{count - 1:,}", f"{inserted:,}", f"{invalid:,}", elapsed,
     )
-
 
 if __name__ == "__main__":
     main()
