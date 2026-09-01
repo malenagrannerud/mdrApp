@@ -2,7 +2,6 @@
 -- 00_create_tables.sql (Supabase SQL Editor). 
 --
 -- MÅL: Skapa tabeller för arkitekturen. 
--- Input:-
 -- Output: bronze_reports, silver_reports, product_stats, manufacturer_stats. 
 -- =================================================================================
 
@@ -28,7 +27,6 @@ CREATE OR REPLACE RULE protect_bronze_updates AS ON UPDATE TO bronze_reports DO 
 CREATE OR REPLACE RULE protect_bronze_deletes AS ON DELETE TO bronze_reports DO INSTEAD NOTHING;
 
 
-
 -- ---------------------------------------------------------------------------------
 -- Skapar silver_reports för rensad, typad, deduplicerad, normaliserad.
 -- En rad per unikt report_key. Tillverkarnamn normaliserade
@@ -44,8 +42,6 @@ create table if not exists silver_reports (
 );
 create index if not exists idx_silver_product_code on silver_reports (product_code);
 create index if not exists idx_silver_manufacturer on silver_reports (manufacturer_name);
-
-
 
 
 -- -----------------------------------------------------------------------------------
