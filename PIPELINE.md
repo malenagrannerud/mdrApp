@@ -1,81 +1,81 @@
-# PIPELINE.md - ETL Pipeline: Medallion Architecture
+# PIPELINE.md — ETL Pipeline: Medallion Architecture
 
-Detta projekt transformerar rådata (FDA MAUDE) till aggregerad, dashboard-klar
-data via en medaljong-arkitektur: bronze → silver → gold, byggd med Python och
-Postgres (via Supabase).
+This document covers the technical data pipeline behind the [Aegis Compliance](./README.md) dashboard: raw FDA MAUDE data transformed into aggregated, dashboard-ready data via a medallion architecture (bronze → silver → gold), built with Python and PostgreSQL (Supabase).
 
-## Pipeline-steg
+## Pipeline steps
 
-1. `1_bronze_ingest.py` — Läser rådata från DEVICE2024.txt, sparar i bronze_reports.
-2. `2_bronze_to_silver.py` — Rensar, validerar, normaliserar och dedupar, sparar i silver_reports.
-3. `3_silver_to_gold.py` — Aggregerar till product_stats och manufacturer_stats, som Dashboard.jsx läser.
+1. `01_bronze_ingest.py` — reads raw data from `DEVICE2024.txt`, writes to `bronze_reports`
+2. `02_silver.sql` — cleans, validates, normalizes, and deduplicates, writes to `silver_reports`
+3. `03_gold.sql` — aggregates into `product_stats` and `manufacturer_stats`, read by `Dashboard.jsx`
 
-### Regler för Bronze-lagret
+### Bronze layer rules
 
-- Append-only (immutability). Ingen rad uppdateras eller raderas.
-- Skräprader (saknad produktkod, "UNKNOWN" tillverkare, dubbletter) sparas 
-- Varje rad berikas med `_inserted_at` och `_source_file` för spårbarhet.
+- Append-only (immutability) — no row is ever updated or deleted
+- Junk rows (missing product code, `"UNKNOWN"` manufacturer, duplicates) are still stored — Bronze doesn't filter, it's a raw copy of the source
+- Every row is enriched with `_inserted_at` and `_source_file` for full traceability
 
-### Regler för Silver-lagret
+### Silver layer rules
 
-- Rader utan produktkod eller med skräpvärde som tillverkare kastas.
-- En rad per unikt `report_key` (deduplicering, första förekomsten vinner).
-- Tillverkarnamn normaliseras (skiljetecken/mellanslag städas, juridiska suffix tas bort) och kända varianter slås ihop via en manuell lista.
-- Skrivs med `upsert` — säkert att köra om (idempotent).
+- Rows missing a product code, or with a junk manufacturer value, are dropped
+- One row per unique `report_key` (deduplication — first occurrence wins)
+- Manufacturer names normalized (punctuation/whitespace cleaned, legal suffixes stripped) and known variants merged via a manual mapping
+- Written via `upsert` — safe to re-run (idempotent)
 
-### Regler för Gold-lagret
+### Gold layer rules
 
-- En rad per produktkod i `product_stats`, med totalt antal rapporter samt vanligast förekommande varumärke/generiskt namn/tillverkare.
-- En rad per tillverkare i `manufacturer_stats`, med totalt antal rapporter oavsett produkt.
+- One row per product code in `product_stats`, with total report count and the most common brand name / generic name / manufacturer
+- One row per manufacturer in `manufacturer_stats`, with total report count across all products
 
-[ Source: FDA MAUDE - DEVICE2024.txt ] ( kan vara API, DB, Filer)
+
+[ Source: FDA MAUDE - DEVICE2024.txt ] (could be an API, DB, or file)
        │
-       ▼  (Ingestering: 1_bronze_ingest.py)
+       ▼  (1_bronze_ingest.py)
 ┌─────────────────────────────────────────┐
-│ BRONZE LAGER | bronze_reports (Supabase)│
+│ bronze_reports (Supabase)               │
 │  - Raw Data                             │
-│  - Historik sparas (Append-only)        │
-│  - Inga filter eller tvätt              │
+│  - History preserved (Append-only)      │
+│  - No filtering or cleaning             │
 └─────────────────────────────────────────┘
        │
-       ▼  (2_bronze_to_silver.py)
+       ▼  (02_silver.sql)
 ┌─────────────────────────────────────────┐
-│ SILVER LAGER | silver_reports (Supabase)│
-│  - Renad, validerad, deduplicerad data  │
-│  - Tillvesnamn normaliserade            │
+│ silver_reports (Supabase)               │
+│  - Cleaned, validated, deduplicated     │
+│  - Manufacturer names normalized        │
 └─────────────────────────────────────────┘
        │
-       ▼  (3_silver_to_gold.py)
+       ▼  (03_gold.sql)
 ┌─────────────────────────────────────────┐
-│ GOLD LAGER                │
-│  - product_stats, manufacturer_stats    │
-│  - Aggregerad och snabb                 │
-│  - Klar för rapportering                │
+│ product_stats, manufacturer_stats       │
+│  - AAggregated and fast                 │
+│  - Ready for reporting                  │
 └─────────────────────────────────────────┘
        │
        ├───────────────────┬───────────────────┐
        ▼                   ▼                   ▼
-[ Dashboard (Power BI) ][ AI / ML Modeller ][ Ad-hoc Analys ]
+[ Dashboard (Power BI) ][ AI / ML Models ][ Ad-hoc Analysis ]
 
 
-## Steg för att köra pipelinen
-### Steg 0 — Ladda ner data
+## Running the pipeline
+
+### Step 0 — Download the data
 
 1. FDA MAUDE: https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download
 
-2. Ladda ner en rådatafil:
+2. Download a raw data file:
 ```bash
-mkdir -p src/data
-cd src/data
+mkdir -p medallion/data
+cd medallion/data
 curl -O https://www.accessdata.fda.gov/MAUDE/ftparea/device2024.zip
 unzip device2024.zip
 cd ../..
 ```
 
-3. Inspektera rubriker:
+3. Inspect the headers:
 ```bash
-head -n 1 data/DEVICE2024.txt | tr '|' '\n'
+head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```
+Key columns used by this pipeline: `MDR_REPORT_KEY`, `DEVICE_REPORT_PRODUCT_CODE`, `BRAND_NAME`, `GENERIC_NAME`, `MANUFACTURER_D_NAME`
 MDR_REPORT_KEY
 DEVICE_EVENT_KEY
 IMPLANT_FLAG
@@ -104,51 +104,48 @@ COMBINATION_PRODUCT_FLAG
 UDI-DI
 UDI-PUBLIC
 
+### Step 1 — Create tables (Supabase)
 
-### Steg 1 — Skapa tabeller (Supabase)
+Run `00_create_tables.sql` in the Supabase SQL editor.
+Creates `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats`.
 
-Kör 00_create_tables.sql i Supabase. 
-Skapar `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats` i Supabase SQL Editor 
+### Step 2 — Run Bronze
 
-
-### Steg 2 — Kör Bronze
-
-Installera Python-beroenden
 ```bash
 pip install -r medallion/requirements.txt
-python -c "from supabase import create_client; print('OK')"
+python medallion/01_bronze_ingest.py
 ```
-Kör 01_bronze_ingest.sql i Supabase. Verifiera: konsolen visar "BRONZE KLAR", `bronze_reports` är fylld i Supabase.
+Verify: console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
 
+### Step 3 — Run Silver
 
-### Steg 3 — Kör Silver (Supabase)
-
-Kör 02_silver.sql i Supabase. Verifiera: `silver_reports` har färre rader än `bronze_reports`. Kontrollera att inga dubbletter finns kvar:
+Run `02_silver.sql` in Supabase.
+Verify `silver_reports` has fewer rows than `bronze_reports`, and no duplicates remain:
 ```sql
 SELECT report_key, COUNT(*)
 FROM silver_reports
 GROUP BY report_key
 HAVING COUNT(*) > 1;
 ```
-Ska returnera 0 rader.
+Should return 0 rows.
 
+### Step 4 — Run Gold
 
-### Steg 4 — Kör Gold (Supabase)
-
-Kör 03_gold.sql i Supabase.
-Verifiera:
+Run `03_gold.sql` in Supabase.
+Verify:
 ```sql
 SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
 ```
 
-### Steg 5 — Validera (Supabase)
+### Step 5 — Validate
 
-- 20 000 rader lästes in i bronze (nuvarande MAX_ROWS_LIMIT)
-- 19 950 av dem klarade sig genom Silver-lagrets rensning (deduplicering + filtrering av ogiltiga tillverkare/produktkoder)
-- Det ger en valideringsandel på 19 950 / 20 000 = 99,75%
-- 555 unika produktkoder och 493 unika normaliserade tillverkare i Gold-lagret
+Run `validate.sql` for a full integrity check across all layers. Expected results for the current dataset:
 
+- 20,000 rows ingested into Bronze (current `MAX_ROWS_LIMIT`)
+- 19,950 passed Silver's cleaning (deduplication + invalid manufacturer/product code filtering)
+- **Validation rate: 19,950 / 20,000 = 99.75%**
+- 555 unique product codes and 493 unique normalized manufacturers in Gold
 
-### Steg 6 — Se dashboarden
+### Step 6 — View the dashboard
 
-`Dashboard.jsx` läser topp 10 från `product_stats` och `manufacturer_stats` och renderar dem som diagram.
+`Dashboard.jsx` reads the top 10 rows from `product_stats` and `manufacturer_stats` and renders them as charts.
