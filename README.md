@@ -28,12 +28,6 @@ Maps the core requirements of ISO 13485:2016 into a step-by-step implementation 
 
 A live dashboard built on a custom-engineered data pipeline (see [PIPELINE.md](./PIPELINE.md)) processing FDA MAUDE adverse event data — the kind of dataset manufacturers use to monitor their own products' safety trends over time.
 
-- **Signal detection** — surfaces which products and manufacturers generate the most reports, the first step in spotting an emerging safety trend before it becomes a bigger problem
-- **Self-monitoring** — a manufacturer can filter down to their own products to track their own incident trends, feeding into downstream processes like CAPA or risk file updates
-- **Benchmarking** — compare incident volume across product categories and manufacturers to spot outliers
-
-The pipeline itself — not just the dashboard — is the technical core: a medallion architecture (bronze → silver → gold) processing 20,000 real reports with a 99.75% validation rate. Full breakdown in [PIPELINE.md](./PIPELINE.md).
-
 
 ---
 ## Tech stack
