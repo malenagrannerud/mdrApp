@@ -7,10 +7,10 @@
 -- =================================================================================
 
 -- ----------------------------------------------------------------------------------
--- bronze_reports sparar rå, ofiltrerad, oföränderlig, append-only data.
+-- Skapar bronze_reports för rå, ofiltrerad, oföränderlig, append-only data i sekventiell ordning
 -- ----------------------------------------------------------------------------------
 create table if not exists bronze_reports (
-  id bigint generated always as identity primary key,
+  id bigint generated always as identity primary key, -- välj bigint 
   report_key text,
   product_code_raw text,
   brand_name_raw text,
@@ -22,18 +22,18 @@ create table if not exists bronze_reports (
 create index if not exists idx_bronze_report_key on bronze_reports (report_key);
 create index if not exists idx_bronze_source_file on bronze_reports (_source_file);
 
--- Gör bronze_reports oföränderlig och append-only på databasnivå.
+-- Gör bronze_reports oföränderlig och append-only på DB-nivå.
 -- OR REPLACE gör att detta går att köra om utan att krascha.
 CREATE OR REPLACE RULE protect_bronze_updates AS ON UPDATE TO bronze_reports DO INSTEAD NOTHING;
 CREATE OR REPLACE RULE protect_bronze_deletes AS ON DELETE TO bronze_reports DO INSTEAD NOTHING;
 
 
 
--- -----------------------------------------------------------------------------------------
--- SILVER: rensad, typad, deduplicerad, normaliserad.
+-- ---------------------------------------------------------------------------------
+-- Skapar silver_reports för rensad, typad, deduplicerad, normaliserad.
 -- En rad per unikt report_key. Tillverkarnamn normaliserade
 -- och sammanslagna. Ogiltiga/skräpvärden omvandlade till NULL.
--- -----------------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------------
 create table if not exists silver_reports (
   report_key text primary key,
   product_code text not null,
@@ -48,10 +48,10 @@ create index if not exists idx_silver_manufacturer on silver_reports (manufactur
 
 
 
--- -----------------------------------------------------------------------------------------
--- GOLD: aggregerad data som dashboarden läser.
+-- -----------------------------------------------------------------------------------
+-- Skapar product_stats & manufacturer_stats för aggregerad data som dashboarden läser.
 -- Fylls av 03_gold_tables.sql (TRUNCATE + INSERT vid varje körning).
--- -----------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------
 create table if not exists product_stats (
   product_code text primary key,
   total_reports integer not null,
