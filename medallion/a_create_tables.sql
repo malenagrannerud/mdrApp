@@ -1,8 +1,8 @@
 -- ============================================================
--- 00_create_tables.sql (Supabase SQL Editor)
+-- a_create_tables.sql (Supabase SQL Editor)
 -- Author: Malena 
 -- Created: 2026-08-02
--- Description: Creates tables for the medallion architecture 
+-- Description: Creates tables & constraint (schemas) for the medallion architecture 
 -- ============================================================
 
 
@@ -26,10 +26,11 @@ create index if not exists idx_bronze_source_file on bronze_reports (_source_fil
 
 
 
+-- prevent_bronze_mutation()
 -- Makes bronze_reports immutable and append-only at DB level.
--- Unlike a silent no-op RULE, this trigger raises an explicit exception —
--- so any attempt to UPDATE or DELETE fails loudly and is visible in logs,
--- which matters for audit trails in a regulated context.
+-- Any UPDATE or DELETE attempt fails immediately and returns an
+-- explicit error to the caller — visible at the point of failure,
+-- and captured in Postgres/Supabase's own server logs by default.
 CREATE OR REPLACE FUNCTION prevent_bronze_mutation()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -44,10 +45,9 @@ CREATE TRIGGER enforce_bronze_immutability
     EXECUTE FUNCTION prevent_bronze_mutation();
 
 
-
 -- TESTA SÅ ATT prevent_bronze_mutation() fungerar som avsett.
 -- Detta ska nu ge ett fel istället för att tyst göra ingenting
-DELETE FROM bronze_reports WHERE id = 1;
+-- DELETE FROM bronze_reports WHERE id = 1;
 -- ERROR: bronze_reports is append-only: DELETE operations are not permitted
 
 
@@ -69,10 +69,8 @@ create table if not exists silver_reports (
 create index if not exists idx_silver_product_code on silver_reports (product_code);
 create index if not exists idx_silver_manufacturer on silver_reports (manufacturer_name);
 
-
 -- SILVER_REJECTED: rows from Bronze that failed Silver's validation rules.
--- Kept for audit purposes — lets you inspect why rows were dropped,
--- instead of silently losing that information.
+-- Kept for audit purposes — lets you inspect why rows were dropped
 create table if not exists silver_rejected (
   id bigint generated always as identity primary key,
   bronze_id bigint not null,
@@ -82,14 +80,9 @@ create table if not exists silver_rejected (
 );
 create index if not exists idx_silver_rejected_reason on silver_rejected (rejection_reason);
 
-
-
-
-
 -- -----------------------------------------------------------------------------------
 -- GOLD LAYER
--- Skapar product_stats & manufacturer_stats för aggregerad data som dashboarden läser.
--- Fylls av 03_gold_tables.sql (TRUNCATE + INSERT vid varje körning).
+-- Description: Creates product_stats & manufacturer_stats för aggregerad data som dashboarden läser.
 -- -----------------------------------------------------------------------------------
 create table if not exists product_stats (
   product_code text primary key,
