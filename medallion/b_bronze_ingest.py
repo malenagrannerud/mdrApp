@@ -1,5 +1,7 @@
+
+# b_bronze_ingest.py 
+
 """
- b_bronze_ingest.py 
  Author: Malena 
  Created: 2026-08-02
  Description: Reads from a text fila and writes to Supabase bronze_reports table.
