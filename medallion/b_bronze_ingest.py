@@ -1,8 +1,8 @@
 """
-b_bronze_ingest.py 
-Author: Malena 
-Created: 2026-08-02
-Description: Reads from a text fila and writes to Supabase bronze_reports table.
+ b_bronze_ingest.py 
+ Author: Malena 
+ Created: 2026-08-02
+ Description: Reads from a text fila and writes to Supabase bronze_reports table.
 """
 
 import os
@@ -14,19 +14,17 @@ from dotenv import load_dotenv
 from supabase import create_client
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-# ============================================================
-# KONFIGURATION
-# ============================================================
-load_dotenv()
+"""
+ CONFIGURATION
+"""
 
-SOURCE_FILE = "data/DEVICE2024.txt"
-WRITE_BATCH_SIZE = 1000
+load_dotenv() # Load environment variables from .env file (SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY)
+
+SOURCE_FILE = "data/DEVICE2024.txt" # Path to the source file with raw data 
+WRITE_BATCH_SIZE = 1000 
 MAX_RETRIES = 3
 RETRY_BACKOFF_SECONDS = 2  # dubblas för varje nytt försök: 2s, 4s, 8s
-
-# 🔥 FÖRBÄTTRING: Gräns för att säkra att nya Supabase inte blir fullt under ELT-körning
-MAX_ROWS_LIMIT = 20000 
-
+MAX_ROWS_LIMIT = 20000 # Make sure Supabase dont get overloaded during ELT-process. (Free-tier Supabase: 500MB storage limit, so we keep it safe.)
 
 # ============================================================
 # LOGGNING 
@@ -44,10 +42,9 @@ logger = logging.getLogger(__name__)
 # ============================================================
 def get_supabase_client():
     """
-    Skapar en Supabase-klient med inställningar från .env.
-    Avbryter körningen med felmeddelande om värden saknas.
+     Skapar en Supabase-klient med inställningar från .env.
+     Avbryter körningen med felmeddelande om värden saknas.
     """
-    # 🔥 FÖRBÄTTRING: Hämtar nu URL dynamiskt från din .env-fil istället för att hårdkoda den gamla!
     supabase_url = os.environ.get("SUPABASE_URL")
     service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
     
