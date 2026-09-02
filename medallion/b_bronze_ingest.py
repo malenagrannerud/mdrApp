@@ -1,9 +1,10 @@
 """
-01_bronze_ingest.py 
-
-MÅL: Läsa DEVICE2024.txt och skriva till bronze_reports i Supabase.
-Ingen data ändras. Lägger till inserted_at och _source_file för att kunna spåra när och varifrån varje rad kom.
+b_bronze_ingest.py 
+Author: Malena 
+Created: 2026-08-02
+Description: Reads from a text fila and writes to Supabase bronze_reports table.
 """
+
 import os
 import time
 import logging
@@ -64,8 +65,7 @@ supabase = get_supabase_client()
 # ============================================================
 class BronzeRow(BaseModel):
     """
-    Validerar bara FORMEN på en rad — att fälten är text eller saknas.
-    Kollar ej om innehållet giltigt t.ex. "UNKNOWN" som tillverkare etc: Silvers ansvar, inte Bronze.
+    Validerar att fälten i en rad är text eller saknas.
     """
     model_config = ConfigDict(populate_by_name=True)
 
@@ -78,14 +78,11 @@ class BronzeRow(BaseModel):
 
 # ============================================================
 # BATCH-SKRIVNING MED RETRY + BACKOFF 
+# Skriver exakt EN batch i taget till Supabase. Releasar minnet direkt efteråt.
 # ============================================================
-
 
 # Minnessäkra för Supabase: Tar emot en batch i taget, sparar inget i RAM
 def upload_single_batch(batch: list[dict]) -> int:
-    """
-    Skriver exakt EN batch till Supabase. Releasar minnet direkt efteråt.
-    """
     attempt = 0
     while attempt < MAX_RETRIES:
         try:

@@ -1,5 +1,5 @@
 -- ============================================================
--- 03_gold.sql
+-- d_gold.sql
 -- SILVER → GOLD
 --
 -- Fyller product_stats och manufacturer_stats från silver_reports.
