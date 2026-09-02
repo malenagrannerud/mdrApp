@@ -6,6 +6,16 @@
 -- Vanliga tabeller (inte views) — TRUNCATE + INSERT vid varje körning.
 -- ============================================================
 
+
+-- ============================================================
+-- 03_gold.sql (Supabase SQL Editor)
+-- Author: Malena 
+-- Created: 2026-08-02
+-- Description: Creates tables for the medallion architecture 
+-- ============================================================
+
+
+
 -- ------------------------------------------------------------
 -- 1. product_stats — en rad per produkt
 -- ------------------------------------------------------------

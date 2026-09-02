@@ -79,39 +79,6 @@ class BronzeRow(BaseModel):
 # ============================================================
 # BATCH-SKRIVNING MED RETRY + BACKOFF 
 # ============================================================
-# ORIGINALKOD BEHÅLLS OCH KOMMENTERAS BORT HÄR:
-# def upload_in_batches(rows: list[dict], batch_size: int = WRITE_BATCH_SIZE) -> int:
-#     """
-#     Skriver rader till bronze_reports i batchar, med retry+backoff
-#     om en batch misslyckas (t.ex. tillfälligt nätverksfel mot Supabase).
-#     Ger upp en batch efter MAX_RETRIES försök och fortsätter med resten,
-#     så att en trasig batch inte kraschar hela körningen.
-#     Returnerar antal rader som faktiskt sparades.
-#     """
-#     inserted = 0
-#     for i in range(0, len(rows), batch_size):
-#         batch = rows[i:i + batch_size]
-#         attempt = 0
-#         while attempt < MAX_RETRIES:
-#             try:
-#                 supabase.table("bronze_reports").insert(batch).execute()
-#                 inserted += len(batch)
-#                 break
-#             except Exception as exc:  # noqa: BLE001
-#                 attempt += 1
-#                 if attempt >= MAX_RETRIES:
-#                     logger.error(
-#                         "❌ Batch misslyckades efter %s försök, hoppas över (%s rader): %s",
-#                         MAX_RETRIES, len(batch), exc,
-#                     )
-#                 else:
-#                     wait = RETRY_BACKOFF_SECONDS * (2 ** (attempt - 1))
-#                     logger.warning(
-#                         "⚠️ Batch misslyckades (försök %s/%s), försöker igen om %ss: %s",
-#                         attempt, MAX_RETRIES, wait, exc,
-#                     )
-#                     time.sleep(wait)
-#     return inserted
 
 
 # Minnessäkra för Supabase: Tar emot en batch i taget, sparar inget i RAM

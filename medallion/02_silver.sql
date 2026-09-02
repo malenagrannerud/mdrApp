@@ -1,5 +1,6 @@
 -- ============================================================
 -- 02_silver.sql
+
 -- BRONZE → SILVER
 --
 -- SILVER → GOLD
@@ -17,6 +18,14 @@
 --   - Kända namnvarianter slås ihop till kanoniskt namn
 --   - Brand/generic-namn versaliseras och mellanslag kollapsas
 -- ============================================================
+
+-- ============================================================
+-- 02_silver.sql (Supabase SQL Editor)
+-- Author: Malena 
+-- Created: 2026-08-02
+-- Description: Creates tables for the medallion architecture 
+-- ============================================================
+
 
 CREATE OR REPLACE FUNCTION refresh_silver_reports()
 RETURNS TABLE(rows_written BIGINT) AS $$
