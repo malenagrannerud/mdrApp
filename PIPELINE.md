@@ -1,43 +1,24 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 This document covers the technical data pipeline behind the [Aegis Compliance](./README.md) dashboard: raw FDA MAUDE data transformed into aggregated, dashboard-ready data via a medallion architecture (bronze → silver → gold), built with Python and PostgreSQL (Supabase).
 
-
 ## Why this matters
 The tables this pipeline produces reflect post-market data manufacturers may use for ongoing safety monitoring:
 
 - **Signal detection** — surfacing which products and manufacturers generate the most reports is the first step in spotting an emerging safety trend before it becomes a bigger problem
 - **Self-monitoring** — a manufacturer can filter down to their own products to track incident trends over time, feeding into downstream processes like CAPA or risk file updates
 - **Benchmarking** — comparing incident volume across product categories and manufacturers helps identify outliers worth investigating
+- **Planning PMS activities** - A manufacturer can filter similar products to get a hint on what risk the PMS plan shall address.
 
+### Why medallion architecture 
+
+Medallion architecture lets the company use the data in different ways
 
 ## Pipeline steps
-1. `01_bronze_ingest.py` — reads raw data from `DEVICE2024.txt`, writes to `bronze_reports`
-2. `02_silver.sql` — cleans, validates, normalizes, and deduplicates, writes to `silver_reports`
-3. `03_gold.sql` — aggregates into `product_stats` and `manufacturer_stats`, read by `Dashboard.jsx`
-
-
-### Bronze layer rules
-- Append-only (immutability) — no row is ever updated or deleted
-- Junk rows (missing product code, `"UNKNOWN"` manufacturer, duplicates) are still stored — Bronze doesn't filter, it's a raw copy of the source
-- Every row is enriched with `_inserted_at` and `_source_file` for full traceability
-
-
-### Silver layer rules
-- Rows missing a product code, or with a junk manufacturer value, are dropped
-- One row per unique `report_key` (deduplication — first occurrence wins)
-- Manufacturer names normalized (punctuation/whitespace cleaned, legal suffixes stripped) and known variants merged via a manual mapping
-- Written via `upsert` — safe to re-run (idempotent)
-
-
-### Gold layer rules
-- One row per product code in `product_stats`, with total report count and the most common brand name / generic name / manufacturer
-- One row per manufacturer in `manufacturer_stats`, with total report count across all products
-
-
 ### MAP
+```
 [ Source: FDA MAUDE - DEVICE2024.txt ] (could be an API, DB, or file)
        │
-       ▼  (1_bronze_ingest.py)
+       ▼  (01_bronze_ingest.py)
 ┌─────────────────────────────────────────┐
 │ bronze_reports (Supabase)               │
 │  - Raw Data                             │
@@ -55,13 +36,37 @@ The tables this pipeline produces reflect post-market data manufacturers may use
        ▼  (03_gold.sql)
 ┌─────────────────────────────────────────┐
 │ product_stats, manufacturer_stats       │
-│  - AAggregated and fast                 │
+│  - Aggregated and fast                  │
 │  - Ready for reporting                  │
 └─────────────────────────────────────────┘
        │
        ├───────────────────┬───────────────────┐
        ▼                   ▼                   ▼
 [ Dashboard (Power BI) ][ AI / ML Models ][ Ad-hoc Analysis ]
+
+```
+1. `01_bronze_ingest.py` — reads raw data from `DEVICE2024.txt`, writes to `bronze_reports`
+2. `02_silver.sql` — cleans, validates, normalizes, and deduplicates, writes to `silver_reports`
+3. `03_gold.sql` — aggregates into `product_stats` and `manufacturer_stats`, read by `Dashboard.jsx`
+
+
+### Bronze layer rules
+- Append-only (immutability) — no row is ever updated or deleted
+- Junk rows (missing product code, `"UNKNOWN"` manufacturer, duplicates) are still stored — Bronze doesn't filter, it's a raw copy of the source
+- Every row is enriched with `_inserted_at` and `_source_file` for full traceability
+
+
+### Silver layer rules
+- Rows missing a product code, or with a junk manufacturer value, are dropped
+- One row per unique `report_key` (deduplication — first occurrence wins)
+- Manufacturer names normalized (punctuation/whitespace cleaned, legal suffixes stripped) and known variants merged via a manual mapping
+- Rebuilt from scratch on every run (`TRUNCATE` + `INSERT`) — safe to re-run (idempotent), since Silver is always derived from the immutable Bronze layer
+
+
+### Gold layer rules
+- One row per product code in `product_stats`, with total report count and the most common brand name / generic name / manufacturer
+- One row per manufacturer in `manufacturer_stats`, with total report count across all products
+
 
 
 ## Running the pipeline
@@ -84,7 +89,7 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```
 Key columns used by this pipeline: `MDR_REPORT_KEY`, `DEVICE_REPORT_PRODUCT_CODE`, `BRAND_NAME`, `GENERIC_NAME`, `MANUFACTURER_D_NAME`
 
-Other columns
+Other headers: 
 `MDR_REPORT_KEY`, `DEVICE_EVENT_KEY`, `IMPLANT_FLAG`, `DATE_REMOVED_FLAG`, `DEVICE_SEQUENCE_NO`, `IMPLANT_DATE_YEAR`, `DATE_REMOVED_YEAR`, `SERVICED_BY_3RD_PARTY_FLAG`, `DATE_RECEIVED`, `BRAND_NAME`, `GENERIC_NAME`, `MANUFACTURER_D_NAME`, `MANUFACTURER ADDRESS ......`, `DEVICE_OPERATOR`, `EXPIRATION_DATE_OF_DEVICE`, `MODEL_NUMBER`, `CATALOG_NUMBER`, `LOT_NUMBER`, `OTHER_ID_NUMBER`, `DEVICE_AVAILABILITY`, `DATE_RETURNED_TO_MANUFACTURER`, `DEVICE_REPORT_PRODUCT_CODE`, `DEVICE_AGE_TEXT`, `DEVICE_EVALUATED_BY_MANUFACTUR`, `COMBINATION_PRODUCT_FLAG`, `UDI-DI`, `UDI-PUBLIC`
 
 
