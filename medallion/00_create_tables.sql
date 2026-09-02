@@ -8,7 +8,7 @@
 
 -- ----------------------------------------------------------------------------------
 -- BRONZE LAYER
--- Description: Creates bronze_reports for raw, unfiltered, immutable, append-only data, loaded  in sequential order.
+-- Description: Creates bronze_reports 
 -- ----------------------------------------------------------------------------------
 
 create table if not exists bronze_reports (
@@ -57,8 +57,6 @@ DELETE FROM bronze_reports WHERE id = 1;
 -- ----------------------------------------------------------------------------------
 -- SILVER LAYER
 -- Description: Creates silver_reports and silver_rejected 
-
-
 -- ---------------------------------------------------------------------------------
 create table if not exists silver_reports (
   report_key text primary key,
