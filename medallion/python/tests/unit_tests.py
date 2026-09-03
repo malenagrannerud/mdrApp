@@ -1,13 +1,17 @@
 """
 unit_tests.py
 
-Unit tests for functions in config.py, models.py, supabase_client.py, bronze_ingest.py.
-
+Author: Malena
+Created: 2026-08-02
+Description: Unit tests for functions in in the python package. 
 Since get_supabase_client() now lives in its own file and is only
 called inside main() (never at import time), importing bronze_ingest.py
 is fully safe here — no network connection, no real credentials needed.
 
-Run with:  pytest medallion/python/tests/unit_tests.py -v
+bash '''cd medallion/python
+pip install pytest pydantic python-dotenv supabase
+pytest tests/unit_tests.py -v'''
+
 """
 import sys
 from pathlib import Path

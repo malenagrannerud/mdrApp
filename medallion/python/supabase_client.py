@@ -1,4 +1,5 @@
 # supabase_client.py
+
 """
 supabase_client.py
 

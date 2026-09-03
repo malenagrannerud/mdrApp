@@ -27,3 +27,11 @@ src/data/*.zip
 src/data/mdrfoi*.txt
 .env
 medallion/data/DEVICE2024.txt
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
