@@ -8,9 +8,10 @@ Since get_supabase_client() now lives in its own file and is only
 called inside main() (never at import time), importing bronze_ingest.py
 is fully safe here — no network connection, no real credentials needed.
 
-bash '''cd medallion/python
-pip install pytest pydantic python-dotenv supabase
-pytest tests/unit_tests.py -v'''
+bash '''
+cd medallion/python
+pytest tests/unit_tests.py -v
+'''
 
 """
 import sys

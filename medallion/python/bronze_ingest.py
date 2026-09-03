@@ -4,12 +4,8 @@ bronze_ingest.py
 Author: Malena
 Created: 2026-08-02
 Description: Reads from a source text file and writes to the Supabase
-bronze_reports table. No data is transformed — see sql/02_silver.sql
-for cleaning and validation logic.
+bronze_reports table. 
 
-Config lives in config.py. Row schema lives in models.py.
-Supabase connection lives in supabase_client.py.
-This file contains parsing, validation, upload, and orchestration.
 """
 
 import os
@@ -42,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================
-# PURE HELPER FUNCTIONS — each does one thing, testable in isolation
+# HELPER FUNCTIONS — each does one thing, testable in isolation
 # ============================================================
 
 def get_field(idx: int, fields: list[str]) -> Optional[str]:
@@ -166,7 +162,7 @@ def upload_single_batch(batch: list[dict], supabase) -> int:
 
 
 # ============================================================
-# MAIN — orchestrates the functions above, contains no logic itself
+# MAIN — orchestrates the functions 
 # ============================================================
 def main() -> None:
     # STEP 1 — Connect to Supabase
@@ -183,10 +179,10 @@ def main() -> None:
     start = time.time()
 
     # STEP 2 — Locate the source file
-    actual_source = resolve_source_path(SOURCE_FILE)
+    df_raw = resolve_source_path(SOURCE_FILE)
 
-    # STEP 3 — Read the file line by line
-    for line_num, line in read_source_lines(actual_source):
+    # STEP 3 — Read the raw file line by line
+    for line_num, line in read_source_lines(df_raw):
 
         # STEP 4 — Parse header row once, map column positions
         if line_num == 0:
@@ -197,7 +193,7 @@ def main() -> None:
 
         # STEP 5 — Build a row dict from the raw line
         fields = line.split("|")
-        raw_row = build_raw_row(fields, col_idx, actual_source)
+        raw_row = build_raw_row(fields, col_idx, df_raw )
 
         # STEP 6 — Validate row shape (BronzeRow), buffer if valid
         try:
