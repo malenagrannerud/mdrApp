@@ -35,3 +35,10 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+
+# Test coverage
+.coverage
+htmlcov/
+
+# Supabase local dev
+.supabase/
