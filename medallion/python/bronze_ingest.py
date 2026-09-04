@@ -42,32 +42,33 @@ logger = logging.getLogger(__name__)
 
 def find_source_file(source_file: str) -> str: 
 
-    """Finds the source file whether you run from the root or python subdir
+    r"""Finds the source file whether you run from the root or python subdir
 
-    This function searches for the file in two locations:
-        1. The current directory (relative path)
-        2. The medallion/ directory (absolute path)
+    This function acts as a path abstraction layer to ensure the pipeline runs 
+    consistently whether triggered locally from the root, within a subdirectory, 
+    or via automated orchestrators. 
     
+    It serves as a "Fail-Fast" guard at the ingestion gateway (Bronze layer), 
+    terminating execution early if raw data is unavailable before wasting 
+    resources on database connections.
+
     Args:
-        source_file(str): The name of the source file.
+        source_file (str): The name of the source file.
 
     Returns:
         str: The path to the source file
-            Example: "data/DEVICE2024.txt" or "medallion/data/DEVICE2024.txt"
-    
-    Example:
-        >>> find_source_file("data/DEVICE2024.txt") # Running from medallion/python/
-        'data/DEVICE2024.txt'
-    
-        >>> find_source_file("data/DEVICE2024.txt") # Running from medallion/ (project root)
-        'medallion/data/DEVICE2024.txt'
 
     Raises: 
-        SystemExit: If file not found 
+        SystemExit: If file not found in either location
         
     Notes:
-        - This function uses os.path.exists() to check if the file exists
-        - The function works on Windows, Mac, and Linux    
+        - os.path.exists() to check if the file exists
+        - This function works on Windows, Mac, and Linux 
+
+    Trade-offs:  
+        * If maps are moved around, this function needs to be updated.
+        * In the future, change this to for example pathlib to remove dependency on from what directory the script is run.
+
     """
     if os.path.exists(source_file):
         return source_file
@@ -79,17 +80,17 @@ def find_source_file(source_file: str) -> str:
 
 def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
 
-    r"""Reads the raw file line by line and streams it with a number.
+    r"""Reads the raw file line by line, removes \n and streams it with a number.
     
     This is a generator function that is memory effcient since it reads one line at a time,
     since reading the whole file at once can crash for large files. 
 
     The expected source file format is pipe-separated ("|") with newlines (\n) & 
-    the first line is typically the header:
+    the first line is the header:
 
         MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME\n 
         12345|ABC|Servo Air|Ventilator|Getinge\n 
-        12346|DEF|Tube Flow|Ventilator|Medtronic Inc\n 
+        12346|DEF|Tube Flow|Ventilator|Medtronic Inc\n ...
     
     Args: 
         path (str): The path to the source file.
@@ -103,55 +104,63 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
         ...     print(f"{line_num}: {line}")                                                     
         (0: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME") # OUTPUT: First iteration
         (1: "12345|ABC|Servo Air|Ventilator|Getinge") # Second iteration
-        (2: "12346|DEF|Tube Flow|Ventilator|Medtronic Inc") # Third iteration
-        ...
+        (2: "12346|DEF|Tube Flow|Ventilator|Medtronic Inc") # Third iteration ...
     
     Notes:
         - The function uses open() with encoding="utf-8" and errors="replace" to replace invalid characters with �
-        - The function uses enumerate() to give each line a number starting from 0.
-        - The function uses rstrip("\n") to remove the newline character from each line.
+        - enumerate() give each line a number starting from 0.
+        - rstrip("\n") removes the newline character from each line.
     
     Trade-offs:
-            * Memory vs. Speed: This function is highly memory-efficient 
-              because it streams data, but it may be slower than reading the 
+            * Memory vs. Speed: This function is memory-efficient because it streams data. It may be slower than reading the 
               entire file into memory at once for small to medium files.
-            * Indexing: Line numbers are 0-indexed and include empty lines, 
-              which preserves exact file geometry but requires manual filtering 
-              if blank lines should be ignored.
-        
+            * Indexing: Line numbers are 0-indexed and include empty lines, which preserves exact file geometry but requires 
+              manual filtering if blank lines should be ignored.
     """
-    with open(path, encoding="utf-8", errors="replace") as f: # Strange letters are replaced with �
-        for line_num, line in enumerate(f): #enumerate gives each line a nr
-            yield line_num, line.rstrip("\n")  # rstrip("\n") removes each "\n"
+
+    with open(path, encoding="utf-8", errors="replace") as f: 
+        for line_num, line in enumerate(f): 
+            yield line_num, line.rstrip("\n")  
 
 # ============================================================
-
 def parse_column_index(headers: list[str]) -> dict[str, int]:
-
-    """Maps column names to their position.
+    """
+    Maps column names from the source file to their position (index) in the file.
+    
+    This function compares the actual column names from the file header with the 
+    required columns defined in config.py. If a required column is missing, it 
+    maps to -1 instead of crashing - this is the first line of defense against 
+    schema drift (FDA renaming a column).
     
     Args:
-        headers (list[str]): The list of column names.
+        headers (list[str]): The list of column names from the source file.
+                             Example: ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME"]
     
     Returns:
-        dict[str, int]: Column name → position mapping.
+        dict[str, int]: A dictionary mapping internal column names to their 
+                        position in the source file.
+                        Example: {"reportKey": 0, "productCode": 1, "brandName": 2}
+                        If a column is missing, the value will be -1.
     
     Example:
         >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME"]
         >>> parse_column_index(headers)
-        {'reportKey': 0, 'productCode': 1, 'brandName': 2}
+        {'reportKey': 0, 'productCode': 1, 'brandName': 2, 'genericName': -1, 'manufacturerRaw': -1}
         
-        >>> headers = ["BRAND_NAME", "GENERIC_NAME"]  # Missing columns
+        >>> headers = ["BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"]
         >>> parse_column_index(headers)
-        {'reportKey': -1, 'productCode': -1, 'brandName': 0, 'genericName': 1}
+        {'reportKey': -1, 'productCode': -1, 'brandName': 0, 'genericName': 1, 'manufacturerRaw': 2}
+    
+    Notes:
+        - Uses REQUIRED_HEADERS from config.py to know which columns are needed
+        - A missing column maps to -1 (not a crash!)
+        - This is the first line of defense against schema drift
+        - The dictionary keys match the keys used in build_raw_row()
     """
-
     return {
         key: headers.index(source_col) if source_col in headers else -1
         for key, source_col in REQUIRED_HEADERS.items()
     }
-
-
 # ============================================================
 
 def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) -> dict:
@@ -313,10 +322,13 @@ def main() -> None:
     # STEP 3 — Read line and process each into a ROW 
     for line_num, line in read_source_lines(df_raw):
 
-        # STEP 3.1 — Split the header line into list of cols
+        # STEP 3.1 — 
+        # If HEADER line " MDR_REPORT_KEY | DEVICE_REPORT_PRODUCT_CODE | BRAND_NAME": remove whitespace and split into a list
+        headers = [ "MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME" ]
+
         if line_num == 0:                                  # Find the line with headers
-            headers = [h.strip() for h in line.split("|")] # Remove whitespaces before || after "|", replace "|" with ","
-            col_idx = parse_column_index(headers)          # Call parse_column_index() to map header to index positions for each col
+            headers = [h.strip() for h in line.split("|")]
+            col_idx = parse_column_index(headers)
             count += 1  # Count header and continue
             continue
 
