@@ -21,7 +21,7 @@ from config import (
     MAX_RETRIES,
     RETRY_BACKOFF_SECONDS,
     MAX_ROWS_LIMIT,
-    REQUIRED_HEADERS,
+    REQUIRED_HEADERS, # 
 )
 from models import BronzeRow
 from supabase_client import get_supabase_client
@@ -40,55 +40,119 @@ logger = logging.getLogger(__name__)
 # HELPER FUNCTIONS — each does one thing, testable in isolation
 # ============================================================
 
-def find_source_file(source_file: str) -> str: # Input: a source file name ("data/DEVICE2024.txt")
-    """Finds the source file whether you run the script from the root or from the python subdir
+def find_source_file(source_file: str) -> str: 
+
+    """Finds the source file whether you run from the root or python subdir
+
+    This function searches for the file in two locations:
+        1. The current directory (relative path)
+        2. The medallion/ directory (absolute path)
     
-    @param: The name of the source file. 
-    @returns: Returns the path to the source file OR error (SystemExit) if file not found.
+    Args:
+        source_file(str): The name of the source file.
+
+    Returns:
+        str: The path to the source file
+            Example: "data/DEVICE2024.txt" or "medallion/data/DEVICE2024.txt"
+    
+    Example:
+        >>> find_source_file("data/DEVICE2024.txt") # Running from medallion/python/
+        'data/DEVICE2024.txt'
+    
+        >>> find_source_file("data/DEVICE2024.txt") # Running from medallion/ (project root)
+        'medallion/data/DEVICE2024.txt'
+
+    Raises: 
+        SystemExit: If file not found 
+        
+    Notes:
+        - This function uses os.path.exists() to check if the file exists
+        - The function works on Windows, Mac, and Linux    
     """
-    if os.path.exists(source_file): # os.path.exists() checks if a file exists at a path
+    if os.path.exists(source_file):
         return source_file
-    if os.path.exists(f"medallion/{source_file}"):
+    if os.path.exists(f"medallion/{source_file}"): # f = StringBuiler in Java
         return f"medallion/{source_file}"
     raise SystemExit(f"Error: source file not found at {source_file}")
 
-
-
+# ============================================================
 
 def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
-    """Reads a file and
 
-    @param: 
-    @returns: 
+    r"""Reads the raw file line by line and streams it with a number.
+    
+    This is a generator function that is memory effcient since it reads one line at a time,
+    since reading the whole file at once can crash for large files. 
+
+    The expected source file format is pipe-separated ("|") with newlines (\n) & 
+    the first line is typically the header:
+
+        MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME\n 
+        12345|ABC|Servo Air|Ventilator|Getinge\n 
+        12346|DEF|Tube Flow|Ventilator|Medtronic Inc\n 
+    
+    Args: 
+        path (str): The path to the source file.
+
+    Yields:
+        tuple[int, str]: A tuple containing the 0-indexed line number (int) 
+            and the cleaned line content (str).
+    
+    Examples:
+        >>> for line_num, line in read_source_lines("data/DEVICE2024.txt"):
+        ...     print(f"{line_num}: {line}")                                                     
+        (0: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME") # OUTPUT: First iteration
+        (1: "12345|ABC|Servo Air|Ventilator|Getinge") # Second iteration
+        (2: "12346|DEF|Tube Flow|Ventilator|Medtronic Inc") # Third iteration
+        ...
+    
+    Notes:
+        - The function uses open() with encoding="utf-8" and errors="replace" to replace invalid characters with �
+        - The function uses enumerate() to give each line a number starting from 0.
+        - The function uses rstrip("\n") to remove the newline character from each line.
+    
+    Trade-offs:
+            * Memory vs. Speed: This function is highly memory-efficient 
+              because it streams data, but it may be slower than reading the 
+              entire file into memory at once for small to medium files.
+            * Indexing: Line numbers are 0-indexed and include empty lines, 
+              which preserves exact file geometry but requires manual filtering 
+              if blank lines should be ignored.
+        
     """
-    with open(path, encoding="utf-8", errors="replace") as f:
-        for line_num, line in enumerate(f):
-            yield line_num, line.rstrip("\n")
+    with open(path, encoding="utf-8", errors="replace") as f: # Strange letters are replaced with �
+        for line_num, line in enumerate(f): #enumerate gives each line a nr
+            yield line_num, line.rstrip("\n")  # rstrip("\n") removes each "\n"
 
-
-
-def get_field(idx: int, fields: list[str]) -> Optional[str]:
-
-    """Extracts and trims one field from a pipe-split line.
-    "@returns: None if the index is out of range or the value is empty."""
-
-    if idx < 0 or idx >= len(fields):
-        return None
-    val = fields[idx].strip()
-    return val or None
-
+# ============================================================
 
 def parse_column_index(headers: list[str]) -> dict[str, int]:
 
-    """Maps expected source columns to their position in the header row.
-    A missing column maps to -1 — this is where schema drift
-    (FDA renaming a column) first becomes detectable."""
+    """Maps column names to their position.
+    
+    Args:
+        headers (list[str]): The list of column names.
+    
+    Returns:
+        dict[str, int]: Column name → position mapping.
+    
+    Example:
+        >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME"]
+        >>> parse_column_index(headers)
+        {'reportKey': 0, 'productCode': 1, 'brandName': 2}
+        
+        >>> headers = ["BRAND_NAME", "GENERIC_NAME"]  # Missing columns
+        >>> parse_column_index(headers)
+        {'reportKey': -1, 'productCode': -1, 'brandName': 0, 'genericName': 1}
+    """
 
     return {
         key: headers.index(source_col) if source_col in headers else -1
         for key, source_col in REQUIRED_HEADERS.items()
     }
 
+
+# ============================================================
 
 def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) -> dict:
     """Builds the raw row dict for a single data line, ready for BronzeRow validation."""
@@ -102,14 +166,62 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
     }
 
 
-def validate_batch_before_upload(batch: list[dict]) -> None:
-    """Pre-flight check run on a batch immediately before it's sent to
-    Supabase. Raises ValueError if the batch fails either check:
+# ============================================================
+def get_field(idx: int, fields: list[str]) -> Optional[str]:
 
-      - not-null: every row must have _source_file (traceability)
-      - uniqueness: no duplicate report_key WITHIN a single batch —
-        Bronze intentionally allows duplicates ACROSS separate runs,
-        just not within one pass over one file.
+    """Extracts and trims one field from a pipe-split line.
+    
+    Args:
+        idx (int): The position of the field.
+        fields (list[str]): The list of fields.
+    
+    Returns:
+        Optional[str]: The trimmed field, or None.
+    
+    Example:
+        >>> get_field(1, ["12345", "ABC", "SomeBrand"])
+        'ABC'
+        
+        >>> get_field(5, ["12345", "ABC"])
+        None
+        
+        >>> get_field(0, ["  padded  "])
+        'padded'
+    """
+
+    if idx < 0 or idx >= len(fields):
+        return None
+    val = fields[idx].strip()
+    return val or None
+
+# ============================================================
+
+def validate_batch_before_upload(batch: list[dict]) -> None:
+  
+    """Validates a batch before upload.
+    
+    Args:
+        batch (list[dict]): The batch to validate.
+    
+    Returns:
+        None
+    
+    Raises:
+        ValueError: If validation fails.
+    
+    Example:
+        >>> batch = [
+        ...     {"report_key": "A1", "_source_file": "file.txt"},
+        ...     {"report_key": "A2", "_source_file": "file.txt"}
+        ... ]
+        >>> validate_batch_before_upload(batch)  # No error - passes!
+        
+        >>> batch = [
+        ...     {"report_key": "A1", "_source_file": None},
+        ...     {"report_key": "A2", "_source_file": "file.txt"}
+        ... ]
+        >>> validate_batch_before_upload(batch)
+        ValueError: Rows missing _source_file at batch positions: [0]
     """
     missing_source = [i for i, row in enumerate(batch) if not row.get("_source_file")]
     if missing_source:
@@ -128,6 +240,7 @@ def validate_batch_before_upload(batch: list[dict]) -> None:
     if duplicates:
         raise ValueError(f"Duplicate report_key values within batch: {duplicates}")
 
+# ============================================================
 
 def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: int = RETRY_BACKOFF_SECONDS):
     """Runs func() with exponential backoff retry. Returns func()'s
@@ -146,6 +259,7 @@ def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: in
             time.sleep(wait)
     return None
 
+# ============================================================
 
 def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[dict], int]:
     """If buffer has reached batch_size: validates and uploads it,
@@ -156,12 +270,14 @@ def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[
     uploaded = upload_fn(buffer)
     return [], uploaded
 
+# ============================================================
 
 def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: float) -> None:
     logger.info(
         "BRONZE DONE — %s rows read, %s saved, %s invalid skipped (%.1fs).",
         f"{count - 1:,}", f"{inserted:,}", f"{invalid:,}", elapsed,
     )
+# ============================================================
 
 
 def upload_single_batch(batch: list[dict], supabase) -> int:
@@ -184,7 +300,7 @@ def main() -> None:
     logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)
     logger.info("[BRONZE] Row limit: %s (protects Supabase storage)", MAX_ROWS_LIMIT)
 
-    col_idx: dict[str, int] = {} # 
+    col_idx: dict[str, int] = {} 
     buffer: list[dict] = []
     count = 0
     inserted = 0
@@ -194,19 +310,19 @@ def main() -> None:
     # STEP 2 — Find the source file, put it in df_raw
     df_raw = find_source_file(SOURCE_FILE)
 
-    # STEP 3 — Read the raw file line by line and process each line
+    # STEP 3 — Read line and process each into a ROW 
     for line_num, line in read_source_lines(df_raw):
 
-        # STEP 3.1 — Split the header row into list of cols
-        if line_num == 0: # Find the one header row (the first), EX: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|..."
-            headers = [h.strip() for h in line.split("|")] # Remove whitespaces before or after a name, split a string by |, 
-            col_idx = parse_column_index(headers) # Call parse_column_index() to map header to index positions for each col
+        # STEP 3.1 — Split the header line into list of cols
+        if line_num == 0:                                  # Find the line with headers
+            headers = [h.strip() for h in line.split("|")] # Remove whitespaces before || after "|", replace "|" with ","
+            col_idx = parse_column_index(headers)          # Call parse_column_index() to map header to index positions for each col
             count += 1  # Count header and continue
             continue
 
         # STEP 3.2 — Build a row dict from the raw line
         fields = line.split("|")
-        raw_row = build_raw_row(fields, col_idx, df_raw )
+        raw_row = build_raw_row(fields, col_idx, df_raw ) # Build ROWS 
 
         # STEP 3.3 — Validate row shape, buffer if valid
         try:

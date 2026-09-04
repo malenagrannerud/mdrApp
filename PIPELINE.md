@@ -1,6 +1,26 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 This document covers the pipeline behind the [Aegis Compliance](./README.md) dashboard. 
 
+```
+medallion
+├── data
+│   └── DEVICE2024.txt
+├── python
+│   ├── bronze_ingest.py
+│   ├── config.py
+│   ├── models.py
+│   ├── requirements.txt
+│   ├── supabase_client.py
+│   └── tests
+│       └── unit_tests.py
+└── sql
+    ├── 01_create_tables.sql
+    ├── 02_silver.sql
+    ├── 03_gold.sql
+    └── tests
+        
+```
+
 ## Purpose & Scope
 Turn raw incident data into a source for competitive risk monitoring and PMS planning.
 
