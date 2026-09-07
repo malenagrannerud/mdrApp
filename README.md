@@ -1,6 +1,9 @@
 
 # Aegis Compliance App
-**A regulatory workflow and post-market surveillance tool for medical device manufacturers**, guiding cross-functional teams — regulatory affairs, quality, data, and leadership — through EU MDR compliance, ISO 13485 QMS setup, and real-world safety signal analysis. ![Aegis Compliance App overview](./screenshots/1.png)
+**A regulatory workflow and post-market surveillance tool for medical device manufacturers**, guiding cross-functional teams — regulatory affairs, quality, data, and leadership — through EU MDR compliance, ISO 13485 QMS setup, and real-world safety signal analysis. 
+
+![Aegis Compliance App overview](./screenshots/1.png)
+
 
 **Live demo:** [mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
 **Data pipeline deep-dive:** [PIPELINE.md](./PIPELINE.md)
