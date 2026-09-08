@@ -22,10 +22,10 @@ MAX_RETRIES = 3             # Max nr of attempts to write to Supabase before giv
 RETRY_BACKOFF_SECONDS = 2   # Initial wait time that doubles on each retry: 2s, 4s, 8s
 MAX_ROWS_LIMIT = 20000      # Keeps free-tier Supabase (500MB) from filling up
 
-HEADER_DICTIONARY = {                           # Mapps FDA column names to internal names
+HEADER_DICTIONARY = {                           # Maps FDA column names to internal names
     "reportKey": "MDR_REPORT_KEY",              # ID number for each report
     "productCode": "DEVICE_REPORT_PRODUCT_CODE",  # Letter code for device type. EX: CBK = Ventilator, FPA = Catheter, MDS = Infusion pump, LZW = Pacemaker
-    "brandName": "BRAND_NAME",                  # Commerial name of the device.  EX: "Servo Air" "
+    "brandName": "BRAND_NAME",                  # Commerial name of the device. EX: "Servo Air"
     "genericName": "GENERIC_NAME",              # Clinical name. EX: "Ventilator"
     "manufacturerRaw": "MANUFACTURER_D_NAME",   # Name of manufacturer as reported. EX: "Getinge", "Medtronic Inc" etc
 }
@@ -88,7 +88,7 @@ def find_source_file(source_file: str) -> str:
 
     if os.path.exists(source_file):
         return source_file
-    if os.path.exists(f"medallion/{source_file}"): # f = StringBuiler in Java
+    if os.path.exists(f"medallion/{source_file}"): # f = f-string in Python
         return f"medallion/{source_file}"
     raise SystemExit(f"Error: source file not found at {source_file}")
 
@@ -189,7 +189,7 @@ class BronzeRow(BaseModel):
             ...    "source_file": "data/DEVICE2024.txt"
             ... }
             >>> validated = BronzeRow(**raw_row)  # Validerar att allt matchar schemat
-            >>> print(validated.report_key
+            >>> print(validated.report_key)
             '124'
     Notes:
         - Optional[str] is used because FDA data may have empty fields (missing columns).
@@ -203,7 +203,7 @@ class BronzeRow(BaseModel):
     brand_name_raw: Optional[str] = None
     generic_name_raw: Optional[str] = None
     manufacturer_raw: Optional[str] = None
-    source_file:str
+    source_file: str
 
 # ============================================================
 def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) -> dict:
@@ -265,7 +265,7 @@ def get_field(idx: int, fields: list[str]) -> Optional[str]:
         'ABC'
         
         >>> get_field(5, ["12345", "ABC"])
-        'None'
+        None
         
         >>> get_field(0, ["  padded  "])
         'padded'
@@ -326,10 +326,24 @@ def validate_batch_before_upload(batch: list[dict]) -> None:
 
 # ============================================================
 def upload_single_batch(batch: list[dict], supabase) -> int:
-    r"""This function writes one batch to Supabase, with retry + exponential backoff.
-    
-    
-    
+    r"""Writes one batch to Supabase, with retry + exponential backoff.
+
+    Args:
+        batch (list[dict]): The batch of rows to upload.
+        supabase: The Supabase client instance.
+
+    Returns:
+        int: Number of rows successfully uploaded (0 if all retries failed).
+
+    Examples:
+        >>> supabase = get_supabase_client()
+        >>> batch = [{"report_key": "124", "source_file": "data/DEVICE2024.txt"}]
+        >>> upload_single_batch(batch, supabase)
+        1
+
+    Notes:
+        - Implementation: Uses retry_with_backoff() to handle transient failures.
+        - If all retries fail, returns 0 instead of crashing.
     """
     def _do_insert():
         supabase.table("bronze_reports").insert(batch).execute()
@@ -337,14 +351,29 @@ def upload_single_batch(batch: list[dict], supabase) -> int:
 
     result = retry_with_backoff(_do_insert)
     return result if result is not None else 0
+
 # ============================================================
-
 def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: int = RETRY_BACKOFF_SECONDS):
-    r"""This function runs func() with exponential backoff retry. Returns func()'s
-    result, or None if every attempt fails."""
-    
-    
+    r"""Runs func() with exponential backoff retry. Returns func()'s result, or None if every attempt fails.
 
+    Args:
+        func: The function to retry.
+        max_retries (int): Maximum number of attempts. Default is MAX_RETRIES (3).
+        backoff_seconds (int): Initial wait time in seconds. Doubles on each retry. Default is RETRY_BACKOFF_SECONDS (2).
+
+    Returns:
+        The result of func(), or None if all attempts fail.
+
+    Examples:
+        >>> def failing_func():
+        ...     raise ValueError("Connection error")
+        >>> retry_with_backoff(failing_func, max_retries=2, backoff_seconds=1)
+        None
+
+    Notes:
+        - Implementation: Exponential backoff: 2s, 4s, 8s...
+        - If func() succeeds, returns immediately without further retries.
+    """
     attempt = 0
     while attempt < max_retries:
         try:
@@ -362,11 +391,28 @@ def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: in
 # ============================================================
 def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[dict], int]:
     r"""If buffer has reached batch_size: validates and uploads it, returns (empty buffer, rows uploaded). Otherwise: (buffer, 0).
-    
-    
-    
-    """
 
+    Args:
+        buffer (list[dict]): The current buffer of rows.
+        batch_size (int): The batch size threshold.
+        upload_fn: The function to call for uploading the batch.
+
+    Returns:
+        tuple[list[dict], int]: (buffer, rows_uploaded). If buffer was flushed, returns (empty list, rows uploaded).
+            If buffer not full, returns (unchanged buffer, 0).
+
+    Examples:
+        >>> buffer = [{"report_key": "1"}, {"report_key": "2"}]
+        >>> buffer, uploaded = flush_if_full(buffer, 2, lambda b: len(b))
+        >>> buffer
+        []
+        >>> uploaded
+        2
+
+    Notes:
+        - If buffer is full, it is validated before upload.
+        - Returns the buffer unchanged if it has not reached batch_size.
+    """
     if len(buffer) < batch_size:
         return buffer, 0
     validate_batch_before_upload(buffer)
@@ -375,9 +421,23 @@ def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[
 
 # ============================================================
 def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: float) -> None:
-    r""" 
-    
-    
+    r"""Logs final summary of the bronze ingestion run.
+
+    Args:
+        count (int): Total number of rows read (including header).
+        inserted (int): Number of rows successfully inserted.
+        invalid (int): Number of rows skipped due to validation errors.
+        elapsed (float): Total time elapsed in seconds.
+
+    Returns:
+        None
+
+    Examples:
+        >>> log_ingestion_summary(1001, 950, 50, 12.5)
+        BRONZE DONE — 1,000 rows read, 950 saved, 50 invalid skipped (12.5s).
+
+    Notes:
+        - count - 1 is logged because the header row is not a data row.
     """
     logger.info(
         "BRONZE DONE — %s rows read, %s saved, %s invalid skipped (%.1fs).",
@@ -387,9 +447,24 @@ def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: floa
 
 # ========================= MAIN — orchestrates the functions ========================
 def main() -> None:
+    r"""Orchestrates the bronze ingestion pipeline.
 
+    Steps:
+        1. Connect to Supabase
+        2. Find the source file
+        3. Read and process each line into a row
+        4. Flush remaining rows in buffer
+        5. Log final summary
+
+    Returns:
+        None
+
+    Notes:
+        - Stops ingestion when MAX_ROWS_LIMIT is reached to protect free-tier storage.
+        - Invalid rows are skipped and logged, not crashing the pipeline.
+    """
     supabase = get_supabase_client()
-    logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)                        # Name this layer [BRONZE]]
+    logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)                        # Name this layer [BRONZE]
     logger.info("[BRONZE] Row limit: %s (protects Supabase free storage)", MAX_ROWS_LIMIT)
 
     col_idx: dict[str, int] = {} 
