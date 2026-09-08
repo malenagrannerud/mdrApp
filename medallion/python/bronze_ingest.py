@@ -106,14 +106,14 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
         path (str): The path to the source file.
     
     Returns:
-        A tuple of [nr, content] for each line.
+        tuple[str, int]: A tuple of [nr, content] for each line.
     
     Examples:
         >>> #Input file:    MDR_REPORT_KEY|BRAND_NAME\n
         >>> #Input file:    124|Servo Air\n ...
         >>> read_source_lines("data/DEVICE2024.txt")                                                  
-        Output first iteration:  (0, "MDR_REPORT_KEY|BRAND_NAME...") # [int,str] & \n removed
-        Output second iteration (1, "124|Servo Air...)               # [int,str] & \n removed
+        >>> (0, "MDR_REPORT_KEY|BRAND_NAME") # Output 1st iteration: [int,str] & \n removed
+        >>> (1, "124|Servo Air)              # Output 2nd iteration: [int,str] & \n removed
     
     Notes:
         - Trade-offs:
@@ -129,7 +129,7 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
 # ============================================================
 def get_column_index(headers: list[str]) -> dict[str, int]:
 
-    """Takes the header row & returns a dictionary mapping internal names to column positions
+    r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
         Row 0 (header):  MDR_REPORT_KEY|BRAND_NAME|GENERIC_NAME    ← Run get_column_index() --> returns col_idx = {'reportKey': 0, 'brandName': 1, 'genericName': 2} 
         Row 1 (data):    12345|Servo Air|Ventilator                ← uses col_idx
@@ -139,18 +139,16 @@ def get_column_index(headers: list[str]) -> dict[str, int]:
         Row 1001:        fortsätter använda samma col_idx
         ...         
 
-    
     Args:
         headers (list[str]): The list of column names from the source file.
     
     Returns:
         dict[str, int]: A dictionary mapping internal column names to their position in the source file.
     
-    Example:
+    Examples:
         # INPUT: Header line from the source file.
         >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"] 
-        >>> get_column_index(headers)
-        # Output: Internal name mapped to column position
+        >>> get_column_index(headers) # Output: Internal name mapped to column position
         {
             'reportKey': 0,        # "MDR_REPORT_KEY" found at position 0
             'productCode': 1,      # "DEVICE_REPORT_PRODUCT_CODE" found at position 1
