@@ -3,8 +3,7 @@ bronze_ingest.py
 
 Author: Malena
 Created: 2026-08-02
-Description: Reads from a source text file and writes to the Supabase
-bronze_reports table. 
+Description: Reads data from a source text file and writes to the Supabase bronze_reports table. All components consolidated into one file.
 """
 
 import os # Operating systems library for file path operations with functions
@@ -13,21 +12,26 @@ import logging
 from typing import Optional, Iterator
 
 from dotenv import load_dotenv
-from pydantic import ValidationError
-
-from config import (
-    SOURCE_FILE,
-    WRITE_BATCH_SIZE,
-    MAX_RETRIES,
-    RETRY_BACKOFF_SECONDS,
-    MAX_ROWS_LIMIT,
-    REQUIRED_HEADERS, # 
-)
-from models import BronzeRow
-from supabase_client import get_supabase_client
-
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from supabase import create_client, Client
 load_dotenv()
 
+# ===================================== CONFIGURATION =====================================
+SOURCE_FILE = "data/DEVICE2024.txt"
+WRITE_BATCH_SIZE = 1000     # Nr of rows buffered before writing to Supabase in one batch
+MAX_RETRIES = 3             # Max nr of attempts to write to Supabase before giving up
+RETRY_BACKOFF_SECONDS = 2   # Initial wait time that doubles on each retry: 2s, 4s, 8s
+MAX_ROWS_LIMIT = 20000      # Keeps free-tier Supabase (500MB) from filling up
+
+HEADER_DICTIONARY = {                           # Mapps FDA column names to internal names
+    "reportKey": "MDR_REPORT_KEY",              # ID number for each report
+    "productCode": "DEVICE_REPORT_PRODUCT_CODE",  # Letter code for device type. EX: CBK = Ventilator, FPA = Catheter, MDS = Infusion pump, LZW = Pacemaker
+    "brandName": "BRAND_NAME",                  # Commerial name of the device.  EX: "Servo Air" "
+    "genericName": "GENERIC_NAME",              # Clinical name of the product type. EX: "Ventilator
+    "manufacturerRaw": "MANUFACTURER_D_NAME",   # Name of manufacturer as reported. EX: "Getinge", "Medtronic Inc" etc
+}
+
+# ===================================== LOGGING SETUP =====================================
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -35,6 +39,41 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ===================================== VALIDATE INPUT DATA =====================================
+class BronzeRow(BaseModel):
+    r"""BronzeRow validates row SHAPE only (types present or absent).
+   
+    """
+    model_config = ConfigDict(populate_by_name=True)
+
+    report_key: Optional[str] = None
+    product_code_raw: Optional[str] = None
+    brand_name_raw: Optional[str] = None
+    generic_name_raw: Optional[str] = None
+    manufacturer_raw: Optional[str] = None
+    source_file: str = Field(alias="_source_file")
+
+# ===================================== SUPABASE CLIENT =====================================
+# 
+def get_supabase_client() -> Client:
+    r"""Initializes and returns a Supabase client using environment variables.
+
+    Returns:
+        Client: An authenticated Supabase client instance.
+
+    Raises:
+        SystemExit: If either SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY 
+            is missing from the environment variables.
+    """
+    supabase_url = os.environ.get("SUPABASE_URL")
+    service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+
+    if not supabase_url:
+        raise SystemExit("Error: SUPABASE_URL is missing from your .env file")
+    if not service_role_key:
+        raise SystemExit("Error: SUPABASE_SERVICE_ROLE_KEY is missing from your .env file")
+
+    return create_client(supabase_url, service_role_key)
 
 # ============================================================
 # HELPER FUNCTIONS — each does one thing, testable in isolation
@@ -124,8 +163,8 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
 
 # ============================================================
 def parse_column_index(headers: list[str]) -> dict[str, int]:
-    """
-    Maps column names from the source file to their position (index) in the file.
+
+    r"""Maps column names from the source file to their position (index) in the file.
     
     This function compares the actual column names from the file header with the 
     required columns defined in config.py. If a required column is missing, it 
@@ -152,14 +191,14 @@ def parse_column_index(headers: list[str]) -> dict[str, int]:
         {'reportKey': -1, 'productCode': -1, 'brandName': 0, 'genericName': 1, 'manufacturerRaw': 2}
     
     Notes:
-        - Uses REQUIRED_HEADERS from config.py to know which columns are needed
+        - Uses HEADER_DICTIONARY from config.py to know which columns are needed
         - A missing column maps to -1 (not a crash!)
         - This is the first line of defense against schema drift
         - The dictionary keys match the keys used in build_raw_row()
     """
     return {
         key: headers.index(source_col) if source_col in headers else -1
-        for key, source_col in REQUIRED_HEADERS.items()
+        for key, source_col in HEADER_DICTIONARY.items()
     }
 # ============================================================
 
@@ -178,7 +217,7 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
 # ============================================================
 def get_field(idx: int, fields: list[str]) -> Optional[str]:
 
-    """Extracts and trims one field from a pipe-split line.
+    r"""Extracts and trims one field from a pipe-split line.
     
     Args:
         idx (int): The position of the field.
@@ -204,13 +243,24 @@ def get_field(idx: int, fields: list[str]) -> Optional[str]:
     return val or None
 
 # ============================================================
-
 def validate_batch_before_upload(batch: list[dict]) -> None:
   
-    """Validates a batch before upload.
+    r"""Validates a batch before upload to Supabase. 
+    
+    This code validates the file by testing for 
+    1) Unique report_key in each batch (alert if doubles are sent in the raw data) 
+    2) Non null source_file. Note: Rows with ``report_key=None``are allowed
     
     Args:
-        batch (list[dict]): The batch to validate.
+        batch (list[dict]): The batch to validate: rows of the source file
+
+        # EXAMPLE: Detta är en list[dict]:
+    batch = [
+        {"report_key": "12345", "product_code_raw": "ABC", "_source_file": "data/DEVICE2024.txt"},
+        {"report_key": "12346", "product_code_raw": "DEF", "_source_file": "data/DEVICE2024.txt"},
+        ...]
+
+        : list[dict] = typhantering som säger "detta ska vara en lista av dictionaries"
     
     Returns:
         None
@@ -220,18 +270,19 @@ def validate_batch_before_upload(batch: list[dict]) -> None:
     
     Example:
         >>> batch = [
-        ...     {"report_key": "A1", "_source_file": "file.txt"},
-        ...     {"report_key": "A2", "_source_file": "file.txt"}
+        ...     {"report_key": "12345", "_source_file": "data/DEVICE2024.txt"},
+        ...     {"report_key": "12346", "_source_file": "data/DEVICE2024.txt"}
         ... ]
-        >>> validate_batch_before_upload(batch)  # No error - passes!
+        >>> validate_batch_before_upload(batch)  # PASS!
         
         >>> batch = [
-        ...     {"report_key": "A1", "_source_file": None},
-        ...     {"report_key": "A2", "_source_file": "file.txt"}
+        ...     {"report_key": "12345", "_source_file": "None"},
+        ...     {"report_key": "12346", "_source_file": "data/DEVICE2024.txt"}
         ... ]
-        >>> validate_batch_before_upload(batch)
-        ValueError: Rows missing _source_file at batch positions: [0]
+        >>> validate_batch_before_upload(batch)  # FAIL! ValueError: Rows missing _source_file at batch positions: [0]
     """
+
+
     missing_source = [i for i, row in enumerate(batch) if not row.get("_source_file")]
     if missing_source:
         raise ValueError(f"Rows missing _source_file at batch positions: {missing_source}")
@@ -249,10 +300,22 @@ def validate_batch_before_upload(batch: list[dict]) -> None:
     if duplicates:
         raise ValueError(f"Duplicate report_key values within batch: {duplicates}")
 
+
+# ============================================================
+def upload_single_batch(batch: list[dict], supabase) -> int:
+
+    r"""Writes one batch to Supabase, with retry + exponential backoff."""
+    def _do_insert():
+        supabase.table("bronze_reports").insert(batch).execute()
+        return len(batch)
+
+    result = retry_with_backoff(_do_insert)
+    return result if result is not None else 0
 # ============================================================
 
 def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: int = RETRY_BACKOFF_SECONDS):
-    """Runs func() with exponential backoff retry. Returns func()'s
+
+    r"""Runs func() with exponential backoff retry. Returns func()'s
     result, or None if every attempt fails."""
     attempt = 0
     while attempt < max_retries:
@@ -271,8 +334,9 @@ def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: in
 # ============================================================
 
 def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[dict], int]:
-    """If buffer has reached batch_size: validates and uploads it,
+    r"""If buffer has reached batch_size: validates and uploads it,
     returns (empty buffer, rows uploaded). Otherwise: (buffer, 0)."""
+
     if len(buffer) < batch_size:
         return buffer, 0
     validate_batch_before_upload(buffer)
@@ -289,21 +353,12 @@ def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: floa
 # ============================================================
 
 
-def upload_single_batch(batch: list[dict], supabase) -> int:
-    """Writes exactly one batch to Supabase, with retry + exponential backoff."""
-    def _do_insert():
-        supabase.table("bronze_reports").insert(batch).execute()
-        return len(batch)
-
-    result = retry_with_backoff(_do_insert)
-    return result if result is not None else 0
-
 
 # ============================================================
 # MAIN — orchestrates the functions 
 # ============================================================
 def main() -> None:
-    # STEP 1 — Connect to Supabase
+
     supabase = get_supabase_client()
 
     logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)
