@@ -128,12 +128,11 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
 
 # ============================================================
 def get_column_index(headers: list[str]) -> dict[str, int]:
-
     r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
         Row 0 (header):  MDR_REPORT_KEY|BRAND_NAME|GENERIC_NAME    ← Run get_column_index() --> returns col_idx = {'reportKey': 0, 'brandName': 1, 'genericName': 2} 
-        Row 1 (data):    12345|Servo Air|Ventilator                ← uses col_idx
-        Row 2 (data):    12346|Tube Flow|Catheter                  ← uses col_idx
+        Row 1 (data):    124|Servo Air|Ventilator                ← uses col_idx
+        Row 2 (data):    125|Tube Flow|Catheter                  ← uses col_idx
         ...
         Row 1000:        batch skickas till Supabase
         Row 1001:        fortsätter använda samma col_idx
@@ -168,15 +167,23 @@ def get_column_index(headers: list[str]) -> dict[str, int]:
         key: headers.index(source_col) if source_col in headers else -1
         for key, source_col in HEADER_DICTIONARY.items()
     }
+
 # ============================================================
 class BronzeRow(BaseModel):
-    r"""Defines the schema (form) of each row to be saved in bronze_table
+    r"""This class defines the schema (form) of each row to be saved in bronze_table
 
     This class defines expected 
     - fields
     - types. Can be str or None since Optional[str] is used
-    - 
-   
+
+    Args: 
+        Any
+
+    Returns:
+
+    Examples:
+
+
     """
 
     model_config = ConfigDict(populate_by_name=True)
@@ -189,7 +196,18 @@ class BronzeRow(BaseModel):
 
 # ============================================================
 def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) -> dict:
-    """Builds the raw row dict for a single data line, ready for BronzeRow validation."""
+    r"""Builds the raw row dict for a single data line, ready for BronzeRow validation.
+    
+    
+    
+    
+    
+    """
+
+    
+    
+
+
     return {
         "report_key": get_field(col_idx["reportKey"], fields),
         "product_code_raw": get_field(col_idx["productCode"], fields),
