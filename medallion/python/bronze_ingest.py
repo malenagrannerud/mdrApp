@@ -73,7 +73,7 @@ def find_source_file(source_file: str) -> str:
         source_file (str): The name of the source file.
 
     Returns:
-        str: The path to the source file
+            str: The path to the source file
 
     Raises: 
         SystemExit: If file not found in either location
@@ -81,12 +81,11 @@ def find_source_file(source_file: str) -> str:
     Notes:
         - os.path.exists() to check if the file exists
         - This function works on Windows, Mac, and Linux 
-
-    Trade-offs:  
-        * If maps are moved around, this function needs to be updated.
-        * In the future, change this to for example pathlib to remove dependency on from what directory the script is run.
-
+        - Trade-offs:  
+            * If maps are moved around, this function needs to be updated.
+            * In the future, change this to for example pathlib to remove dependency on from what directory the script is run.
     """
+
     if os.path.exists(source_file):
         return source_file
     if os.path.exists(f"medallion/{source_file}"): # f = StringBuiler in Java
@@ -95,31 +94,29 @@ def find_source_file(source_file: str) -> str:
 
 # ============================================================
 def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
-
     r"""Reads the raw file line by line, removes \n and streams it with a number.
     
     This is a generator function that is memory effcient since it reads one line at a time,
     (reading a whole file may crash for large files). Expected source file format is: 
-    (1) pipe-separated ("|"), (2) newlines (\n) separating each line & , (3) the first line is the header
+        (1) pipe-separated ("|")
+        (2) newlines (\n) separating each line
+        (3) the first line is the header
 
-        MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME\n 
-        124|CBK|Servo Air|Ventilator|Getinge\n ...
-    
-    Args: 
+    Args:
         path (str): The path to the source file.
-
-    Yields:
-        tuple[int, str]: 
     
-    Example:
-    If original file: MDR_REPORT_KEY|BRAND_NAME\n
-                      124|Servo Air\n
-        >>> for line_num, line in read_source_lines("data/DEVICE2024.txt"):
-        ...     print(f"{line_num}: {line}")                                                     
-        (0, "MDR_REPORT_KEY|BRAND_NAME")  # First iteration: [int,str] & \n removed
-        (1, "124|Servo Air)               # Second iteration:[int,str] & \n removed
+    Returns:
+        A tuple of [nr, content] for each line.
     
-    Trade-offs:
+    Examples:
+        >>> #Input file:    MDR_REPORT_KEY|BRAND_NAME\n
+        >>> #Input file:    124|Servo Air\n ...
+        >>> read_source_lines("data/DEVICE2024.txt")                                                  
+        Output first iteration:  (0, "MDR_REPORT_KEY|BRAND_NAME...") # [int,str] & \n removed
+        Output second iteration (1, "124|Servo Air...)               # [int,str] & \n removed
+    
+    Notes:
+        - Trade-offs:
             * This streaming may be slower than reading the entire file at once for small/medium files.
             * Line numbers are 0-indexed and include empty lines, which preserves exact file geometry but requires 
               manual filtering if blank lines should be ignored.
@@ -130,40 +127,45 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
             yield line_num, line.rstrip("\n")  # yield: reads one line at the time & removes \n.
 
 # ============================================================
-def parse_column_index(headers: list[str]) -> dict[str, int]:
+def get_column_index(headers: list[str]) -> dict[str, int]:
 
-    r"""Maps column names from the source file to their position (index) in the file.
-    
-    This function compares the actual column names from the file header with the 
-    required columns defined in config.py. If a required column is missing, it 
-    maps to -1 instead of crashing - this is the first line of defense against 
-    schema drift (FDA renaming a column).
+    """Takes the header row & returns a dictionary mapping internal names to column positions
+
+        Row 0 (header):  MDR_REPORT_KEY|BRAND_NAME|GENERIC_NAME    ← Run get_column_index() --> returns col_idx = {'reportKey': 0, 'brandName': 1, 'genericName': 2} 
+        Row 1 (data):    12345|Servo Air|Ventilator                ← uses col_idx
+        Row 2 (data):    12346|Tube Flow|Catheter                  ← uses col_idx
+        ...
+        Row 1000:        batch skickas till Supabase
+        Row 1001:        fortsätter använda samma col_idx
+        ...         
+
     
     Args:
         headers (list[str]): The list of column names from the source file.
-                             Example: ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME"]
     
     Returns:
-        dict[str, int]: A dictionary mapping internal column names to their 
-                        position in the source file.
-                        Example: {"reportKey": 0, "productCode": 1, "brandName": 2}
-                        If a column is missing, the value will be -1.
+        dict[str, int]: A dictionary mapping internal column names to their position in the source file.
     
     Example:
-        >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME"]
-        >>> parse_column_index(headers)
-        {'reportKey': 0, 'productCode': 1, 'brandName': 2, 'genericName': -1, 'manufacturerRaw': -1}
-        
-        >>> headers = ["BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"]
-        >>> parse_column_index(headers)
-        {'reportKey': -1, 'productCode': -1, 'brandName': 0, 'genericName': 1, 'manufacturerRaw': 2}
-    
+        # INPUT: Header line from the source file.
+        >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"] 
+        >>> get_column_index(headers)
+        # Output: Internal name mapped to column position
+        {
+            'reportKey': 0,        # "MDR_REPORT_KEY" found at position 0
+            'productCode': 1,      # "DEVICE_REPORT_PRODUCT_CODE" found at position 1
+            'brandName': 2,        # "BRAND_NAME" found at position 2
+            'genericName': 3,      # "GENERIC_NAME" found at position 3
+            'manufacturerRaw': 4,  # "MANUFACTURER_D_NAME" found at position 4
+        }
+   
     Notes:
         - Uses HEADER_DICTIONARY  to know which columns are needed
         - A missing column maps to -1 (not a crash!)
         - This is the first line of defense against schema drift
         - The dictionary keys match the keys used in build_raw_row()
     """
+
     return {
         key: headers.index(source_col) if source_col in headers else -1
         for key, source_col in HEADER_DICTIONARY.items()
@@ -368,7 +370,7 @@ def main() -> None:
 
         if line_num == 0:                                  # Finds the line with headers
             headers = [h.strip() for h in line.split("|")] # Splits the header line by "|" and removes whitespaces
-            col_idx = parse_column_index(headers) # Maps which position each required column has in the file
+            col_idx = get_column_index(headers) 
             count += 1  # Count header as "read" and moves on
             continue
 
