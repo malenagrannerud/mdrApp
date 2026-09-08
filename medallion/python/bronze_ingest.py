@@ -5,12 +5,11 @@ Author: Malena
 Created: 2026-08-02
 Description: Reads data from a source text file and writes to the Supabase bronze_reports table. All components consolidated into one file.
 """
-
 import os # Operating systems library for file path operations with functions
 import time
 import logging
-from typing import Optional, Iterator
 
+from typing import Optional, Iterator
 from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from supabase import create_client, Client
@@ -27,7 +26,7 @@ HEADER_DICTIONARY = {                           # Mapps FDA column names to inte
     "reportKey": "MDR_REPORT_KEY",              # ID number for each report
     "productCode": "DEVICE_REPORT_PRODUCT_CODE",  # Letter code for device type. EX: CBK = Ventilator, FPA = Catheter, MDS = Infusion pump, LZW = Pacemaker
     "brandName": "BRAND_NAME",                  # Commerial name of the device.  EX: "Servo Air" "
-    "genericName": "GENERIC_NAME",              # Clinical name of the product type. EX: "Ventilator
+    "genericName": "GENERIC_NAME",              # Clinical name. EX: "Ventilator"
     "manufacturerRaw": "MANUFACTURER_D_NAME",   # Name of manufacturer as reported. EX: "Getinge", "Medtronic Inc" etc
 }
 
@@ -39,57 +38,36 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ===================================== VALIDATE INPUT DATA =====================================
-class BronzeRow(BaseModel):
-    r"""BronzeRow validates row SHAPE only (types present or absent).
-   
-    """
-    model_config = ConfigDict(populate_by_name=True)
-
-    report_key: Optional[str] = None
-    product_code_raw: Optional[str] = None
-    brand_name_raw: Optional[str] = None
-    generic_name_raw: Optional[str] = None
-    manufacturer_raw: Optional[str] = None
-    source_file: str = Field(alias="_source_file")
-
 # ===================================== SUPABASE CLIENT =====================================
-# 
 def get_supabase_client() -> Client:
-    r"""Initializes and returns a Supabase client using environment variables.
+    r"""Initializes and returns a Supabase client using environment variables service_role_key and url.
 
     Returns:
         Client: An authenticated Supabase client instance.
 
     Raises:
-        SystemExit: If either SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY 
-            is missing from the environment variables.
+        SystemExit: If SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing from the environment variables.
     """
-    supabase_url = os.environ.get("SUPABASE_URL")
-    service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 
-    if not supabase_url:
+    url = os.environ.get("SUPABASE_URL")
+    service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    if not url:
         raise SystemExit("Error: SUPABASE_URL is missing from your .env file")
     if not service_role_key:
         raise SystemExit("Error: SUPABASE_SERVICE_ROLE_KEY is missing from your .env file")
-
-    return create_client(supabase_url, service_role_key)
+    return create_client(url, service_role_key)
 
 # ============================================================
-# HELPER FUNCTIONS — each does one thing, testable in isolation
+# HELPER FUNCTIONS AND CLASSES — each does one thing, testable in isolation
 # ============================================================
 
 def find_source_file(source_file: str) -> str: 
 
     r"""Finds the source file whether you run from the root or python subdir
 
-    This function acts as a path abstraction layer to ensure the pipeline runs 
-    consistently whether triggered locally from the root, within a subdirectory, 
-    or via automated orchestrators. 
-    
-    It serves as a "Fail-Fast" guard at the ingestion gateway (Bronze layer), 
-    terminating execution early if raw data is unavailable before wasting 
-    resources on database connections.
+    This function ensure the pipeline runs consistently whether triggered locally from the root, 
+    within a subdirectory, or via automated orchestrators. It terminates execution if raw data 
+    is unavailable before wasting resources on DB connections.
 
     Args:
         source_file (str): The name of the source file.
@@ -116,50 +94,40 @@ def find_source_file(source_file: str) -> str:
     raise SystemExit(f"Error: source file not found at {source_file}")
 
 # ============================================================
-
 def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
 
     r"""Reads the raw file line by line, removes \n and streams it with a number.
     
     This is a generator function that is memory effcient since it reads one line at a time,
-    since reading the whole file at once can crash for large files. 
-
-    The expected source file format is pipe-separated ("|") with newlines (\n) & 
-    the first line is the header:
+    (reading a whole file may crash for large files). Expected source file format is: 
+    (1) pipe-separated ("|"), (2) newlines (\n) separating each line & , (3) the first line is the header
 
         MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME\n 
-        12345|ABC|Servo Air|Ventilator|Getinge\n 
-        12346|DEF|Tube Flow|Ventilator|Medtronic Inc\n ...
+        124|CBK|Servo Air|Ventilator|Getinge\n ...
     
     Args: 
         path (str): The path to the source file.
 
     Yields:
-        tuple[int, str]: A tuple containing the 0-indexed line number (int) 
-            and the cleaned line content (str).
+        tuple[int, str]: 
     
-    Examples:
+    Example:
+    If original file: MDR_REPORT_KEY|BRAND_NAME\n
+                      124|Servo Air\n
         >>> for line_num, line in read_source_lines("data/DEVICE2024.txt"):
         ...     print(f"{line_num}: {line}")                                                     
-        (0: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME") # OUTPUT: First iteration
-        (1: "12345|ABC|Servo Air|Ventilator|Getinge") # Second iteration
-        (2: "12346|DEF|Tube Flow|Ventilator|Medtronic Inc") # Third iteration ...
-    
-    Notes:
-        - The function uses open() with encoding="utf-8" and errors="replace" to replace invalid characters with �
-        - enumerate() give each line a number starting from 0.
-        - rstrip("\n") removes the newline character from each line.
+        (0, "MDR_REPORT_KEY|BRAND_NAME")  # First iteration: [int,str] & \n removed
+        (1, "124|Servo Air)               # Second iteration:[int,str] & \n removed
     
     Trade-offs:
-            * Memory vs. Speed: This function is memory-efficient because it streams data. It may be slower than reading the 
-              entire file into memory at once for small to medium files.
-            * Indexing: Line numbers are 0-indexed and include empty lines, which preserves exact file geometry but requires 
+            * This streaming may be slower than reading the entire file at once for small/medium files.
+            * Line numbers are 0-indexed and include empty lines, which preserves exact file geometry but requires 
               manual filtering if blank lines should be ignored.
     """
 
-    with open(path, encoding="utf-8", errors="replace") as f: 
-        for line_num, line in enumerate(f): 
-            yield line_num, line.rstrip("\n")  
+    with open(path, encoding="utf-8", errors="replace") as f:  # Opens file with UTF-8 encoding & replaces invalid characters with �
+        for line_num, line in enumerate(f):    # Give each line a number starting from 0.
+            yield line_num, line.rstrip("\n")  # yield: reads one line at the time & removes \n.
 
 # ============================================================
 def parse_column_index(headers: list[str]) -> dict[str, int]:
@@ -191,7 +159,7 @@ def parse_column_index(headers: list[str]) -> dict[str, int]:
         {'reportKey': -1, 'productCode': -1, 'brandName': 0, 'genericName': 1, 'manufacturerRaw': 2}
     
     Notes:
-        - Uses HEADER_DICTIONARY from config.py to know which columns are needed
+        - Uses HEADER_DICTIONARY  to know which columns are needed
         - A missing column maps to -1 (not a crash!)
         - This is the first line of defense against schema drift
         - The dictionary keys match the keys used in build_raw_row()
@@ -201,7 +169,25 @@ def parse_column_index(headers: list[str]) -> dict[str, int]:
         for key, source_col in HEADER_DICTIONARY.items()
     }
 # ============================================================
+class BronzeRow(BaseModel):
+    r"""Defines the schema (form) of each row to be saved in bronze_table
 
+    This class defines expected 
+    - fields
+    - types. Can be str or None since Optional[str] is used
+    - 
+   
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+    report_key: Optional[str] = None
+    product_code_raw: Optional[str] = None
+    brand_name_raw: Optional[str] = None
+    generic_name_raw: Optional[str] = None
+    manufacturer_raw: Optional[str] = None
+    source_file:str
+
+# ============================================================
 def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) -> dict:
     """Builds the raw row dict for a single data line, ready for BronzeRow validation."""
     return {
@@ -210,7 +196,7 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
         "brand_name_raw": get_field(col_idx["brandName"], fields),
         "generic_name_raw": get_field(col_idx["genericName"], fields),
         "manufacturer_raw": get_field(col_idx["manufacturerRaw"], fields),
-        "_source_file": source_file,
+        "source_file": source_file,
     }
 
 
@@ -256,8 +242,8 @@ def validate_batch_before_upload(batch: list[dict]) -> None:
 
         # EXAMPLE: Detta är en list[dict]:
     batch = [
-        {"report_key": "12345", "product_code_raw": "ABC", "_source_file": "data/DEVICE2024.txt"},
-        {"report_key": "12346", "product_code_raw": "DEF", "_source_file": "data/DEVICE2024.txt"},
+        {"report_key": "12345", "product_code_raw": "ABC", "source_file": "data/DEVICE2024.txt"},
+        {"report_key": "12346", "product_code_raw": "DEF", "source_file": "data/DEVICE2024.txt"},
         ...]
 
         : list[dict] = typhantering som säger "detta ska vara en lista av dictionaries"
@@ -360,9 +346,8 @@ def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: floa
 def main() -> None:
 
     supabase = get_supabase_client()
-
-    logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)
-    logger.info("[BRONZE] Row limit: %s (protects Supabase storage)", MAX_ROWS_LIMIT)
+    logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)                        # Name this layer [BRONZE]]
+    logger.info("[BRONZE] Row limit: %s (protects Supabase free storage)", MAX_ROWS_LIMIT)
 
     col_idx: dict[str, int] = {} 
     buffer: list[dict] = []
@@ -371,30 +356,30 @@ def main() -> None:
     invalid = 0
     start = time.time()
 
-    # STEP 2 — Find the source file, put it in df_raw
-    df_raw = find_source_file(SOURCE_FILE)
+    # STEP 2 - Find the source file, put it in df_raw
+    df_raw = find_source_file(SOURCE_FILE) 
 
     # STEP 3 — Read line and process each into a ROW 
     for line_num, line in read_source_lines(df_raw):
 
         # STEP 3.1 — 
         # If HEADER line " MDR_REPORT_KEY | DEVICE_REPORT_PRODUCT_CODE | BRAND_NAME": remove whitespace and split into a list
-        headers = [ "MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME" ]
+        # headers = [ "MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME" ]
 
-        if line_num == 0:                                  # Find the line with headers
-            headers = [h.strip() for h in line.split("|")]
-            col_idx = parse_column_index(headers)
-            count += 1  # Count header and continue
+        if line_num == 0:                                  # Finds the line with headers
+            headers = [h.strip() for h in line.split("|")] # Splits the header line by "|" and removes whitespaces
+            col_idx = parse_column_index(headers) # Maps which position each required column has in the file
+            count += 1  # Count header as "read" and moves on
             continue
 
         # STEP 3.2 — Build a row dict from the raw line
         fields = line.split("|")
-        raw_row = build_raw_row(fields, col_idx, df_raw ) # Build ROWS 
+        raw_row = build_raw_row(fields, col_idx, df_raw) # Build ROWS 
 
         # STEP 3.3 — Validate row shape, buffer if valid
         try:
             validated = BronzeRow(**raw_row)
-            buffer.append(validated.model_dump(by_alias=True))
+            buffer.append(validated.model_dump())
         except ValidationError as exc:
             invalid += 1
             logger.warning("[BRONZE] Invalid row %s skipped: %s", line_num, exc)

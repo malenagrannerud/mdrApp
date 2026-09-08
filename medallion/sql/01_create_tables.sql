@@ -18,11 +18,11 @@ create table if not exists bronze_reports (
   brand_name_raw text,
   generic_name_raw text,
   manufacturer_raw text,
-  _inserted_at timestamptz not null default now(),
-  _source_file text not null
+  inserted_at timestamptz not null default now(),
+  source_file text not null
 );
 create index if not exists idx_bronze_report_key on bronze_reports (report_key);
-create index if not exists idx_bronze_source_file on bronze_reports (_source_file);
+create index if not exists idx_bronze_source_file on bronze_reports (source_file);
 
 
 
