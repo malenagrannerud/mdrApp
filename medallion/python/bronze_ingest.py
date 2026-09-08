@@ -94,27 +94,32 @@ def find_source_file(source_file: str) -> str:
 
 # ============================================================
 def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
-    r"""Reads the raw file line by line, removes \n and streams it with a number.
-    
+    r"""Reads the raw file line by line, removes newline and streams it with a number
+
     This is a generator function that is memory effcient since it reads one line at a time,
-    (reading a whole file may crash for large files). Expected source file format is: 
+    (reading a whole file may crash for large files). 
+    Expected source file format is: 
         (1) pipe-separated ("|")
-        (2) newlines (\n) separating each line
+        (2) '\n' separating each line
         (3) the first line is the header
 
     Args:
         path (str): The path to the source file.
-    
-    Returns:
-        tuple[str, int]: A tuple of [nr, content] for each line.
-    
+
+    Yields:
+        tuple[int,str]: A tuple of [nr, content] for each line.
+
     Examples:
-        >>> #Input file:    MDR_REPORT_KEY|BRAND_NAME\n
-        >>> #Input file:    124|Servo Air\n ...
-        >>> read_source_lines("data/DEVICE2024.txt")                                                  
-        >>> (0, "MDR_REPORT_KEY|BRAND_NAME") # Output 1st iteration: [int,str] & \n removed
-        >>> (1, "124|Servo Air)              # Output 2nd iteration: [int,str] & \n removed
-    
+        Input file content:
+            MDR_REPORT_KEY|BRAND_NAME\n
+            124|Servo Air\n
+
+        >>> gen = read_source_lines("data/DEVICE2024.txt")
+        >>> next(gen)
+        (0, "MDR_REPORT_KEY|BRAND_NAME") # Output
+        >>> next(gen)
+        (1, "124|Servo Air")             # Output
+
     Notes:
         - Trade-offs:
             * This streaming may be slower than reading the entire file at once for small/medium files.
@@ -130,23 +135,14 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
 def get_column_index(headers: list[str]) -> dict[str, int]:
     r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
-        Row 0 (header):  MDR_REPORT_KEY|BRAND_NAME|GENERIC_NAME    ← Run get_column_index() --> returns col_idx = {'reportKey': 0, 'brandName': 1, 'genericName': 2} 
-        Row 1 (data):    124|Servo Air|Ventilator                ← uses col_idx
-        Row 2 (data):    125|Tube Flow|Catheter                  ← uses col_idx
-        ...
-        Row 1000:        batch skickas till Supabase
-        Row 1001:        fortsätter använda samma col_idx
-        ...         
-
     Args:
-        headers (list[str]): The list of column names from the source file.
+        headers (list[str]): A list of the column names from the source file.
     
     Returns:
         dict[str, int]: A dictionary mapping internal column names to their position in the source file.
     
     Examples:
-        # INPUT: Header line from the source file.
-        >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"] 
+        >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"] # Input: Header line from the source file.
         >>> get_column_index(headers) # Output: Internal name mapped to column position
         {
             'reportKey': 0,        # "MDR_REPORT_KEY" found at position 0
@@ -155,14 +151,13 @@ def get_column_index(headers: list[str]) -> dict[str, int]:
             'genericName': 3,      # "GENERIC_NAME" found at position 3
             'manufacturerRaw': 4,  # "MANUFACTURER_D_NAME" found at position 4
         }
-   
+    
     Notes:
         - Uses HEADER_DICTIONARY  to know which columns are needed
         - A missing column maps to -1 (not a crash!)
         - This is the first line of defense against schema drift
         - The dictionary keys match the keys used in build_raw_row()
     """
-
     return {
         key: headers.index(source_col) if source_col in headers else -1
         for key, source_col in HEADER_DICTIONARY.items()
@@ -172,18 +167,34 @@ def get_column_index(headers: list[str]) -> dict[str, int]:
 class BronzeRow(BaseModel):
     r"""This class defines the schema (form) of each row to be saved in bronze_table
 
-    This class defines expected 
-    - fields
-    - types. Can be str or None since Optional[str] is used
+    This class inherits from Pydantics BaseModel to use automated data validation. 
+    Each field is Optional[str] (can be str or None) except source_file which is required.
 
     Args: 
-        Any
-
-    Returns:
+        report_key (Optional[str] = None)
+        product_code_raw (Optional[str] = None)
+        brand_name_raw (Optional[str] = None)
+        generic_name_raw (Optional[str] = None)
+        manufacturer_raw (Optional[str] = None)
+        source_file (str)
 
     Examples:
-
-
+        When an object is created 
+            >>> raw_row = {
+            ...    "report_key": "124",
+            ...    "product_code_raw": "CBK",
+            ...    "brand_name_raw": "Servo Air",
+            ...    "generic_name_raw": None,           # None OK
+            ...    "manufacturer_raw": "Getinge",
+            ...    "source_file": "data/DEVICE2024.txt"
+            ... }
+            >>> validated = BronzeRow(**raw_row)  # Validerar att allt matchar schemat
+            >>> print(validated.report_key
+            '124'
+    Notes:
+        - Optional[str] is used because FDA data may have empty fields (missing columns).
+        - source_file is NOT Optional because you always want to know which file the data came from.
+        - Bronze layer validates shape only; content rules (e.g. rejecting "UNKNOWN" as manufacturer) belong to Silver.
     """
 
     model_config = ConfigDict(populate_by_name=True)
@@ -196,18 +207,38 @@ class BronzeRow(BaseModel):
 
 # ============================================================
 def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) -> dict:
-    r"""Builds the raw row dict for a single data line, ready for BronzeRow validation.
+    r"""Builds a dictionary for a single data line, ready for BronzeRow validation.
     
-    
-    
-    
-    
+    Takes a line split by "|" and uses the column index mapping to extract each value
+    into a dictionary with internal field names. Missing columns map to None.
+
+    Args:
+        fields (list[str]): The line split by "|" into individual field values.
+        col_idx (dict[str, int]): Maps internal names to column positions in the file.
+            Missing columns have value -1.
+        source_file (str): Path to the source file, added to every row for traceability.
+
+    Returns:
+        dict: A dictionary with internal field names as keys and extracted values as values.
+            Keys: report_key, product_code_raw, brand_name_raw, generic_name_raw,
+            manufacturer_raw, source_file.
+
+    Examples:
+        >>> fields = ["12345", "CBK", "Servo Air", "Ventilator", "Getinge"]
+        >>> col_idx = {"reportKey": 0, "productCode": 1, "brandName": 2,
+        ...            "genericName": 3, "manufacturerRaw": 4}
+        >>> build_raw_row(fields, col_idx, "data/DEVICE2024.txt")
+        {'report_key': '12345', 'product_code_raw': 'CBK', 'brand_name_raw': 'Servo Air',
+         'generic_name_raw': 'Ventilator', 'manufacturer_raw': 'Getinge',
+         'source_file': 'data/DEVICE2024.txt'}
+
+    Notes:
+        - Implementation: Uses get_field() to extract and trim each value.
+        - Trade-offs:
+            * If a column is missing (col_idx value is -1), get_field() returns None.
+            * source_file is always populated even if all other fields are None.
+
     """
-
-    
-    
-
-
     return {
         "report_key": get_field(col_idx["reportKey"], fields),
         "product_code_raw": get_field(col_idx["productCode"], fields),
@@ -220,7 +251,6 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
 
 # ============================================================
 def get_field(idx: int, fields: list[str]) -> Optional[str]:
-
     r"""Extracts and trims one field from a pipe-split line.
     
     Args:
@@ -235,12 +265,11 @@ def get_field(idx: int, fields: list[str]) -> Optional[str]:
         'ABC'
         
         >>> get_field(5, ["12345", "ABC"])
-        None
+        'None'
         
         >>> get_field(0, ["  padded  "])
         'padded'
     """
-
     if idx < 0 or idx >= len(fields):
         return None
     val = fields[idx].strip()
@@ -248,48 +277,39 @@ def get_field(idx: int, fields: list[str]) -> Optional[str]:
 
 # ============================================================
 def validate_batch_before_upload(batch: list[dict]) -> None:
-  
     r"""Validates a batch before upload to Supabase. 
     
-    This code validates the file by testing for 
-    1) Unique report_key in each batch (alert if doubles are sent in the raw data) 
-    2) Non null source_file. Note: Rows with ``report_key=None``are allowed
+    This function validates the file by testing for 
+    (1) Unique report_key in each batch (alert if doubles are sent in the raw data) 
+    (2) Non null source_file. Note: Rows with ``report_key=None``are allowed
     
     Args:
-        batch (list[dict]): The batch to validate: rows of the source file
-
-        # EXAMPLE: Detta är en list[dict]:
-    batch = [
-        {"report_key": "12345", "product_code_raw": "ABC", "source_file": "data/DEVICE2024.txt"},
-        {"report_key": "12346", "product_code_raw": "DEF", "source_file": "data/DEVICE2024.txt"},
-        ...]
-
-        : list[dict] = typhantering som säger "detta ska vara en lista av dictionaries"
+        batch (list[dict]): 
+            The batch to validate: rows of the source file
     
     Returns:
         None
     
     Raises:
-        ValueError: If validation fails.
+        ValueError: 
+            If validation fails.
     
-    Example:
+    Examples:
         >>> batch = [
-        ...     {"report_key": "12345", "_source_file": "data/DEVICE2024.txt"},
-        ...     {"report_key": "12346", "_source_file": "data/DEVICE2024.txt"}
+        ...     {"report_key": "121", "source_file": "data/DEVICE2024.txt"},
+        ...     {"report_key": "122", "source_file": "data/DEVICE2024.txt"}
         ... ]
         >>> validate_batch_before_upload(batch)  # PASS!
         
         >>> batch = [
-        ...     {"report_key": "12345", "_source_file": "None"},
-        ...     {"report_key": "12346", "_source_file": "data/DEVICE2024.txt"}
+        ...     {"report_key": "123", "source_file": "None"},
+        ...     {"report_key": "124", "source_file": "data/DEVICE2024.txt"}
         ... ]
-        >>> validate_batch_before_upload(batch)  # FAIL! ValueError: Rows missing _source_file at batch positions: [0]
-    """
-
-
-    missing_source = [i for i, row in enumerate(batch) if not row.get("_source_file")]
+        >>> validate_batch_before_upload(batch)  # FAIL! ValueError: Rows missing source_file at batch positions: [0]
+        """
+    missing_source = [i for i, row in enumerate(batch) if not row.get("source_file")]
     if missing_source:
-        raise ValueError(f"Rows missing _source_file at batch positions: {missing_source}")
+        raise ValueError(f"Rows missing source_file at batch positions: {missing_source}")
 
     seen: set[str] = set()
     duplicates: set[str] = set()
@@ -304,11 +324,13 @@ def validate_batch_before_upload(batch: list[dict]) -> None:
     if duplicates:
         raise ValueError(f"Duplicate report_key values within batch: {duplicates}")
 
-
 # ============================================================
 def upload_single_batch(batch: list[dict], supabase) -> int:
-
-    r"""Writes one batch to Supabase, with retry + exponential backoff."""
+    r"""This function writes one batch to Supabase, with retry + exponential backoff.
+    
+    
+    
+    """
     def _do_insert():
         supabase.table("bronze_reports").insert(batch).execute()
         return len(batch)
@@ -318,9 +340,11 @@ def upload_single_batch(batch: list[dict], supabase) -> int:
 # ============================================================
 
 def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: int = RETRY_BACKOFF_SECONDS):
-
-    r"""Runs func() with exponential backoff retry. Returns func()'s
+    r"""This function runs func() with exponential backoff retry. Returns func()'s
     result, or None if every attempt fails."""
+    
+    
+
     attempt = 0
     while attempt < max_retries:
         try:
@@ -336,10 +360,12 @@ def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: in
     return None
 
 # ============================================================
-
 def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[dict], int]:
-    r"""If buffer has reached batch_size: validates and uploads it,
-    returns (empty buffer, rows uploaded). Otherwise: (buffer, 0)."""
+    r"""If buffer has reached batch_size: validates and uploads it, returns (empty buffer, rows uploaded). Otherwise: (buffer, 0).
+    
+    
+    
+    """
 
     if len(buffer) < batch_size:
         return buffer, 0
@@ -348,19 +374,18 @@ def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[
     return [], uploaded
 
 # ============================================================
-
 def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: float) -> None:
+    r""" 
+    
+    
+    """
     logger.info(
         "BRONZE DONE — %s rows read, %s saved, %s invalid skipped (%.1fs).",
         f"{count - 1:,}", f"{inserted:,}", f"{invalid:,}", elapsed,
     )
-# ============================================================
 
 
-
-# ============================================================
-# MAIN — orchestrates the functions 
-# ============================================================
+# ========================= MAIN — orchestrates the functions ========================
 def main() -> None:
 
     supabase = get_supabase_client()
@@ -381,9 +406,6 @@ def main() -> None:
     for line_num, line in read_source_lines(df_raw):
 
         # STEP 3.1 — 
-        # If HEADER line " MDR_REPORT_KEY | DEVICE_REPORT_PRODUCT_CODE | BRAND_NAME": remove whitespace and split into a list
-        # headers = [ "MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME" ]
-
         if line_num == 0:                                  # Finds the line with headers
             headers = [h.strip() for h in line.split("|")] # Splits the header line by "|" and removes whitespaces
             col_idx = get_column_index(headers) 
@@ -414,7 +436,7 @@ def main() -> None:
 
         # STEP 3.5 — Stop once the safety row limit is reached
         if inserted >= MAX_ROWS_LIMIT:
-            logger.info("[BRONZE] Reached %s rows. Stopping ingestion to protect free-tier storage.", MAX_ROWS_LIMIT)
+            logger.info("[BRONZE] Reached %s rows. Stopping ingestion to protect storage.", MAX_ROWS_LIMIT)
             break
 
     # STEP 4 — Flush whatever's left in the buffer
