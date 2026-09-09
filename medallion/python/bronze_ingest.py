@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 # ===================================== SUPABASE CLIENT =====================================
 def get_supabase_client() -> Any:
-    r"""Initializes and returns a Supabase client using environment variables service_role_key and url.
+    r"""Initializes and returns a Supabase client using environment variables service_role_key & url.
 
     Returns:
         Client: An authenticated Supabase client instance.
@@ -67,12 +67,9 @@ def get_supabase_client() -> Any:
     return supabase.create_client(url, service_role_key)
 
 
-
-
 # ============================================================
 # HELPER FUNCTIONS AND CLASSES — each does one thing, testable in isolation
 # ============================================================
-
 def find_source_file(source_file: str) -> str: 
 
     r"""Finds the source file whether you run from the root or python subdir
@@ -86,12 +83,11 @@ def find_source_file(source_file: str) -> str:
         source_file (str): The name of the source file.
 
     Returns:
-            str: The path to the source file
+        str: The path to the source file
 
-    Raises: 
+    Raises:
         SystemExit: If file not found in either location
     """
-
     if os.path.exists(source_file):
         return source_file
     if os.path.exists(f"medallion/{source_file}"): # f = f-string in Python
@@ -103,24 +99,23 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
     r"""Reads the raw file line by line, removes newline and streams it with a number
 
     This function: 
-        1. Opens the file. with closes the file safely
+        1. Opens the file. "with" closes the file safely
         2. Numerates the rows after each other
         3. Streams out the data
 
-    Args: 
+    Notes:
+        * This streaming may be slower than reading the entire file at once for small/medium files.
+        * Line numbers are 0-indexed and include empty lines, which preserves exact file geometry but requires manual filtering if blank lines should be ignored.
+
+    Args:
         path (str): 
             The path to the source file.
 
     Yields:
         tuple[int,str]: A tuple of [nr, content] for each line.
 
-    Notes:
-        - Trade-offs:
-            * This streaming may be slower than reading the entire file at once for small/medium files.
-            * Line numbers are 0-indexed and include empty lines, which preserves exact file geometry but requires 
-              manual filtering if blank lines should be ignored.
+    
     """
-
     with open(path, encoding="utf-8", errors="replace") as f:  # Opens file with UTF-8 encoding & replaces invalid characters with �
         for line_num, line in enumerate(f):    
             yield line_num, line.rstrip("\n")  
@@ -130,8 +125,8 @@ def build_header_mapping(headers: list[str]) -> dict[str, int]:
     r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
     This function takes the header line (file[0]), splits it into columns and give each column an index:
-        - From "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME"
-        - To ["MDR_REPORT_KEY":0], ["DEVICE_REPORT_PRODUCT_CODE":1], ["BRAND_NAME":2, "GENERIC_NAME":3], ["MANUFACTURER_D_NAME":4]
+        Before: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|..."
+        After:  ["MDR_REPORT_KEY":0], ["DEVICE_REPORT_PRODUCT_CODE":1], ["BRAND_NAME":2, "GENERIC_NAME":3], ["MANUFACTURER_D_NAME":4]
     
     Args:
         headers (list[str]): A list of the column names from the source file.
@@ -193,11 +188,16 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
     
     Takes a line split by "|" and uses the column index mapping to extract each value
     into a dictionary with internal field names. Missing columns map to None.
-
+    
+    Notes:
+        - Implementation: Uses get_field() to extract and trim each value.
+        - Trade-offs:
+            * If a column is missing (col_idx value is -1), get_field() returns None.
+            * source_file is always populated even if all other fields are None.
+    
     Args:
         fields (list[str]): The line split by "|" into individual field values.
-        col_idx (dict[str, int]): Maps internal names to column positions in the file.
-            Missing columns have value -1.
+        col_idx (dict[str, int]): Maps internal names to column positions in the file. Missing columns have value -1.
         source_file (str): Path to the source file, added to every row for traceability.
 
     Returns:
@@ -213,12 +213,6 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
         {'report_key': '12345', 'product_code_raw': 'CBK', 'brand_name_raw': 'Servo Air',
          'generic_name_raw': 'Ventilator', 'manufacturer_raw': 'Getinge',
          'source_file': 'data/DEVICE2024.txt'}
-
-    Notes:
-        - Implementation: Uses get_field() to extract and trim each value.
-        - Trade-offs:
-            * If a column is missing (col_idx value is -1), get_field() returns None.
-            * source_file is always populated even if all other fields are None.
 
     """
     return {
@@ -281,6 +275,10 @@ def upload_single_batch(batch: list[dict], supabase) -> int:
 def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: int = RETRY_BACKOFF_SECONDS):
     r"""Runs func() with exponential backoff retry. Returns func()'s result, or None if every attempt fails.
 
+    Notes:
+        - Implementation: Exponential backoff: 2s, 4s, 8s...
+        - If func() succeeds, returns immediately without further retries.
+    
     Args:
         func: The function to retry.
         max_retries (int): Maximum number of attempts. Default is MAX_RETRIES (3).
@@ -295,9 +293,6 @@ def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: in
         >>> retry_with_backoff(failing_func, max_retries=2, backoff_seconds=1)
         None
 
-    Notes:
-        - Implementation: Exponential backoff: 2s, 4s, 8s...
-        - If func() succeeds, returns immediately without further retries.
     """
     attempt = 0
     while attempt < max_retries:
@@ -336,6 +331,9 @@ def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[
 def log_ingestion_summary(count: int, inserted: int, elapsed: float) -> None:
     r"""Logs final summary of the bronze ingestion run.
 
+    Notes:
+        - count - 1 is logged because the header row is not a data row.
+
     Args:
         count (int): Total number of rows read (including header).
         inserted (int): Number of rows successfully inserted.
@@ -344,9 +342,6 @@ def log_ingestion_summary(count: int, inserted: int, elapsed: float) -> None:
 
     Returns:
         None
-
-    Notes:
-        - count - 1 is logged because the header row is not a data row.
     """
     logger.info(
         "BRONZE DONE — %s rows read, %s saved, %s invalid skipped (%.1fs).",
