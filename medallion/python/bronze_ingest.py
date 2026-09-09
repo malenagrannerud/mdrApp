@@ -1,6 +1,4 @@
-"""
-
-medallion/python/bronze_ingest.py
+"""medallion/python/bronze_ingest.py
 
 Author: Malena
 Created: 2026-08-02
@@ -79,9 +77,10 @@ def find_source_file(source_file: str) -> str:
 
     r"""Finds the source file whether you run from the root or python subdir
 
-    This function ensure the pipeline runs consistently whether triggered locally from the root, 
-    within a subdirectory, or via automated orchestrators. It terminates execution if raw data 
-    is unavailable before wasting resources on DB connections.
+    This function: 
+        1. Looks for the file in the rootmap. If file found, returns the string. 
+        2. Loos in /medallion. If file found, returns medallion/file_name
+        3. If nothing founf, throws an error
 
     Args:
         source_file (str): The name of the source file.
@@ -91,13 +90,6 @@ def find_source_file(source_file: str) -> str:
 
     Raises: 
         SystemExit: If file not found in either location
-        
-    Notes:
-        - os.path.exists() to check if the file exists
-        - This function works on Windows, Mac, and Linux 
-        - Trade-offs:  
-            * If maps are moved around, this function needs to be updated.
-            * In the future, change this to for example pathlib to remove dependency on from what directory the script is run.
     """
 
     if os.path.exists(source_file):

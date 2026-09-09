@@ -10,6 +10,7 @@
     ```
 """
 import pytest
+import os 
 
 from bronze_ingest import (
     get_supabase_client,
@@ -68,25 +69,44 @@ def test_supabase_klient_error_case(monkeypatch):
 
 
 # ------------------------------------ TEST find_source_file()------------------------------------
+# pytest test_bronze_ingest.py::test_find_source_file_happy_path -v -s
 
-def test_find_source_file_happy_path(mock_source_file, monkeypatch, tmp_path):
-    """HAPPY PATH: Tests finding an existing source file."""
+def test_find_source_file_in_root(tmp_path, monkeypatch):
+    """Test so the function finds the file when located root directory."""
+    monkeypatch.chdir(tmp_path) # 1. Move the test environment into a temp folder (removed later)
     
-    monkeypatch.chdir(tmp_path) # 1. Change to the temp directory where mock file exists
-    result = find_source_file() # 2. Run the function
-    print(f"\n\n📂 [MOCK FIL PATH]: {mock_source_file}") # 3. Verify the file was found
-    print("-" * 80)
-    assert result == mock_source_file # Compare to actual
+    file_name = "DEVICE2024.txt" # 2. Create a dummy file 
+    dummy_file = tmp_path / file_name
+    dummy_file.write_text("dummy data")
+    
+    result = find_source_file(file_name)     # 3. Run the function and verify it returns just the file name
+    assert result == file_name
 
-    
-def test_find_source_file_error_case(monkeypatch, tmp_path):
-    """ERROR CASE: Tests when no source file exists."""
-    
-    monkeypatch.chdir(tmp_path) # 1. Change to empty temp directory (no DEVICE file)
-    with pytest.raises(FileNotFoundError, match="No source file found"):  # 2. Verify the function raises an error
-        find_source_file()
 
+def test_find_source_file_in_medallion_folder(tmp_path, monkeypatch):
+    """Test that the function finds a file when it is located inside the 'medallion/' folder."""
+    monkeypatch.chdir(tmp_path) # 1. Move into the temporary folder
     
+    medallion_dir = tmp_path / "medallion" # 2. Create the 'medallion' folder and put the dummy file there
+    medallion_dir.mkdir()
+    
+    file_name = "DEVICE2024.txt"
+    dummy_file = medallion_dir / file_name
+    dummy_file.write_text("dummy data")
+    
+    result = find_source_file(file_name) # 3. Run the function, verify it returns subfolder path right
+    assert result == f"medallion/{file_name}"
+
+
+def test_find_source_file_raises_system_exit(tmp_path, monkeypatch):
+    """Test that the function crashes with SystemExit if the file doesn't exist anywhere."""
+    monkeypatch.chdir(tmp_path) # 1. Move into a completely empty folder
+    
+    with pytest.raises(SystemExit) as exc_info: # 2. Verify that searching for a missing file triggers 'raise SystemExit'
+        find_source_file("MISSING_FILE.txt")
+        
+    assert "Error: source file not found at MISSING_FILE.txt" in str(exc_info.value) # 3. Double check error message is returned
+
 # ------------------------------------ TEST read_source_lines()------------------------------------
 
 
