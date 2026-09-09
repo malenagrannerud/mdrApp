@@ -8,7 +8,7 @@ Description: Reads data from a source text file and writes to the Supabase bronz
 
 """
 
-import os # Operating systems library for file path operations with functions
+import os           # Operating systems library for file path operations with functions
 import time
 import logging
 
@@ -18,8 +18,6 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 load_dotenv()
-
-
 
 # ===================================== CONFIGURATION =====================================
 SOURCE_FILE = "data/DEVICE2024.txt"
@@ -69,6 +67,9 @@ def get_supabase_client() -> Any:
             "'pip install supabase'"
         ) from exc
     return supabase.create_client(url, service_role_key)
+
+
+
 
 # ============================================================
 # HELPER FUNCTIONS AND CLASSES — each does one thing, testable in isolation
