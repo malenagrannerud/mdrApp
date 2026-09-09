@@ -1,19 +1,26 @@
 """
-bronze_ingest.py
+
+medallion/python/bronze_ingest.py
 
 Author: Malena
 Created: 2026-08-02
 Description: Reads data from a source text file and writes to the Supabase bronze_reports table. All components consolidated into one file.
+
 """
+
+
 import os # Operating systems library for file path operations with functions
 import time
 import logging
 
-from typing import Optional, Iterator
+from typing import Any, Optional, Iterator
+from importlib import import_module
 from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
-from supabase import create_client, Client
+
 load_dotenv()
+
+
 
 # ===================================== CONFIGURATION =====================================
 SOURCE_FILE = "data/DEVICE2024.txt"
@@ -39,7 +46,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ===================================== SUPABASE CLIENT =====================================
-def get_supabase_client() -> Client:
+def get_supabase_client() -> Any:
     r"""Initializes and returns a Supabase client using environment variables service_role_key and url.
 
     Returns:
@@ -55,7 +62,14 @@ def get_supabase_client() -> Client:
         raise SystemExit("Error: SUPABASE_URL is missing from your .env file")
     if not service_role_key:
         raise SystemExit("Error: SUPABASE_SERVICE_ROLE_KEY is missing from your .env file")
-    return create_client(url, service_role_key)
+    try:
+        supabase = import_module("supabase")
+    except ImportError as exc:
+        raise SystemExit(
+            "Error: the 'supabase' package is required; install it with "
+            "'pip install supabase'"
+        ) from exc
+    return supabase.create_client(url, service_role_key)
 
 # ============================================================
 # HELPER FUNCTIONS AND CLASSES — each does one thing, testable in isolation

@@ -6,12 +6,9 @@ medallion/python/test_bronze_ingest.py
 ''' 
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import tempfile
-from supabase import create_client, Client
+
+
 
 
 from bronze_ingest import (
@@ -34,21 +31,6 @@ from bronze_ingest import (
 def main():
    
     print("\n ============= TESTING get_supabase_client =============")
-
-def get_supabase_client() -> Client:
-
-    # os.environ["SUPABASAE_URL"] = ""    # CASE 1: Set the environment var "url" as empty. os.environ.pop also work
-    url = os.environ.get("SUPABASE_URL")
-
-    os.environ["SUPABASE_SERVICE_ROLE_KEY"] = ""    # CASE 2: Set the environment var "service_role_key" as empty. os.environ.pop also work
-    service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-
-    if not url:
-        raise SystemExit("Error: SUPABASE_URL is missing from your .env file")
-    if not service_role_key:
-        raise SystemExit("Error: SUPABASE_SERVICE_ROLE_KEY is missing from your .env file")
-    return create_client(url, service_role_key)
-
 
 
 
