@@ -62,6 +62,7 @@ Purpose: Ingest and store untouched raw data (Append-only) from source systems a
 Data Quality: Validates data shape and structural schemas (data types and column names) in Python to prevent ingestion crashes.
 
 Lineage: Enriches every row with metadata like file name (source_file) and timestamp (inserted_at) to enable incremental loading and auditing.
+
 ---
 ### Silver Layer
 Purpose: Clean, standardize, and conform the raw data into a single source of truth ready for analytics.
@@ -69,6 +70,7 @@ Purpose: Clean, standardize, and conform the raw data into a single source of tr
 Data Quality: Utilizes dbt tests as a quality gate to strictly enforce unique and not_null constraints on business keys before building the layer.
 
 Business Logic: Deduplicates records, filters out invalid rows, handles missing columns (index -1), and standardizes formatting (dates, strings, currencies).
+
 ---
 ### Gold Layer
 Purpose: Deliver business-focused, aggregated, and highly performant data models (e.g., star schemas with facts and dimensions) directly to BI tools.
@@ -76,6 +78,7 @@ Purpose: Deliver business-focused, aggregated, and highly performant data models
 Data Quality: Guarantees that data is strictly analytics-ready and aligns with corporate KPIs and accounting rules.
 
 Performance: Optimized for end-user querying through pre-calculated metrics and aggregations, completely removing complex SQL logic from dashboards.
+
 ---
 
 ## Running the pipeline
