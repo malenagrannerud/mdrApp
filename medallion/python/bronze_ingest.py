@@ -126,30 +126,16 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
             yield line_num, line.rstrip("\n")  
 
 # ============================================================
-def get_column_index(headers: list[str]) -> dict[str, int]:
+def build_header_mapping(headers: list[str]) -> dict[str, int]:
     r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
-    This function: 
-        1. Goes trough columns in HEADER_DICTIONARY   
-        2. Finds where that column is located in the sorce file (its index number).
-        3. If the column is not found in the file, it sets the index to -1.
+    This function takes the header line, splits it into columns and give each column an index
     
     Args:
         headers (list[str]): A list of the column names from the source file.
     
     Returns:
         dict[str, int]: A dictionary mapping internal column names to their position in the source file.
-    
-    Examples:
-        >>> headers = ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"] # Input: Header line from the source file.
-        >>> get_column_index(headers) # Output: Internal name mapped to column position
-        {
-            'reportKey': 0,        # "MDR_REPORT_KEY" found at position 0
-            'productCode': 1,      # "DEVICE_REPORT_PRODUCT_CODE" found at position 1
-            'brandName': 2,        # "BRAND_NAME" found at position 2
-            'genericName': 3,      # "GENERIC_NAME" found at position 3
-            'manufacturerRaw': 4,  # "MANUFACTURER_D_NAME" found at position 4
-        }
     
     """
     return {
@@ -462,7 +448,7 @@ def main() -> None:
         # STEP 3.1 — 
         if line_num == 0:                                  # Finds the line with headers
             headers = [h.strip() for h in line.split("|")] # Splits the header line by "|" and removes whitespaces
-            col_idx = get_column_index(headers) 
+            col_idx = build_header_mapping(headers) 
             count += 1  # Count header as "read" and moves on
             continue
 

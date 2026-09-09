@@ -27,9 +27,18 @@ from bronze_ingest import (
     log_ingestion_summary,
 )
 
+HEADER_DICTIONARY = {                           # Maps FDA column names to internal names
+    "reportKey": "MDR_REPORT_KEY",              # ID number for each report
+    "productCode": "DEVICE_REPORT_PRODUCT_CODE",  # Letter code for device type. EX: CBK = Ventilator, FPA = Catheter, MDS = Infusion pump, LZW = Pacemaker
+    "brandName": "BRAND_NAME",                  # Commerial name of the device. EX: "Servo Air"
+    "genericName": "GENERIC_NAME",              # Clinical name. EX: "Ventilator"
+    "manufacturerRaw": "MANUFACTURER_D_NAME",   # Name of manufacturer as reported. EX: "Getinge", "Medtronic Inc" etc
+}
+
+
 # --------------------------------- MOCK RAW FILE DEVICE2024.txt --------------------------------------
 @pytest.fixture
-def mock_source_file():
+def mock_sf():
     """Returns your exact raw file content as a string."""
     return (                              
         "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME\n"
@@ -110,5 +119,21 @@ def test_find_source_file_raises_system_exit(tmp_path, monkeypatch):
 
 # ------------------------------------ TEST read_source_lines()------------------------------------
 
+def test_get_column_index_with_exact_mock(mock_sf): # sf = SOURCE_FILE
+    """Tests how the function maps the top row of your mock file to index numbers."""
 
+    # 1. Grab the very first row (the headers) from the mock string
+    sf_lines = mock_sf.splitlines()     # .splitlines() 
+    sf_header_line = sf_lines[0]        #     # sf_header_line is now: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME"
 
+    # 2. Split the row into a clean list of words by separating at each "|"
+    sf_header_cols = sf_header_line.split("|") # sf_header_cols is now: ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"]
+
+    result = get_column_index(sf_header_cols) # 3. Run your function!
+
+    # 4. Verify that each internal key got mapped to its exact position (0 to 4)
+    assert result["reportKey"] == 0         # "MDR_REPORT_KEY" is at position 0
+    assert result["productCode"] == 1       # "DEVICE_REPORT_PRODUCT_CODE" is at position 1
+    assert result["brandName"] == 2         # "BRAND_NAME" is at position 2
+    assert result["genericName"] == 3       # "GENERIC_NAME" is at position 3
+    assert result["manufacturerRaw"] == 4   # "MANUFACTURER_D_NAME" is at position 4
