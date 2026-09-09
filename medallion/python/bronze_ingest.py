@@ -8,7 +8,6 @@ Description: Reads data from a source text file and writes to the Supabase bronz
 
 """
 
-
 import os # Operating systems library for file path operations with functions
 import time
 import logging
