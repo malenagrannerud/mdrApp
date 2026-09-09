@@ -1,4 +1,5 @@
 /**
+ *  src/components/Dashboard.jsx
  * Post-Market Surveillance Dashboard
  * 
  * Hämtar och visualiserar städad DEVICE2024-data från Supabase.
@@ -8,7 +9,7 @@ import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Loader, ShieldAlert, Factory } from 'lucide-react'
 import PBICard from './PBICard'
-import { supabase } from '../lib/supabase'
+import { supabase } from '../../medallion/supabase'
 
 
 export default function Dashboard() {
