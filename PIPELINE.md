@@ -156,7 +156,7 @@ SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
 ```
 
 ### Step 5 — Validate
-Run `validate.sql` for a full integrity check across all layers. Expected results for the current dataset:
+For a full integrity check across all layers. Expected results for the current dataset:
 
 - 20,000 rows ingested into Bronze (current `MAX_ROWS_LIMIT`)
 - 19,950 passed Silver's cleaning (deduplication + invalid manufacturer/product code filtering)
