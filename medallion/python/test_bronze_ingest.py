@@ -28,27 +28,28 @@ from bronze_ingest import (
 )
 
 # --------------------------------- MOCK RAW FILE DEVICE2024.txt --------------------------------------
-
 @pytest.fixture
-def mock_source_file(tmp_path):
-    """Creates a temp text file with raw pipe-separerad data."""
-    
-    mock_file = tmp_path / "DEVICE2024.txt"  # 1. Create splace on disc to  save the temp file
-    DEVICE2024_txt = (                              # 2. The raw file
+def mock_source_file():
+    """Returns your exact raw file content as a string."""
+    return (                              
         "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME\n"
         "18423065|FDF|EVIS EXERA II COLONOVIDEOSCOPE|COLONOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
         "18423066|EOQ|EVIS EXERA III BRONCHOVIDEOSCOPE|BRONCHOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
+        "18423067|EOQ|EVIS LUCERA ELITE BRONCHOVIDEOSCOPE|BRONCHOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
         "18423068|NAY|ENDOWRIST|FENESTRATED BIPOLAR FORCEPS|INTUITIVE SURGICAL, INC\n"
+        "18423069|EOQ|ION|VISION PROBE|INTUITIVE SURGICAL, INC\n"
+        "18423070|NAY|ENDOWRIST|TENACULUM FORCEPS|INTUITIVE SURGICAL, INC\n"
+        "18423071|LRO|CONSTELLATION SURGICAL PROCEDURE PACK|GENERAL SURGERY TRAY (KIT)|ALCON RESEARCH, LLC - HOUSTON\n"
+        "18423072|DZE|DYMIC|DYNAMIC IMPLANT SP 3.75X10|PALTOP ADVANCED DENTAL SOLUTIONS INC.\n"
+        "18423073|FHW|AMS INFLATABLE PENILE PROSTHESIS|DEVICE IMPOTENCE MECHANICAL/HYDRAULIC|BOSTON SCIENTIFIC CORPORATION\n"
+        "18423074|FHW|AMS INFLATABLE PENILE PROSTHESIS|DEVICE IMPOTENCE MECHANICAL/HYDRAULIC|BOSTON SCIENTIFIC CORPORATION\n"
     )
-    mock_file.write_text(DEVICE2024_txt, encoding="utf-8") # 3. Save DEVICE2024_txt to disc
-    return str(mock_file)                                  # 4. Return the path 
+
 
 # ======================================= UNIT TESTS ============================================
 
 
-
 # ------------------------------------- TEST get_supabase_client() ------------------------------
-
 def test_get_supabase_klient_happy_path(monkeypatch):
     """HAPPY PATH: Tests that a key is there AND the code can read it without crash ."""
 
@@ -69,7 +70,7 @@ def test_supabase_klient_error_case(monkeypatch):
 
 
 # ------------------------------------ TEST find_source_file()------------------------------------
-# pytest test_bronze_ingest.py::test_find_source_file_happy_path -v -s
+# pytest test_bronze_ingest.py::test_find_source_file_in_root -v -s
 
 def test_find_source_file_in_root(tmp_path, monkeypatch):
     """Test so the function finds the file when located root directory."""

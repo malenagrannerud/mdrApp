@@ -79,7 +79,7 @@ def find_source_file(source_file: str) -> str:
 
     This function: 
         1. Looks for the file in the rootmap. If file found, returns the string. 
-        2. Loos in /medallion. If file found, returns medallion/file_name
+        2. Looks in /medallion. If file found, returns medallion/file_name
         3. If nothing founf, throws an error
 
     Args:
@@ -102,29 +102,17 @@ def find_source_file(source_file: str) -> str:
 def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
     r"""Reads the raw file line by line, removes newline and streams it with a number
 
-    This is a generator function that is memory effcient since it reads one line at a time,
-    (reading a whole file may crash for large files). 
-    Expected source file format is: 
-        (1) pipe-separated ("|")
-        (2) '\n' separating each line
-        (3) the first line is the header
+    This function: 
+        1. Opens the file. with closes the file safely
+        2. Numerates the rows after each other
+        3. Streams out the data
 
-    Args:
-        path (str): The path to the source file.
+    Args: 
+        path (str): 
+            The path to the source file.
 
     Yields:
         tuple[int,str]: A tuple of [nr, content] for each line.
-
-    Examples:
-        Input file content:
-            MDR_REPORT_KEY|BRAND_NAME\n
-            124|Servo Air\n
-
-        >>> gen = read_source_lines("data/DEVICE2024.txt")
-        >>> next(gen)
-        (0, "MDR_REPORT_KEY|BRAND_NAME") # Output
-        >>> next(gen)
-        (1, "124|Servo Air")             # Output
 
     Notes:
         - Trade-offs:
@@ -134,13 +122,18 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
     """
 
     with open(path, encoding="utf-8", errors="replace") as f:  # Opens file with UTF-8 encoding & replaces invalid characters with �
-        for line_num, line in enumerate(f):    # Give each line a number starting from 0.
-            yield line_num, line.rstrip("\n")  # yield: reads one line at the time & removes \n.
+        for line_num, line in enumerate(f):    
+            yield line_num, line.rstrip("\n")  
 
 # ============================================================
 def get_column_index(headers: list[str]) -> dict[str, int]:
     r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
+    This function: 
+        1. Goes trough columns in HEADER_DICTIONARY   
+        2. Finds where that column is located in the sorce file (its index number).
+        3. If the column is not found in the file, it sets the index to -1.
+    
     Args:
         headers (list[str]): A list of the column names from the source file.
     
@@ -158,11 +151,6 @@ def get_column_index(headers: list[str]) -> dict[str, int]:
             'manufacturerRaw': 4,  # "MANUFACTURER_D_NAME" found at position 4
         }
     
-    Notes:
-        - Uses HEADER_DICTIONARY  to know which columns are needed
-        - A missing column maps to -1 (not a crash!)
-        - This is the first line of defense against schema drift
-        - The dictionary keys match the keys used in build_raw_row()
     """
     return {
         key: headers.index(source_col) if source_col in headers else -1
@@ -453,22 +441,7 @@ def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: floa
 
 # ========================= MAIN — orchestrates the functions ========================
 def main() -> None:
-    r"""Orchestrates the bronze ingestion pipeline.
 
-    Steps:
-        1. Connect to Supabase
-        2. Find the source file
-        3. Read and process each line into a row
-        4. Flush remaining rows in buffer
-        5. Log final summary
-
-    Returns:
-        None
-
-    Notes:
-        - Stops ingestion when MAX_ROWS_LIMIT is reached to protect free-tier storage.
-        - Invalid rows are skipped and logged, not crashing the pipeline.
-    """
     supabase = get_supabase_client()
     logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)                        # Name this layer [BRONZE]
     logger.info("[BRONZE] Row limit: %s (protects Supabase free storage)", MAX_ROWS_LIMIT)
