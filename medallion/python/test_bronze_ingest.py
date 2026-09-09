@@ -1,5 +1,5 @@
 """
-tests/unit_tests.py
+medallion/python/test_bronze_ingest.py
 
 1-Stand in /workspaces/mdrApp: bash cd medallion/python
 2-Run testfile: bash  python tests/test_bronze_ingest.py
