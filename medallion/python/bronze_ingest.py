@@ -129,7 +129,9 @@ def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
 def build_header_mapping(headers: list[str]) -> dict[str, int]:
     r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
-    This function takes the header line, splits it into columns and give each column an index
+    This function takes the header line (file[0]), splits it into columns and give each column an index:
+        - From "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME"
+        - To ["MDR_REPORT_KEY":0], ["DEVICE_REPORT_PRODUCT_CODE":1], ["BRAND_NAME":2, "GENERIC_NAME":3], ["MANUFACTURER_D_NAME":4]
     
     Args:
         headers (list[str]): A list of the column names from the source file.
@@ -255,54 +257,6 @@ def get_field(idx: int, fields: list[str]) -> Optional[str]:
     val = fields[idx].strip()
     return val or None
 
-# ============================================================
-def validate_batch_before_upload(batch: list[dict]) -> None:
-    r"""Validates a batch before upload to Supabase. 
-    
-    This function validates the file by testing for 
-    (1) Unique report_key in each batch (alert if doubles are sent in the raw data) 
-    (2) Non null source_file. Note: Rows with ``report_key=None``are allowed
-    
-    Args:
-        batch (list[dict]): 
-            The batch to validate: rows of the source file
-    
-    Returns:
-        None
-    
-    Raises:
-        ValueError: 
-            If validation fails.
-    
-    Examples:
-        >>> batch = [
-        ...     {"report_key": "121", "source_file": "data/DEVICE2024.txt"},
-        ...     {"report_key": "122", "source_file": "data/DEVICE2024.txt"}
-        ... ]
-        >>> validate_batch_before_upload(batch)  # PASS!
-        
-        >>> batch = [
-        ...     {"report_key": "123", "source_file": "None"},
-        ...     {"report_key": "124", "source_file": "data/DEVICE2024.txt"}
-        ... ]
-        >>> validate_batch_before_upload(batch)  # FAIL! ValueError: Rows missing source_file at batch positions: [0]
-        """
-    missing_source = [i for i, row in enumerate(batch) if not row.get("source_file")]
-    if missing_source:
-        raise ValueError(f"Rows missing source_file at batch positions: {missing_source}")
-
-    seen: set[str] = set()
-    duplicates: set[str] = set()
-    for row in batch:
-        key = row.get("report_key")
-        if key is None:
-            continue
-        if key in seen:
-            duplicates.add(key)
-        seen.add(key)
-
-    if duplicates:
-        raise ValueError(f"Duplicate report_key values within batch: {duplicates}")
 
 # ============================================================
 def upload_single_batch(batch: list[dict], supabase) -> int:
@@ -314,17 +268,8 @@ def upload_single_batch(batch: list[dict], supabase) -> int:
 
     Returns:
         int: Number of rows successfully uploaded (0 if all retries failed).
-
-    Examples:
-        >>> supabase = get_supabase_client()
-        >>> batch = [{"report_key": "124", "source_file": "data/DEVICE2024.txt"}]
-        >>> upload_single_batch(batch, supabase)
-        1
-
-    Notes:
-        - Implementation: Uses retry_with_backoff() to handle transient failures.
-        - If all retries fail, returns 0 instead of crashing.
     """
+
     def _do_insert():
         supabase.table("bronze_reports").insert(batch).execute()
         return len(batch)
@@ -370,7 +315,7 @@ def retry_with_backoff(func, max_retries: int = MAX_RETRIES, backoff_seconds: in
 
 # ============================================================
 def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[dict], int]:
-    r"""If buffer has reached batch_size: validates and uploads it, returns (empty buffer, rows uploaded). Otherwise: (buffer, 0).
+    r"""
 
     Args:
         buffer (list[dict]): The current buffer of rows.
@@ -381,26 +326,14 @@ def flush_if_full(buffer: list[dict], batch_size: int, upload_fn) -> tuple[list[
         tuple[list[dict], int]: (buffer, rows_uploaded). If buffer was flushed, returns (empty list, rows uploaded).
             If buffer not full, returns (unchanged buffer, 0).
 
-    Examples:
-        >>> buffer = [{"report_key": "1"}, {"report_key": "2"}]
-        >>> buffer, uploaded = flush_if_full(buffer, 2, lambda b: len(b))
-        >>> buffer
-        []
-        >>> uploaded
-        2
-
-    Notes:
-        - If buffer is full, it is validated before upload.
-        - Returns the buffer unchanged if it has not reached batch_size.
     """
     if len(buffer) < batch_size:
         return buffer, 0
-    validate_batch_before_upload(buffer)
     uploaded = upload_fn(buffer)
     return [], uploaded
 
 # ============================================================
-def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: float) -> None:
+def log_ingestion_summary(count: int, inserted: int, elapsed: float) -> None:
     r"""Logs final summary of the bronze ingestion run.
 
     Args:
@@ -412,16 +345,12 @@ def log_ingestion_summary(count: int, inserted: int, invalid: int, elapsed: floa
     Returns:
         None
 
-    Examples:
-        >>> log_ingestion_summary(1001, 950, 50, 12.5)
-        BRONZE DONE — 1,000 rows read, 950 saved, 50 invalid skipped (12.5s).
-
     Notes:
         - count - 1 is logged because the header row is not a data row.
     """
     logger.info(
         "BRONZE DONE — %s rows read, %s saved, %s invalid skipped (%.1fs).",
-        f"{count - 1:,}", f"{inserted:,}", f"{invalid:,}", elapsed,
+        f"{count - 1:,}", f"{inserted:,}", elapsed,
     )
 
 
@@ -436,7 +365,6 @@ def main() -> None:
     buffer: list[dict] = []
     count = 0
     inserted = 0
-    invalid = 0
     start = time.time()
 
     # STEP 2 - Find the source file, put it in df_raw
@@ -445,25 +373,20 @@ def main() -> None:
     # STEP 3 — Read line and process each into a ROW 
     for line_num, line in read_source_lines(df_raw):
 
-        # STEP 3.1 — 
+        # STEP 3.1 — Extract headers and build column mapping
         if line_num == 0:                                  # Finds the line with headers
             headers = [h.strip() for h in line.split("|")] # Splits the header line by "|" and removes whitespaces
             col_idx = build_header_mapping(headers) 
-            count += 1  # Count header as "read" and moves on
+            count += 1                                     # Count header as "read" and moves on
             continue
 
         # STEP 3.2 — Build a row dict from the raw line
         fields = line.split("|")
-        raw_row = build_raw_row(fields, col_idx, df_raw) # Build ROWS 
+        raw_row = build_raw_row(fields, col_idx, df_raw) 
 
-        # STEP 3.3 — Validate row shape, buffer if valid
-        try:
-            validated = BronzeRow(**raw_row)
-            buffer.append(validated.model_dump())
-        except ValidationError as exc:
-            invalid += 1
-            logger.warning("[BRONZE] Invalid row %s skipped: %s", line_num, exc)
-
+        # STEP 3.3 — Pass row into BronzeRow and append to buffer
+        validated = BronzeRow(**raw_row)
+        buffer.append(validated.model_dump())
         count += 1
 
         # STEP 3.4 — Flush to Supabase once the buffer is full
@@ -481,13 +404,11 @@ def main() -> None:
 
     # STEP 4 — Flush whatever's left in the buffer
     if buffer and inserted < MAX_ROWS_LIMIT:
-        validate_batch_before_upload(buffer)
         inserted += upload_single_batch(buffer, supabase)
 
     # STEP 5 — Log final summary
     elapsed = time.time() - start
-    log_ingestion_summary(count, inserted, invalid, elapsed)
-
+    log_ingestion_summary(count, inserted, elapsed)
 
 if __name__ == "__main__":
     main()

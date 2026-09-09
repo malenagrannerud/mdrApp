@@ -16,7 +16,7 @@ from bronze_ingest import (
     get_supabase_client,
     find_source_file,
     read_source_lines,
-    get_column_index,
+    build_header_mapping,
     BronzeRow,
     build_raw_row,
     get_field,
@@ -117,9 +117,9 @@ def test_find_source_file_raises_system_exit(tmp_path, monkeypatch):
         
     assert "Error: source file not found at MISSING_FILE.txt" in str(exc_info.value) # 3. Double check error message is returned
 
-# ------------------------------------ TEST read_source_lines()------------------------------------
-
-def test_get_column_index_with_exact_mock(mock_sf): # sf = SOURCE_FILE
+# ------------------------------------ TEST test_build_header_mapping()------------------------------------
+# pytest test_bronze_ingest.py::test_build_header_mapping -v -s
+def test_build_header_mapping(mock_sf): # sf = SOURCE_FILE
     """Tests how the function maps the top row of your mock file to index numbers."""
 
     # 1. Grab the very first row (the headers) from the mock string
@@ -129,7 +129,7 @@ def test_get_column_index_with_exact_mock(mock_sf): # sf = SOURCE_FILE
     # 2. Split the row into a clean list of words by separating at each "|"
     sf_header_cols = sf_header_line.split("|") # sf_header_cols is now: ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"]
 
-    result = get_column_index(sf_header_cols) # 3. Run your function!
+    result = build_header_mapping(sf_header_cols) # 3. Run your function!
 
     # 4. Verify that each internal key got mapped to its exact position (0 to 4)
     assert result["reportKey"] == 0         # "MDR_REPORT_KEY" is at position 0

@@ -1,0 +1,24 @@
+# dbt_schema.yml 
+
+# 1. Kör python-skriptet för att ladda rådatan till Bronze
+#       python ../python/bronze_ingest.py && \
+# 2. Kör dbt för att bygga Bronze-tabellen
+#       dbt run --select bronze_reports && \
+# 3. Testa Bronze-tabellen automatisk (unique / not_null)
+#       dbt test --select bronze_reports && \
+# 4. Bygg Silver-lagret (Körs BARA om dbt test blev 100% grönt!)
+#       dbt run --select silver_reports
+
+version: 2  
+
+models:
+  - name: bronze_reports  
+    columns:
+      - name: report_key
+        tests:
+          - unique
+          - not_null
+
+      - name: source_file
+        tests:
+          - not_null
