@@ -142,123 +142,104 @@ Creates `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats
 pip install -r medallion/requirements.txt
 python medallion/01_bronze_ingest.py
 ```
-Verify: console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
+
+
+#### Verify bronze_reports
+console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
 
 
 
-[
-  {
-    "id": 1,
-    "report_key": "18436067",
-    "product_code_raw": "QFG",
-    "brand_name_raw": "T:SLIM X2 INSULIN PUMP WITH CONTROL-IQ TECHNOLOGY",
-    "generic_name_raw": "ALTERNATE CONTROLLER ENABLED INFUSION PUMP",
-    "manufacturer_raw": "TANDEM DIABETES CARE",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 2,
-    "report_key": "18436068",
-    "product_code_raw": "FMG",
-    "brand_name_raw": "STOPCOCK",
-    "generic_name_raw": "STOPCOCK, I.V. SET",
-    "manufacturer_raw": "BAXTER HEALTHCARE CORPORATION",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 3,
-    "report_key": "18436069",
-    "product_code_raw": "QFG",
-    "brand_name_raw": "T:SLIM X2 INSULIN PUMP WITH CONTROL-IQ TECHNOLOGY",
-    "generic_name_raw": "ALTERNATE CONTROLLER ENABLED INFUSION PUMP",
-    "manufacturer_raw": "TANDEM DIABETES CARE",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 4,
-    "report_key": "18436070",
-    "product_code_raw": "MSD",
-    "brand_name_raw": "14F X 24CM SPLIT CATH III",
-    "generic_name_raw": "SPLIT CATH III",
-    "manufacturer_raw": "MEDICAL COMPONENTS, INC.",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 5,
-    "report_key": "18436071",
-    "product_code_raw": "DZE",
-    "brand_name_raw": "OSSEOSPEED TX 4.0S - 6 MM",
-    "generic_name_raw": "IMPLANT, ENDOSSEOUS, ROOT-FORM",
-    "manufacturer_raw": "DENTSPLY IMPLANTS MANUFACTURING GMBH",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 6,
-    "report_key": "18436072",
-    "product_code_raw": "MMI",
-    "brand_name_raw": "I-STAT TROPONIN (CTNI) CARTRIDGE",
-    "generic_name_raw": "CTNI CARTRIDGE",
-    "manufacturer_raw": "ABBOTT POINT OF CARE INC.",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 7,
-    "report_key": "18436073",
-    "product_code_raw": "NBH",
-    "brand_name_raw": "KNEE SCORPION",
-    "generic_name_raw": "MANUAL INSTR, GENERAL SURGICAL",
-    "manufacturer_raw": "ARTHREX, INC.",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 8,
-    "report_key": "18436074",
-    "product_code_raw": "OJX",
-    "brand_name_raw": "ATTAIN STABILITY QUAD MRI SURESCAN",
-    "generic_name_raw": "DRUG ELUTING PERMANENT LEFT VENTRICULAR (LV) P",
-    "manufacturer_raw": "MPRI",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 9,
-    "report_key": "18436075",
-    "product_code_raw": "QFG",
-    "brand_name_raw": "T:SLIM X2 INSULIN PUMP WITH CONTROL-IQ TECHNOLOGY",
-    "generic_name_raw": "ALTERNATE CONTROLLER ENABLED INFUSION PUMP",
-    "manufacturer_raw": "TANDEM DIABETES CARE",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  },
-  {
-    "id": 10,
-    "report_key": "18436076",
-    "product_code_raw": "GET",
-    "brand_name_raw": "ENDO DISSECT",
-    "generic_name_raw": "MOTOR, SURGICAL INSTRUMENT, PNEUMATIC POWERED",
-    "manufacturer_raw": "US SURGICAL PUERTO RICO",
-    "inserted_at": "2026-09-17 13:00:17.505824+00",
-    "source_file": "medallion/data/DEVICE2024.txt"
-  }
-]
+```sql 
+SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
+```
+RESULTS 
+| id | report_key | product_code_raw | brand_name_raw                     | generic_name_raw  | manufacturer_raw      | inserted_at                   | source_file                   |
+| -- | ---------- | ---------------- | ---------------------------------- | ----------------- | ----------------------| ----------------------------- | ----------------------------- |
+| 1  | 18423065   | FDF              | EVIS EXERA II COLONOVIDEOSCOPE     | COLONOVIDEOSCOPE  | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
+| 2  | 18423066   | EOQ              | EVIS EXERA III BRONCHOVIDEOSCOPE   | BRONCHOVIDEOSCOPE | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
+| 3  | 18423067   | EOQ              | EVIS LUCERA ELITE BRONCHOVIDEOSCOPE| BRONCHOVIDEOSCOPE | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
+
+...
+
+| count | min      | max      |
+| ----- | -------- | -------- |
+| 20000 | 18423065 | 18443053 |
+
+
+
+
 
 ### Step 3 — Run Silver
 Run `02_silver.sql` in Supabase.
-Verify `silver_reports` has fewer rows than `bronze_reports`, and no duplicates remain:
+
+### Verify silver_reports 
+Should have fewer rows than `bronze_reports`, and no duplicates remain:
+
 ```sql
-SELECT report_key, COUNT(*)
-FROM silver_reports
-GROUP BY report_key
-HAVING COUNT(*) > 1;
+SELECT
+    (SELECT COUNT(*) FROM bronze_reports) AS bronze_rows,
+    (SELECT COUNT(*) FROM silver_reports) AS silver_rows,
+    (SELECT COUNT(*) FROM bronze_reports) - (SELECT COUNT(*) FROM silver_reports) AS rows_dropped;
 ```
-Should return 0 rows.
+RESULTS 
+bronze_rows	silver_rows	rows_dropped
+20000	19950	50
+
+
+
+Breakdown of dropped rows:
+```sql
+-- Duplicates: report_keys that appear more than once in bronze
+SELECT report_key, COUNT(*) AS occurrences
+FROM bronze_reports
+GROUP BY report_key
+HAVING COUNT(*) > 1
+ORDER BY report_key;
+```
+RESULTS  39 report_keys appear exactly twice, e.g.:
+
+report_key	occurrences
+18423161	2
+18423516	2
+18423519	2
+18423562	2
+18424434	2
+...	...
+
+
+
+```sql
+-- Invalid manufacturers: rows filtered out by the invalid_values list
+SELECT report_key, product_code_raw, manufacturer_raw
+FROM bronze_reports
+WHERE UPPER(TRIM(manufacturer_raw)) IN ('NI','UNK','*','N/A','NA','UNKNOWN','NO INFORMATION','?','NONE')
+   OR product_code_raw IS NULL
+   OR product_code_raw = ''
+ORDER BY id;
+```
+RESULTS  
+11 rows with invalid manufacturer values:
+
+report_key	product_code_raw	manufacturer_raw
+18423233	MCW	UNKNOWN
+18423438	MCW	UNKNOWN
+18423441	MCW	UNKNOWN
+18423808	MCW	UNKNOWN
+18424176	MCW	UNKNOWN
+18424902	MCW	UNKNOWN
+18437484	GEI	UNK
+18437524	OBP	UNK
+18437557	MVV	UNK
+18437565	PJY	UNK
+18438088	NVN	UNK
+
+
+Layer	Rows	Notes
+Bronze	20 000	Raw rows as ingested from DEVICE2024.txt
+Silver	19 950	After deduplication and invalid manufacturer filtering
+Dropped	50	39 duplicate report_key + 11 invalid manufacturers
+Validation rate: 19 950 / 20 000 = 99.75%
+
 
 ### Step 4 — Run Gold
 Run `03_gold.sql` in Supabase.
@@ -277,3 +258,5 @@ For a full integrity check across all layers. Expected results for the current d
 
 ### Step 6 — View the dashboard
 `Dashboard.jsx` reads the top 10 rows from `product_stats` and `manufacturer_stats` and renders them as charts.
+
+

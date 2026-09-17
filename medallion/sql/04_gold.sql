@@ -1,11 +1,3 @@
--- ============================================================
--- d_gold.sql
--- SILVER → GOLD
---
--- Fyller product_stats och manufacturer_stats från silver_reports.
--- Vanliga tabeller (inte views) — TRUNCATE + INSERT vid varje körning.
--- ============================================================
-
 
 -- ============================================================
 -- 03_gold.sql (Supabase SQL Editor)

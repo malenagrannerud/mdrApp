@@ -139,19 +139,9 @@ BEGIN
         manufacturer_name
     FROM merged;
 
+
+
     GET DIAGNOSTICS written = ROW_COUNT;
 
-    -- ============================================================
-    -- FÖRBÄTTRING: KOMMENTERAT BORT SYNTAXFEL OCH ERSATT
-    -- ============================================================
-    -- RETURN QUERY SELECT written; 
-    
-    rows_written := written;
-    RETURN NEXT;
-    -- ============================================================
+    RETURN QUERY SELECT written;
 END;
-$$ LANGUAGE plpgsql;
-
-
--- Kör funktionen direkt när filen körs, så Silver är uppdaterat på en gång
-SELECT * FROM refresh_silver_reports();
