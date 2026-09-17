@@ -57,11 +57,11 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
 ## REQUIREMENTS
 
 ### Bronze Layer
-Purpose: Ingest and store untouched raw data (Append-only) from source systems as fast and cost-effectively as possible.
+Purpose: Ingest and store raw data (Append-only) from source systems as fast and cost-effectively as possible.
 
 Data Quality: Validates data shape and structural schemas (data types and column names) in Python to prevent ingestion crashes.
 
-Lineage: Enriches every row with metadata like file name (source_file) and timestamp (inserted_at) to enable incremental loading and auditing.
+Lineage: Enriches every row with file name (source_file) and timestamp (inserted_at) to enable incremental loading and auditing.
 
 ---
 ### Silver Layer
