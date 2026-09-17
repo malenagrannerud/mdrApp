@@ -133,7 +133,7 @@ MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D
 18423084|DZE|PCA|CONICAL ACTIVE IMPLANT 3.75X16|PALTOP ADVANCED DENTAL SOLUTIONS INC.
 
 
-### Step 1 — Create tables (Supabase)
+### Step 1 — Create tables
 Run `00_create_tables.sql` in the Supabase SQL editor.
 Creates `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats`.
 
@@ -142,39 +142,31 @@ Creates `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats
 pip install -r medallion/requirements.txt
 python medallion/01_bronze_ingest.py
 ```
+#### Verify upload in console
+Should print:  `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
 
-
-#### Verify bronze_reports
-console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
-
-
-
+#### Verify the table: Inspect the first 20 rows
 ```sql 
 SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
 ```
-RESULTS 
+
 | id | report_key | product_code_raw | brand_name_raw                     | generic_name_raw  | manufacturer_raw      | inserted_at                   | source_file                   |
 | -- | ---------- | ---------------- | ---------------------------------- | ----------------- | ----------------------| ----------------------------- | ----------------------------- |
 | 1  | 18423065   | FDF              | EVIS EXERA II COLONOVIDEOSCOPE     | COLONOVIDEOSCOPE  | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
 | 2  | 18423066   | EOQ              | EVIS EXERA III BRONCHOVIDEOSCOPE   | BRONCHOVIDEOSCOPE | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
 | 3  | 18423067   | EOQ              | EVIS LUCERA ELITE BRONCHOVIDEOSCOPE| BRONCHOVIDEOSCOPE | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
-
 ...
 
+#### Verify row count and deleted rows
 | count | min      | max      |
 | ----- | -------- | -------- |
 | 20000 | 18423065 | 18443053 |
 
 
-
-
-
 ### Step 3 — Run Silver
-Run `02_silver.sql` in Supabase.
+Run `02_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates remain:
 
-### Verify silver_reports 
-Should have fewer rows than `bronze_reports`, and no duplicates remain:
-
+#### Verify row count and number of deleted rows
 ```sql
 SELECT
     (SELECT COUNT(*) FROM bronze_reports) AS bronze_rows,
@@ -182,12 +174,13 @@ SELECT
     (SELECT COUNT(*) FROM bronze_reports) - (SELECT COUNT(*) FROM silver_reports) AS rows_dropped;
 ```
 RESULTS 
-bronze_rows	silver_rows	rows_dropped
-20000	19950	50
+| bronze_rows | silver_rows | rows_dropped |
+| ----------- | ----------- | ------------ |
+| 20000       | 19950       | 50           |
 
 
+#### Verify deleted rows
 
-Breakdown of dropped rows:
 ```sql
 -- Duplicates: report_keys that appear more than once in bronze
 SELECT report_key, COUNT(*) AS occurrences
@@ -204,7 +197,6 @@ report_key	occurrences
 18423519	2
 18423562	2
 18424434	2
-...	...
 
 
 
