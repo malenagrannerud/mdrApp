@@ -12,10 +12,12 @@ import logging
 
 from typing import Any, Optional, Iterator
 from importlib import import_module
+
+from pathlib import Path
 from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 # ===================================== CONFIGURATION =====================================
 SOURCE_FILE = "data/DEVICE2024.txt"
@@ -333,21 +335,20 @@ def log_ingestion_summary(count: int, inserted: int, elapsed: float) -> None:
 
     Notes:
         - count - 1 is logged because the header row is not a data row.
+        - Bronze does not reject rows; content filtering belongs to Silver.
 
     Args:
         count (int): Total number of rows read (including header).
         inserted (int): Number of rows successfully inserted.
-        invalid (int): Number of rows skipped due to validation errors.
         elapsed (float): Total time elapsed in seconds.
 
     Returns:
         None
     """
     logger.info(
-        "BRONZE DONE — %s rows read, %s saved, %s invalid skipped (%.1fs).",
+        "BRONZE DONE — %s rows read, %s saved (%.1fs).",
         f"{count - 1:,}", f"{inserted:,}", elapsed,
     )
-
 
 # ========================= MAIN — orchestrates the functions ========================
 def main() -> None:

@@ -20,7 +20,6 @@ from bronze_ingest import (
     BronzeRow,
     build_raw_row,
     get_field,
-    validate_batch_before_upload,
     upload_single_batch,
     retry_with_backoff,
     flush_if_full,
@@ -56,6 +55,28 @@ def mock_sf():
 
 
 # ======================================= UNIT TESTS ============================================
+
+
+
+
+
+@pytest.mark.integration
+def test_real_insert_and_count():
+    """Kör bara om du satt RUN_INTEGRATION=1 — annars hoppas den över."""
+    if os.environ.get("RUN_INTEGRATION") != "1":
+        pytest.skip("Integrationstest kräver RUN_INTEGRATION=1")
+
+    sb = get_supabase_client()
+    before = sb.table("bronze_reports").select("*", count="exact").execute().count
+
+    rows = [{"report_key": f"TEST-{i}", "source_file": "pytest"} for i in range(500)]
+    sb.table("bronze_reports").insert(rows).execute()
+
+    after = sb.table("bronze_reports").select("*", count="exact").execute().count
+    assert after - before == 500, f"Förväntade 500 nya rader, fick {after - before}"
+
+    # cleanup
+    sb.table("bronze_reports").delete().eq("source_file", "pytest").execute()
 
 
 # ------------------------------------- TEST get_supabase_client() ------------------------------
