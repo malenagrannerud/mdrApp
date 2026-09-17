@@ -143,12 +143,8 @@ pip install -r medallion/requirements.txt
 python medallion/01_bronze_ingest.py
 ```
 
-
 #### Verify bronze_reports
 console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
-
-
-
 ```sql 
 SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
 ```
@@ -167,14 +163,10 @@ RESULTS
 
 
 
-
-
 ### Step 3 — Run Silver
-Run `02_silver.sql` in Supabase.
+Run `02_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates remain
 
-### Verify silver_reports 
-Should have fewer rows than `bronze_reports`, and no duplicates remain:
-
+### Verify number of rows dropped
 ```sql
 SELECT
     (SELECT COUNT(*) FROM bronze_reports) AS bronze_rows,
@@ -182,12 +174,12 @@ SELECT
     (SELECT COUNT(*) FROM bronze_reports) - (SELECT COUNT(*) FROM silver_reports) AS rows_dropped;
 ```
 RESULTS 
-bronze_rows	silver_rows	rows_dropped
-20000	19950	50
+| bronze_rows | silver_rows | rows_dropped |
+| ----------- | ----------- | ------------ |
+| 20000       | 19950       | 50           |
 
 
-
-Breakdown of dropped rows:
+### Verify duplicated report_key 
 ```sql
 -- Duplicates: report_keys that appear more than once in bronze
 SELECT report_key, COUNT(*) AS occurrences
@@ -196,18 +188,17 @@ GROUP BY report_key
 HAVING COUNT(*) > 1
 ORDER BY report_key;
 ```
-RESULTS  39 report_keys appear exactly twice, e.g.:
+RESULTS  39 report_keys has duplicates
 
-report_key	occurrences
-18423161	2
-18423516	2
-18423519	2
-18423562	2
-18424434	2
-...	...
+| report_key  | occurrences| |
+| ----------- | ------------ | 
+| 18423161    | 2            | 
+| 18423519    | 2            | 
+| 18423562    | 2            | 
+| 18424434    | 2            | 
+| ...         | ...          | 
 
-
-
+### Verify invalid manudacturer rows
 ```sql
 -- Invalid manufacturers: rows filtered out by the invalid_values list
 SELECT report_key, product_code_raw, manufacturer_raw
@@ -219,44 +210,80 @@ ORDER BY id;
 ```
 RESULTS  
 11 rows with invalid manufacturer values:
+| report_key | product_code_raw | manufacturer_raw |
+| ---------- | ---------------- | ---------------- |
+| 18423233   | MCW              | UNKNOWN          |
+| 18423438   | MCW              | UNKNOWN          |
+| 18423441   | MCW              | UNKNOWN          |
+| 18423808   | MCW              | UNKNOWN          |
+| 18424176   | MCW              | UNKNOWN          |
+| 18424902   | MCW              | UNKNOWN          |
+| 18437484   | GEI              | UNK              |
+| 18437524   | OBP              | UNK              |
+| 18437557   | MVV              | UNK              |
+| 18437565   | PJY              | UNK              |
+| 18438088   | NVN              | UNK              |
 
-report_key	product_code_raw	manufacturer_raw
-18423233	MCW	UNKNOWN
-18423438	MCW	UNKNOWN
-18423441	MCW	UNKNOWN
-18423808	MCW	UNKNOWN
-18424176	MCW	UNKNOWN
-18424902	MCW	UNKNOWN
-18437484	GEI	UNK
-18437524	OBP	UNK
-18437557	MVV	UNK
-18437565	PJY	UNK
-18438088	NVN	UNK
 
-
-Layer	Rows	Notes
-Bronze	20 000	Raw rows as ingested from DEVICE2024.txt
-Silver	19 950	After deduplication and invalid manufacturer filtering
-Dropped	50	39 duplicate report_key + 11 invalid manufacturers
+### Validation rate
+| Layer   | Rows   | Notes                                                  |
+| ------- | ------ | ------------------------------------------------------ |
+| Bronze  | 20 000 | Raw rows as ingested from DEVICE2024.txt               |
+| Silver  | 19 950 | After deduplication and invalid manufacturer filtering |
+| Dropped | 50     | 39 duplicate report_key + 11 invalid manufacturers     |
 Validation rate: 19 950 / 20 000 = 99.75%
 
 
 ### Step 4 — Run Gold
 Run `03_gold.sql` in Supabase.
-Verify:
+
+
+#### Verify product_stats (What products has the most incidents?)
 ```sql
 SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
 ```
 
-### Step 5 — Validate
-For a full integrity check across all layers. Expected results for the current dataset:
+| product_code | total_reports | brand_name                                        | generic_name                                                     | manufacturer_name                                   |
+| ------------ | ------------- | ------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------- |
+| DZE          | 4252          | BLT �4.1MM RC, SLACTIVE� 10MM, TIZR, NTP          | ENDOSSEOUS DENTAL IMPLANT                                        | INSTITUT STRAUMANN                                  |
+| QBJ          | 2938          | DEXCOM G6 CONTINUOUS GLUCOSE MONITORING SYSTEM    | CONTINUOUS GLUCOSE MONITOR                                       | DEXCOM INC                                          |
+| QFG          | 2102          | T:SLIM X2 INSULIN PUMP WITH CONTROL-IQ TECHNOLOGY | ALTERNATE CONTROLLER ENABLED INFUSION PUMP                       | TANDEM DIABETES CARE                                |
+| OZP          | 1096          | PUMP 1886 780G OUS BLE PUMP MG/DL                 | AUTOMATED INSULIN DOSING DEVICE SYSTEM, SINGLE HORMONAL CONTROL  | MEDTRONIC PUERTO RICO OPERATIONS CO                 |
+| BZD          | 393           | DREAMSTATION AUTO CPAP                            | VENTILATOR, NON-CONTINUOUS (RESPIRATOR)                          | RESPIRONICS INC                                     |
+| FTR          | 323           | MENTOR MEMORYGEL BREAST IMPLANT                   | PROSTHESIS, BREAST, NONINFLATABLE, INTERNAL, SILICONE GEL-FILLED | ALLERGAN (COSTA RICA)                               |
+| LGW          | 305           | OCTRODE LEAD KIT, 60CM LENGTH                     | STIMULATOR, SPINAL-CORD, TOTALLY IMPLANTED FOR PAIN RELIEF       | ST JUDE MEDICAL - NEUROMODULATION (PUERTO RICO LLC) |
+| QLG          | 285           | LIBRE 2 SENSOR FREESTYLE                          | FLASH GLUCOSE MONITORING SYSTEM                                  | ABBOTT DIABETES CARE                                |
+| OYC          | 274           | 640G INSULIN PUMP MMT-1712K                       | PUMP, INFUSION, INSULIN, TO BE USED WITH INVASIVE GLUCOSE SENSOR | MEDTRONIC PUERTO RICO OPERATIONS CO                 |
+| NVN          | 251           | TENDRIL STS                                       | NO MATCH                                                         | ST JUDE MEDICAL INC (CRM-SYLMAR)                    |
 
-- 20,000 rows ingested into Bronze (current `MAX_ROWS_LIMIT`)
-- 19,950 passed Silver's cleaning (deduplication + invalid manufacturer/product code filtering)
-- **Validation rate: 19,950 / 20,000 = 99.75%**
-- 555 unique product codes and 493 unique normalized manufacturers in Gold
 
-### Step 6 — View the dashboard
+
+
+#### Verify manufacturer_stats (What manufacturers has the most incidents?)
+```sql
+SELECT * FROM manufacturer_stats ORDER BY count DESC LIMIT 10;
+```
+
+| name                                | count |
+| ----------------------------------- | ----- |
+| DEXCOM INC                          | 2931  |
+| TANDEM DIABETES CARE                | 1963  |
+| INSTITUT STRAUMANN                  | 1776  |
+| MEDTRONIC PUERTO RICO OPERATIONS CO | 1583  |
+| NOBEL BIOCARE                       | 1269  |
+| BOSTON SCIENTIFIC                   | 641   |
+| RESPIRONICS INC                     | 521   |
+| MEDTRONIC                           | 457   |
+| ABBOTT DIABETES CARE                | 379   |
+| INSULET                             | 352   |
+
+
+
+
+
+
+
+### Step 5 — View the dashboard
 `Dashboard.jsx` reads the top 10 rows from `product_stats` and `manufacturer_stats` and renders them as charts.
 
 

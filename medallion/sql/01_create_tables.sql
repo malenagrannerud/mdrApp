@@ -1,16 +1,12 @@
 -- ============================================================
--- a_create_tables.sql (Supabase SQL Editor)
+-- 01_create_tables.sql 
 -- Author: Malena 
 -- Created: 2026-08-02
 -- Description: Creates tables & constraint (schemas) for the medallion architecture 
 -- ============================================================
 
 
--- ----------------------------------------------------------------------------------
--- BRONZE LAYER
--- Description: Creates bronze_reports 
--- ----------------------------------------------------------------------------------
-
+-- ----------- ----------- BRONZE LAYER: Creates bronze_reports ----------------------
 create table if not exists bronze_reports (
   id bigint generated always as identity primary key, -- choose bigint 
   report_key text,
@@ -24,10 +20,8 @@ create table if not exists bronze_reports (
 create index if not exists idx_bronze_report_key on bronze_reports (report_key);
 create index if not exists idx_bronze_source_file on bronze_reports (source_file);
 
-
-
 -- prevent_bronze_mutation()
--- Makes bronze_reports immutable and append-only at DB level.
+-- Makes bronze_reports immutable and append-only 
 -- Any UPDATE or DELETE attempt fails immediately and returns an
 -- explicit error to the caller — visible at the point of failure,
 -- and captured in Postgres/Supabase's own server logs by default.
@@ -44,20 +38,13 @@ CREATE TRIGGER enforce_bronze_immutability
     FOR EACH ROW
     EXECUTE FUNCTION prevent_bronze_mutation();
 
-
 -- TESTA SÅ ATT prevent_bronze_mutation() fungerar som avsett.
 -- Detta ska nu ge ett fel istället för att tyst göra ingenting
 -- DELETE FROM bronze_reports WHERE id = 1;
 -- ERROR: bronze_reports is append-only: DELETE operations are not permitted
 
 
-
-
-
--- ----------------------------------------------------------------------------------
--- SILVER LAYER
--- Description: Creates silver_reports and silver_rejected 
--- ---------------------------------------------------------------------------------
+-- ---------------------- SILVER LAYER: Creates silver_reports and silver_rejected ----------------------
 create table if not exists silver_reports (
   report_key text primary key,
   product_code text not null,
@@ -80,10 +67,9 @@ create table if not exists silver_rejected (
 );
 create index if not exists idx_silver_rejected_reason on silver_rejected (rejection_reason);
 
--- -----------------------------------------------------------------------------------
--- GOLD LAYER
--- Description: Creates product_stats & manufacturer_stats för aggregerad data som dashboarden läser.
--- -----------------------------------------------------------------------------------
+
+-- ---------------------- GOLD LAYER Creates product_stats & manufacturer_stats for aggregerad data      ----------------------
+
 create table if not exists product_stats (
   product_code text primary key,
   total_reports integer not null,
