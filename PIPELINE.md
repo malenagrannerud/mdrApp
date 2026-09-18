@@ -26,7 +26,7 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
        │
        ▼  
 ┌─────────────────────────────────────────┐
-│ 01_bronze_ingest.py                     │
+│ bronze_ingest.py                     │
 | - Reads a source file (`DEVICE2024.txt`)│
 | - Writes to table bronze_reports        │
 |   in Supabase                           │
@@ -74,7 +74,7 @@ Business Logic: Deduplicates records, filters out invalid rows, handles missing 
 ### Gold Layer
 Purpose: Deliver business-focused, aggregated, and highly performant data models (e.g., star schemas with facts and dimensions) directly to BI tools.
 
-Data Quality: Guarantees that data is strictly analytics-ready and aligns with corporate KPIs and accounting rules.
+Data Quality: Guarantees that data is strictly analytics-ready
 
 Performance: Optimized for end-user querying through pre-calculated metrics and aggregations, completely removing complex SQL logic from dashboards.
 
@@ -144,12 +144,8 @@ python medallion/01_bronze_ingest.py
 #### Verify upload in console
 Should print:  `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
 
-<<<<<<< HEAD
 #### Verify bronze_reports
 console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
-=======
-#### Verify the table: Inspect the first 20 rows
->>>>>>> e740ccba5122f0ba4689bf764d73bafe17ae0910
 ```sql 
 SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
 ```
@@ -167,18 +163,11 @@ SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
 | 20000 | 18423065 | 18443053 |
 
 
-<<<<<<< HEAD
 
 ### Step 3 — Run Silver
 Run `02_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates remain
 
 ### Verify number of rows dropped
-=======
-### Step 3 — Run Silver
-Run `02_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates remain:
-
-#### Verify row count and number of deleted rows
->>>>>>> e740ccba5122f0ba4689bf764d73bafe17ae0910
 ```sql
 SELECT
     (SELECT COUNT(*) FROM bronze_reports) AS bronze_rows,
@@ -191,12 +180,7 @@ RESULTS
 | 20000       | 19950       | 50           |
 
 
-<<<<<<< HEAD
 ### Verify duplicated report_key 
-=======
-#### Verify deleted rows
-
->>>>>>> e740ccba5122f0ba4689bf764d73bafe17ae0910
 ```sql
 -- Duplicates: report_keys that appear more than once in bronze
 SELECT report_key, COUNT(*) AS occurrences
@@ -205,19 +189,7 @@ GROUP BY report_key
 HAVING COUNT(*) > 1
 ORDER BY report_key;
 ```
-<<<<<<< HEAD
 RESULTS  39 report_keys has duplicates
-=======
-RESULTS  39 report_keys appear exactly twice, e.g.:
-
-report_key	occurrences
-18423161	2
-18423516	2
-18423519	2
-18423562	2
-18424434	2
-
->>>>>>> e740ccba5122f0ba4689bf764d73bafe17ae0910
 
 | report_key  | occurrences| |
 | ----------- | ------------ | 
