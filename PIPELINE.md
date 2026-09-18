@@ -12,10 +12,9 @@ medallion
 │   
 └── sql
     ├── 01_create_tables.sql
-    ├── 02_bronze.sql
     ├── 02_silver.sql
     ├── 03_gold.sql
-    └── dbt_schema.yml
+    
         
 ```
 ## Purpose & Scope
