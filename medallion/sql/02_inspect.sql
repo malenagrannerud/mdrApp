@@ -3,16 +3,18 @@
 -- 02_inspect.sql
 -- Author: Malena
 -- Created: 2026-08-02
--- Description: Inspect data
+-- Description: Inspect data to create rules for the silver layer
 --
 -- Input:  bronze_reports (append-only raw data)
 -- Output: a number of rules for data quality
 -- 
 ===============================================================
 
+-- I1: Discovery - Total Batch Volume Check
 SELECT COUNT(*) AS totalt_antal_rader 
 FROM bronze_reports; --- one batch, 2000 rows
 
+-- I2: Discovery - Raw Geometries Sample Inspection
 
 SELECT * 
 FROM bronze_reports 
@@ -43,7 +45,7 @@ LIMIT 20;
 -- | 20 | 18423084   | DZE              | PCA                                                  | CONICAL ACTIVE IMPLANT 3.75X16          | PALTOP ADVANCED DENTAL SOLUTIONS INC.        | 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
 
 
--- ==================== CHECK INVALID MANUFACTURER NAMES ========================================
+-- I3: Discovery - Target Malformed & Token Junk String Counts
 
 SELECT COUNT(*) AS antal_ogiltiga_namn
 FROM bronze_reports
@@ -51,15 +53,19 @@ WHERE UPPER(TRIM(manufacturer_raw)) IN (
     'NI', 'UNK', '*', 'N/A', 'NA', 'UNKNOWN', 
     'NO INFORMATION', '?', 'NONE'
 )
-OR length(TRIM(manufacturer_raw)) < 2;    -- RESULT: 11
+OR length(TRIM(manufacturer_raw)) < 2;    -- RESULT: 11. Map theese as NULL --> RULE 
 
--- ==================== CHECK MANUFACTURER NAMES == NULL ========================================
+
+
+-- I4: Discovery - Missing Optional Attribute Frequency
 
 SELECT COUNT(*) AS antal_null_namn
 FROM bronze_reports
 WHERE manufacturer_raw IS NULL;  -- 15
 
--- ==================== CHECK DUPLICATE > REPORT_KEY ========================================
+
+
+-- I5: Discovery - Primary Identifier Uniqueness & Redundant Row Volume
 
 SELECT 
     report_key, 
@@ -71,6 +77,9 @@ ORDER BY antal_forekomster DESC;
 
 SELECT COUNT(*) - COUNT(DISTINCT report_key) AS totalt_antal_extra_rader
 FROM bronze_reports; -- 39 extra rows
+
+
+
 
 -- E1: Volume & Density Metrics
 SELECT 
@@ -97,7 +106,7 @@ FROM bronze_reports;
 -- | 39                          | 0                          |
 
 
--- E3: Suffix- och punktvalidering (Edge Cases)
+-- E3: Edge Cases
 SELECT 
     id,
     manufacturer_raw AS original,
