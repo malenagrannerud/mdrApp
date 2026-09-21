@@ -1,5 +1,10 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 This document covers the pipeline behind the [Aegis Compliance](./README.md) dashboard. 
+This analyisis answers
+
+1 - Which are the most reported products to FDA 2024?
+2 - Which are the most reported manufacturers to FDA 2024? 
+
 
 ```
 medallion
@@ -26,7 +31,7 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
        │
        ▼  
 ┌─────────────────────────────────────────┐
-│ bronze_ingest.py                     │
+│ bronze_ingest.py                        │
 | - Reads a source file (`DEVICE2024.txt`)│
 | - Writes to table bronze_reports        │
 |   in Supabase                           │
@@ -94,7 +99,7 @@ unzip device2024.zip
 cd ../..
 ```
 
-3. Inspect the headers:
+3. Inspect headers:
 ```bash
 head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```
@@ -105,7 +110,7 @@ Other headers:
 
 
 ### Step 1 — Create tables
-Run `00_create_tables.sql` in the Supabase SQL editor.
+Run `01_create_tables.sql` in the Supabase SQL editor.
 Creates `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats`.
 
 ### Step 2 — Run Bronze
@@ -122,12 +127,7 @@ console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
 SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
 ```
 
-| id | report_key | product_code_raw | brand_name_raw                     | generic_name_raw  | manufacturer_raw      | inserted_at                   | source_file                   |
-| -- | ---------- | ---------------- | ---------------------------------- | ----------------- | ----------------------| ----------------------------- | ----------------------------- |
-| 1  | 18423065   | FDF              | EVIS EXERA II COLONOVIDEOSCOPE     | COLONOVIDEOSCOPE  | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
-| 2  | 18423066   | EOQ              | EVIS EXERA III BRONCHOVIDEOSCOPE   | BRONCHOVIDEOSCOPE | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
-| 3  | 18423067   | EOQ              | EVIS LUCERA ELITE BRONCHOVIDEOSCOPE| BRONCHOVIDEOSCOPE | AIZU OLYMPUS CO., LTD.| 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
-...
+
 
 #### Verify row count and deleted rows
 | count | min      | max      |
@@ -172,30 +172,7 @@ RESULTS  39 report_keys has duplicates
 | ...         | ...          | 
 
 ### Verify invalid manudacturer rows
-```sql
--- Invalid manufacturers: rows filtered out by the invalid_values list
-SELECT report_key, product_code_raw, manufacturer_raw
-FROM bronze_reports
-WHERE UPPER(TRIM(manufacturer_raw)) IN ('NI','UNK','*','N/A','NA','UNKNOWN','NO INFORMATION','?','NONE')
-   OR product_code_raw IS NULL
-   OR product_code_raw = ''
-ORDER BY id;
-```
-RESULTS  
-11 rows with invalid manufacturer values:
-| report_key | product_code_raw | manufacturer_raw |
-| ---------- | ---------------- | ---------------- |
-| 18423233   | MCW              | UNKNOWN          |
-| 18423438   | MCW              | UNKNOWN          |
-| 18423441   | MCW              | UNKNOWN          |
-| 18423808   | MCW              | UNKNOWN          |
-| 18424176   | MCW              | UNKNOWN          |
-| 18424902   | MCW              | UNKNOWN          |
-| 18437484   | GEI              | UNK              |
-| 18437524   | OBP              | UNK              |
-| 18437557   | MVV              | UNK              |
-| 18437565   | PJY              | UNK              |
-| 18438088   | NVN              | UNK              |
+
 
 
 ### Validation rate
@@ -211,28 +188,15 @@ Validation rate: 19 950 / 20 000 = 99.75%
 Run `03_gold.sql` in Supabase.
 
 
-#### Verify product_stats (What products has the most incidents?)
+#### Verify product_stats (Most reported products?)
 ```sql
 SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
 ```
 
-| product_code | total_reports | brand_name                                        | generic_name                                                     | manufacturer_name                                   |
-| ------------ | ------------- | ------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------- |
-| DZE          | 4252          | BLT �4.1MM RC, SLACTIVE� 10MM, TIZR, NTP          | ENDOSSEOUS DENTAL IMPLANT                                        | INSTITUT STRAUMANN                                  |
-| QBJ          | 2938          | DEXCOM G6 CONTINUOUS GLUCOSE MONITORING SYSTEM    | CONTINUOUS GLUCOSE MONITOR                                       | DEXCOM INC                                          |
-| QFG          | 2102          | T:SLIM X2 INSULIN PUMP WITH CONTROL-IQ TECHNOLOGY | ALTERNATE CONTROLLER ENABLED INFUSION PUMP                       | TANDEM DIABETES CARE                                |
-| OZP          | 1096          | PUMP 1886 780G OUS BLE PUMP MG/DL                 | AUTOMATED INSULIN DOSING DEVICE SYSTEM, SINGLE HORMONAL CONTROL  | MEDTRONIC PUERTO RICO OPERATIONS CO                 |
-| BZD          | 393           | DREAMSTATION AUTO CPAP                            | VENTILATOR, NON-CONTINUOUS (RESPIRATOR)                          | RESPIRONICS INC                                     |
-| FTR          | 323           | MENTOR MEMORYGEL BREAST IMPLANT                   | PROSTHESIS, BREAST, NONINFLATABLE, INTERNAL, SILICONE GEL-FILLED | ALLERGAN (COSTA RICA)                               |
-| LGW          | 305           | OCTRODE LEAD KIT, 60CM LENGTH                     | STIMULATOR, SPINAL-CORD, TOTALLY IMPLANTED FOR PAIN RELIEF       | ST JUDE MEDICAL - NEUROMODULATION (PUERTO RICO LLC) |
-| QLG          | 285           | LIBRE 2 SENSOR FREESTYLE                          | FLASH GLUCOSE MONITORING SYSTEM                                  | ABBOTT DIABETES CARE                                |
-| OYC          | 274           | 640G INSULIN PUMP MMT-1712K                       | PUMP, INFUSION, INSULIN, TO BE USED WITH INVASIVE GLUCOSE SENSOR | MEDTRONIC PUERTO RICO OPERATIONS CO                 |
-| NVN          | 251           | TENDRIL STS                                       | NO MATCH                                                         | ST JUDE MEDICAL INC (CRM-SYLMAR)                    |
 
 
 
-
-#### Verify manufacturer_stats (What manufacturers has the most incidents?)
+#### Verify manufacturer_stats (Most reported companies?)
 ```sql
 SELECT * FROM manufacturer_stats ORDER BY count DESC LIMIT 10;
 ```

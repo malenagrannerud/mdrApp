@@ -30,11 +30,11 @@ export default function Dashboard() {
           .order('total_reports', { ascending: false })
           .limit(10)
 
-        // Reads manufacturer stats from Supabase, ordered by count descending, limited to top 10
+        // Reads manufacturer stats from Supabase, ordered by total_reports descending, limited to top 10
         const manufacturersHook = await supabase
           .from('manufacturer_stats')
           .select('*')
-          .order('count', { ascending: false })
+          .order('total_reports', { ascending: false })
           .limit(10)
 
         if (productsHook.error) throw new Error(productsHook.error.message)
@@ -64,10 +64,11 @@ export default function Dashboard() {
     </div>
   )
 
-  // JS-Transformering: Mappa produktkoder till deras riktiga kategorinamn för diagrammet
+  // JS-Transformering: använd generic_name som kategori (renare än brand_name)
   const productChartData = productData.map(p => ({
-  category: p.brand_name || p.generic_name || `Kod: ${p.product_code}`,    reports: p.total_reports,
-  brand: p.brand_name || 'Okänt märke'
+    category: p.generic_name || p.brand_name || `Kod: ${p.product_code}`,
+    reports: p.total_reports,
+    brand: p.brand_name || 'Okänt märke'
   }))
 
   // Formateringshjälp för stora tal (t.ex. 340691 -> 340 691)
@@ -90,7 +91,7 @@ export default function Dashboard() {
               <BarChart data={productChartData} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis type="number" tickFormatter={fmt} tick={{ fontSize: 10 }} />
-                <YAxis dataKey="category" type="category" width={140} tick={{ fontSize: 9 }} />
+                <YAxis dataKey="category" type="category" width={180} tick={{ fontSize: 9 }} />
                 {/* Custom Tooltip som visar det populäraste varumärket när man hovrar över stapeln */}
                 <Tooltip formatter={(value, name, props) => [fmt(value), `Incidenter (Topp-märke: ${props.payload.brand})`]} />
                 <Bar dataKey="reports" fill="#1e40af" radius={[0, 4, 4, 0]} />
@@ -110,7 +111,7 @@ export default function Dashboard() {
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={60} tick={{ fontSize: 9 }} interval={0} />
                 <YAxis tickFormatter={fmt} tick={{ fontSize: 10 }} />
                 <Tooltip formatter={(value) => [fmt(value), 'Totalt antal incidenter']} />
-                <Bar dataKey="count" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="total_reports" fill="#10b981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

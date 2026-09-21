@@ -79,5 +79,5 @@ create table if not exists product_stats (
 );
 create table if not exists manufacturer_stats (
   name text primary key,
-  count integer not null
+  total_reports integer not null
 );

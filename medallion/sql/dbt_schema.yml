@@ -1,24 +1,64 @@
 # dbt_schema.yml 
-
-# 1. Kör python-skriptet för att ladda rådatan till Bronze
-#       python ../python/bronze_ingest.py && \
-# 2. Kör dbt för att bygga Bronze-tabellen
-#       dbt run --select bronze_reports && \
-# 3. Testa Bronze-tabellen automatisk (unique / not_null)
-#       dbt test --select bronze_reports && \
-# 4. Bygg Silver-lagret (Körs BARA om dbt test blev 100% grönt!)
-#       dbt run --select silver_reports
+#
+# Data quality tests for the medallion pipeline.
+# Test philosophy:
+#   Bronze = Only structural checks (not_null) belong here.
+#   Silver = Unique + not_null belong here.
+#   Gold   = Primary keys (product_code, name) must be
+#            Unique and not_null. These are Tier 1 tests.
+#
+# Pipeline run order:
+#   1. Run python ../python/bronze_ingest.py
+#   2. dbt run  --select bronze_reports
+#   3. dbt test --select bronze_reports
+#   4. dbt run  --select silver_reports
+#   5. dbt test --select silver_reports
+#   6. dbt run  --select product_stats manufacturer_stats
+#   7. dbt test --select product_stats manufacturer_stats
 
 version: 2  
 
 models:
-  - name: bronze_reports  
+ 
+  # BRONZE — Test so mandatory fields exist: report_key not null
+  - name: bronze_reports
+    columns:
+      - name: report_key
+        tests:
+          - not_null
+      - name: source_file
+        tests:
+          - not_null
+
+
+  
+  # SILVER — cleaned, deduplicated
+  #
+  - name: silver_reports
     columns:
       - name: report_key
         tests:
           - unique
           - not_null
-
-      - name: source_file
+      - name: product_code
         tests:
+          - not_null
+
+
+  # GOLD — aggregated, analytics-ready
+  # 
+  # Primary keys must be unique. These tests block the dashboard
+  # from reading broken aggregates.
+  - name: product_stats
+    columns:
+      - name: product_code
+        tests:
+          - unique
+          - not_null
+
+  - name: manufacturer_stats
+    columns:
+      - name: name
+        tests:
+          - unique
           - not_null
