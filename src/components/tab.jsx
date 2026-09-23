@@ -36,12 +36,12 @@ export default function TabBar({ currentPage, onPageChange }) {
       </button>
 
       <button
-        onClick={() => onPageChange('surveillance')}
+        onClick={() => onPageChange('dashboard')}
         className={`px-6 py-2 font-black text-xs uppercase tracking-widest border-4 transition-all ${
-          currentPage === 'surveillance' ? 'bg-blue-700 text-white border-blue-700' : 'bg-slate-900 text-slate-400 border-slate-900 hover:border-slate-700'
+          currentPage === 'dashboard' ? 'bg-blue-700 text-white border-blue-700' : 'bg-slate-900 text-slate-400 border-slate-900 hover:border-slate-700'
         }`}
       >
-        Surveillance
+        Dashboard
       </button>
 
 

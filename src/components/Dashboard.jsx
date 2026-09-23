@@ -54,13 +54,13 @@ export default function Dashboard() {
   if (loading) return (
     <div className="flex flex-col items-center justify-center pt-20">
       <Loader className="w-8 h-8 animate-spin text-blue-800" />
-      <p className="mt-2 text-gray-600 font-medium">Hämtar städad 2024-data från Supabase...</p>
+      <p className="mt-2 text-gray-600 font-medium">Fetches 2024-data from Supabase...</p>
     </div>
   )
 
   if (error) return (
     <div className="text-center pt-20 text-red-600 font-semibold">
-      <p>Kunde inte hämta data: {error}</p>
+      <p>Could not fetch data: {error}</p>
     </div>
   )
 
@@ -85,7 +85,7 @@ export default function Dashboard() {
         
         
         {/* KORT 1: TOPP PRODUKTER */}
-        <PBICard title="Topp 10 Rapporterade Medicintekniska Produkter till FDA 2024" subtitle=" ">
+        <PBICard title="Most reported medical device product categorys to FDA 2024" subtitle=" ">
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={productChartData} layout="vertical" margin={{ left: 10, right: 30, top: 10, bottom: 10 }}>
@@ -93,7 +93,7 @@ export default function Dashboard() {
                 <XAxis type="number" tickFormatter={fmt} tick={{ fontSize: 10 }} />
                 <YAxis dataKey="category" type="category" width={180} tick={{ fontSize: 9 }} />
                 {/* Custom Tooltip som visar det populäraste varumärket när man hovrar över stapeln */}
-                <Tooltip formatter={(value, name, props) => [fmt(value), `Incidenter (Topp-märke: ${props.payload.brand})`]} />
+                <Tooltip formatter={(value, name, props) => [fmt(value), 'Number of reports']} />
                 <Bar dataKey="reports" fill="#1e40af" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -101,7 +101,7 @@ export default function Dashboard() {
         </PBICard>
 
         {/* KORT 2: TOPP TILLVERKARE */}
-        <PBICard title="Topp 10 Rapporterade Tillverkare till FDA 2024" subtitle=" ">
+        <PBICard title="Most reported manufacturers to FDA 2024" subtitle=" ">
          
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -110,7 +110,7 @@ export default function Dashboard() {
                 {/* Vi roterar texten -45 grader så att tillverkarnas namn inte krockar med varandra */}
                 <XAxis dataKey="name" angle={-45} textAnchor="end" height={60} tick={{ fontSize: 9 }} interval={0} />
                 <YAxis tickFormatter={fmt} tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(value) => [fmt(value), 'Totalt antal incidenter']} />
+                <Tooltip formatter={(value) => [fmt(value), 'Number of reports']} />
                 <Bar dataKey="total_reports" fill="#10b981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>

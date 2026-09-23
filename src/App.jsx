@@ -6,7 +6,7 @@ import StartPage from './pages/startPage';
 import QmsPage from './pages/qms';
 import MdrPage from './pages/mdr';
 
-import SurveillanceDashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 import TabBar from './components/tab'; 
 import './style.css';
 
@@ -21,7 +21,7 @@ export default function App() {
         {currentPage === 'start' && <StartPage onSelectPage={(page) => setCurrentPage(page)} />}
         {currentPage === 'mdr' && <MdrPage />}
         {currentPage === 'qms' && <QmsPage />}
-        {currentPage === 'surveillance' && <SurveillanceDashboard />}
+        {currentPage === 'dashboard' && <Dashboard />}
        
       </div>
     </div>
