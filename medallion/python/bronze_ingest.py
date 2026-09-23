@@ -24,7 +24,7 @@ SOURCE_FILE = "data/DEVICE2024.txt"
 WRITE_BATCH_SIZE = 1000     # Nr of rows buffered before writing to Supabase in one batch
 MAX_RETRIES = 3             # Max nr of attempts to write to Supabase before giving up
 RETRY_BACKOFF_SECONDS = 2   # Initial wait time that doubles on each retry: 2s, 4s, 8s
-MAX_ROWS_LIMIT = 20000      # Keeps free-tier Supabase (500MB) from filling up
+DEV_SAMPLE_LIMIT = 20000      # Keeps free-tier Supabase (500MB) from filling up. the file has 2,6 M rows
 
 HEADER_DICTIONARY = {
     "reportKey":      "MDR_REPORT_KEY",            
@@ -358,7 +358,7 @@ def main() -> None:
 
     supabase = get_supabase_client()
     logger.info("[BRONZE] Reading raw data from %s...", SOURCE_FILE)                        # Name this layer [BRONZE]
-    logger.info("[BRONZE] Row limit: %s (protects Supabase free storage)", MAX_ROWS_LIMIT)
+    logger.info("[BRONZE] Row limit: %s (protects Supabase free storage)", DEV_SAMPLE_LIMIT)
 
     col_idx: dict[str, int] = {} 
     buffer: list[dict] = []
@@ -397,12 +397,12 @@ def main() -> None:
             logger.info("[BRONZE] Wrote %s rows total (read: %s)", f"{inserted:,}", f"{count:,}")
 
         # STEP 3.5 — Stop once the safety row limit is reached
-        if inserted >= MAX_ROWS_LIMIT:
-            logger.info("[BRONZE] Reached %s rows. Stopping ingestion to protect storage.", MAX_ROWS_LIMIT)
+        if inserted >= DEV_SAMPLE_LIMIT:
+            logger.info("[BRONZE] Reached %s rows. Stopping ingestion to protect storage.", DEV_SAMPLE_LIMIT)
             break
 
     # STEP 4 — Flush whatever's left in the buffer
-    if buffer and inserted < MAX_ROWS_LIMIT:
+    if buffer and inserted < DEV_SAMPLE_LIMIT:
         inserted += upload_single_batch(buffer, supabase)
 
     # STEP 5 — Log final summary
