@@ -293,7 +293,7 @@ BEGIN
                     regexp_replace(
                         regexp_replace(
                             regexp_replace(r.manufacturer_raw, '\.', '', 'g'),
-                            '\s+', ' ', 'g'
+                            ',\s*$', '', 'g'
                         ),
                         '\s(inc|llc|ltd|co|corp|corporation|as|ag|gmbh|sa|ab)$',
                         '', 'i'
