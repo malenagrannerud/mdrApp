@@ -130,9 +130,9 @@ SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
 
 
 #### Verify row count and deleted rows
-| count | min      | max      |
-| ----- | -------- | -------- |
-| 20000 | 18423065 | 18443053 |
+| count  | min      | max      |
+| -----  | -------- | -------- |
+| 200000 | 18423065 | 18443053 |
 
 
 
@@ -188,39 +188,8 @@ Validation rate: 19 950 / 20 000 = 99.75%
 Run `03_gold.sql` in Supabase.
 
 
-#### Verify product_stats (Most reported products?)
-```sql
-SELECT * FROM product_stats ORDER BY total_reports DESC LIMIT 10;
-```
-
-
-
-
-#### Verify manufacturer_stats (Most reported companies?)
-```sql
-SELECT * FROM manufacturer_stats ORDER BY count DESC LIMIT 10;
-```
-
-| name                                | count |
-| ----------------------------------- | ----- |
-| DEXCOM INC                          | 2931  |
-| TANDEM DIABETES CARE                | 1963  |
-| INSTITUT STRAUMANN                  | 1776  |
-| MEDTRONIC PUERTO RICO OPERATIONS CO | 1583  |
-| NOBEL BIOCARE                       | 1269  |
-| BOSTON SCIENTIFIC                   | 641   |
-| RESPIRONICS INC                     | 521   |
-| MEDTRONIC                           | 457   |
-| ABBOTT DIABETES CARE                | 379   |
-| INSULET                             | 352   |
-
-
-
-
-
-
 
 ### Step 5 — View the dashboard
-`Dashboard.jsx` reads the top 10 rows from `product_stats` and `manufacturer_stats` and renders them as charts.
+`Dashboard.jsx` reads the top rows from `product_stats` and `manufacturer_stats` and renders them as charts.
 
 
