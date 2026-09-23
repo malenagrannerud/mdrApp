@@ -87,7 +87,7 @@ Performance: Optimized for end-user querying through pre-calculated metrics and 
 
 ## Running the pipeline
 
-### Step 0 — Download the data
+### Step 0 — Download the data - inspect headers
 1. FDA MAUDE: https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download
 
 2. Download a raw data file:
@@ -103,10 +103,18 @@ cd ../..
 ```bash
 head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```
-Key columns used by this pipeline: `MDR_REPORT_KEY`, `DEVICE_REPORT_PRODUCT_CODE`, `BRAND_NAME`, `GENERIC_NAME`, `MANUFACTURER_D_NAME`
+
+| Column | Role | 
+|---|---|---|
+| `DEVICE_EVENT_KEY` | Primary key – unique for each device event | 
+| `MDR_REPORT_KEY` | Foreign key – links this file to other MAUDE files. Good to have for later | 
+| `DEVICE_REPORT_PRODUCT_CODE` | FDA product classification code (3 letters) | 
+| `BRAND_NAME` | Manufacturer's marketing name (e.g. DEXCOM G6) | 
+| `GENERIC_NAME` | Medical/technical product type (e.g. CONTINUOUS GLUCOSE MONITOR) | 
+| `MANUFACTURER_D_NAME` | Company that manufactured the device | 
 
 Other headers: 
- `DEVICE_EVENT_KEY`, `IMPLANT_FLAG`, `DATE_REMOVED_FLAG`, `DEVICE_SEQUENCE_NO`, `IMPLANT_DATE_YEAR`, `DATE_REMOVED_YEAR`, `SERVICED_BY_3RD_PARTY_FLAG`, `DATE_RECEIVED`, `MANUFACTURER ADDRESS ......`, `DEVICE_OPERATOR`, `EXPIRATION_DATE_OF_DEVICE`, `MODEL_NUMBER`, `CATALOG_NUMBER`, `LOT_NUMBER`, `OTHER_ID_NUMBER`, `DEVICE_AVAILABILITY`, `DATE_RETURNED_TO_MANUFACTURER`, `DEVICE_AGE_TEXT`, `DEVICE_EVALUATED_BY_MANUFACTURER`, `COMBINATION_PRODUCT_FLAG`, `UDI-DI`, `UDI-PUBLIC`
+`IMPLANT_FLAG`, `DATE_REMOVED_FLAG`, `DEVICE_SEQUENCE_NO`, `IMPLANT_DATE_YEAR`, `DATE_REMOVED_YEAR`, `SERVICED_BY_3RD_PARTY_FLAG`, `DATE_RECEIVED`, `MANUFACTURER ADDRESS ......`, `DEVICE_OPERATOR`, `EXPIRATION_DATE_OF_DEVICE`, `MODEL_NUMBER`, `CATALOG_NUMBER`, `LOT_NUMBER`, `OTHER_ID_NUMBER`, `DEVICE_AVAILABILITY`, `DATE_RETURNED_TO_MANUFACTURER`, `DEVICE_AGE_TEXT`, `DEVICE_EVALUATED_BY_MANUFACTURER`, `COMBINATION_PRODUCT_FLAG`, `UDI-DI`, `UDI-PUBLIC`
 
 
 ### Step 1 — Create tables
