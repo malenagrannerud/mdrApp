@@ -13,6 +13,9 @@
 --
 -- Idempotent: silver_reports is TRUNCATEd before insert. silver_rejected is append-only to preserve audit history.
 --
+-- input :bronze_data
+-- output:silver_data, silver_rejected
+-- 
 -- ============================================================
 
 -- HOW MANY ROWS DO WE HAVE?
@@ -116,16 +119,8 @@ ORDER BY report_count DESC
 LIMIT 10;
 -- result: DZE 21.26 %, QBJ 14.69 %, QFG 10.51 %, OZP 5.48 %, BZD 1.97 %
 
--- HOW WERE ROWS LOADED OVER TIME?
-SELECT inserted_at AS load_timestamp, COUNT(*) AS rows_loaded
-FROM bronze_reports
-GROUP BY inserted_at
-ORDER BY load_timestamp;
--- result: 3 batches of 1000 rows. 
 
-
-
-
+-- ERRORS WITH PRODUCT CODE?
 
 
 
@@ -328,6 +323,7 @@ BEGIN
                 WHEN 'MEDTRONIC PUERTO RICO OPERATIONS' THEN 'MEDTRONIC'
                 WHEN 'AIZU OLYMPUS'                     THEN 'OLYMPUS'
                 WHEN 'SHIRAKAWA OLYMPUS'                THEN 'OLYMPUS'
+                WHEN 'DENSPLY IMPLANTS MANUFACTURING'   THEN 'DENSPLY'
                 ELSE manufacturer_normalized
             END AS manufacturer_name
         FROM cleaned

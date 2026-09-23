@@ -3,8 +3,7 @@
 -- Author: Malena
 -- Created: 2026-08-02
 -- Updated: 2026-09-21
--- Description: Build the gold layer — aggregated, analytics-ready
---              tables for the dashboard.
+-- Description: Build the gold layer — aggregated, analytics-ready tables for the dashboard.
 --
 -- Input:  silver_reports (clean, unique report_key)
 -- Output: product_stats      (one row per product_code, with generic_name)
@@ -49,7 +48,22 @@ generic_counts AS (
 INSERT INTO product_stats (product_code, generic_name, total_reports)
 SELECT
     pc.product_code,
-    gc.generic_name,
+    CASE pc.product_code
+        WHEN 'DZE' THEN 'Dental Implant'
+        WHEN 'QBJ' THEN 'Continuous Glucose Monitor (CGM)'
+        WHEN 'QFG' THEN 'Insulin Pump'
+        WHEN 'OZP' THEN 'Pacemaker / ICD'
+        WHEN 'BZD' THEN 'CPAP / Ventilator'
+        WHEN 'FDF' THEN 'Colonovideoscope'
+        WHEN 'EOQ' THEN 'Bronchovideoscope'
+        WHEN 'NAY' THEN 'Surgical Forceps'
+        WHEN 'LRO' THEN 'Surgical Procedure Pack'
+        WHEN 'FHW' THEN 'Penile Prosthesis'
+        WHEN 'KNQ' THEN 'Esophageal Dilator'
+        WHEN 'MLZ' THEN 'Vitrectomy Instrument'
+        WHEN 'HQC' THEN 'Phacofragmentation Unit'
+        ELSE gc.generic_name
+    END AS generic_name,
     pc.total_reports
 FROM product_counts pc
 LEFT JOIN generic_counts gc
