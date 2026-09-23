@@ -288,7 +288,7 @@ BEGIN
                     regexp_replace(
                         regexp_replace(
                             regexp_replace(r.manufacturer_raw, '\.', '', 'g'),
-                            ',\s*$', '', 'g'
+                            ',.*$', '', 'g'
                         ),
                         '\s(inc|llc|ltd|co|corp|corporation|as|ag|gmbh|sa|ab)$',
                         '', 'i'
@@ -317,15 +317,17 @@ BEGIN
             product_code,
             brand_name,
             generic_name,
-            CASE UPPER(manufacturer_normalized)
-                WHEN 'NOBEL BIOCARE GÖTEBORG'           THEN 'NOBEL BIOCARE'
-                WHEN 'MEDTRONIC MINIMED'                THEN 'MEDTRONIC'
-                WHEN 'MEDTRONIC PUERTO RICO OPERATIONS' THEN 'MEDTRONIC'
-                WHEN 'AIZU OLYMPUS'                     THEN 'OLYMPUS'
-                WHEN 'SHIRAKAWA OLYMPUS'                THEN 'OLYMPUS'
-                WHEN 'DENSPLY IMPLANTS MANUFACTURING'   THEN 'DENSPLY'
+
+            CASE
+                WHEN UPPER(manufacturer_normalized) LIKE 'DENTSPLY%'      THEN 'DENTSPLY'
+                WHEN UPPER(manufacturer_normalized) LIKE 'ALCON%'         THEN 'ALCON'
+                WHEN UPPER(manufacturer_normalized) LIKE 'MEDTRONIC%'     THEN 'MEDTRONIC'
+                WHEN UPPER(manufacturer_normalized) LIKE '%OLYMPUS%'      THEN 'OLYMPUS'
+                WHEN UPPER(manufacturer_normalized) LIKE 'NOBEL BIOCARE%' THEN 'NOBEL BIOCARE'
                 ELSE manufacturer_normalized
             END AS manufacturer_name
+
+
         FROM cleaned
     )
 

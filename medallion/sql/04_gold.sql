@@ -48,22 +48,44 @@ generic_counts AS (
 INSERT INTO product_stats (product_code, generic_name, total_reports)
 SELECT
     pc.product_code,
+
     CASE pc.product_code
-        WHEN 'DZE' THEN 'Dental Implant'
-        WHEN 'QBJ' THEN 'Continuous Glucose Monitor (CGM)'
-        WHEN 'QFG' THEN 'Insulin Pump'
-        WHEN 'OZP' THEN 'Pacemaker / ICD'
-        WHEN 'BZD' THEN 'CPAP / Ventilator'
-        WHEN 'FDF' THEN 'Colonovideoscope'
-        WHEN 'EOQ' THEN 'Bronchovideoscope'
-        WHEN 'NAY' THEN 'Surgical Forceps'
-        WHEN 'LRO' THEN 'Surgical Procedure Pack'
-        WHEN 'FHW' THEN 'Penile Prosthesis'
-        WHEN 'KNQ' THEN 'Esophageal Dilator'
-        WHEN 'MLZ' THEN 'Vitrectomy Instrument'
-        WHEN 'HQC' THEN 'Phacofragmentation Unit'
-        ELSE gc.generic_name
-    END AS generic_name,
+    -- Dental implants
+    WHEN 'DZE' THEN 'DENTAL IMPLANT'
+
+    -- Diabetes / glucose / insulin
+    WHEN 'QBJ' THEN 'CONTINUOUS GLUCOSE MONITOR'
+    WHEN 'QLG' THEN 'FLASH GLUCOSE MONITORING SYSTEM'
+    WHEN 'QFG' THEN 'INSULIN PUMP'
+    WHEN 'LZG' THEN 'INSULIN INFUSION PUMP'
+    WHEN 'OYC' THEN 'INSULIN PUMP - INVASIVE SENSOR'
+    WHEN 'OZO' THEN 'AUTOMATED INSULIN DOSING'
+    WHEN 'PKU' THEN 'INSULIN PUMP SECONDARY DISPLAY'
+
+    -- Heart implants / pacemakers
+    WHEN 'OZP' THEN 'IMPLANTABLE CARDIOVERTER DEFIBRILLATOR'
+    WHEN 'DTB' THEN 'PACEMAKER ELECTRODE'
+    WHEN 'LWP' THEN 'IMPLANTABLE PACEMAKER'
+    WHEN 'LWS' THEN 'IMPLANTABLE DEFIBRILLATOR'
+    WHEN 'MVK' THEN 'WEARABLE DEFIBRILLATOR'
+    WHEN 'NVN' THEN 'DRUG ELUTING PACEMAKER LEAD'
+
+    -- Respiratory support
+    WHEN 'BZD' THEN 'CPAP OR VENTILATOR'
+    WHEN 'CBK' THEN 'CONTINUOUS VENTILATOR FOR INTENSIVE CARE'
+
+    -- Infusion
+    WHEN 'FRN' THEN 'INFUSION PUMP'
+
+    -- Spinal / nerve stimulation
+    WHEN 'LGW' THEN 'SPINAL CORD STIMULATOR'
+
+    -- Surgical implants and instruments
+    WHEN 'FTR' THEN 'SILICONE GEL BREAST IMPLANT'
+    WHEN 'GDW' THEN 'IMPLANTABLE STAPLE'
+
+    ELSE gc.generic_name
+END AS generic_name,
     pc.total_reports
 FROM product_counts pc
 LEFT JOIN generic_counts gc
