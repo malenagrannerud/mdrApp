@@ -55,21 +55,6 @@ LIMIT 20;
 -- | 20 | 18423084   | DZE              | PCA                                                  | CONICAL ACTIVE IMPLANT 3.75X16          | PALTOP ADVANCED DENTAL SOLUTIONS INC.        | 2026-09-17 13:14:18.945897+00 | medallion/data/DEVICE2024.txt |
 
 
-
-
--- I10: Batch pattern — when rows were loaded
-SELECT
-    inserted_at AS load_timestamp,
-    COUNT(*) AS rows_loaded
-FROM bronze_reports
-GROUP BY inserted_at
-ORDER BY load_timestamp;
-
-
-SELECT COUNT(*) AS total_rows FROM bronze_reports;
-
-
-
 -- HOW MUCH OF EACH ROW IS FILLED? 
 -- Why: shows which columns have missing data without running a separate COUNT for each one.
 SELECT
