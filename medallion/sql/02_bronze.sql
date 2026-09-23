@@ -9,13 +9,6 @@
 --      1 - Which are the most reported products to FDA 2024?
 --      2 - Which are the most reported manufacturers to FDA 2024? 
 --
--- Data flow
--- 1 - dbt: Structural checks (report_key is not_null)
--- 2 - Input:  bronze_reports (append-only raw data)
--- 3 - Output: bronze_reports validated
--- 4 - dbt: Check if OK to load bronze_reports to silver_reports
---
---
 -- ============================================================
 
 -- HOW MANY ROWS DO WE HAVE?
