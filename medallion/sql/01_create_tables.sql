@@ -13,7 +13,7 @@
 create table if not exists bronze_reports (
   id bigint generated always as identity primary key,
   report_key text,
-  device_event_key text,        -- ← NY: PK för device-filen (unik per device-event)
+  device_event_key text,        
   product_code_raw text,
   brand_name_raw text,
   generic_name_raw text,
