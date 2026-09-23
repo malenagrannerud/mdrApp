@@ -7,9 +7,13 @@
 
 
 -- ----------- ----------- BRONZE LAYER: Creates bronze_reports ----------------------
+
+-- TRUNCATE TABLE bronze_reports; -- RUN TO DELETE DATA, FOR TESTS
+
 create table if not exists bronze_reports (
-  id bigint generated always as identity primary key, -- choose bigint 
+  id bigint generated always as identity primary key,
   report_key text,
+  device_event_key text,        -- ← NY: PK för device-filen (unik per device-event)
   product_code_raw text,
   brand_name_raw text,
   generic_name_raw text,
@@ -18,6 +22,7 @@ create table if not exists bronze_reports (
   source_file text not null
 );
 create index if not exists idx_bronze_report_key on bronze_reports (report_key);
+create index if not exists idx_bronze_device_event_key on bronze_reports (device_event_key);   
 create index if not exists idx_bronze_source_file on bronze_reports (source_file);
 
 -- prevent_bronze_mutation()
