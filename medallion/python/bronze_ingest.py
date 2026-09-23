@@ -26,12 +26,13 @@ MAX_RETRIES = 3             # Max nr of attempts to write to Supabase before giv
 RETRY_BACKOFF_SECONDS = 2   # Initial wait time that doubles on each retry: 2s, 4s, 8s
 MAX_ROWS_LIMIT = 20000      # Keeps free-tier Supabase (500MB) from filling up
 
-HEADER_DICTIONARY = {                           # Maps FDA column names to internal names
-    "reportKey": "MDR_REPORT_KEY",              # ID number for each report
-    "productCode": "DEVICE_REPORT_PRODUCT_CODE",  # Letter code for device type. EX: CBK = Ventilator, FPA = Catheter, MDS = Infusion pump, LZW = Pacemaker
-    "brandName": "BRAND_NAME",                  # Commerial name of the device. EX: "Servo Air"
-    "genericName": "GENERIC_NAME",              # Clinical name. EX: "Ventilator"
-    "manufacturerRaw": "MANUFACTURER_D_NAME",   # Name of manufacturer as reported. EX: "Getinge", "Medtronic Inc" etc
+HEADER_DICTIONARY = {
+    "reportKey":      "MDR_REPORT_KEY",            
+    "deviceEventKey": "DEVICE_EVENT_KEY",          # PK – unique per device event
+    "productCode":    "DEVICE_REPORT_PRODUCT_CODE",
+    "brandName":      "BRAND_NAME",
+    "genericName":    "GENERIC_NAME",
+    "manufacturerRaw":"MANUFACTURER_D_NAME",
 }
 
 # ===================================== LOGGING SETUP =====================================
@@ -151,6 +152,7 @@ class BronzeRow(BaseModel):
 
     Args: 
         report_key (Optional[str] = None)
+        device_event_key: (Optional[str] = None)  
         product_code_raw (Optional[str] = None)
         brand_name_raw (Optional[str] = None)
         generic_name_raw (Optional[str] = None)
@@ -175,9 +177,9 @@ class BronzeRow(BaseModel):
         - source_file is NOT Optional because you always want to know which file the data came from.
         - Bronze layer validates shape only; content rules (e.g. rejecting "UNKNOWN" as manufacturer) belong to Silver.
     """
-
     model_config = ConfigDict(populate_by_name=True)
     report_key: Optional[str] = None
+    device_event_key: Optional[str] = None     
     product_code_raw: Optional[str] = None
     brand_name_raw: Optional[str] = None
     generic_name_raw: Optional[str] = None
@@ -218,12 +220,13 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
 
     """
     return {
-        "report_key": get_field(col_idx["reportKey"], fields),
-        "product_code_raw": get_field(col_idx["productCode"], fields),
-        "brand_name_raw": get_field(col_idx["brandName"], fields),
-        "generic_name_raw": get_field(col_idx["genericName"], fields),
-        "manufacturer_raw": get_field(col_idx["manufacturerRaw"], fields),
-        "source_file": source_file,
+        "report_key":         get_field(col_idx["reportKey"], fields),
+        "device_event_key":   get_field(col_idx["deviceEventKey"], fields),   
+        "product_code_raw":   get_field(col_idx["productCode"], fields),
+        "brand_name_raw":     get_field(col_idx["brandName"], fields),
+        "generic_name_raw":   get_field(col_idx["genericName"], fields),
+        "manufacturer_raw":   get_field(col_idx["manufacturerRaw"], fields),
+        "source_file":        source_file,
     }
 
 
