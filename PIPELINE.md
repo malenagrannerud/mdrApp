@@ -105,12 +105,12 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```
 
 | Column | Role | 
-|---|---|---|
+|---|---|
 | `DEVICE_EVENT_KEY` | Primary key – unique for each device event | 
-| `MDR_REPORT_KEY` | Foreign key – links this file to other MAUDE files. Good to have for later | 
+| `MDR_REPORT_KEY` | Foreign key – links this file to other MAUDE files. Good to have for joining files later | 
 | `DEVICE_REPORT_PRODUCT_CODE` | FDA product classification code (3 letters) | 
-| `BRAND_NAME` | Manufacturer's marketing name (e.g. DEXCOM G6) | 
-| `GENERIC_NAME` | Medical/technical product type (e.g. CONTINUOUS GLUCOSE MONITOR) | 
+| `BRAND_NAME` | Manufacturer's marketing name  | 
+| `GENERIC_NAME` | Medical/technical product name | 
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
 
 Other headers: 
