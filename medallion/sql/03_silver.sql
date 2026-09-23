@@ -11,13 +11,6 @@
 --      2 - Which are the most reported manufacturers to FDA 2024? 
 --
 --
--- Data flow
--- 1 - Input:  bronze_reports_raw (append-only raw data)
--- 2 - Output: silver_reports     (clean, unique report_key)
---             silver_rejected    (rejected rows + reason + timestamp)
--- 3 - dbt: Check if OK to load silver_reports to gold_reports
---
---
 -- Idempotent: silver_reports is TRUNCATEd before insert. silver_rejected is append-only to preserve audit history.
 --
 -- ============================================================
@@ -26,7 +19,6 @@
 SELECT COUNT(*) AS total_rows
 FROM bronze_reports;
 -- result: one batch, 2000 rows
-
 
 -- WHAT DOES THE DATA LOOK LIKE?
 SELECT *
@@ -75,9 +67,7 @@ FROM bronze_reports;
 -- result: 39 
 -- >>> RULE R1 - DEDUPLICATION: keep first (earliest) row per report_key
 
-
 -- ======================================= DATA CLEANING =======================================
-
 
 -- HOW MANY JUNK MANUFACTURER VALUES ARE THERE?
 SELECT COUNT(*) AS junk_manufacturer_count
@@ -89,8 +79,6 @@ WHERE UPPER(TRIM(manufacturer_raw)) IN (
 OR length(TRIM(manufacturer_raw)) < 2;
 -- result: 11
 -- >>> RULE R2 - VALIDITY: junk values -> reject in silver.
-
-
 
 -- HOW MANY ROWS ARE MISSING A MANUFACTURER?
 SELECT COUNT(*) AS missing_manufacturer_count
@@ -115,22 +103,6 @@ LIMIT 10;
 -- >>> RULE R4: strip dots, collapse spaces, strip suffixes, TRIM.
 
 
--- HOW MANY PRODUCTS ARE CRAMMED INTO ONE FIELD? (context for R4)
-SELECT
-    report_key,
-    brand_name_raw,
-    length(brand_name_raw) - length(replace(brand_name_raw, ',', '')) + 1 AS comma_parts
-FROM bronze_reports
-WHERE brand_name_raw LIKE '%,%'
-ORDER BY comma_parts DESC
-LIMIT 10;
--- result: DZE has up to 4 parts in a single brand_name field
--- >>> CONTEXT FOR R4: keep whole string, or split at first comma?
-
--- IS THERE PROBLEMS WITH GENERIC_NAME? 
-
-
-
 -- ======================================= analysis =======================================
 
 -- HOW ARE PRODUCT CODES DISTRIBUTED?
@@ -150,13 +122,6 @@ FROM bronze_reports
 GROUP BY inserted_at
 ORDER BY load_timestamp;
 -- result: 3 batches of 1000 rows. 
-
-
-
-
-
-
-
 
 
 
