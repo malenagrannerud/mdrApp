@@ -17,7 +17,7 @@ medallion
 │   
 └── sql
     ├── 01_create_tables.sql
-    ├── 02_create_tables.sql
+    ├── 02_bronze.sql
     ├── 03_silver.sql
     └── 04_gold.sql
     
