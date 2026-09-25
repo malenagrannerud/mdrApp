@@ -1,11 +1,15 @@
-# dbt_schema.yml 
+# dbt_schema.yml
 #
 # Data quality tests for the medallion pipeline.
+#
 # Test philosophy:
-#   Bronze = Only structural checks (not_null) belong here.
-#   Silver = Unique + not_null belong here.
-#   Gold   = Primary keys (product_code, name) must be
-#            Unique and not_null. These are Tier 1 tests.
+#   Bronze = Structural checks only. PK must be unique and not_null.
+#            Metadata (source_file, inserted_at) must be not_null.
+#   Silver = PK must be unique and not_null (one row per device_event_key).
+#            FK (report_key) may be duplicated and may be NULL.
+#   Gold   = PKs (product_code, name) must be unique and not_null.
+#            These are Tier 1 tests – they block the dashboard
+#            from reading broken aggregates.
 #
 # Pipeline run order:
 #   1. Run python ../python/bronze_ingest.py
@@ -16,49 +20,76 @@
 #   6. dbt run  --select product_stats manufacturer_stats
 #   7. dbt test --select product_stats manufacturer_stats
 
-version: 2  
+version: 2
 
 models:
- 
-  # BRONZE — Test so mandatory fields exist: report_key not null
+
+  # ============================================================
+  # BRONZE — Raw data, append-only
+  # Tests: BR5 (unique + not_null on PK id),
+  #        BR3 (metadata: source_file, inserted_at)
+  # ============================================================
   - name: bronze_reports
+    description: "Raw FDA MAUDE device events. Append-only."
     columns:
-      - name: report_key
-        tests:
-          - not_null
-      - name: source_file
-        tests:
-          - not_null
-
-
-  
-  # SILVER — TEST SO REPORT_KEY IS UNIQUE
-  #
-  - name: silver_reports
-    columns:
-      - name: report_key
+      - name: device_event_key
+        description: "Primary key – unique per device event."
         tests:
           - unique
           - not_null
-      - name: product_code
+
+      - name: source_file
+        description: "Source file the row was ingested from."
         tests:
           - not_null
 
+      - name: inserted_at
+        description: "Timestamp when the row was inserted (set by DB)."
+        tests:
+          - not_null
 
-  # GOLD — aggregated, analytics-ready
-  # 
-  # Primary keys must be unique. These tests block the dashboard
-  # from reading broken aggregates.
+      # report_key is a FOREIGN KEY – may be duplicated and NULL.
+      # No tests applied intentionally.
+
+  # ============================================================
+  # SILVER — Clean, deduplicated, one row per device_event_key
+  # Tests: SR6 (unique + not_null on PK device_event_key)
+  # ============================================================
+  - name: silver_reports
+    description: "Cleaned and deduplicated device events."
+    columns:
+      - name: device_event_key
+        description: "Primary key – unique per device event."
+        tests:
+          - unique
+          - not_null
+
+      - name: product_code
+        description: "FDA product classification code."
+        tests:
+          - not_null
+
+      # report_key is a FOREIGN KEY – may be duplicated and NULL.
+      # No tests applied intentionally.
+
+  # ============================================================
+  # GOLD — Aggregated, analytics-ready
+  # Tests: GR4 (unique + not_null on PKs)
+  # ============================================================
   - name: product_stats
+    description: "Report count per product code."
     columns:
       - name: product_code
+        description: "Primary key – one row per product code."
         tests:
           - unique
           - not_null
 
   - name: manufacturer_stats
+    description: "Report count per manufacturer."
     columns:
       - name: name
+        description: "Primary key – one row per manufacturer."
         tests:
           - unique
           - not_null
