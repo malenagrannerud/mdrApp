@@ -1,86 +1,232 @@
 -- ============================================================
--- 01_create_tables.sql 
--- Author: Malena 
+-- 03_silver.sql
+-- Author: Malena
 -- Created: 2026-08-02
--- Description: Creates tables & constraint (schemas) for the medallion architecture 
-
--- bronze_reports adds a time stamp for each row
+-- Updated: 2026-09-25
+-- Description: Cleans, deduplicates and normalizes bronze_reports into silver_reports. Rejected rows are routed
+--              to silver_rejected for audit and replay.
+--
+-- Idempotent: silver_reports is TRUNCATEd before insert. silver_rejected is append-only to preserve audit history.
+--
+-- input : bronze_reports
+-- output: silver_reports, silver_rejected
+--
 -- ============================================================
 
 
--- ----------- ----------- BRONZE LAYER: Creates bronze_reports ----------------------
+-- ======================================= DEVICE_EVENT_KEY - DEDUP =======================================
 
--- TRUNCATE TABLE bronze_reports; -- RUN TO DELETE DATA, FOR TESTS
+-- HOW MANY device_event_key APPEAR > ONCE?
+-- device_event_key is the PK – duplicates ARE a problem.
+SELECT
+    device_event_key,
+    COUNT(*) AS times_seen
+FROM bronze_reports
+GROUP BY device_event_key
+HAVING COUNT(*) > 1
+ORDER BY times_seen DESC;
+-- result: 0 (PK is unique in Bronze)
 
-create table if not exists bronze_reports (
-  id bigint generated always as identity primary key,
-  report_key text,
-  device_event_key text,        
-  product_code_raw text,
-  manufacturer_raw text,
-  inserted_at timestamptz not null default now(),
-  source_file text not null
-);
-create index if not exists idx_bronze_report_key on bronze_reports (report_key);
-create index if not exists idx_bronze_device_event_key on bronze_reports (device_event_key);   
-create index if not exists idx_bronze_source_file on bronze_reports (source_file);
+-- HOW MANY report_key APPEAR > ONCE?
+-- report_key is a FK – duplicates are EXPECTED, not a problem.
+SELECT
+    report_key,
+    COUNT(*) AS times_seen
+FROM bronze_reports
+GROUP BY report_key
+HAVING COUNT(*) > 1
+ORDER BY times_seen DESC;
 
--- prevent_bronze_mutation()
--- Makes bronze_reports immutable and append-only 
--- Any UPDATE or DELETE attempt fails immediately and returns an
--- explicit error to the caller — visible at the point of failure,
--- and captured in Postgres/Supabase's own server logs by default.
-CREATE OR REPLACE FUNCTION prevent_bronze_mutation()
-RETURNS TRIGGER AS $$
+
+-- ======================================= DATA CLEANING =======================================
+
+-- HOW MANY JUNK MANUFACTURER VALUES ARE THERE?
+SELECT COUNT(*) AS junk_manufacturer_count
+FROM bronze_reports
+WHERE UPPER(TRIM(manufacturer_raw)) IN (
+    'NI', 'UNK', '*', 'N/A', 'NA', 'UNKNOWN',
+    'NO INFORMATION', '?', 'NONE'
+)
+OR length(TRIM(manufacturer_raw)) < 2;
+
+-- HOW MANY ROWS ARE MISSING A MANUFACTURER?
+SELECT COUNT(*) AS missing_manufacturer_count
+FROM bronze_reports
+WHERE manufacturer_raw IS NULL;
+
+
+-- ======================================= RUN SILVER =======================================
+
+TRUNCATE TABLE silver_reports;
+TRUNCATE TABLE silver_rejected;
+
+DROP FUNCTION IF EXISTS refresh_silver_reports();
+
+CREATE OR REPLACE FUNCTION refresh_silver_reports()
+RETURNS TABLE(rows_written BIGINT, rows_rejected BIGINT) AS $$
+DECLARE
+    written  BIGINT;
+    rejected BIGINT;
 BEGIN
-    RAISE EXCEPTION 'bronze_reports is append-only: % operations are not permitted', TG_OP;
+
+    TRUNCATE TABLE silver_reports;
+
+    -- ========================================================
+    -- STEP 1: IDENTIFY REJECTED ROWS (R1, R2, R3)
+    -- ========================================================
+    WITH
+    junk_markers AS (
+        SELECT unnest(ARRAY[
+            'NI', 'UNK', '*', 'N/A', 'NA', 'UNKNOWN',
+            'NO INFORMATION', 'NO MATCH', 'NO DATA', 'NONE', '?'
+        ]) AS marker
+    ),
+
+    ranked AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY device_event_key
+                ORDER BY id
+            ) AS row_number
+        FROM bronze_reports
+    ),
+
+    rejected_rows AS (
+        SELECT
+            r.id AS bronze_id,
+            r.device_event_key,
+            r.report_key,
+            r.product_code_raw AS product_code,
+            r.manufacturer_raw AS manufacturer_name,
+            CASE
+                WHEN r.row_number > 1
+                    THEN 'duplicate_device_event_key'                   -- R1
+                WHEN r.manufacturer_raw IS NULL
+                    THEN 'missing_manufacturer'                         -- R3
+                WHEN UPPER(TRIM(r.manufacturer_raw)) IN
+                     (SELECT marker FROM junk_markers)
+                    THEN 'invalid_manufacturer'                         -- R2
+                WHEN length(TRIM(r.manufacturer_raw)) < 2
+                    THEN 'invalid_manufacturer'                         -- R2
+                ELSE 'unknown_reason'
+            END AS rejection_reason
+        FROM ranked r
+        WHERE r.row_number > 1
+           OR r.manufacturer_raw IS NULL
+           OR UPPER(TRIM(r.manufacturer_raw)) IN
+              (SELECT marker FROM junk_markers)
+           OR length(TRIM(r.manufacturer_raw)) < 2
+    )
+
+    INSERT INTO silver_rejected (
+        bronze_id,
+        device_event_key,
+        report_key,
+        product_code,
+        manufacturer_name,
+        rejection_reason
+    )
+    SELECT
+        bronze_id,
+        device_event_key,
+        report_key,
+        product_code,
+        manufacturer_name,
+        rejection_reason
+    FROM rejected_rows;
+
+    GET DIAGNOSTICS rejected = ROW_COUNT;
+
+
+    -- ========================================================
+    -- STEP 2: CLEAN AND INSERT VALID ROWS (R1, R2, R3, R4)
+    -- ========================================================
+    WITH
+    junk_markers AS (
+        SELECT unnest(ARRAY[
+            'NI', 'UNK', '*', 'N/A', 'NA', 'UNKNOWN',
+            'NO INFORMATION', 'NO MATCH', 'NO DATA', 'NONE', '?'
+        ]) AS marker
+    ),
+
+    ranked AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY device_event_key
+                ORDER BY id
+            ) AS row_number
+        FROM bronze_reports
+    ),
+
+    cleaned AS (
+        SELECT
+            r.device_event_key,
+            r.report_key,
+            r.product_code_raw AS product_code,
+
+            -- R4: strip dots, collapse whitespace, remove legal suffixes
+            NULLIF(
+                TRIM(
+                    regexp_replace(
+                        regexp_replace(
+                            regexp_replace(r.manufacturer_raw, '\.', '', 'g'),
+                            ',.*$', '', 'g'
+                        ),
+                        '\s(inc|llc|ltd|co|corp|corporation|as|ag|gmbh|sa|ab)$',
+                        '', 'i'
+                    )
+                ),
+                ''
+            ) AS manufacturer_normalized
+
+        FROM ranked r
+        WHERE r.row_number = 1                              -- R1
+          AND r.device_event_key IS NOT NULL                 -- PK
+          AND r.product_code_raw IS NOT NULL
+          AND r.product_code_raw <> ''
+          AND r.manufacturer_raw IS NOT NULL                 -- R3
+          AND UPPER(TRIM(r.manufacturer_raw)) NOT IN
+              (SELECT marker FROM junk_markers)              -- R2
+          AND length(TRIM(r.manufacturer_raw)) >= 2          -- R2
+    ),
+
+    merged AS (
+        SELECT
+            device_event_key,
+            report_key,
+            product_code,
+
+            CASE
+                WHEN UPPER(manufacturer_normalized) LIKE 'DENTSPLY%'      THEN 'DENTSPLY'
+                WHEN UPPER(manufacturer_normalized) LIKE 'ALCON%'         THEN 'ALCON'
+                WHEN UPPER(manufacturer_normalized) LIKE 'MEDTRONIC%'     THEN 'MEDTRONIC'
+                WHEN UPPER(manufacturer_normalized) LIKE '%OLYMPUS%'      THEN 'OLYMPUS'
+                WHEN UPPER(manufacturer_normalized) LIKE 'NOBEL BIOCARE%' THEN 'NOBEL BIOCARE'
+                ELSE manufacturer_normalized
+            END AS manufacturer_name
+
+        FROM cleaned
+    )
+
+    INSERT INTO silver_reports (
+        device_event_key,
+        report_key,
+        product_code,
+        manufacturer_name
+    )
+    SELECT
+        device_event_key,
+        report_key,
+        product_code,
+        manufacturer_name
+    FROM merged;
+
+    GET DIAGNOSTICS written = ROW_COUNT;
+
+    RETURN QUERY SELECT written, rejected;
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS enforce_bronze_immutability ON bronze_reports;
-CREATE TRIGGER enforce_bronze_immutability
-    BEFORE UPDATE OR DELETE ON bronze_reports
-    FOR EACH ROW
-    EXECUTE FUNCTION prevent_bronze_mutation();
-
--- TESTA SÅ ATT prevent_bronze_mutation() fungerar som avsett.
--- Detta ska nu ge ett fel istället för att tyst göra ingenting
--- DELETE FROM bronze_reports WHERE id = 1;
--- ERROR: bronze_reports is append-only: DELETE operations are not permitted
-
-
--- ---------------------- SILVER LAYER: Creates silver_reports and silver_rejected ----------------------
-create table if not exists silver_reports (
-  device_event_key text primary key,
-  report_key text,
-  product_code text not null,
-  manufacturer_name text,
-  _silver_updated_at timestamptz not null default now()
-);
-create index if not exists idx_silver_report_key on silver_reports (report_key);
-create index if not exists idx_silver_product_code on silver_reports (product_code);
-create index if not exists idx_silver_manufacturer on silver_reports (manufacturer_name);
-
--- SILVER_REJECTED: rows from Bronze that failed Silver's validation rules.
--- Kept for audit purposes — lets you inspect why rows were dropped
-create table if not exists silver_rejected (
-  id bigint generated always as identity primary key,
-  bronze_id bigint not null,
-  report_key text,
-  device_event_key text,
-  rejection_reason text not null,
-  _rejected_at timestamptz not null default now()
-);
-create index if not exists idx_silver_rejected_reason on silver_rejected (rejection_reason);
-
-
--- ---------------------- GOLD LAYER Creates product_stats & manufacturer_stats for aggregerad data      ----------------------
-
-create table if not exists product_stats (
-  product_code text primary key,
-  total_reports integer not null
-);
-create table if not exists manufacturer_stats (
-  name text primary key,
-  total_reports integer not null
-);
+SELECT * FROM refresh_silver_reports();
