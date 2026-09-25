@@ -1,12 +1,9 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
-This document covers the pipeline behind the [Aegis Compliance](./README.md) dashboard. 
-The purpose of this analysis is to answer
+This document covers the pipeline behind the [Aegis Compliance](./README.md) dashboard. The purpose of this analysis is to answer
 
 1 - Which are the most reported products to FDA 2024?
 
 2 - Which are the most reported manufacturers to FDA 2024? 
-
-
 ```
 medallion
 ├── data
@@ -22,13 +19,9 @@ medallion
     ├── 03_silver.sql
     └── 04_gold.sql
 ```
-## Purpose & Scope
-Turn raw incident data into a source for competitive risk monitoring and PMS planning.
 
-## Pipeline steps
-```
 ## Pipeline Architecture & Data Flow
-
+```
 [ Source: FDA MAUDE (DEVICE2024.txt) ] 
        │
        ▼ (Ingestion via Python)
@@ -54,13 +47,10 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
        │
        ├───────────────────┼───────────────────────────┐
        ▼                   ▼                           ▼
-[ BI Dashboard ]     [ NOT YET-Feature Store ]   [ NOT YET-Ad-hoc Analysis ]
+[ BI Dashboard ]     [ Feature Store ]   [ NOT YET-Ad-hoc Analysis ]
 (Power BI Insights)        │
                            ▼
-                     [ ML Pipelines ]
-                     - Risk Forecasting
-                     - Text NLP Mining
-
+                     [ Future ML Pipelines ]
 ```
 
 ## REQUIREMENTS
@@ -79,13 +69,14 @@ Data Quality RULES:
 ### Silver Layer
 Purpose: Conform the raw data into a single source of truth ready for analytics.
 
-Data Quality RULES: Data must be 
+Data Quality rules:
 - SR1 – Type conversion: All columns have explicit, correct data types
 - SR2 – Deduplication: One row per device_event_key. Earliest row is kept
 - SR3 – Completeness: Rows with NULL in key columns (manufacturer_raw) are rejected.
 - SR4 – Validity: Rows with junk manufacturer values (blocklist + length < 2) are rejected.
 - SR5 – Normalization: Manufacturer names are trimmed, dots stripped, legal suffixes removed, case normalized.
-- SR6 - Unique/not_null on PK - `device_event_key`
+- SR6 – Normalization: `GENERIC_NAME` is stripped of extra spaces, converted to UPPERCASE, and empty strings default to `'UNKNOWN PRODUCT'` to ensure robust aggregation for Question 1.
+- SR7 - Unique/not_null on PK - `device_event_key`
 
 ---
 ### Gold Layer
@@ -126,11 +117,12 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 |---|---|
 | `DEVICE_EVENT_KEY` | Primary key – unique for each device event | 
 | `MDR_REPORT_KEY` | Foreign key – links this file to other MAUDE files. Can be duplicated.| 
+| `GENERIC_NAME`  | The generic common name of the medical device | 
 | `DEVICE_REPORT_PRODUCT_CODE` | FDA product classification code (3 letters) | 
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
 
 Other headers: 
-`BRAND_NAME`, `GENERIC_NAME` , `IMPLANT_FLAG`, `DATE_REMOVED_FLAG`, `DEVICE_SEQUENCE_NO`, `IMPLANT_DATE_YEAR`, `DATE_REMOVED_YEAR`, `SERVICED_BY_3RD_PARTY_FLAG`, `DATE_RECEIVED`, `MANUFACTURER ADDRESS ......`, `DEVICE_OPERATOR`, `EXPIRATION_DATE_OF_DEVICE`, `MODEL_NUMBER`, `CATALOG_NUMBER`, `LOT_NUMBER`, `OTHER_ID_NUMBER`, `DEVICE_AVAILABILITY`, `DATE_RETURNED_TO_MANUFACTURER`, `DEVICE_AGE_TEXT`, `DEVICE_EVALUATED_BY_MANUFACTURER`, `COMBINATION_PRODUCT_FLAG`, `UDI-DI`, `UDI-PUBLIC`
+`BRAND_NAME`, `IMPLANT_FLAG`, `DATE_REMOVED_FLAG`, `DEVICE_SEQUENCE_NO`, `IMPLANT_DATE_YEAR`, `DATE_REMOVED_YEAR`, `SERVICED_BY_3RD_PARTY_FLAG`, `DATE_RECEIVED`, `MANUFACTURER ADDRESS ......`, `DEVICE_OPERATOR`, `EXPIRATION_DATE_OF_DEVICE`, `MODEL_NUMBER`, `CATALOG_NUMBER`, `LOT_NUMBER`, `OTHER_ID_NUMBER`, `DEVICE_AVAILABILITY`, `DATE_RETURNED_TO_MANUFACTURER`, `DEVICE_AGE_TEXT`, `DEVICE_EVALUATED_BY_MANUFACTURER`, `COMBINATION_PRODUCT_FLAG`, `UDI-DI`, `UDI-PUBLIC`
 
 ### Step 1 — Create tables
 Run `01_create_tables.sql` in the Supabase SQL editor.
