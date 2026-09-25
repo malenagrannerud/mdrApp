@@ -128,12 +128,14 @@ Run `01_create_tables.sql` in the Supabase SQL editor.
 ### Step 2 — Run Bronze 
 ```bash
 pip install -r medallion/requirements.txt
-python medallion/01_bronze_ingest.py
+python medallion/bronze_ingest.py
 ```
 #### Verify upload in console
 Should print:  `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
 
 #### Verify data quality rules and unique/not_null
+
+
 
 
 ### Step 3 — Run Silver
