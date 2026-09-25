@@ -17,7 +17,6 @@
 -- ======================================= DEVICE_EVENT_KEY - DEDUP =======================================
 
 -- HOW MANY device_event_key APPEAR > ONCE?
--- device_event_key is the PK – duplicates ARE a problem.
 SELECT
     device_event_key,
     COUNT(*) AS times_seen
@@ -25,22 +24,10 @@ FROM bronze_reports
 GROUP BY device_event_key
 HAVING COUNT(*) > 1
 ORDER BY times_seen DESC;
--- result: 0 (PK is unique in Bronze)
-
--- HOW MANY report_key APPEAR > ONCE?
--- report_key is a FK – duplicates are EXPECTED, not a problem.
-SELECT
-    report_key,
-    COUNT(*) AS times_seen
-FROM bronze_reports
-GROUP BY report_key
-HAVING COUNT(*) > 1
-ORDER BY times_seen DESC;
-
 
 -- ======================================= DATA CLEANING =======================================
 
--- HOW MANY JUNK MANUFACTURER VALUES ARE THERE?
+-- R2: HOW MANY JUNK MANUFACTURER VALUES ARE THERE?
 SELECT COUNT(*) AS junk_manufacturer_count
 FROM bronze_reports
 WHERE UPPER(TRIM(manufacturer_raw)) IN (
@@ -48,6 +35,7 @@ WHERE UPPER(TRIM(manufacturer_raw)) IN (
     'NO INFORMATION', '?', 'NONE'
 )
 OR length(TRIM(manufacturer_raw)) < 2;
+
 
 -- HOW MANY ROWS ARE MISSING A MANUFACTURER?
 SELECT COUNT(*) AS missing_manufacturer_count
