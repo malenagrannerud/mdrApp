@@ -1,14 +1,17 @@
--- ============================================================
--- 01_create_tables.sql 
--- Author: Malena 
--- Created: 2026-08-02
--- Description: Creates tables & constraint (schemas) for the medallion architecture 
+/* 
+  01_create_tables.sql 
+  Author: Malena 
+  Created: 2026-08-02
+  Description: Creates tables for the medallion architecture 
+ */
 
--- bronze_reports adds a time stamp for each row
--- ============================================================
+-- ------------------------------------------------------------------------
+/* 
+BRONZE LAYER: 
+  Creates bronze_reports to save raw data
+  Adds a time stamp for each row
 
-
--- ----------- ----------- BRONZE LAYER: Creates bronze_reports ----------------------
+*/
 
 -- TRUNCATE TABLE bronze_reports; -- RUN TO DELETE DATA, FOR TESTS
 
