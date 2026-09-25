@@ -63,32 +63,38 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
 ### Bronze Layer
 Purpose: Ingest and store raw data from source systems.
 
-Data Quality: 
-- 1 - Critical columns must exist,
-- 2 - The file cant be empty,
-- 3 - Data must have meta data (source file and time stamp),
-- 4 - Data must be saved as "append only": no update/delete, new data is inserted only
-
-Validation before silver: unique/not null PK's (LATER FOR DBT)
+Data Quality RULES: 
+- BR1 – Schema: Critical columns must exist (schema validation)
+- BR2 – Volume: The source file must contain at least one data row
+- BR3 – Metadata: Every row must have source_file and inserted_at
+- BR4 – Immutability: Append-only. No UPDATE or DELETE. Enforced by DB trigger.
+- BR5 - Validation before silver: unique/not null PK's (LATER ALSO IN DBT)
 
 ---
 ### Silver Layer
 Purpose: Conform the raw data into a single source of truth ready for analytics.
 
-Data Quality: Data must be 
-- 1 - Type converted,
-- 2 - Deduplicated: One row per primary key (PK)
-- 3 - Filtered: Rows with null values on key columns are removed
-
-Validation before gold: unique/not null PK's (LATER FOR DBT)
+Data Quality RULES: Data must be 
+- SR1 – Type conversion: All columns have explicit, correct data types
+- SR2 – Deduplication: One row per device_event_key. Earliest row is kept
+- SR3 – Completeness: Rows with NULL in key columns (manufacturer_raw) are rejected.
+- SR4 – Validity: Rows with junk manufacturer values (blocklist + length < 2) are rejected.
+- SR5 – Normalization: Manufacturer names are trimmed, dots stripped, legal suffixes removed, case normalized.
+- SR6 Validation before Gold (also in dbt later): unique + not_null on device_event_key
 
 ---
 ### Gold Layer
 Purpose: Deliver business-focused, aggregated, and highly performant data models (e.g., star schemas with facts and dimensions) directly to BI tools.
 
-Data Quality: Guarantees that data is strictly analytics-ready
+Data Quality Rules: 
+- GR1 – Reproducibility: All metrics can be recomputed from Silver
+- GR2 – PK integrity: No NULL or duplicates in product_stats.product_code or manufacturer_stats.name
+- GR3 – Sanity: total_reports > 0 in both tables
+- GR4 – Consistency: Sum of total_reports in product_stats equals row count in silver_reports
 
-Performance: Optimized for end-user querying through pre-calculated metrics and aggregations.
+Performance:
+- Pre-calculated metrics and aggregations --> makes code faster
+- Materialized as tables (TRUNCATE + INSERT -->  idempotency)
 
 ---
 
