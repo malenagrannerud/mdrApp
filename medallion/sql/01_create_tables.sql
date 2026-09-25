@@ -51,13 +51,13 @@ CREATE TRIGGER enforce_bronze_immutability
 
 -- ---------------------- SILVER LAYER: Creates silver_reports and silver_rejected ----------------------
 create table if not exists silver_reports (
-  report_key text primary key,
+  device_event_key text primary key,
+  report_key text,
   product_code text not null,
-  brand_name text,
-  generic_name text,
   manufacturer_name text,
   _silver_updated_at timestamptz not null default now()
 );
+create index if not exists idx_silver_report_key on silver_reports (report_key);
 create index if not exists idx_silver_product_code on silver_reports (product_code);
 create index if not exists idx_silver_manufacturer on silver_reports (manufacturer_name);
 
@@ -67,6 +67,7 @@ create table if not exists silver_rejected (
   id bigint generated always as identity primary key,
   bronze_id bigint not null,
   report_key text,
+  device_event_key text,
   rejection_reason text not null,
   _rejected_at timestamptz not null default now()
 );
@@ -77,10 +78,7 @@ create index if not exists idx_silver_rejected_reason on silver_rejected (reject
 
 create table if not exists product_stats (
   product_code text primary key,
-  total_reports integer not null,
-  brand_name text,
-  generic_name text,
-  manufacturer_name text
+  total_reports integer not null
 );
 create table if not exists manufacturer_stats (
   name text primary key,
