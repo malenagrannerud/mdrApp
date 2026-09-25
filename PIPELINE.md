@@ -27,34 +27,40 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
 
 ## Pipeline steps
 ```
-[ Source: FDA MAUDE - DEVICE2024.txt ] (could be from an API, DB etc)
+## Pipeline Architecture & Data Flow
+
+[ Source: FDA MAUDE (DEVICE2024.txt) ] 
        │
-       ▼  
+       ▼ (Ingestion via Python)
 ┌─────────────────────────────────────────┐
-│ bronze_ingest.py                        │
-| - Reads a source file                   │
-| - Writes raw data to bronze_reports     │
-|   in Supabase                           │
+│ BRONZE LAYER (Raw & Immutable)          │
+│ - Append-only storage in Supabase       │
+│ - Tracks ingestion metadata             │
 └─────────────────────────────────────────┘
        │
-       ▼  
+       ▼ (Transformation & DQ via SQL/dbt)
 ┌───────────────────────────────────────────┐
-│ 03_silver.sql                             │
-│  - Reads from table bronze_reports        │
-│  - Washes data & writes to silver_reports │
+│ SILVER LAYER (Cleaned & Normalized)       │
+│ - Deduplication & Type Casting            │
+│ - Junk filtering ──> [ Quarantine Table ] │
 └───────────────────────────────────────────┘
        │
-       ▼  
+       ▼ (Aggregation & Feature Engineering)
 ┌─────────────────────────────────────────┐
-│ 04_gold.sql                             │
-│  - Reads from table silver_reports      │
-│  - Aggregates data into product_stats & │
-│    manufacturer_stats                   │
+│ GOLD LAYER (Business & ML Ready)        │
+│ - High-performance materialized views    │
+│ - Analytical Star Schema                │
 └─────────────────────────────────────────┘
        │
-       ├───────────────────┬───────────────────┐
-       ▼                   ▼                   ▼
-[ Dashboard (Power BI) ][ AI / ML Models ][ Ad-hoc Analysis ]
+       ├───────────────────┼───────────────────────────┐
+       ▼                   ▼                           ▼
+[ BI Dashboard ]     [ NOT YET-Feature Store ]   [ NOT YET-Ad-hoc Analysis ]
+(Power BI Insights)        │
+                           ▼
+                     [ ML Pipelines ]
+                     - Risk Forecasting
+                     - Text NLP Mining
+
 ```
 
 ## REQUIREMENTS
