@@ -20,8 +20,6 @@ medallion
     ├── 02_bronze.sql
     ├── 03_silver.sql
     └── 04_gold.sql
-    
-        
 ```
 ## Purpose & Scope
 Turn raw incident data into a source for competitive risk monitoring and PMS planning.
@@ -33,8 +31,8 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
        ▼  
 ┌─────────────────────────────────────────┐
 │ bronze_ingest.py                        │
-| - Reads a source file (`DEVICE2024.txt`)│
-| - Writes to table bronze_reports        │
+| - Reads a source file                   │
+| - Writes raw data to bronze_reports     │
 |   in Supabase                           │
 └─────────────────────────────────────────┘
        │
@@ -62,19 +60,19 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
 ## REQUIREMENTS
 
 ### Bronze Layer
-Purpose: Ingest and store raw data (Append-only) from source systems as fast and cost-effectively as possible.
+Purpose: Ingest and store raw data from source systems.
 
-Data Quality: Validates data shape and structural schemas (data types and column names) in Python to prevent ingestion crashes.
+Data Quality: 1 - Critical columns must exist (schema validity), 2 - The file cant be empty, 3 - Data must have meta data (source file and time stamp), 4 - Data must be saved as "append only": no update/delete, new data is inserted only
 
-Lineage: Enriches every row with file name (source_file) and timestamp (inserted_at) to enable incremental loading and auditing.
+Rules for bronze data before building the silver layer: 1 - Duplicated batches not allowed
 
 ---
 ### Silver Layer
-Purpose: Clean, standardize, and conform the raw data into a single source of truth ready for analytics.
+Purpose: Conform the raw data into a single source of truth ready for analytics.
 
-Data Quality: Utilizes dbt tests as a quality gate to strictly enforce unique and not_null constraints on business keys before building the layer.
+Data Quality: Data must be 1 - Type converted, 2 - Deduplicated, 3 - Filtered, 4 - Enriched with other tables by JOIN, 5 - If GDPR: use HASHBYTES
 
-Business Logic: Deduplicates records, filters out invalid rows, handles missing columns (index -1), and standardizes formatting (dates, strings, currencies).
+Rules before building the Gold layer: 1 - Duplicated PK's not allowed, 2 - Null values on PK's not allowed
 
 ---
 ### Gold Layer
@@ -82,7 +80,7 @@ Purpose: Deliver business-focused, aggregated, and highly performant data models
 
 Data Quality: Guarantees that data is strictly analytics-ready
 
-Performance: Optimized for end-user querying through pre-calculated metrics and aggregations, completely removing complex SQL logic from dashboards.
+Performance: Optimized for end-user querying through pre-calculated metrics and aggregations.
 
 ---
 
@@ -108,7 +106,7 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 | Column | Role | 
 |---|---|
 | `DEVICE_EVENT_KEY` | Primary key – unique for each device event | 
-| `MDR_REPORT_KEY` | Foreign key – links this file to other MAUDE files. Good to have for joining files later | 
+| `MDR_REPORT_KEY` | Foreign key – links this file to other MAUDE files. Can be duplicated. Good to have for joining files later | 
 | `DEVICE_REPORT_PRODUCT_CODE` | FDA product classification code (3 letters) | 
 | `BRAND_NAME` | Manufacturer's marketing name  | 
 | `GENERIC_NAME` | Medical/technical product name | 
@@ -120,9 +118,8 @@ Other headers:
 
 ### Step 1 — Create tables
 Run `01_create_tables.sql` in the Supabase SQL editor.
-Creates `bronze_reports`, `silver_reports`, `product_stats`, `manufacturer_stats`.
 
-### Step 2 — Run Bronze
+### Step 2 — Run Bronze 
 ```bash
 pip install -r medallion/requirements.txt
 python medallion/01_bronze_ingest.py
@@ -130,23 +127,11 @@ python medallion/01_bronze_ingest.py
 #### Verify upload in console
 Should print:  `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
 
-#### Verify bronze_reports
-console prints `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
-```sql 
-SELECT * FROM bronze_reports ORDER BY id ASC LIMIT 20;
-```
-
-
-
-#### Verify row count and deleted rows
-| count  | min      | max      |
-| -----  | -------- | -------- |
-| 200000 | 18423065 | 18443053 |
-
+#### Inspect the data, verify no duplicates on primary key
 
 
 ### Step 3 — Run Silver
-Run `02_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates remain
+Run `02_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates on PK 
 
 ### Verify number of rows dropped
 ```sql
@@ -189,7 +174,7 @@ RESULTS  39 report_keys has duplicates
 | ------- | ------ | ------------------------------------------------------ |
 | Bronze  | 20 000 | Raw rows as ingested from DEVICE2024.txt               |
 | Silver  | 19 950 | After deduplication and invalid manufacturer filtering |
-| Dropped | 50     | 39 duplicate report_key + 11 invalid manufacturers     |
+| Dropped | 50     | 39 duplicate PK + 11 invalid manufacturers             |
 Validation rate: 19 950 / 20 000 = 99.75%
 
 
