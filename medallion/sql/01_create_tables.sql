@@ -2,7 +2,8 @@
   01_create_tables.sql 
   Author: Malena 
   Created: 2026-08-02
-  Description: Creates tables for the medallion architecture 
+  Updated: 2026-09-25
+  Description: Creates tables for the medallion architecture, including GENERIC_NAME 
  */
 
 -- ------------------------------------------------------------------------
@@ -10,29 +11,26 @@
 BRONZE LAYER: 
   Creates bronze_reports to save raw data
   Adds a time stamp for each row
-
 */
 
 -- TRUNCATE TABLE bronze_reports; -- RUN TO DELETE DATA, FOR TESTS
 
-create table if not exists bronze_reports (
-  id bigint generated always as identity primary key,
+CREATE TABLE IF NOT EXISTS bronze_reports (
+  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   report_key text,
   device_event_key text,        
+  generic_name text,            -- Rå data från python-ingestorn
   product_code_raw text,
   manufacturer_raw text,
-  inserted_at timestamptz not null default now(),
-  source_file text not null
+  inserted_at timestamptz NOT NULL DEFAULT now(),
+  source_file text NOT NULL
 );
-create index if not exists idx_bronze_report_key on bronze_reports (report_key);
-create index if not exists idx_bronze_device_event_key on bronze_reports (device_event_key);   
-create index if not exists idx_bronze_source_file on bronze_reports (source_file);
+CREATE INDEX IF NOT EXISTS idx_bronze_report_key ON bronze_reports (report_key);
+CREATE INDEX IF NOT EXISTS idx_bronze_device_event_key ON bronze_reports (device_event_key);   
+CREATE INDEX IF NOT EXISTS idx_bronze_source_file ON bronze_reports (source_file);
 
 -- prevent_bronze_mutation()
 -- Makes bronze_reports immutable and append-only 
--- Any UPDATE or DELETE attempt fails immediately and returns an
--- explicit error to the caller — visible at the point of failure,
--- and captured in Postgres/Supabase's own server logs by default.
 CREATE OR REPLACE FUNCTION prevent_bronze_mutation()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -48,39 +46,45 @@ CREATE TRIGGER enforce_bronze_immutability
 
 
 -- ---------------------- SILVER LAYER: Creates silver_reports and silver_rejected ----------------------
-create table if not exists silver_reports (
-  device_event_key text primary key,
+CREATE TABLE IF NOT EXISTS silver_reports (
+  device_event_key text PRIMARY KEY,
   report_key text,
-  product_code text not null,
+  generic_name text NOT NULL,   -- Tvättad och säkrad produktkategori
+  product_code text NOT NULL,
   manufacturer_name text,
-  _silver_updated_at timestamptz not null default now()
+  _silver_updated_at timestamptz NOT NULL DEFAULT now()
 );
-create index if not exists idx_silver_report_key on silver_reports (report_key);
-create index if not exists idx_silver_product_code on silver_reports (product_code);
-create index if not exists idx_silver_manufacturer on silver_reports (manufacturer_name);
+CREATE INDEX IF NOT EXISTS idx_silver_report_key ON silver_reports (report_key);
+CREATE INDEX IF NOT EXISTS idx_silver_product_code ON silver_reports (product_code);
+CREATE INDEX IF NOT EXISTS idx_silver_manufacturer ON silver_reports (manufacturer_name);
+CREATE INDEX IF NOT EXISTS idx_silver_generic_name ON silver_reports (generic_name);
 
--- SILVER_REJECTED: rows from Bronze that failed Silver's validation rules.
--- Kept for audit purposes — lets you inspect why rows were dropped
-create table if not exists silver_rejected (
-  id bigint generated always as identity primary key,
-  bronze_id bigint not null,
+-- SILVER_REJECTED: Karantän för rader som misslyckas i valideringen
+CREATE TABLE IF NOT EXISTS silver_rejected (
+  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  bronze_id bigint NOT NULL,
   device_event_key text,
   report_key text,
+  generic_name text,
   product_code text,
   manufacturer_name text,
-  rejection_reason text not null,
-  _rejected_at timestamptz not null default now()
+  rejection_reason text NOT NULL,
+  _rejected_at timestamptz NOT NULL DEFAULT now()
 );
-create index if not exists idx_silver_rejected_reason on silver_rejected (rejection_reason);
+CREATE INDEX IF NOT EXISTS idx_silver_rejected_reason ON silver_rejected (rejection_reason);
 
 
--- ---------------------- GOLD LAYER Creates product_stats & manufacturer_stats for aggregerad data      ----------------------
+-- ---------------------- GOLD LAYER: Aggregerad data för BI ----------------------
 
-create table if not exists product_stats (
-  product_code text primary key,
-  total_reports integer not null
+-- SVAR PÅ FRÅGA 1: Behåller product_code som PK (GR4), har generic_name för dashboarden
+CREATE TABLE IF NOT EXISTS product_stats (
+  product_code text PRIMARY KEY,
+  generic_name text NOT NULL,
+  total_reports integer NOT NULL
 );
-create table if not exists manufacturer_stats (
-  name text primary key,
-  total_reports integer not null
+
+-- SVAR PÅ FRÅGA 2: Mest rapporterade tillverkare
+CREATE TABLE IF NOT EXISTS manufacturer_stats (
+  name text PRIMARY KEY,
+  total_reports integer NOT NULL
 );
