@@ -3,6 +3,8 @@
 -- Author: Malena 
 -- Created: 2026-08-02
 -- Description: Creates tables & constraint (schemas) for the medallion architecture 
+
+-- bronze_reports adds a time stamp for each row
 -- ============================================================
 
 
@@ -15,8 +17,6 @@ create table if not exists bronze_reports (
   report_key text,
   device_event_key text,        
   product_code_raw text,
-  brand_name_raw text,
-  generic_name_raw text,
   manufacturer_raw text,
   inserted_at timestamptz not null default now(),
   source_file text not null
