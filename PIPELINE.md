@@ -1,6 +1,6 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 This document covers the pipeline behind the [Aegis Compliance](./README.md) dashboard. 
-This analysis answers
+The purpose of this analysis is to answer
 
 1 - Which are the most reported products to FDA 2024?
 
@@ -38,16 +38,15 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
 └─────────────────────────────────────────┘
        │
        ▼  
-┌─────────────────────────────────────────┐
-│ 02_silver.sql                           │
-│  - Reads from table bronze_reports      │
-│  - Washes data and writes to            │
-│     silver_reports                      │
-└─────────────────────────────────────────┘
+┌───────────────────────────────────────────┐
+│ 03_silver.sql                             │
+│  - Reads from table bronze_reports        │
+│  - Washes data & writes to silver_reports │
+└───────────────────────────────────────────┘
        │
        ▼  
 ┌─────────────────────────────────────────┐
-│ 03_gold.sql                             │
+│ 04_gold.sql                             │
 │  - Reads from table silver_reports      │
 │  - Aggregates data into product_stats & │
 │    manufacturer_stats                   │
@@ -64,11 +63,11 @@ Turn raw incident data into a source for competitive risk monitoring and PMS pla
 Purpose: Ingest and store raw data from source systems.
 
 Data Quality RULES: 
-- BR1 – Schema: Critical columns must exist (schema validation)
+- BR1 – Schema: Critical columns must exist 
 - BR2 – Volume: The source file must contain at least one data row
 - BR3 – Metadata: Every row must have source_file and inserted_at
 - BR4 – Immutability: Append-only. No UPDATE or DELETE. Enforced by DB trigger.
-- BR5 - Validation before silver: unique/not null PK's (LATER ALSO IN DBT)
+- BR5 - Unique/not_null PK - `id`
 
 ---
 ### Silver Layer
@@ -80,7 +79,7 @@ Data Quality RULES: Data must be
 - SR3 – Completeness: Rows with NULL in key columns (manufacturer_raw) are rejected.
 - SR4 – Validity: Rows with junk manufacturer values (blocklist + length < 2) are rejected.
 - SR5 – Normalization: Manufacturer names are trimmed, dots stripped, legal suffixes removed, case normalized.
-- SR6 Validation before Gold (also in dbt later): unique + not_null on device_event_key
+- SR6 - Unique/not_null on PK - `device_event_key`
 
 ---
 ### Gold Layer
@@ -88,9 +87,9 @@ Purpose: Deliver business-focused, aggregated, and highly performant data models
 
 Data Quality Rules: 
 - GR1 – Reproducibility: All metrics can be recomputed from Silver
-- GR2 – PK integrity: No NULL or duplicates in product_stats.product_code or manufacturer_stats.name
-- GR3 – Sanity: total_reports > 0 in both tables
-- GR4 – Consistency: Sum of total_reports in product_stats equals row count in silver_reports
+- GR2 – Sanity: total_reports > 0 in both tables
+- GR3 – Consistency: Sum of total_reports in product_stats equals row count in silver_reports
+- GR4 – unique/not_null on PK's `product_stats.product_code` and `manufacturer_stats.name`
 
 Performance:
 - Pre-calculated metrics and aggregations --> makes code faster
@@ -127,49 +126,37 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 Other headers: 
 `BRAND_NAME`, `GENERIC_NAME` , `IMPLANT_FLAG`, `DATE_REMOVED_FLAG`, `DEVICE_SEQUENCE_NO`, `IMPLANT_DATE_YEAR`, `DATE_REMOVED_YEAR`, `SERVICED_BY_3RD_PARTY_FLAG`, `DATE_RECEIVED`, `MANUFACTURER ADDRESS ......`, `DEVICE_OPERATOR`, `EXPIRATION_DATE_OF_DEVICE`, `MODEL_NUMBER`, `CATALOG_NUMBER`, `LOT_NUMBER`, `OTHER_ID_NUMBER`, `DEVICE_AVAILABILITY`, `DATE_RETURNED_TO_MANUFACTURER`, `DEVICE_AGE_TEXT`, `DEVICE_EVALUATED_BY_MANUFACTURER`, `COMBINATION_PRODUCT_FLAG`, `UDI-DI`, `UDI-PUBLIC`
 
-
 ### Step 1 — Create tables
 Run `01_create_tables.sql` in the Supabase SQL editor.
 
 ### Step 2 — Run Bronze 
 ```bash
-pip install -r medallion/requirements.txt
+pip install -r medallion/python/requirements.txt
 python medallion/bronze_ingest.py
 ```
 #### Verify upload in console
-Should print:  `BRONZE KLAR`, `bronze_reports` is populated in Supabase.
+Expected:  `BRONZE DONE`, `bronze_reports` is populated in Supabase.
 
-#### Verify data quality rules and unique/not_null
-
-
-
+#### Verify data quality rules 
 
 ### Step 3 — Run Silver
-Run `02_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates on PK 
+Run `03_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates on PK 
 
-#### Verify data quality rules and unique/not_null
+#### Verify data quality rules 
 
-
-#### Validation rate
-| Layer   | Rows   | Notes                                                  |
-| ------- | ------ | ------------------------------------------------------ |
-| Bronze  | 20 000 | Raw rows as ingested from DEVICE2024.txt               |
-| Silver  | 19 950 | After deduplication and invalid manufacturer filtering |
-| Dropped | 50     | 39 duplicate PK + 11 invalid manufacturers             |
-Validation rate: 19 950 / 20 000 = 99.75%
-
+#### Verify validation rate
 
 ### Step 4 — Run Gold
-Run `03_gold.sql` in Supabase.
+Run `04_gold.sql` in Supabase.
 
-
+#### Verify data quality rules 
 
 ### Step 5 — View the dashboard
 `Dashboard.jsx` reads the top rows from `product_stats` and `manufacturer_stats` and renders them as charts.
 
 ## Future steps
 * dbt
-* Silver: Enriche with other tables by JOIN for better insights. 
+* Silver: Enrich with other tables by JOIN for better insights. 
 * star schemas 
 
 Note: No GDPR, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 
