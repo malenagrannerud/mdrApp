@@ -2,7 +2,7 @@
 
 Author: Malena
 Created: 2026-08-02
-Description: Reads data from a source text file and writes to the Supabase bronze_reports table. All components consolidated into one file.
+Description: Reads data from a source text file and writes to the Supabase bronze_reports table. 
 
 """
 
