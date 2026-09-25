@@ -30,8 +30,6 @@ HEADER_DICTIONARY = {
     "reportKey":      "MDR_REPORT_KEY",            
     "deviceEventKey": "DEVICE_EVENT_KEY",          # PK – unique per device event
     "productCode":    "DEVICE_REPORT_PRODUCT_CODE",
-    "brandName":      "BRAND_NAME",
-    "genericName":    "GENERIC_NAME",
     "manufacturerRaw":"MANUFACTURER_D_NAME",
 }
 
@@ -128,8 +126,8 @@ def build_header_mapping(headers: list[str]) -> dict[str, int]:
     r"""Takes the header row & returns a dictionary mapping internal names to column positions
 
     This function takes the header line (file[0]), splits it into columns and give each column an index:
-        Before: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|..."
-        After:  ["MDR_REPORT_KEY":0], ["DEVICE_REPORT_PRODUCT_CODE":1], ["BRAND_NAME":2, "GENERIC_NAME":3], ["MANUFACTURER_D_NAME":4]
+        Before: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|MANUFACTURER_D_NAME|..."
+        After:  ["MDR_REPORT_KEY":0], ["DEVICE_REPORT_PRODUCT_CODE":1], ["MANUFACTURER_D_NAME":2]
     
     Args:
         headers (list[str]): A list of the column names from the source file.
@@ -154,8 +152,6 @@ class BronzeRow(BaseModel):
         report_key (Optional[str] = None)
         device_event_key: (Optional[str] = None)  
         product_code_raw (Optional[str] = None)
-        brand_name_raw (Optional[str] = None)
-        generic_name_raw (Optional[str] = None)
         manufacturer_raw (Optional[str] = None)
         source_file (str)
 
@@ -164,8 +160,6 @@ class BronzeRow(BaseModel):
             >>> raw_row = {
             ...    "report_key": "124",
             ...    "product_code_raw": "CBK",
-            ...    "brand_name_raw": "Servo Air",
-            ...    "generic_name_raw": None,           # None OK
             ...    "manufacturer_raw": "Getinge",
             ...    "source_file": "data/DEVICE2024.txt"
             ... }
@@ -181,8 +175,6 @@ class BronzeRow(BaseModel):
     report_key: Optional[str] = None
     device_event_key: Optional[str] = None     
     product_code_raw: Optional[str] = None
-    brand_name_raw: Optional[str] = None
-    generic_name_raw: Optional[str] = None
     manufacturer_raw: Optional[str] = None
     source_file: str
 
@@ -206,16 +198,15 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
 
     Returns:
         dict: A dictionary with internal field names as keys and extracted values as values.
-            Keys: report_key, product_code_raw, brand_name_raw, generic_name_raw,
-            manufacturer_raw, source_file.
+            Keys: report_key, device_event_key, product_code_raw, manufacturer_raw,
+            source_file.
 
     Examples:
-        >>> fields = ["12345", "CBK", "Servo Air", "Ventilator", "Getinge"]
-        >>> col_idx = {"reportKey": 0, "productCode": 1, "brandName": 2,
-        ...            "genericName": 3, "manufacturerRaw": 4}
+        >>> fields = ["12345", "CBK", "Getinge"]
+        >>> col_idx = {"reportKey": 0, "productCode": 1, "manufacturerRaw": 2}
         >>> build_raw_row(fields, col_idx, "data/DEVICE2024.txt")
-        {'report_key': '12345', 'product_code_raw': 'CBK', 'brand_name_raw': 'Servo Air',
-         'generic_name_raw': 'Ventilator', 'manufacturer_raw': 'Getinge',
+        {'report_key': '12345', 'device_event_key': None,
+         'product_code_raw': 'CBK', 'manufacturer_raw': 'Getinge',
          'source_file': 'data/DEVICE2024.txt'}
 
     """
@@ -223,8 +214,6 @@ def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) 
         "report_key":         get_field(col_idx["reportKey"], fields),
         "device_event_key":   get_field(col_idx["deviceEventKey"], fields),   
         "product_code_raw":   get_field(col_idx["productCode"], fields),
-        "brand_name_raw":     get_field(col_idx["brandName"], fields),
-        "generic_name_raw":   get_field(col_idx["genericName"], fields),
         "manufacturer_raw":   get_field(col_idx["manufacturerRaw"], fields),
         "source_file":        source_file,
     }
