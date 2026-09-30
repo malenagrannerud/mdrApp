@@ -1,5 +1,5 @@
 
-![CI](https://github.com/malenagrannerud/mdrApp/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/malenagrannerud/mdrApp/medallion/actions/workflows/ci.yml/badge.svg)
 
 
 
