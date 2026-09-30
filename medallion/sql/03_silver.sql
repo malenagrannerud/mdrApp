@@ -13,10 +13,9 @@
          The function then fails and undoes everything.
 
   Run order: 
-- 01_create_tables.sql 
-- 02_bronze.sql
-- 03_silver.sql
-- SELECT * FROM refresh_silver_reports();
+  Step 1: 01_create_tables.sql 
+  Step 2: 03_silver.sql
+  Step 3: SELECT * FROM refresh_silver_reports();
 */
 
 
