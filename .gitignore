@@ -42,3 +42,8 @@ htmlcov/
 
 # Supabase local dev
 .supabase/
+
+
+
+medallion/data/mdrfoi*.txt
+medallion/data/*.zip
