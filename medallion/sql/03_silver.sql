@@ -12,7 +12,11 @@
          If the numbers do not match, data was lost silently.
          The function then fails and undoes everything.
 
-  Run order: 01_create_tables.sql -> this file -> SELECT * FROM refresh_silver_reports();
+  Run order: 
+- 01_create_tables.sql 
+- 02_bronze.sql
+- 03_silver.sql
+- SELECT * FROM refresh_silver_reports();
 */
 
 
