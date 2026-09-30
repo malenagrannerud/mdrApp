@@ -1,245 +1,200 @@
+/*
+  03_silver.sql
+  Author: Malena
+  Updated: 2026-09-30
+
+  WHAT:  Cleans bronze_reports and splits every row into
+         silver_reports (valid) or silver_rejected (invalid, with a reason).
+  WHY:   Gold must only see trusted data. Bad rows are quarantined,
+         not deleted, so we can always explain why a row was excluded.
+
+  THE KEY RULE:  bronze rows = silver rows + rejected rows.
+         If the numbers do not match, data was lost silently.
+         The function then fails and undoes everything.
+
+  Run order: 01_create_tables.sql -> this file -> SELECT * FROM refresh_silver_reports();
+*/
+
+
 -- ============================================================
--- 03_silver.sql
--- Author: Malena
--- Created: 2026-08-02, Updated: 2026-09-25
--- Description: Cleans, deduplicates and normalizes bronze_reports into silver_reports. 
---              Rejected rows are routed to silver_rejected for audit and replay.
---
--- Idempotent: silver_reports is TRUNCATEd before insert. silver_rejected is append-only to preserve audit history.
---
--- input : bronze_reports
--- output: silver_reports, silver_rejected
---
--- RULES APPLIED (FROM PIPELINE.md):
---   SR1 – Type conversion: Explicit text mapping.
---   SR2 – Deduplication: Keep first (earliest) row per device_event_key.
---   SR3 – Completeness: Missing manufacturer (NULL) is rejected.
---   SR4 – Validity: Junk manufacturer values or length < 2 are rejected.
---   SR5 – Normalization: Strip dots, collapse whitespace, remove legal suffixes from manufacturer.
---   SR6 – Normalization: GENERIC_NAME is trimmed, capitalized, and defaults to 'UNKNOWN PRODUCT'.
---   SR7 – Constraints: Unique/not_null on PK device_event_key.
+-- STEP 0: LOOK BEFORE YOU CLEAN (read-only, changes nothing)
 -- ============================================================
+-- WHY? Know problems in the data before writing rules. These numbers also become evidence that each rule is needed.
 
-
--- ======================================= STEP 0: VERIFY =======================================
-
--- HOW MANY device_event_key APPEAR > ONCE? (Pre-check for SR2)
-SELECT
-    device_event_key,
-    COUNT(*) AS times_seen
+-- Rows sharing a device_event_key (needed for rule SR2, deduplication)
+SELECT device_event_key, COUNT(*) AS times_seen
 FROM bronze_reports
 GROUP BY device_event_key
 HAVING COUNT(*) > 1
-ORDER BY times_seen DESC;
+ORDER BY times_seen DESC
+LIMIT 20;
 
--- HOW MANY report_key APPEAR > ONCE?
-SELECT
-    report_key,
-    COUNT(*) AS times_seen
-FROM bronze_reports
-GROUP BY report_key
-HAVING COUNT(*) > 1
-ORDER BY times_seen DESC;
-
--- HOW MANY JUNK MANUFACTURER VALUES ARE THERE? (Pre-check for SR4)
+-- Junk manufacturer names (needed for rule SR4)
 SELECT COUNT(*) AS junk_manufacturer_count
 FROM bronze_reports
-WHERE UPPER(TRIM(manufacturer_raw)) IN (
-    'NI', 'UNK', '*', 'N/A', 'NA', 'UNKNOWN',
-    'NO INFORMATION', '?', 'NONE', 'NO MATCH', 'NO DATA'
-)
-OR length(TRIM(manufacturer_raw)) < 2;
+WHERE UPPER(TRIM(manufacturer_raw)) IN
+      ('NI','UNK','*','N/A','NA','UNKNOWN','NO INFORMATION','?','NONE','NO MATCH','NO DATA')
+   OR length(TRIM(manufacturer_raw)) < 2;
 
--- HOW MANY ROWS ARE MISSING A MANUFACTURER? (Pre-check for SR3)
+-- Missing manufacturer (needed for rule SR3)
 SELECT COUNT(*) AS missing_manufacturer_count
 FROM bronze_reports
 WHERE manufacturer_raw IS NULL;
 
 
--- ======================================= STEP 1: RUN SILVER =======================================
+-- ============================================================
+-- STEP 1: THE CLEANING FUNCTION
+-- ============================================================
+-- WHY a function? It runs as ONE transaction: either everything succeeds,
+-- or nothing changes. If the reconciliation check at the end fails,
+-- the database rolls back to how it was before. No half-finished silver.
 
 DROP FUNCTION IF EXISTS refresh_silver_reports();
 
 CREATE OR REPLACE FUNCTION refresh_silver_reports()
-RETURNS TABLE(rows_written BIGINT, rows_rejected BIGINT) AS $$
+RETURNS TABLE(o_run_id uuid, o_bronze bigint, o_written bigint, o_rejected bigint) AS $$
 DECLARE
-    written  BIGINT;
-    rejected BIGINT;
+    -- WHY a run_id? It stamps every row this run creates, so later you can
+    -- answer "which run produced this number?" (traceability).
+    v_run_id   uuid := gen_random_uuid();
+    v_bronze   bigint;
+    v_written  bigint;
+    v_rejected bigint;
 BEGIN
 
-    -- Tömmer silver_reports för att garantera idempotens. 
-    -- silver_rejected rörs INTE här eftersom den ska vara append-only för historik (Audit log).
+    -- WHY truncate silver_reports? Silver is always recalculated from scratch
+    -- from bronze. Running twice gives the same result (idempotent).
+    -- silver_rejected is NOT truncated: it is the audit history.
     TRUNCATE TABLE silver_reports;
 
-    -- ========================================================
-    -- STEP 1.1: IDENTIFY AND ROUTE REJECTED ROWS TO QUARANTINE. Applies rules: SR2, SR3, SR4
-    -- ========================================================
+    -- --------------------------------------------------------
+    -- STEP 1.1: Give every bronze row ONE label
+    -- --------------------------------------------------------
+    -- WHY one label per row? The old version had two separate lists
+    -- ("what to reject" and "what to keep") that were not exact opposites.
+    -- A row matching neither list vanished. With one label per row and a
+    -- split on that label, a row can only go one of two ways.
+    -- ON COMMIT DROP: the temp table cleans itself up.
+    CREATE TEMP TABLE tmp_classified ON COMMIT DROP AS
     WITH
-    junk_markers AS (
-        SELECT unnest(ARRAY[
-            'NI', 'UNK', '*', 'N/A', 'NA', 'UNKNOWN',
-            'NO INFORMATION', 'NO MATCH', 'NO DATA', 'NONE', '?'
-        ]) AS marker
+    junk AS (
+        SELECT unnest(ARRAY['NI','UNK','*','N/A','NA','UNKNOWN','NO INFORMATION',
+                            'NO MATCH','NO DATA','NONE','?']) AS marker
     ),
 
+    -- SR2: number the rows per device_event_key; the earliest gets 1.
+    -- WHY earliest? It is the original report; later ones are repeats.
     ranked AS (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (
-                PARTITION BY device_event_key
-                ORDER BY id
-            ) AS row_number
+        SELECT *, ROW_NUMBER() OVER (PARTITION BY device_event_key ORDER BY id) AS rn
         FROM bronze_reports
     ),
 
-    rejected_rows AS (
-        SELECT
-            r.id AS bronze_id,
-            r.device_event_key,
-            r.report_key,
-            r.generic_name,                                              
-            r.product_code_raw AS product_code,
-            r.manufacturer_raw AS manufacturer_name,
-            CASE
-                WHEN r.row_number > 1
-                    THEN 'duplicate_device_event_key'                   -- SR2
-                WHEN r.manufacturer_raw IS NULL
-                    THEN 'missing_manufacturer'                         -- SR3
-                WHEN UPPER(TRIM(r.manufacturer_raw)) IN
-                     (SELECT marker FROM junk_markers)
-                    THEN 'invalid_manufacturer'                         -- SR4
-                WHEN length(TRIM(r.manufacturer_raw)) < 2
-                    THEN 'invalid_manufacturer'                         -- SR4
-                ELSE 'unknown_reason'
-            END AS rejection_reason
+    -- SR5: normalize manufacturer names ("Medtronic Inc." -> "Medtronic").
+    -- WHY? Without it, the same company is counted as several different
+    -- manufacturers and the top-10 chart is wrong.
+    -- Step by step: (1) remove dots, (2) remove everything after a comma,
+    -- (3) remove a legal suffix at the end, then trim spaces.
+    norm AS (
+        SELECT r.*,
+               NULLIF(TRIM(regexp_replace(regexp_replace(regexp_replace(
+                   r.manufacturer_raw, '\.', '', 'g'),
+                   ',.*$', '', 'g'),
+                   '\s(inc|llc|ltd|co|corp|corporation|as|ag|gmbh|sa|ab)$', '', 'i')), '')
+               AS manufacturer_norm
         FROM ranked r
-        WHERE r.row_number > 1                                      -- SR2
-           OR r.manufacturer_raw IS NULL                            -- SR3
-           OR UPPER(TRIM(r.manufacturer_raw)) IN
-              (SELECT marker FROM junk_markers)                     -- SR4
-           OR length(TRIM(r.manufacturer_raw)) < 2                  -- SR4
     )
 
-    INSERT INTO silver_rejected (
-        bronze_id,
-        device_event_key,
-        report_key,
-        generic_name,                                              
-        product_code,
-        manufacturer_name,
-        rejection_reason
-    )
     SELECT
-        bronze_id,
-        device_event_key,
-        report_key,
-        generic_name,
-        product_code,
-        manufacturer_name,
-        rejection_reason
-    FROM rejected_rows;
+        n.id AS bronze_id,
+        n.device_event_key, n.report_key, n.generic_name,
+        n.product_code_raw, n.manufacturer_raw, n.manufacturer_norm,
 
-    GET DIAGNOSTICS rejected = ROW_COUNT;
+        -- The label. CASE stops at the FIRST match, so the order matters:
+        -- the most fundamental problem is checked first.
+        -- NULL means "no problem found = valid row".
+        CASE
+            WHEN n.device_event_key IS NULL
+                THEN 'missing_device_event_key'   -- cannot be the primary key
+            WHEN n.rn > 1
+                THEN 'duplicate_device_event_key' -- SR2
+            WHEN NULLIF(TRIM(n.product_code_raw), '') IS NULL
+                THEN 'missing_product_code'       -- gold groups by this
+            WHEN n.manufacturer_raw IS NULL
+                THEN 'missing_manufacturer'       -- SR3
+            WHEN UPPER(TRIM(n.manufacturer_raw)) IN (SELECT marker FROM junk)
+              OR length(TRIM(n.manufacturer_raw)) < 2
+              OR n.manufacturer_norm IS NULL
+                THEN 'invalid_manufacturer'       -- SR4 (also catches "INC." only)
+            ELSE NULL
+        END AS rejection_reason
+    FROM norm n;
 
+    -- --------------------------------------------------------
+    -- STEP 1.2: Rows WITH a problem go to quarantine
+    -- --------------------------------------------------------
+    -- WHY bronze_id? It points back to the exact raw row (traceability chain).
+    INSERT INTO silver_rejected (run_id, bronze_id, device_event_key, report_key,
+                                 generic_name, product_code, manufacturer_name,
+                                 rejection_reason)
+    SELECT v_run_id, bronze_id, device_event_key, report_key,
+           generic_name, product_code_raw, manufacturer_raw, rejection_reason
+    FROM tmp_classified
+    WHERE rejection_reason IS NOT NULL;
 
-    -- ========================================================
-    -- STEP 1.2: CLEAN, NORMALIZE AND INSERT VALID ROWS. Applies rules: SR1, SR2, SR3, SR4, SR5, SR6, SR7
-    -- ========================================================
-    WITH
-    junk_markers AS (
-        SELECT unnest(ARRAY[
-            'NI', 'UNK', '*', 'N/A', 'NA', 'UNKNOWN',
-            'NO INFORMATION', 'NO MATCH', 'NO DATA', 'NONE', '?'
-        ]) AS marker
-    ),
+    -- WHY count here? We need the number for the reconciliation check below.
+    GET DIAGNOSTICS v_rejected = ROW_COUNT;
 
-    ranked AS (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (
-                PARTITION BY device_event_key
-                ORDER BY id
-            ) AS row_number
-        FROM bronze_reports
-    ),
-
-    cleaned AS (
-        SELECT
-            r.device_event_key,                                      -- SR7 (PK-kandidat)
-            r.report_key,
-            
-            -- SR6: Normaliserar GENERIC_NAME (trimmar, UPPERCASE, fallback till 'UNKNOWN PRODUCT')
-            COALESCE(
-                NULLIF(UPPER(TRIM(r.generic_name)), ''), 
-                'UNKNOWN PRODUCT'
-            ) AS generic_name_clean,
-
-            r.product_code_raw AS product_code,                      -- SR1
-
-            -- SR5: Normaliserar tillverkare (tar bort punkter, kommatecken, legal suffixes)
-            NULLIF(
-                TRIM(
-                    regexp_replace(
-                        regexp_replace(
-                            regexp_replace(r.manufacturer_raw, '\.', '', 'g'),
-                            ',.*$', '', 'g'
-                        ),
-                        '\s(inc|llc|ltd|co|corp|corporation|as|ag|gmbh|sa|ab)$',
-                        '', 'i'
-                    )
-                ),
-                ''
-            ) AS manufacturer_normalized
-
-        FROM ranked r
-        WHERE r.row_number = 1                                      -- SR2
-          AND r.device_event_key IS NOT NULL                         -- SR7 (Not Null)
-          AND r.product_code_raw IS NOT NULL
-          AND r.product_code_raw <> ''
-          AND r.manufacturer_raw IS NOT NULL                         -- SR3
-          AND UPPER(TRIM(r.manufacturer_raw)) NOT IN
-              (SELECT marker FROM junk_markers)                      -- SR4
-          AND length(TRIM(r.manufacturer_raw)) >= 2                  -- SR4
-    ),
-
-    merged AS (
-        SELECT
-            device_event_key,
-            report_key,
-            generic_name_clean AS generic_name,
-            product_code,
-
-            CASE
-                WHEN UPPER(manufacturer_normalized) LIKE 'DENTSPLY%'      THEN 'DENTSPLY'
-                WHEN UPPER(manufacturer_normalized) LIKE 'ALCON%'         THEN 'ALCON'
-                WHEN UPPER(manufacturer_normalized) LIKE 'MEDTRONIC%'     THEN 'MEDTRONIC'
-                WHEN UPPER(manufacturer_normalized) LIKE '%OLYMPUS%'      THEN 'OLYMPUS'
-                WHEN UPPER(manufacturer_normalized) LIKE 'NOBEL BIOCARE%' THEN 'NOBEL BIOCARE'
-                ELSE manufacturer_normalized
-            END AS manufacturer_name
-
-        FROM cleaned
-    )
-
-    INSERT INTO silver_reports (
-        device_event_key,
-        report_key,
-        generic_name,                                               
-        product_code,
-        manufacturer_name
-    )
+    -- --------------------------------------------------------
+    -- STEP 1.3: Rows WITHOUT a problem go to silver
+    -- --------------------------------------------------------
+    -- This is the exact opposite condition of step 1.2, by construction.
+    INSERT INTO silver_reports (run_id, device_event_key, report_key,
+                                generic_name, product_code, manufacturer_name)
     SELECT
+        v_run_id,
         device_event_key,
         report_key,
-        generic_name,
-        product_code,
-        manufacturer_name
-    FROM merged;
 
-    GET DIAGNOSTICS written = ROW_COUNT;
+        -- SR6: unify product names (trim, UPPERCASE, empty -> 'UNKNOWN PRODUCT').
+        -- WHY a default instead of rejecting? A missing product NAME does not
+        -- make the report unusable, and the product CODE is what we group by.
+        COALESCE(NULLIF(UPPER(TRIM(generic_name)), ''), 'UNKNOWN PRODUCT'),
 
-    RETURN QUERY SELECT written, rejected;
+        TRIM(product_code_raw),
+
+        -- Merge known spelling variants into one company.
+        -- WHY a manual list? Regex cannot know that "ALCON RESEARCH, LLC"
+        -- and "ALCON LABORATORIES" are the same group. Extend as you find more.
+        CASE
+            WHEN UPPER(manufacturer_norm) LIKE 'DENTSPLY%'      THEN 'DENTSPLY'
+            WHEN UPPER(manufacturer_norm) LIKE 'ALCON%'         THEN 'ALCON'
+            WHEN UPPER(manufacturer_norm) LIKE 'MEDTRONIC%'     THEN 'MEDTRONIC'
+            WHEN UPPER(manufacturer_norm) LIKE '%OLYMPUS%'      THEN 'OLYMPUS'
+            WHEN UPPER(manufacturer_norm) LIKE 'NOBEL BIOCARE%' THEN 'NOBEL BIOCARE'
+            ELSE manufacturer_norm
+        END
+    FROM tmp_classified
+    WHERE rejection_reason IS NULL;
+
+    GET DIAGNOSTICS v_written = ROW_COUNT;
+
+    -- --------------------------------------------------------
+    -- STEP 1.4: RECONCILIATION - prove that no row was lost
+    -- --------------------------------------------------------
+    -- WHY RAISE EXCEPTION and not just a log message? A log message can be
+    -- ignored. An exception stops the run AND rolls back everything above,
+    -- so a broken silver layer can never reach gold or the dashboard.
+    SELECT COUNT(*) INTO v_bronze FROM bronze_reports;
+
+    IF v_bronze <> v_written + v_rejected THEN
+        RAISE EXCEPTION 'Reconciliation failed: bronze=% but silver=% + rejected=%',
+                        v_bronze, v_written, v_rejected;
+    END IF;
+
+    RETURN QUERY SELECT v_run_id, v_bronze, v_written, v_rejected;
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM refresh_silver_reports();
+-- WHY is the call not here? Creating the function and running it are two
+-- different things. Run it yourself when you want to refresh silver:
+--   SELECT * FROM refresh_silver_reports();
