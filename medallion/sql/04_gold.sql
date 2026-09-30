@@ -1,75 +1,105 @@
--- ============================================================
--- 04_gold.sql
--- Author: Malena
--- Created: 2026-08-02
--- Updated: 2026-09-25
--- Description: Build the gold layer — aggregated, analytics-ready tables for the dashboard.
---              Answers Question 1 (Products) and Question 2 (Manufacturers).
---
--- Input:  silver_reports (clean, one row per device_event_key)
--- Output: product_stats      (one row per product_code, includes generic_name)
---         manufacturer_stats (one row per manufacturer_name)
---
--- Idempotent: both target tables are TRUNCATEd before insert.
---
--- RULES APPLIED (FROM PIPELINE.md):
---   GR1 – Reproducibility: All metrics can be recomputed from Silver.
---   GR2 – Sanity: total_reports > 0 in both tables (enforced via HAVING clause).
---   GR3 – Consistency: Sum of total_reports matches total rows in Silver.
---   GR4 – Constraints: unique/not_null on PKs product_stats.product_code and manufacturer_stats.name.
--- ============================================================
+/*
+  04_gold.sql
+  Author: Malena
+  Updated: 2026-09-30
+  Builds the two small tables the dashboard reads:
+           product_stats      (most reported products)
+           manufacturer_stats (most reported manufacturers)
+
+
+  WHY:   The dashboard should read ~10 rows, not count millions of rows
+         on every page load. All numbers can be recomputed from silver (GR1).
+
+  Run order: 
+    (1) 03_silver.sql 
+    (2) SELECT * FROM refresh_silver_reports();  
+    (3) this file
+*/
+
 
 -- ============================================================
--- 1. product_stats — SVAR PÅ FRÅGA 1 (Mest rapporterade produkter)
+-- GUARD: never build gold on top of an empty or broken silver
 -- ============================================================
--- A product_code maps to a conformed generic_name from Silver.
--- We count reports per product_code and include generic_name for BI mapping.
--- product_code remains the unique Primary Key (GR4).
+-- WHY? If silver is empty, gold would be truncated and rebuilt as empty,
+-- and the dashboard would silently show nothing. Better to stop here.
+DO $$
+BEGIN
+  IF (SELECT COUNT(*) FROM silver_reports) = 0 THEN
+    RAISE EXCEPTION 'Gold aborted: silver_reports is empty. Run refresh_silver_reports() first.';
+  END IF;
+END $$;
+
+
 -- ============================================================
+-- 1. product_stats - Question 1: which products are reported most?
+-- ============================================================
+-- WHY TRUNCATE first? Gold is always rebuilt from scratch from silver.
+-- Running this file twice gives the same result (idempotent).
+TRUNCATE TABLE product_stats;
 
-TRUNCATE TABLE product_stats; -- Idempotency step
-
+-- WHY group ONLY by product_code?
+-- product_code is the primary key, so we need exactly one row per code.
+-- The old version grouped by (product_code, generic_name). If one code had
+-- two different names in the data, it produced two rows with the same key,
+-- and the insert crashed.
+-- WHY MODE()? It picks the most common name for each code, so the chart
+-- gets one readable label per code.
+-- WHY no HAVING COUNT(*) > 0? A group always has at least one row, so the
+-- condition can never be false. GR2 is checked properly in section 3.
 INSERT INTO product_stats (product_code, generic_name, total_reports)
 SELECT
     product_code,
-    generic_name,                                           -- Inkluderad i loopen för dashboarden
-    COUNT(*) AS total_reports
+    MODE() WITHIN GROUP (ORDER BY generic_name) AS generic_name,
+    COUNT(*)                                    AS total_reports
 FROM silver_reports
-WHERE product_code IS NOT NULL                              -- Säkrar GR4 (Not Null)
-GROUP BY product_code, generic_name
-HAVING COUNT(*) > 0;                                        -- Enforcar GR2 (Sanity check)
+GROUP BY product_code;
 
 
 -- ============================================================
--- 2. manufacturer_stats — SVAR PÅ FRÅGA 2 (Mest rapporterade tillverkare)
+-- 2. manufacturer_stats - Question 2: which manufacturers are reported most?
 -- ============================================================
--- Groups clean, normalized manufacturer names from Silver.
--- name is the unique Primary Key (GR4).
--- ============================================================
+TRUNCATE TABLE manufacturer_stats;
 
-TRUNCATE TABLE manufacturer_stats; -- Idempotency step
-
+-- WHY manufacturer_name IS NOT NULL? It is the primary key, and a key
+-- cannot be NULL. Silver already rejects rows without a manufacturer,
+-- so this is a safety net that should never remove anything.
 INSERT INTO manufacturer_stats (name, total_reports)
 SELECT
     manufacturer_name AS name,
-    COUNT(*) AS total_reports
+    COUNT(*)          AS total_reports
 FROM silver_reports
-WHERE manufacturer_name IS NOT NULL                         -- Säkrar GR4 (Not Null)
-GROUP BY manufacturer_name
-HAVING COUNT(*) > 0;                                        -- Enforcar GR2 (Sanity check)
+WHERE manufacturer_name IS NOT NULL
+GROUP BY manufacturer_name;
 
 
 -- ============================================================
--- 3. QA VERIFICATION LOGS — VERIFYING GR3 (Consistency)
+-- 3. QUALITY CHECKS - fail loudly, do not just show a message
 -- ============================================================
-SELECT 
-    (SELECT COUNT(*) FROM silver_reports) AS total_silver_rows,
-    (SELECT SUM(total_reports) FROM product_stats) AS total_gold_product_reports,
-    CASE 
-        WHEN (SELECT COUNT(*) FROM silver_reports) = (SELECT SUM(total_reports) FROM product_stats)
-        THEN 'PASSED: Gold is consistent with Silver (GR3)'
-        ELSE 'FAILED: Row count mismatch between layers'
-    END AS gr3_verification_status;
+-- WHY RAISE EXCEPTION? The old version only printed PASSED/FAILED text
+-- that nobody was forced to read. An error is impossible to overlook.
+DO $$
+DECLARE
+  v_silver       bigint := (SELECT COUNT(*) FROM silver_reports);
+  v_products     bigint := (SELECT COALESCE(SUM(total_reports), 0) FROM product_stats);
+  v_manufacturer bigint := (SELECT COALESCE(SUM(total_reports), 0) FROM manufacturer_stats);
+BEGIN
+  -- GR3 (products): every silver row is counted exactly once.
+  IF v_silver <> v_products THEN
+    RAISE EXCEPTION 'GR3 FAILED (products): silver=% but product_stats sum=%', v_silver, v_products;
+  END IF;
 
+  -- GR3 (manufacturers): same check for the second table.
+  -- WHY the old version missed this: it only checked product_stats.
+  IF v_silver <> v_manufacturer THEN
+    RAISE EXCEPTION 'GR3 FAILED (manufacturers): silver=% but manufacturer_stats sum=%', v_silver, v_manufacturer;
+  END IF;
 
+  -- GR2: no row with zero or negative counts.
+  IF EXISTS (SELECT 1 FROM product_stats WHERE total_reports <= 0)
+  OR EXISTS (SELECT 1 FROM manufacturer_stats WHERE total_reports <= 0) THEN
+    RAISE EXCEPTION 'GR2 FAILED: a gold row has total_reports <= 0';
+  END IF;
+
+  RAISE NOTICE 'GOLD PASSED: silver=% rows, both gold tables add up (GR2, GR3)', v_silver;
+END $$;
 
