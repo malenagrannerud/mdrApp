@@ -19,7 +19,7 @@
 -- ============================================================
 -- STEP 0: LOOK BEFORE YOU CLEAN (read-only, changes nothing)
 -- ============================================================
--- WHY? Know problems in the data before writing rules. These numbers also become evidence that each rule is needed.
+-- WHY? Know data problems before writing rules. These numbers also become evidence that each rule is needed.
 
 -- Rows sharing a device_event_key (needed for rule SR2, deduplication)
 SELECT device_event_key, COUNT(*) AS times_seen
@@ -70,9 +70,7 @@ BEGIN
     -- --------------------------------------------------------
     -- STEP 1.1: Give every bronze row ONE label
     -- --------------------------------------------------------
-    -- WHY one label per row? The old version had two separate lists
-    -- ("what to reject" and "what to keep") that were not exact opposites.
-    -- A row matching neither list vanished. With one label per row and a
+    -- WHY one label per row? With one label per row and a
     -- split on that label, a row can only go one of two ways.
     -- ON COMMIT DROP: the temp table cleans itself up.
     CREATE TEMP TABLE tmp_classified ON COMMIT DROP AS
