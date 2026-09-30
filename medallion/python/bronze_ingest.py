@@ -181,7 +181,7 @@ def main() -> None:
         
         try:
             validated_row = BronzeRow(**raw_dict) # Validate using Pydantic model
-            batch_buffer.append(validated_row.model_dump(by_alias=True)) # Convert to dictionary using the aliases that match database column names
+            batch_buffer.append(validated_row.model_dump()) # Convert to dictionary using the aliases that match database column names
             processed_count += 1
         except ValidationError as ve:
             logger.warning(f"Row {line_num} failed schema validation. Skipping. Error: {ve}")
