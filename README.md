@@ -1,10 +1,6 @@
 
 ![CI](https://github.com/malenagrannerud/mdrApp/medallion/actions/workflows/ci.yml/badge.svg)
 
-
-
-
-
 # Aegis Compliance App
 **A regulatory workflow and post-market surveillance tool for medical device manufacturers**, guiding cross-functional teams — regulatory affairs, quality, data, and leadership — through EU MDR compliance, ISO 13485 QMS setup, and real-world safety signal analysis. 
 
@@ -37,6 +33,23 @@ Maps the core requirements of ISO 13485:2016 into a step-by-step implementation 
 
 A live dashboard built on a custom-engineered data pipeline (see [PIPELINE.md](./PIPELINE.md)) processing FDA MAUDE adverse event data — the kind of dataset manufacturers use to monitor their own products' safety trends over time.
 
+#### Signal detection 
+For each product code, the Proportional Reporting Ratio (PRR) compares its share of
+serious reports (death or injury) with the share for all other products.
+Signal rule: PRR >= 2, chi-square >= 4, at least 3 serious cases; "strict" also
+requires the lower 95% confidence bound to be above 1.
+
+#### Limitations
+- MAUDE is voluntary/spontaneous reporting. There is no usage denominator,
+  so PRR shows relative reporting patterns, not the true risk of a device.
+- Reporting is affected by media attention, recalls, and manufacturer
+  reporting habits (stimulated reporting).
+- Thousands of product codes are tested, so some signals will be false
+  alarms by chance. Signals are hypotheses for a PMS review, not conclusions.
+- Serious = event type D or IN. Events reported as "malfunction" can still
+  be safety relevant and are not counted as serious here.
+- One event type per report; a report with several devices counts once per product code.
+
 
 ---
 ## Tech stack
@@ -65,9 +78,6 @@ To rebuild the underlying dataset from scratch (ingest → clean → aggregate),
 - [ ] Add sample audit checklists
 - [ ] Clickable regulatory abbreviations with inline definitions
 
-**PMS Data Analysis**
-- [ ] Expand beyond top-10 view — searchable/filterable product and manufacturer tables
-- [ ] Time-series view of report volume by product code
 
 
 ---
