@@ -15,7 +15,8 @@
   Run order: 
   Step 1: 01_create_tables.sql 
   Step 2: 03_silver.sql
-  Step 3: SELECT * FROM refresh_silver_reports();
+  Step 3: If you want to rebuild silver, run: SELECT * FROM refresh_silver_reports();
+
 */
 
 
@@ -196,6 +197,5 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- WHY is the call not here? Creating the function and running it are two
--- different things. Run it yourself when you want to refresh silver:
+
 --   SELECT * FROM refresh_silver_reports();
