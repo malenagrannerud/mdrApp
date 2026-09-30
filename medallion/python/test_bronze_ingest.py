@@ -1,160 +1,172 @@
 """medallion/python/test_bronze_ingest.py
 
-1-Stand in /workspaces/mdrApp: 
-    ```bash 
-    cd medallion/python
-    ```
-2-Run testfile: 
-    ```bash  
-    pytest test_bronze_ingest.py
-    ```
+Run:  cd medallion/python && pytest -v
+No network or database needed: everything external is faked.
 """
 import pytest
-import os 
-
+import bronze_ingest
 from bronze_ingest import (
     get_supabase_client,
     find_source_file,
-    read_source_lines,
     build_header_mapping,
     BronzeRow,
     build_raw_row,
-    get_field,
-    upload_single_batch,
-    retry_with_backoff,
-    flush_if_full,
-    log_ingestion_summary,
+    write_batch_with_retry,
 )
 
-HEADER_DICTIONARY = {                           # Maps FDA column names to internal names
-    "reportKey": "MDR_REPORT_KEY",              # ID number for each report
-    "productCode": "DEVICE_REPORT_PRODUCT_CODE",  # Letter code for device type. EX: CBK = Ventilator, FPA = Catheter, MDS = Infusion pump, LZW = Pacemaker
-    "brandName": "BRAND_NAME",                  # Commerial name of the device. EX: "Servo Air"
-    "genericName": "GENERIC_NAME",              # Clinical name. EX: "Ventilator"
-    "manufacturerRaw": "MANUFACTURER_D_NAME",   # Name of manufacturer as reported. EX: "Getinge", "Medtronic Inc" etc
-}
+HEADER = "MDR_REPORT_KEY|DEVICE_EVENT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME"
 
 
-# --------------------------------- MOCK RAW FILE DEVICE2024.txt --------------------------------------
 @pytest.fixture
 def mock_sf():
-    """Returns your exact raw file content as a string."""
-    return (                              
-        "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME\n"
-        "18423065|FDF|EVIS EXERA II COLONOVIDEOSCOPE|COLONOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
-        "18423066|EOQ|EVIS EXERA III BRONCHOVIDEOSCOPE|BRONCHOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
-        "18423067|EOQ|EVIS LUCERA ELITE BRONCHOVIDEOSCOPE|BRONCHOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
-        "18423068|NAY|ENDOWRIST|FENESTRATED BIPOLAR FORCEPS|INTUITIVE SURGICAL, INC\n"
-        "18423069|EOQ|ION|VISION PROBE|INTUITIVE SURGICAL, INC\n"
-        "18423070|NAY|ENDOWRIST|TENACULUM FORCEPS|INTUITIVE SURGICAL, INC\n"
-        "18423071|LRO|CONSTELLATION SURGICAL PROCEDURE PACK|GENERAL SURGERY TRAY (KIT)|ALCON RESEARCH, LLC - HOUSTON\n"
-        "18423072|DZE|DYMIC|DYNAMIC IMPLANT SP 3.75X10|PALTOP ADVANCED DENTAL SOLUTIONS INC.\n"
-        "18423073|FHW|AMS INFLATABLE PENILE PROSTHESIS|DEVICE IMPOTENCE MECHANICAL/HYDRAULIC|BOSTON SCIENTIFIC CORPORATION\n"
-        "18423074|FHW|AMS INFLATABLE PENILE PROSTHESIS|DEVICE IMPOTENCE MECHANICAL/HYDRAULIC|BOSTON SCIENTIFIC CORPORATION\n"
+    """A tiny fake source file: header + 2 data rows."""
+    return (
+        f"{HEADER}\n"
+        "18423065|E1|FDF|EVIS EXERA II|COLONOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
+        "18423066|E2|EOQ|EVIS EXERA III|BRONCHOVIDEOSCOPE|AIZU OLYMPUS CO., LTD.\n"
     )
 
 
-# ======================================= UNIT TESTS ============================================
+# ---------------- build_header_mapping ----------------
+def test_build_header_mapping(mock_sf):
+    cols = mock_sf.splitlines()[0].split("|")
+    assert build_header_mapping(cols) == {
+        "reportKey": 0,
+        "deviceEventKey": 1,
+        "productCode": 2,
+        "genericName": 4,
+        "manufacturerRaw": 5,
+    }
 
 
+def test_header_mapping_missing_column_gives_minus_one():
+    result = build_header_mapping(["MDR_REPORT_KEY"])
+    assert result["reportKey"] == 0
+    assert result["deviceEventKey"] == -1
 
 
-
-@pytest.mark.integration
-def test_real_insert_and_count():
-    """Kör bara om du satt RUN_INTEGRATION=1 — annars hoppas den över."""
-    if os.environ.get("RUN_INTEGRATION") != "1":
-        pytest.skip("Integrationstest kräver RUN_INTEGRATION=1")
-
-    sb = get_supabase_client()
-    before = sb.table("bronze_reports").select("*", count="exact").execute().count
-
-    rows = [{"report_key": f"TEST-{i}", "source_file": "pytest"} for i in range(500)]
-    sb.table("bronze_reports").insert(rows).execute()
-
-    after = sb.table("bronze_reports").select("*", count="exact").execute().count
-    assert after - before == 500, f"Förväntade 500 nya rader, fick {after - before}"
-
-    # cleanup
-    sb.table("bronze_reports").delete().eq("source_file", "pytest").execute()
+# ---------------- build_raw_row ----------------
+def test_build_raw_row_reads_fields(mock_sf):
+    lines = mock_sf.splitlines()
+    col_idx = build_header_mapping(lines[0].split("|"))
+    row = build_raw_row(lines[1].split("|"), col_idx, "f.txt")
+    assert row["reportKey"] == "18423065"
+    assert row["deviceEventKey"] == "E1"
+    assert row["productCode"] == "FDF"
+    assert row["genericName"] == "COLONOVIDEOSCOPE"
 
 
-# ------------------------------------- TEST get_supabase_client() ------------------------------
-def test_get_supabase_klient_happy_path(monkeypatch):
-    """HAPPY PATH: Tests that a key is there AND the code can read it without crash ."""
-
-    monkeypatch.setenv("SUPABASE_URL", "https://supabase.co")                # 1. Assign fake environment variable
-    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "sb_publishable_abc123") # 1. Assign fake environment variable
-    klient = get_supabase_client()                        # 2. Run
-    assert klient is not None                             # 3. Verify: Check so correct values are picked up
-
-def test_supabase_klient_error_case(monkeypatch):
-    """ERROR CASE: Tests that the code raises an error if variables are missing."""
-
-    monkeypatch.delenv("SUPABASE_URL", raising=False)      # 1. Remove fake environment variable
-    monkeypatch.delenv("SUPABASE_SERVICE_ROLE_KEY", raising=False) # 1. Remove fake environment variable
-
-    with pytest.raises(SystemExit) as exc_info: # 2. Ensure ValueError
-        get_supabase_client()
-    assert "SUPABASE_URL is missing" in str(exc_info.value)
+def test_build_raw_row_missing_column_gives_none():
+    col_idx = {"reportKey": 0, "deviceEventKey": -1, "genericName": -1,
+               "productCode": -1, "manufacturerRaw": -1}
+    row = build_raw_row(["123"], col_idx, "f.txt")
+    assert row["reportKey"] == "123"
+    assert row["deviceEventKey"] is None
 
 
-# ------------------------------------ TEST find_source_file()------------------------------------
-# pytest test_bronze_ingest.py::test_find_source_file_in_root -v -s
+def test_build_raw_row_empty_string_becomes_none():
+    col_idx = {"reportKey": 0, "deviceEventKey": 1, "genericName": -1,
+               "productCode": -1, "manufacturerRaw": -1}
+    row = build_raw_row(["123", "   "], col_idx, "f.txt")
+    assert row["deviceEventKey"] is None
 
+
+def test_build_raw_row_short_line_does_not_crash():
+    col_idx = {"reportKey": 0, "deviceEventKey": 5, "genericName": -1,
+               "productCode": -1, "manufacturerRaw": -1}
+    row = build_raw_row(["123"], col_idx, "f.txt")
+    assert row["deviceEventKey"] is None
+
+
+# ---------------- BronzeRow (regression test for the model_dump bug) ----------------
+def test_bronze_row_dump_matches_table_columns():
+    """The keys must equal the bronze_reports column names, or the insert fails."""
+    row = BronzeRow(reportKey="1", deviceEventKey="2", genericName="X",
+                    productCode="ABC", manufacturerRaw="M", source_file="f")
+    assert set(row.model_dump()) == {
+        "report_key", "device_event_key", "generic_name",
+        "product_code_raw", "manufacturer_raw", "source_file",
+    }
+
+
+def test_bronze_row_requires_source_file():
+    with pytest.raises(Exception):
+        BronzeRow(reportKey="1")
+
+
+# ---------------- write_batch_with_retry ----------------
+class FakeClient:
+    """Fails `fail_times` times, then succeeds. Counts the attempts."""
+    def __init__(self, fail_times):
+        self.fail_times = fail_times
+        self.calls = 0
+
+    def table(self, name):
+        assert name == "bronze_reports"
+        return self
+
+    def insert(self, batch):
+        return self
+
+    def execute(self):
+        self.calls += 1
+        if self.calls <= self.fail_times:
+            raise RuntimeError("boom")
+
+
+def test_write_batch_retries_then_succeeds(monkeypatch):
+    monkeypatch.setattr(bronze_ingest.time, "sleep", lambda s: None)  # no real waiting
+    client = FakeClient(fail_times=2)
+    write_batch_with_retry(client, [{"a": 1}])
+    assert client.calls == 3
+
+
+def test_write_batch_gives_up_after_max_retries(monkeypatch):
+    monkeypatch.setattr(bronze_ingest.time, "sleep", lambda s: None)
+    client = FakeClient(fail_times=99)
+    with pytest.raises(RuntimeError):
+        write_batch_with_retry(client, [{"a": 1}])
+    assert client.calls == bronze_ingest.MAX_RETRIES
+
+
+# ---------------- find_source_file ----------------
 def test_find_source_file_in_root(tmp_path, monkeypatch):
-    """Test so the function finds the file when located root directory."""
-    monkeypatch.chdir(tmp_path) # 1. Move the test environment into a temp folder (removed later)
-    
-    file_name = "DEVICE2024.txt" # 2. Create a dummy file 
-    dummy_file = tmp_path / file_name
-    dummy_file.write_text("dummy data")
-    
-    result = find_source_file(file_name)     # 3. Run the function and verify it returns just the file name
-    assert result == file_name
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "DEVICE2024.txt").write_text("x")
+    assert find_source_file("DEVICE2024.txt") == "DEVICE2024.txt"
 
 
 def test_find_source_file_in_medallion_folder(tmp_path, monkeypatch):
-    """Test that the function finds a file when it is located inside the 'medallion/' folder."""
-    monkeypatch.chdir(tmp_path) # 1. Move into the temporary folder
-    
-    medallion_dir = tmp_path / "medallion" # 2. Create the 'medallion' folder and put the dummy file there
-    medallion_dir.mkdir()
-    
-    file_name = "DEVICE2024.txt"
-    dummy_file = medallion_dir / file_name
-    dummy_file.write_text("dummy data")
-    
-    result = find_source_file(file_name) # 3. Run the function, verify it returns subfolder path right
-    assert result == f"medallion/{file_name}"
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "medallion").mkdir()
+    (tmp_path / "medallion" / "DEVICE2024.txt").write_text("x")
+    assert find_source_file("DEVICE2024.txt") == "medallion/DEVICE2024.txt"
 
 
 def test_find_source_file_raises_system_exit(tmp_path, monkeypatch):
-    """Test that the function crashes with SystemExit if the file doesn't exist anywhere."""
-    monkeypatch.chdir(tmp_path) # 1. Move into a completely empty folder
-    
-    with pytest.raises(SystemExit) as exc_info: # 2. Verify that searching for a missing file triggers 'raise SystemExit'
-        find_source_file("MISSING_FILE.txt")
-        
-    assert "Error: source file not found at MISSING_FILE.txt" in str(exc_info.value) # 3. Double check error message is returned
+    monkeypatch.chdir(tmp_path)
+    with pytest.raises(SystemExit) as exc:
+        find_source_file("MISSING.txt")
+    assert "source file not found" in str(exc.value)
 
-# ------------------------------------ TEST test_build_header_mapping()------------------------------------
-# pytest test_bronze_ingest.py::test_build_header_mapping -v -s
-def test_build_header_mapping(mock_sf): # sf = SOURCE_FILE
-    """Tests how the function maps the top row of your mock file to index numbers."""
 
-    # 1. Grab the very first row (the headers) from the mock string
-    sf_lines = mock_sf.splitlines()     # .splitlines() 
-    sf_header_line = sf_lines[0]        #     # sf_header_line is now: "MDR_REPORT_KEY|DEVICE_REPORT_PRODUCT_CODE|BRAND_NAME|GENERIC_NAME|MANUFACTURER_D_NAME"
+# ---------------- get_supabase_client ----------------
+def test_get_supabase_client_happy_path(monkeypatch):
+    monkeypatch.setenv("SUPABASE_URL", "https://x.supabase.co")
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "dummy")
 
-    # 2. Split the row into a clean list of words by separating at each "|"
-    sf_header_cols = sf_header_line.split("|") # sf_header_cols is now: ["MDR_REPORT_KEY", "DEVICE_REPORT_PRODUCT_CODE", "BRAND_NAME", "GENERIC_NAME", "MANUFACTURER_D_NAME"]
+    class FakeSupabase:
+        @staticmethod
+        def create_client(url, key):
+            return (url, key)
 
-    result = build_header_mapping(sf_header_cols) # 3. Run your function!
+    monkeypatch.setattr(bronze_ingest, "import_module", lambda name: FakeSupabase)
+    assert get_supabase_client() == ("https://x.supabase.co", "dummy")
 
-    # 4. Verify that each internal key got mapped to its exact position (0 to 4)
-    assert result["reportKey"] == 0         # "MDR_REPORT_KEY" is at position 0
-    assert result["productCode"] == 1       # "DEVICE_REPORT_PRODUCT_CODE" is at position 1
-    assert result["brandName"] == 2         # "BRAND_NAME" is at position 2
-    assert result["genericName"] == 3       # "GENERIC_NAME" is at position 3
-    assert result["manufacturerRaw"] == 4   # "MANUFACTURER_D_NAME" is at position 4
+
+def test_get_supabase_client_missing_url(monkeypatch):
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_SERVICE_ROLE_KEY", raising=False)
+    with pytest.raises(SystemExit) as exc:
+        get_supabase_client()
+    assert "SUPABASE_URL is missing" in str(exc.value)
