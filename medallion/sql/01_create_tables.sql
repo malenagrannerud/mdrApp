@@ -3,13 +3,11 @@
   Author: Malena
   Created: 2026-08-02
   Updated: 2026-09-30
+  Creates all tables for the medallion architecture.
 
-  WHAT:  Creates all tables for the medallion architecture.
   WHY:   Data flows in one direction: bronze -> silver -> gold.
-         Each layer has one job, so when a number on the dashboard looks
-         wrong you can trace it back layer by layer to find the cause.
-  SAFE:  Can be run many times. "IF NOT EXISTS" means: existing tables
-         and their data are left alone.
+         Each layer has one job --> if a nr on the dashboard looks wrong: trace it back layer by layer to find the cause.
+  SAFE:  Can be run many times. "IF NOT EXISTS" --> existing tables and their data are left
 */
 
 
@@ -69,11 +67,16 @@ CREATE TRIGGER enforce_bronze_immutability
     FOR EACH ROW
     EXECUTE FUNCTION prevent_bronze_mutation();
 
+
+
 -- WHY a second trigger? TRUNCATE empties the whole table WITHOUT firing
 -- row-level DELETE triggers, so the trigger above does not stop it.
 -- This one closes that gap.
--- For tests: DROP TRIGGER enforce_bronze_no_truncate ON bronze_reports;
---            TRUNCATE TABLE bronze_reports;   then re-run this file.
+-- If bronze must be emptied during development
+-- Step 1 - run: DROP TRIGGER enforce_bronze_no_truncate ON bronze_reports;
+-- Step 2 - run: TRUNCATE TABLE bronze_reports;   
+-- Step 3 - run 01_create_tables.sql 
+
 DROP TRIGGER IF EXISTS enforce_bronze_no_truncate ON bronze_reports;
 CREATE TRIGGER enforce_bronze_no_truncate
     BEFORE TRUNCATE ON bronze_reports
