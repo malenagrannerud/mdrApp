@@ -9,46 +9,6 @@ Aim: Help PMS teams to detect what to focus on, for a product.
 ## Steps in conducting the analysis and building the pipeline
 
 ### Step 1 — Find and explore data 
-Data: FDAs MAUDE database: mandatory reportings by sources User Facility (U), Distributor (D), Manufacturer (M), and voluntary submitter (P). 
-
-| File | Description | 
-| :--- | :--- |
-| **mdrfoi.zip** | One record per reporting. *Ex.: If  U, D M and P report the same event --> four event records.* |   
-| **Device Data** | Details related to the medical device(s) involved. |
-| **Patient Data** | Details related to the  patient(s) involved in the event. | 
-| **Text Data** | Free text extracted  |
-| **Device Problem Data** | Device Problem Code data from MEDWATCH Form Sections F10 and H6. |
-| **Patient Problem Data** | Contains Health Effect – Clinical Code data from MEDWATCH |
-
-- Records are linked by MDR REPORT KEY, found in each file.
-
-#### Record/Data Characteristics
-- The data has one record per line, with the data fields pipe-delimited, "|". 
-- Data elements are alpha-numeric.
-- All text fields contain whatever data was entered. If no, the field will be left empty. If an asterisk ("*") is present, it represents what was entered on the 3500/3500A.
-
-
-#### Master Event Record Data Elements
-NEW RECORD|DEVICE EVENT KEY|REPORT SOURCE CODE|MDR REPORT KEY|Section B
-
-- All other data elements will be blank.
-
-#### MDRFOI  (82 fields)
-Example
-
-MDR Report Key|Empty field|Report Number|Report Source Code||Manufacturer Link Flag|Number Devices in Event |Number Patient in Event |Date Received |Adverse Event Flag (B1)|Product Problem Flag (B1)|Date Report (B4) | Date of Event (B3)|Single Use Flag|Reporter Occupation Code (E3)|000 OTHER ... 501 ADMINISTRATOR/SUPERVISOR| 
-
-#### DEVICE file (48 fields)
-MDR Report Key|Device Event key |...|Generic Name (D2) | Manufacturer Name (D3)| 
-
-#### Patient (10 files)
-
-
-#### PATIENT file, 10 fields
-
-#### TEXT file, 6 fields
-MDR Report Key | MDR Text Key | Text Type Code (D=B5, E=H3, N=H10 from mdr_text table)|Patient Sequence Number (from mdr_text table)|Date Report (from mdr_text table)|Text (B5, or H3 or H10 from mdr_text table)
-
 
 1. FDA MAUDE: https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download
 
@@ -61,7 +21,14 @@ unzip device2024.zip
 cd ../..
 ```
 
-3. Inspect headers:
+### 1.1 Master data-file  (mdrfoi*.zip)
+Summary of all data files 
+
+
+### 1.2 Device data-file (device*.zip)
+Information related to the device involved
+
+
 ```bash
 head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```
@@ -77,29 +44,24 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 Other headers: 
 `BRAND_NAME`, `IMPLANT_FLAG`, `DATE_REMOVED_FLAG`, `DEVICE_SEQUENCE_NO`, `IMPLANT_DATE_YEAR`, `DATE_REMOVED_YEAR`, `SERVICED_BY_3RD_PARTY_FLAG`, `DATE_RECEIVED`, `MANUFACTURER ADDRESS ......`, `DEVICE_OPERATOR`, `EXPIRATION_DATE_OF_DEVICE`, `MODEL_NUMBER`, `CATALOG_NUMBER`, `LOT_NUMBER`, `OTHER_ID_NUMBER`, `DEVICE_AVAILABILITY`, `DATE_RETURNED_TO_MANUFACTURER`, `DEVICE_AGE_TEXT`, `DEVICE_EVALUATED_BY_MANUFACTURER`, `COMBINATION_PRODUCT_FLAG`, `UDI-DI`, `UDI-PUBLIC`
 
+### 1.3 Patient data-file (patientthru*.zip)
+Information related to the patient(s) involved
 
-DATA LIMITATIONS
 
-- Underrapportering
-- Felaktigheter i rapporter
-- Brist på verifiering att produkten orsakade händelsen
-- Brist på information om användningsfrekvens
+### 1.4 Device data-file (foitext*.zip)
+Textual information from MEDWATCH Form Sections B5, H3, and H10
+
+### DATA LIMITATIONS
+- Under-reporting of events
+- Inaccuracies in reports
+- Lack of verification that the device caused the reported event
+- Lack of information about frequency of device use
+
 
 
 
 
 ## Step 2 — EDA
-
-
-
-
-
-
-
-
-
-
-
 
 
 
