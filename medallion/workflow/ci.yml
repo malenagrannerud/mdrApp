@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Only what the tests need. No network or database is used.
+      - run: pip install pytest python-dotenv pydantic pandas numpy
+      - name: Ingestion tests
+        working-directory: medallion/python
+        run: pytest -v
+      - name: Analysis tests (PRR)
+        working-directory: medallion/analysis
+        run: pytest -v
+
+  dbt-parse:
+    # WHY? Catches broken SQL/Jinja/YAML in the dbt project on every push,
+    # without needing a database connection.
+    runs-on: ubuntu-latest
+    env:
+      DBT_HOST: dummy
+      DBT_USER: dummy
+      DBT_PASSWORD: dummy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "dbt-postgres>=1.8"
+      - working-directory: medallion/dbt
+        run: dbt parse --profiles-dir .
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build
