@@ -13,15 +13,15 @@
          The function then fails and undoes everything.
 
   Input:
-    - bronze_reports        raw ingestion (read-only here)
-    - manufacturer_mapping  S5 - final rename map (rebuilt in STEP 3)
-    - manufacturer_parent   S5 - keyword rules that build the rename map
+    - bronze_reports        
+    - manufacturer_mapping  
+    - manufacturer_parent   
 
   Output:
-    - silver_reports        cleaned rows, with flags
-    - silver_rejected       quarantine, with rejection_reason
-    - manufacturer_mapping  S5 - rebuilt from manufacturer_parent + bronze
-    - product_code_dim      S6 - canonical product name per code
+    - silver_reports        
+    - silver_rejected       
+    - manufacturer_mapping  
+    - product_code_dim      
 
   Rules implemented here:
     S1  Deduplicate on PK
