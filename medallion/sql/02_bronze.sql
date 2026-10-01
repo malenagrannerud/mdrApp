@@ -23,17 +23,20 @@
 -- A count of 0 means the column is completely missing.
 
 SELECT
-    COUNT(*)                 AS total_rows,
-    COUNT(report_key)        AS report_key_filled,
+    COUNT(*)                  AS total_rows,
+    COUNT(report_key)         AS report_key_filled,
     COUNT(device_sequence_no) AS device_sequence_no_filled,
-    COUNT(device_event_key)  AS device_event_key_filled,
-    COUNT(generic_name)      AS generic_name_filled,
-    COUNT(product_code_raw)  AS product_code_filled,
-    COUNT(manufacturer_raw)  AS manufacturer_filled
+    COUNT(generic_name)       AS generic_name_filled,
+    COUNT(product_code_raw)   AS product_code_filled,
+    COUNT(manufacturer_raw)   AS manufacturer_filled
 FROM bronze_reports;
 -- Expected: report_key, device_sequence_no, product_code_raw near total_rows.
--- device_event_key may be lower: it is often blank in the source.
 -- A few NULLs in generic_name / manufacturer are normal: silver handles them.
+
+-- result 
+-- | total_rows | report_key_filled | device_sequence_no_filled | generic_name_filled | product_code_filled | manufacturer_filled |
+-- | ---------- | ----------------- | ------------------------- | ------------------- | ------------------- | ------------------- |
+-- | 20000      | 20000             | 20000                     | 19994               | 20000               | 19985               |
 
 
 -- ============================================================
@@ -115,7 +118,7 @@ FROM bronze_reports;
 
 
 -- ============================================================
--- EXTRA - Which file(s) have been ingested, and how often?
+-- Which file(s) have been ingested, and how often?
 -- ============================================================
 -- WHY? Bronze is append-only. A second run of bronze_ingest.py adds a
 -- second copy of the same 20,000 rows. This shows whether that has happened.

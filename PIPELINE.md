@@ -119,6 +119,8 @@ This is the variable MANUFACTURER_D_NAME
 - ALCON: 20 different spellings, 11,719 rows. Top 5:
 - BOSTON SCIENTIFIC: 27 different spellings, 64,829 rows. Top 5:
 - ABBOTT: 95 different spellings, 90,271 rows. Top 5:
+
+
 ```
 --> S6: Normalize manufacturer names — add manufacturer_normalized column mapped to parent company via explicit mapping table.
 

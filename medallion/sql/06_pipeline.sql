@@ -1,16 +1,38 @@
 /*
   05_pipeline.sql
-  WHAT:  pipeline_runs (a log of every run) + run_pipeline() (one command for everything).
+  Author: Malena
+  Updated: 2026-10-01
+
+  WHAT:  pipeline_runs (a log of every run) + run_pipeline() (one command
+         for everything: silver -> gold in one transaction).
   WHY:   You should never have to remember "silver, then gold". One command,
          fixed order, and every run is logged so you can answer
          "when did it last run, and did the numbers add up?".
+
+  Input:
+    - bronze_reports        (via refresh_silver_reports)
+    - silver_reports        (via refresh_gold)
+    - product_code_dim      (via refresh_gold)
+
+  Output:
+    - silver_reports        (via refresh_silver_reports)
+    - silver_rejected       (via refresh_silver_reports)
+    - product_code_dim      (built inside refresh_silver_reports)
+    - product_stats         (via refresh_gold)
+    - manufacturer_stats    (via refresh_gold)
+    - pipeline_runs         (this file)
+
+  Rules touched here:
+    GR3 — reconciliation is enforced inside refresh_silver_reports() and refresh_gold()
+    Observability — every run is logged with status, row counts and error message
 */
+
 
 -- ============================================================
 -- The run log (observability)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS pipeline_runs (
-  run_id                uuid PRIMARY KEY,        -- same id as on silver_reports / silver_rejected
+  run_id                uuid PRIMARY KEY,
   started_at            timestamptz NOT NULL,
   finished_at           timestamptz NOT NULL DEFAULT now(),
   status                text NOT NULL CHECK (status IN ('success', 'failed')),
@@ -19,15 +41,19 @@ CREATE TABLE IF NOT EXISTS pipeline_runs (
   rows_rejected         bigint,
   products_in_gold      bigint,
   manufacturers_in_gold bigint,
-  error_message         text                     -- filled only when status = 'failed'
+  error_message         text
 );
 
--- WHY RLS? Supabase exposes tables through its API. With RLS on and only a
--- read policy, the public (anon) key can read the log but never change it.
+CREATE INDEX IF NOT EXISTS idx_pipeline_runs_started_at
+    ON pipeline_runs (started_at DESC);
+
 ALTER TABLE pipeline_runs ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "public read pipeline_runs" ON pipeline_runs;
 CREATE POLICY "public read pipeline_runs" ON pipeline_runs
   FOR SELECT USING (true);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.pipeline_runs TO service_role;
+
 
 -- ============================================================
 -- The one command
@@ -47,9 +73,6 @@ DECLARE
     v_manu     bigint;
     v_err      text;
 BEGIN
-    -- The inner BEGIN...EXCEPTION block works like a safety net:
-    -- if silver OR gold fails, everything done inside it is undone,
-    -- and we can still write a 'failed' row in the log afterwards.
     BEGIN
         SELECT s.o_run_id, s.o_bronze, s.o_written, s.o_rejected
           INTO v_run_id, v_bronze, v_written, v_rejected
@@ -81,3 +104,25 @@ BEGIN
                         v_written, v_rejected, NULL::text;
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- ============================================================
+-- Grants for service_role
+-- ============================================================
+GRANT EXECUTE ON FUNCTION public.run_pipeline()           TO service_role;
+GRANT EXECUTE ON FUNCTION public.refresh_silver_reports() TO service_role;
+GRANT EXECUTE ON FUNCTION public.refresh_gold()           TO service_role;
+
+
+-- ============================================================
+-- Usage
+-- ============================================================
+-- Run everything (silver + gold) as one transaction:
+--   SELECT * FROM run_pipeline();
+--
+-- Check the last run:
+--   SELECT run_id, started_at, status, rows_bronze, rows_silver, rows_rejected,
+--          products_in_gold, manufacturers_in_gold, error_message
+--   FROM pipeline_runs
+--   ORDER BY started_at DESC
+--   LIMIT 5;

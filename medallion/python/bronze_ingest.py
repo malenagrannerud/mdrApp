@@ -28,13 +28,12 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 SOURCE_FILE = "medallion/data/DEVICE2024.txt"
 SOURCE_FILE_LABEL = "DEVICE2024.txt"   # stored in source_file column
 BATCH_SIZE = 1000                      # rows per Supabase insert
-DEV_SAMPLE_LIMIT = 20000               # rows to load; None = full file
+DEV_SAMPLE_LIMIT = 20000               # rows to load; None = full file. Supabase would manage about 100 ingestions with 20 000 records 
 
 # Raw FDA column name -> bronze_reports column name
 COLUMN_MAP = {
     "MDR_REPORT_KEY":              "report_key",
     "DEVICE_SEQUENCE_NO":          "device_sequence_no",
-    "DEVICE_EVENT_KEY":            "device_event_key",
     "GENERIC_NAME":                "generic_name",
     "DEVICE_REPORT_PRODUCT_CODE":  "product_code_raw",
     "MANUFACTURER_D_NAME":         "manufacturer_raw",

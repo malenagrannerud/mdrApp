@@ -2,17 +2,24 @@
  * src/components/Dashboard.jsx
  * Post-Market Surveillance Dashboard
  *
- * Hämtar och visualiserar städad DEVICE2024-data från Supabase.
- * 
+ * Fetches cleaned DEVICE2024 data from Supabase and visualizes:
+ *   - Most reported product categories (G1)
+ *   - Most reported manufacturers (G2)
+ *
+ * Reads from ranked views so that:
+ *   - manufacturers exclude junk (G6)
+ *   - manufacturers use normalized names (G7)
+ *   - rows are sorted by rank (G4)
+ *
+ * Labels say "Number of reports" — never "rate" (G8).
  */
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Loader } from 'lucide-react'
 import { supabase } from '../../medallion/supabase'
 
-/* ------------------------------------------------------------------ */
-/*  PBICard – Power BI-inspirerat kort                                 */
-/* ------------------------------------------------------------------ */
+const HIGH_VOLUME_ONLY = false   // set true to show only the top-10 volume codes (G5)
+
 function PBICard({ children, title, subtitle, className = '' }) {
   return (
     <div
@@ -40,12 +47,10 @@ function PBICard({ children, title, subtitle, className = '' }) {
   )
 }
 
-/* ------------------------------------------------------------------ */
-/*  Dashboard                                                          */
-/* ------------------------------------------------------------------ */
 export default function Dashboard() {
   const [productData, setProductData] = useState([])
   const [manufacturerData, setManufacturerData] = useState([])
+  const [lastRun, setLastRun] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -54,23 +59,40 @@ export default function Dashboard() {
       setLoading(true)
       setError(null)
       try {
-        const productsHook = await supabase
-          .from('product_stats')
+        // G1: product categories, ranked, optionally filtered to high volume
+        let productsQuery = supabase
+          .from('product_stats_ranked')
           .select('*')
-          .order('total_reports', { ascending: false })
+          .order('rank', { ascending: true })
           .limit(10)
 
+        if (HIGH_VOLUME_ONLY) {
+          productsQuery = productsQuery.eq('is_high_volume_code', true)
+        }
+        const productsHook = await productsQuery
+
+        // G2 / G6 / G7: manufacturers, ranked, junk already excluded by the view
         const manufacturersHook = await supabase
-          .from('manufacturer_stats')
+          .from('manufacturer_stats_ranked')
           .select('*')
-          .order('total_reports', { ascending: false })
+          .order('rank', { ascending: true })
           .limit(10)
+
+        // Observability: when was the data last refreshed?
+        const runHook = await supabase
+          .from('pipeline_runs')
+          .select('started_at, status, rows_silver')
+          .eq('status', 'success')
+          .order('started_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
 
         if (productsHook.error) throw new Error(productsHook.error.message)
         if (manufacturersHook.error) throw new Error(manufacturersHook.error.message)
 
         setProductData(productsHook.data)
         setManufacturerData(manufacturersHook.data)
+        if (!runHook.error) setLastRun(runHook.data)
       } catch (e) {
         setError(e.message)
       } finally {
@@ -84,7 +106,7 @@ export default function Dashboard() {
     return (
       <div className="flex flex-col items-center justify-center pt-20">
         <Loader className="w-8 h-8 animate-spin text-blue-800" />
-        <p className="mt-2 text-gray-600 font-medium">Fetches 2024-data from Supabase...</p>
+        <p className="mt-2 text-gray-600 font-medium">Fetching 2024 data from Supabase…</p>
       </div>
     )
 
@@ -95,28 +117,28 @@ export default function Dashboard() {
       </div>
     )
 
-  // Formateringshjälp för stora tal (t.ex. 340691 -> 340 691)
   const fmt = (n) => n?.toLocaleString('sv-SE') || '0'
-
-
-
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen font-sans">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">PMS Dashboard</h1>
+        {lastRun && (
+          <p className="text-sm text-gray-500 mt-1">
+            Last run: {new Date(lastRun.started_at).toLocaleString('sv-SE')} ·{' '}
+            {fmt(lastRun.rows_silver)} rows in silver
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-
-       <PBICard title="Most reported medical device product categorys to FDA 2024">
+        <PBICard
+          title="Most reported medical device product categories to FDA 2024"
+          subtitle="Number of reports — not rate (no denominator exists)"
+        >
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={productData}
-                margin={{ top: 10, right: 10, left: 10, bottom: 50 }}
-              >
+              <BarChart data={productData} margin={{ top: 10, right: 10, left: 10, bottom: 50 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis
                   dataKey="generic_name"
@@ -134,15 +156,13 @@ export default function Dashboard() {
           </div>
         </PBICard>
 
-      
-
-        <PBICard title="Most reported manufacturers to FDA 2024">
+        <PBICard
+          title="Most reported manufacturers to FDA 2024"
+          subtitle="Normalized parent company — junk excluded"
+        >
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={manufacturerData}
-                margin={{ top: 10, right: 10, left: 10, bottom: 50 }}
-              >
+              <BarChart data={manufacturerData} margin={{ top: 10, right: 10, left: 10, bottom: 50 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis
                   dataKey="name"
@@ -159,7 +179,6 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </div>
         </PBICard>
-
       </div>
     </div>
   )
