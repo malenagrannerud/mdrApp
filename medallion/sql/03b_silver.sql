@@ -1,11 +1,9 @@
 /*
   03b_silver.sql
-  Author: Malena
-  Updated: 2026-10-01
+  Author: Malena | Updated: 2026-10-01
 
-  WHAT:  Reads bronze_reports and splits every row into silver_reports
-         (valid) or silver_rejected (invalid, with a reason).
-         Bronze is never modified.
+  Reads bronze_reports and splits every row into silver_reports (valid) or silver_rejected (invalid, with a reason).
+       
 
   WHY:   Gold must only see trusted data. Bad rows are quarantined,
          not deleted, so we can always explain why a row was excluded.
@@ -16,14 +14,14 @@
 
   Input:
     - bronze_reports        raw ingestion (read-only here)
-    - manufacturer_mapping  S5 - final rename map (built automatically below)
+    - manufacturer_mapping  S5 - final rename map (rebuilt in STEP 3)
     - manufacturer_parent   S5 - keyword rules that build the rename map
 
   Output:
     - silver_reports        cleaned rows, with flags
     - silver_rejected       quarantine, with rejection_reason
-    - product_code_dim      S6 - canonical product name per code
     - manufacturer_mapping  S5 - rebuilt from manufacturer_parent + bronze
+    - product_code_dim      S6 - canonical product name per code
 
   Rules implemented here:
     S1  Deduplicate on PK
@@ -33,7 +31,6 @@
     S5  Normalize manufacturers: auto-generated from manufacturer_parent
     S6  Canonical product name (built after main function)
 */
-
 
 
 -- ============================================================
@@ -109,24 +106,30 @@ BEGIN
     -- STEP 2.1: Give every bronze row ONE label (or none)
     -- --------------------------------------------------------
     -- WHY normalize_mfr_name() on BOTH sides of the join?
-    --   The mapping was built from raw names. Two raw names that differ only
-    --   by ", Inc." would otherwise be treated as different companies.
+    --   The mapping is keyed by raw_name. Two raw names that differ only
+    --   by ", Inc." would otherwise look like different companies.
     --   Normalizing both sides collapses them onto the same key.
+    -- WHY DISTINCT ON in deduped?
+    --   Bronze is append-only. If the same file was ingested twice, the
+    --   same (report_key, device_sequence_no) appears twice. DISTINCT ON
+    --   keeps the earliest id, so downstream inserts never violate the
+    --   composite primary key on silver_reports.
     CREATE TEMP TABLE tmp_classified ON COMMIT DROP AS
     WITH
+    deduped AS (
+        SELECT DISTINCT ON (report_key, device_sequence_no)
+               id, report_key, device_sequence_no,
+               generic_name, product_code_raw, manufacturer_raw
+        FROM bronze_reports
+        ORDER BY report_key, device_sequence_no, id
+    ),
     ranked AS (
         SELECT *,
                ROW_NUMBER() OVER (
                    PARTITION BY report_key, device_sequence_no
                    ORDER BY id
                ) AS rn
-        FROM (
-    SELECT DISTINCT ON (report_key, device_sequence_no)
-           id, report_key, device_sequence_no,
-           generic_name, product_code_raw, manufacturer_raw
-    FROM bronze_reports
-    ORDER BY report_key, device_sequence_no, id
-) deduped
+        FROM deduped
     ),
     mapped AS (
         SELECT r.*,
@@ -146,8 +149,6 @@ BEGIN
                 THEN 'missing_report_key'
             WHEN mp.device_sequence_no IS NULL OR NULLIF(TRIM(mp.device_sequence_no), '') IS NULL
                 THEN 'missing_device_sequence_no'
-            WHEN mp.rn > 1
-                THEN 'duplicate_primary_key'
             ELSE NULL
         END AS rejection_reason
     FROM mapped mp;
@@ -213,21 +214,33 @@ $$ LANGUAGE plpgsql;
 -- ============================================================
 -- WHY TRUNCATE first? The mapping is derived from manufacturer_parent.
 -- Rebuilding it cleanly avoids stale rows when keywords change.
+-- WHY DISTINCT ON (normalize_mfr_name(raw_name))?
+--   Two raw names ("MEDTRONIC" and "MEDTRONIC, INC.") both normalize to
+--   the same string. Without DISTINCT ON, both would be inserted. Then
+--   refresh_silver_reports() LEFT JOINs on the normalized form and would
+--   match BOTH mapping rows for a single bronze row -> 2 output rows ->
+--   PK collision on silver_reports. DISTINCT ON keeps exactly one row
+--   per normalized name.
 TRUNCATE TABLE manufacturer_mapping;
 
 INSERT INTO manufacturer_mapping (raw_name, normalized_name)
-SELECT DISTINCT
-    s.manufacturer_name,
-    p.parent_name
-FROM silver_reports s
-CROSS JOIN manufacturer_parent p
-WHERE s.manufacturer_is_junk = FALSE
-  AND s.manufacturer_name IS NOT NULL
-  AND EXISTS (
-      SELECT 1 FROM unnest(p.keywords) kw
-      WHERE normalize_mfr_name(s.manufacturer_name) LIKE '%' || kw || '%'
-  )
-ON CONFLICT (raw_name) DO NOTHING;
+SELECT DISTINCT ON (normalize_mfr_name(raw_name))
+       raw_name,
+       normalized_name
+FROM (
+    SELECT DISTINCT
+        s.manufacturer_name AS raw_name,
+        p.parent_name       AS normalized_name
+    FROM silver_reports s
+    CROSS JOIN manufacturer_parent p
+    WHERE s.manufacturer_is_junk = FALSE
+      AND s.manufacturer_name IS NOT NULL
+      AND EXISTS (
+          SELECT 1 FROM unnest(p.keywords) kw
+          WHERE normalize_mfr_name(s.manufacturer_name) LIKE '%' || kw || '%'
+      )
+) matches
+ORDER BY normalize_mfr_name(raw_name);
 
 
 -- ============================================================

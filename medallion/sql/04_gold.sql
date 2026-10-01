@@ -155,6 +155,10 @@ FROM manufacturer_stats;
 GRANT SELECT ON public.product_stats_ranked       TO service_role;
 GRANT SELECT ON public.manufacturer_stats_ranked  TO service_role;
 
+GRANT SELECT ON public.product_stats_ranked       TO anon;
+GRANT SELECT ON public.manufacturer_stats_ranked  TO anon;
+GRANT SELECT ON public.product_stats              TO anon;
+GRANT SELECT ON public.manufacturer_stats         TO anon;
 -- ============================================================
 -- Usage
 -- ============================================================

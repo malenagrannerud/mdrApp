@@ -44,7 +44,7 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 
 | Column | Role | 
 |---|---|
-| `MDR_REPORT_KEY` | Primary key – links this file to other MAUDE files. Can be duplicated.| 
+| `MDR_REPORT_KEY` | Links this file to other MAUDE files. Can be duplicated.| 
 | `DEVICE_SEQUENCE_NO`| Unique per unit in a report|
 | `GENERIC_NAME`  | The generic common name of the medical device | 
 | `DEVICE_REPORT_PRODUCT_CODE` | FDA product classification code (3 letters) | 
@@ -69,6 +69,7 @@ duplicated (one row): 31
 
 --> S1 Deduplicate 31 identical rows on PK
 --> S2: PK is MDR_REPORT_KEY , DEVICE_SEQUENCE_NO
+
 ```
 === 2. Missing values (%) ===
 MDR_REPORT_KEY                0.00
@@ -133,7 +134,7 @@ codes: 2,206 | codes with more than 1 name: 1,402
 
 ```
 === 6. Concentration ===
-DEVICE_REPORT_PRODUCT_CODE
+
 DZE    697107
 QBJ    347156
 QFG    273207
@@ -144,14 +145,9 @@ FPA     47212
 QLG     35122
 LGW     35083
 FTR     30774
-Name: count, dtype: int64
 top 10 codes = 65.5 % of rows
 top 10 manufacturers = 55.0 % of rows
 ```
-
-
-
-
 
 
 #### DATA LIMITATIONS
@@ -166,25 +162,26 @@ Aggregation + ranking, since kategorical and numerical data types
 
 
 
-
-
-
 ## STEPS IN CONDUCTING THE PIPELINE
 
 ```
 medallion
 ├── data
 │   └── DEVICE2024.txt
+├── analysis
+│   └── eda_device.py
 ├── python
 │   ├── bronze_ingest.py
 │   ├── test_bronze_ingest.py
 │   └── requirements.txt
-│   
+│
 └── sql
     ├── 01_create_tables.sql
     ├── 02_bronze.sql
-    ├── 03_silver.sql
-    └── 04_gold.sql
+    ├── 03a_seed_manufacturers.sql
+    ├── 03b_silver.sql
+    ├── 04_gold.sql
+    └── 05_pipeline.sql             
 ```
 
 ### Pipeline Architecture & Data Flow
@@ -198,7 +195,7 @@ medallion
 │ - Tracks ingestion metadata             │
 └─────────────────────────────────────────┘
        │
-       ▼ (Transformation & DQ via SQL/dbt)
+       ▼ (Transformation & DQ via SQL)
 ┌───────────────────────────────────────────┐
 │ SILVER LAYER (Cleaned & Normalized)       │
 │ - Deduplication & Type Casting            │
@@ -208,24 +205,19 @@ medallion
        ▼ (Aggregation & Feature Engineering)
 ┌─────────────────────────────────────────┐
 │ GOLD LAYER (Business & ML Ready)        │
-│ - High-performance materialized views    │
+│ - High-performance materialized views   │
 │ - Analytical Star Schema                │
 └─────────────────────────────────────────┘
        │
-       ├───────────────────┼───────────────────────────┐
-       ▼                   ▼                           ▼
-[ BI Dashboard ]     [ Feature Store ]   [ NOT YET - Ad-hoc Analysis ]
-(Power BI Insights)        │
-                           ▼
-                 [ Future ML Pipelines ]
+       |
+       ▼                   
+[ BI Dashboard ]     
+(Power BI Insights)        
+                 
 ```
 
 
-
-
-
-
-### STEP 1 - LIST REQUIREMENTS
+### STEP 1 - LIST OF REQUIREMENTS
 
 ### Bronze Layer
 Principle: read everythong, do not modify data 
@@ -249,8 +241,7 @@ Principle: read everythong, do not modify data
 | S4 | Flag junk manufacturers | `manufacturer_is_junk = TRUE/FALSE` | Excludes junk from Gold rankings |
 | S5 | Normalize manufacturers | `manufacturer_normalized` via mapping table | Medtronic has 99 spellings |
 | S6 | Canonical product name | `product_code_dim` with most common `GENERIC_NAME` | 1,402 of 2,206 codes have >1 name |
-
-Observe: Explore `MPRI`, largets unkown manufacturer 
+| S7 | Build mapping automatically	| manufacturer_parent keyword rules → manufacturer_mapping | Extensible without touching Silver logic |
 
 
 ---
@@ -264,55 +255,55 @@ Observe: Explore `MPRI`, largets unkown manufacturer
 | G3 | Rank results | `RANK() OVER (ORDER BY total_reports DESC)` | Enables "#1, #2, #3" — not just a list |
 | G4 | Filter high volume | `WHERE is_high_volume_code = TRUE` | Top 10 codes = 65.5 % of all rows |
 | G5 | Exclude junk | `WHERE manufacturer_is_junk = FALSE` | Correct rankings |
-| G6 | Normalized names | `manufacturer_normalized` | Without it, Medtronic split across 99 rows |
-| G7 | Label clearly | "Number of reports" — not "rate" | No denominator exists |
+| G6 | Label clearly | "Number of reports" — not "rate" | No denominator exists |
 ---
 
 
-
 ### STEP 2 — CREATE TABLES 
-
 Run `01_create_tables.sql` in the Supabase SQL editor.
+
+Creates: bronze_reports, silver_reports, silver_rejected, product_code_dim, manufacturer_mapping, manufacturer_parent, product_stats, manufacturer_stats, all triggers and grants.
+
 
 ### STEP 3 — RUN BRONZE 
 ```bash
 pip install -r medallion/python/requirements.txt
 python medallion/bronze_ingest.py
 ```
-#### Verify upload in console
-Expected:  `BRONZE DONE`, `bronze_reports` is populated in Supabase.
+Expected: `BRONZE DONE`, `bronze_reports` is populated in Supabase.
 
-
-#### Verify data quality rules 
-dbt - later
+#### Gatekeeper before SILVER
+B1–B5 verification, manual read only
 
 
 ### STEP 4 — RUN SILVER
-
 Run `03_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates on PK 
 
-#### Verify data quality rules 
-dbt - later
+#### Gatekepper before GOLD
+bronze = silver + rejected. Exception in refresh_silver_reports() 
 
 #### Validation rate
 
 
 
+
 ### STEP 5 — RUN GOLD
+Run `04_gold.sql` in Supabase. Output: refresh_gold() and the two ranked views.
+Run `pipeline.sql`
 
-Run `04_gold.sql` in Supabase.
+#### Gatekeeper before Dashboard (enforced inside refresh_gold()):
+- sum(total_reports) = silver row count
+- no total_reports <= 0
+- If either fails, the transaction rolls back and pipeline_runs logs a failed row.
 
-#### Verify data quality rules 
-dbt - later
 
 
 
 ### FUTURE STEPS 
-* dbt - verify that requirements are met 
-* Silver: Enrich with mdrfoi.txt and  by JOIN for better insights. add severity per report
-* star schemas 
-* handle the sample, make it representative 
-
+- dbt — formalize the gatekeepers as dbt tests (not_null, unique, relationships, custom sum checks). One dbt test command instead of manual SQL checks.
+- Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
+- Star schema in Gold for ad-hoc analysis.
+- Representative sample: current 20 k rows are the first rows of the file, not randomly drawn.
 
 
 Note: No GDPR, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 

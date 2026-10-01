@@ -1,18 +1,15 @@
-S
 
+-- ITERATE TO ENSURE MOST MANUFACTURERS ARE MAPPED
 
-ELECT
+SELECT
     COUNT(*) FILTER (WHERE manufacturer_normalized = manufacturer_name) AS unmapped,
     COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) AS mapped,
-    COUNT(*) AS total
+    COUNT(*) AS total,
+    ROUND(100.0 * COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) / COUNT(*), 1) AS pct_mapped
 FROM silver_reports
 WHERE manufacturer_is_junk = FALSE;
 
--- result 76 % 
--- | unmapped | mapped | total |
--- | -------- | ------ | ----- |
--- | 4718     | 15256  | 19974 |
-
+-- result 97% OK
 
 
 -- Display the top 50 manufacturer names that are not mapped to a normalized name. This is useful for identifying which manufacturers need to be added to the mapping table.

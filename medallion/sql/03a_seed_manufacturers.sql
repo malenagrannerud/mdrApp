@@ -30,7 +30,7 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 ('MEDTRONIC',            ARRAY['MEDTRONIC','COVIDIEN','MPRI','US SURGICAL','TYCO','MEDIVANCE','MEDOS INTERNATIONAL','MICRO THERAPEUTICS','EV3','HEARTWARE','MDT POWERED']),
 ('ABBOTT',               ARRAY['ABBOTT','ST JUDE','ST. JUDE','THORATEC','BIOSENSE WEBSTER','AMO PUERTO RICO']),
 ('JOHNSON & JOHNSON',    ARRAY['JOHNSON & JOHNSON','ETHICON','DEPUY','SYNTHES','ABIOMED','AURIS','CERENOVUS']),
-('BECTON DICKINSON',     ARRAY['BECTON','C.R. BARD','CR BARD','CAREFUSION','ALARIS','BARD PERIPHERAL','BARD ACCESS','BD SUZHOU','BD MEDICAL','BD INFUSION']),
+('BECTON DICKINSON',     ARRAY['BECTON','BARD','C.R. BARD','CR BARD','CAREFUSION','ALARIS','BARD PERIPHERAL','BARD ACCESS','BD SUZHOU','BD MEDICAL','BD INFUSION']),
 ('BOSTON SCIENTIFIC',    ARRAY['BOSTON SCIENTIFIC']),
 ('PHILIPS',              ARRAY['PHILIPS','RESPIRONICS']),
 ('GE HEALTHCARE',        ARRAY['GE HEALTHCARE','DATEX','OHMEDA','GE MEDICAL']),
@@ -220,6 +220,10 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 -- ============================================================
 -- Verify
 -- ============================================================
--- SELECT COUNT(*) AS parents FROM manufacturer_parent;
--- SELECT parent_name, array_length(keywords, 1) AS kw_count
--- FROM manufacturer_parent ORDER BY parent_name;
+SELECT
+    COUNT(*) FILTER (WHERE manufacturer_normalized = manufacturer_name) AS unmapped,
+    COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) AS mapped,
+    COUNT(*) AS total,
+    ROUND(100.0 * COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) / COUNT(*), 1) AS pct_mapped
+FROM silver_reports
+WHERE manufacturer_is_junk = FALSE;

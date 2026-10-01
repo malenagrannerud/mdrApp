@@ -1,9 +1,8 @@
 /*
   05_pipeline.sql
-  Author: Malena
-  Updated: 2026-10-01
+  Author: Malena | Updated: 2026-10-01
 
-  WHAT:  pipeline_runs (a log of every run) + run_pipeline() (one command
+  pipeline_runs (a log of every run) + run_pipeline() (one command
          for everything: silver -> gold in one transaction).
   WHY:   You should never have to remember "silver, then gold". One command,
          fixed order, and every run is logged so you can answer
@@ -17,7 +16,7 @@
   Output:
     - silver_reports        (via refresh_silver_reports)
     - silver_rejected       (via refresh_silver_reports)
-    - product_code_dim      (built inside refresh_silver_reports)
+    - product_code_dim      (built in 03b_silver.sql after the function)
     - product_stats         (via refresh_gold)
     - manufacturer_stats    (via refresh_gold)
     - pipeline_runs         (this file)
@@ -52,7 +51,11 @@ DROP POLICY IF EXISTS "public read pipeline_runs" ON pipeline_runs;
 CREATE POLICY "public read pipeline_runs" ON pipeline_runs
   FOR SELECT USING (true);
 
+-- service_role needs full access (writes the log)
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.pipeline_runs TO service_role;
+
+-- anon reads the log for the dashboard's "Last run" panel
+GRANT SELECT ON public.pipeline_runs TO anon;
 
 
 -- ============================================================
