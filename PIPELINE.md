@@ -1,10 +1,14 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 
-This document covers the analysis and pipeline behind the [Aegis Compliance](./README.md) dashboard. First, steps in conduction data analysis is presented, and seconly, steps in developing and running the pipeline. 
+This document covers the analysis and pipeline behind the [Aegis Compliance](./README.md) dashboard. It contains 
+- STEPS IN CONDUCTING THE ANALYSIS and 
+- STEPS IN CONDUCTING THE PIPELINE
+
 
 ## STEPS IN CONDUCTING THE ANALYSIS
 
 ### STEP 1 - DEFINE THE QUESTION 
+
 The purpose is to answer
 - What type of medical device has a high rate of incident reports? What devices are connected to death or serious events?
 - What manufacturer are behind the most frequently reported products?
@@ -100,7 +104,7 @@ MERZ        1
 Name: count, dtype: int64
 ```
 --> S4: Explore MPRI 
---> S4: Flag rows with junk manufacturer names — manufacturer_is_junk = TRUE/FALSE. Keep rows in Silver, exclude from Gold rankings.
+--> S5: Flag rows with junk manufacturer names — manufacturer_is_junk = TRUE/FALSE. Keep rows in Silver, exclude from Gold rankings.
 ```
 === 4. Same company, many spellings ===
 This is the variable MANUFACTURER_D_NAME
@@ -116,13 +120,13 @@ This is the variable MANUFACTURER_D_NAME
 - BOSTON SCIENTIFIC: 27 different spellings, 64,829 rows. Top 5:
 - ABBOTT: 95 different spellings, 90,271 rows. Top 5:
 ```
---> S5: Normalize manufacturer names — add manufacturer_normalized column mapped to parent company via explicit mapping table.
+--> S6: Normalize manufacturer names — add manufacturer_normalized column mapped to parent company via explicit mapping table.
 
 ```
 === 5. One product code, several names? ===
 codes: 2,206 | codes with more than 1 name: 1,402
 ```
---> S6: Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE.
+--> S7: Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE.
 
 
 ```
@@ -142,11 +146,18 @@ Name: count, dtype: int64
 top 10 codes = 65.5 % of rows
 top 10 manufacturers = 55.0 % of rows
 ```
+
+
+
+
+
+
 #### DATA LIMITATIONS
 - Under-reporting of events
 - Inaccuracies in reports
 - Lack of verification that the device caused the reported event
 - Lack of information about frequency of device use
+- To small sample to representable in the test phase 
 
 ### 2.3 - ANALYSIS METHOD
 Aggregation + ranking, since kategorical and numerical data types
@@ -217,45 +228,42 @@ medallion
 ### Bronze Layer
 Principle: read everythong, do not modify data 
 
-| # | Rule | Detail |
-|---|------|--------|
-| B1 | Read file with correct format | Pipe-delimited, latin-1, `QUOTE_NONE` |
-| B2 | Keep all columns | Even empty ones (`DEVICE_EVENT_KEY`) — decisions belong in Silver |
-| B3 | Keep all rows | No dedup, no filtering |
-| B4 | Read everything as `str` | No type conversion — that belongs in Silver |
-| B5 | Add metadata | `_source_file`, `_ingested_at` for traceability |
+| # | Rule | What | Why |
+|---|------|------|-----|
+| B1 | Read file with correct format | Pipe-delimited, latin-1, `QUOTE_NONE` | Wrong encoding corrupts names |
+| B2 | Keep all columns | Even empty ones | Decisions belong in Silver |
+| B3 | Keep all rows | No dedup, no filtering | Traceability — Silver decides |
+| B4 | Read everything as `str` | No type conversion | Avoid silent type errors |
+| B5 | Add metadata | `_source_file`, `_ingested_at` | Traceability and lineage |
 
 ---
-
-
 ### Silver Layer
-| # | Rule |
-|---|------|
-| S1 | Deduplicate 31 identical rows on PK |
-| S2 | PK is `MDR_REPORT_KEY`, `DEVICE_SEQUENCE_NO` |
-| S3 | Handle missing `GENERIC_NAME` & `MANUFACTURER_D_NAME` — flag, do not impute |
-| S4 | Explore `MPRI` |
-| S5 | Flag rows with junk manufacturer names — `manufacturer_is_junk = TRUE/FALSE`. Keep rows in Silver, exclude from Gold rankings |
-| S6 | Normalize manufacturer names — add `manufacturer_normalized` column mapped to parent company via explicit mapping table |
-| S7 | Build canonical product name — `product_code_dim` with the most common `GENERIC_NAME` per `DEVICE_REPORT_PRODUCT_CODE` |
+
+| # | Rule | What | Why |
+|---|------|------|-----|
+| S1 | Deduplicate | Remove 31 identical rows on PK | Removes exact duplicates |
+| S2 | Primary key | `(MDR_REPORT_KEY, DEVICE_SEQUENCE_NO)` | Unique in 99.999 % of rows |
+| S3 | Flag missing values | has_missing_generic_name, has_missing_manufacturer | Preserves data integrity |
+| S4 | Flag junk manufacturers | `manufacturer_is_junk = TRUE/FALSE` | Excludes junk from Gold rankings |
+| S5 | Normalize manufacturers | `manufacturer_normalized` via mapping table | Medtronic has 99 spellings |
+| S6 | Canonical product name | `product_code_dim` with most common `GENERIC_NAME` | 1,402 of 2,206 codes have >1 name |
+
+Observe: Explore `MPRI`, largets unkown manufacturer 
+
 
 ---
-
 ### Gold Layer
 
-| # | Rule | What |
-|---|------|------|
-| G1 | Aggregate per product code | `GROUP BY device_report_product_code` + `COUNT` |
-| G2 | Aggregate per manufacturer | `GROUP BY manufacturer_normalized` + `COUNT` |
-| G3 | Split by severity | D / IN / M per group |
-| G4 | Rank results | `RANK() OVER (ORDER BY total_reports DESC)` |
-| G5 | Filter high volume | `WHERE is_high_volume_code = TRUE` |
-| G6 | Exclude junk | `WHERE manufacturer_is_junk = FALSE` |
-| G7 | Use normalized names | `manufacturer_normalized` |
-| G8 | Monthly trend | Join with `mdrfoi` |
-| G9 | Label clearly | "Number of reports" — not "rate" |
 
-
+| # | Rule | What | Why |
+|---|------|------|-----|
+| G1 | Aggregate per product code | `GROUP BY device_report_product_code` + `COUNT` | Answers Q1  |
+| G2 | Aggregate per manufacturer | `GROUP BY manufacturer_normalized` + `COUNT` | Answers Q2 |
+| G3 | Rank results | `RANK() OVER (ORDER BY total_reports DESC)` | Enables "#1, #2, #3" — not just a list |
+| G4 | Filter high volume | `WHERE is_high_volume_code = TRUE` | Top 10 codes = 65.5 % of all rows |
+| G5 | Exclude junk | `WHERE manufacturer_is_junk = FALSE` | Correct rankings |
+| G6 | Normalized names | `manufacturer_normalized` | Without it, Medtronic split across 99 rows |
+| G7 | Label clearly | "Number of reports" — not "rate" | No denominator exists |
 ---
 
 
@@ -299,7 +307,10 @@ dbt - later
 
 ### FUTURE STEPS 
 * dbt - verify that requirements are met 
-* Silver: Enrich with mdrfoi.txt and  by JOIN for better insights. 
+* Silver: Enrich with mdrfoi.txt and  by JOIN for better insights. add severity per report
 * star schemas 
+* handle the sample, make it representative 
+
+
 
 Note: No GDPR, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 

@@ -1,45 +1,46 @@
 """medallion/python/bronze_ingest.py
 
 Author: Malena
-Updated: 2026-09-30
+Updated: 2026-10-01
 Description: Reads the raw FDA MAUDE file and appends it to the Supabase
-             bronze_reports table. Adds source_file to every row.
+             bronze_reports table.
+             - Adds source_file to every row.
+             - Loads a sample (DEV_SAMPLE_LIMIT) to protect the free tier.
+             - A new run adds DEV_SAMPLE_LIMIT new rows. 
 
-WHY: Bronze keeps data exactly as it arrived. No cleaning happens here.
-     Bad rows are still loaded (silver quarantines them with a reason).
-     Only rows that cannot be parsed at all are skipped, and they are counted.
+
+WHY pandas? Replaces the manual line-by-line reader and Pydantic model.
+     pandas handles parsing, column selection and NaN handling directly.
 """
 
 import os
-import time
+import csv
 import logging
-
-from typing import Any, Optional, Iterator
-from importlib import import_module
-
 from pathlib import Path
+
+import pandas as pd
 from dotenv import load_dotenv
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from supabase import create_client
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 # ===================================== CONFIGURATION =====================================
-SOURCE_FILE = "data/DEVICE2024.txt"
-WRITE_BATCH_SIZE = 1000     # rows buffered before one write to Supabase
-MAX_RETRIES = 3             # attempts per batch before giving up
-RETRY_BACKOFF_SECONDS = 2   # wait doubles each retry: 2s, 4s, 8s
-DEV_SAMPLE_LIMIT = 20000    # keeps the free Supabase tier (500 MB) from filling up.
-                            # The full file has ~2.6 M rows. Set to None for all rows.
+SOURCE_FILE = "medallion/data/DEVICE2024.txt"
+SOURCE_FILE_LABEL = "DEVICE2024.txt"   # stored in source_file column
+BATCH_SIZE = 1000                      # rows per Supabase insert
+DEV_SAMPLE_LIMIT = 20000               # rows to load; None = full file
 
-HEADER_DICTIONARY = {
-    "reportKey":       "MDR_REPORT_KEY",
-    "deviceEventKey":  "DEVICE_EVENT_KEY",
-    "genericName":     "GENERIC_NAME",
-    "productCode":     "DEVICE_REPORT_PRODUCT_CODE",
-    "manufacturerRaw": "MANUFACTURER_D_NAME",
+# Raw FDA column name -> bronze_reports column name
+COLUMN_MAP = {
+    "MDR_REPORT_KEY":              "report_key",
+    "DEVICE_SEQUENCE_NO":          "device_sequence_no",
+    "DEVICE_EVENT_KEY":            "device_event_key",
+    "GENERIC_NAME":                "generic_name",
+    "DEVICE_REPORT_PRODUCT_CODE":  "product_code_raw",
+    "MANUFACTURER_D_NAME":         "manufacturer_raw",
 }
 
-# ===================================== LOGGING SETUP =====================================
+# ===================================== LOGGING =====================================
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -49,99 +50,70 @@ logger = logging.getLogger(__name__)
 
 
 # ===================================== SUPABASE CLIENT =====================================
-def get_supabase_client() -> Any:
-    """Returns a Supabase client built from SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.
-
-    WHY the service role key? Bronze is locked by RLS, so only the pipeline
-    (not the public dashboard key) may write to it.
-
-    Raises:
-        SystemExit: if a variable is missing or the supabase package is not installed.
-    """
+def get_supabase_client():
+    """Returns a Supabase client built from SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."""
     url = os.environ.get("SUPABASE_URL")
-    service_role_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
     if not url:
         raise SystemExit("Error: SUPABASE_URL is missing from your .env file")
-    if not service_role_key:
+    if not key:
         raise SystemExit("Error: SUPABASE_SERVICE_ROLE_KEY is missing from your .env file")
-    try:
-        supabase = import_module("supabase")
-    except ImportError as exc:
-        raise SystemExit(
-            "Error: the 'supabase' package is required; install it with 'pip install supabase'"
-        ) from exc
-    return supabase.create_client(url, service_role_key)
+    return create_client(url, key)
 
 
-# ============================================================
-# HELPER FUNCTIONS: each does one thing and can be tested alone
-# ============================================================
-def find_source_file(source_file: str) -> str:
-    """Finds the source file whether you run from the repo root or a subfolder."""
-    if os.path.exists(source_file):
-        return source_file
-    if os.path.exists(f"medallion/{source_file}"):
-        return f"medallion/{source_file}"
-    raise SystemExit(f"Error: source file not found at {source_file}")
+# ===================================== INGEST =====================================
+def ingest(source_file: str, supabase_client) -> None:
+    """Streams the source file into bronze_reports in batches."""
+    reader = pd.read_csv(
+        source_file,
+        sep="|",
+        usecols=list(COLUMN_MAP.keys()),
+        dtype=str,
+        encoding="latin-1",
+        quoting=csv.QUOTE_NONE,
+        on_bad_lines="skip",
+        chunksize=BATCH_SIZE,
+    )
 
+    total_rows = 0
+    total_batches = 0
 
-def read_source_lines(path: str) -> Iterator[tuple[int, str]]:
-    """Streams the file line by line (never loads 2.6 M rows into memory)."""
-    with open(path, encoding="utf-8", errors="replace") as f:
-        for line_num, line in enumerate(f):
-            yield line_num, line.rstrip("\r\n")
+    for batch_num, chunk in enumerate(reader, start=1):
+        chunk = chunk.rename(columns=COLUMN_MAP)
+        chunk["source_file"] = SOURCE_FILE_LABEL
 
+        # WHY: pandas converts None back to NaN inside to_dict() for object
+        # dtype columns. httpx refuses to serialize NaN to JSON. So we clean
+        # each row AFTER to_dict(), not before.
+        records = chunk.to_dict(orient="records")
+        records = [
+            {k: (None if pd.isna(v) else v) for k, v in row.items()}
+            for row in records
+        ]
 
-def build_header_mapping(headers: list[str]) -> dict[str, int]:
-    """Maps internal names to column positions. -1 means 'column not in file'."""
-    return {
-        key: headers.index(source_col) if source_col in headers else -1
-        for key, source_col in HEADER_DICTIONARY.items()
-    }
-
-
-class BronzeRow(BaseModel):
-    """Schema of one bronze row.
-
-    WHY aliases? The source uses camelCase keys, the database uses snake_case
-    columns. Fields are filled by alias, but model_dump() returns the field
-    names, which match the database columns.
-    """
-    model_config = ConfigDict(populate_by_name=True)
-    report_key: Optional[str] = Field(default=None, alias="reportKey")
-    device_event_key: Optional[str] = Field(default=None, alias="deviceEventKey")
-    generic_name: Optional[str] = Field(default=None, alias="genericName")
-    product_code_raw: Optional[str] = Field(default=None, alias="productCode")
-    manufacturer_raw: Optional[str] = Field(default=None, alias="manufacturerRaw")
-    source_file: str = Field(..., alias="source_file")
-
-
-def build_raw_row(fields: list[str], col_idx: dict[str, int], source_file: str) -> dict:
-    """Builds a dict for one data line. Missing or empty values become None."""
-
-    def get_field(key: str) -> Optional[str]:
-        idx = col_idx.get(key, -1)
-        if idx == -1 or idx >= len(fields):
-            return None
-        val = fields[idx].strip()
-        return val if val else None
-
-    return {
-        "reportKey": get_field("reportKey"),
-        "deviceEventKey": get_field("deviceEventKey"),
-        "genericName": get_field("genericName"),
-        "productCode": get_field("productCode"),
-        "manufacturerRaw": get_field("manufacturerRaw"),
-        "source_file": source_file,
-    }
-
-
-def write_batch_with_retry(supabase_client: Any, batch: list[dict]) -> None:
-    """Writes one batch, retrying with doubling wait time on failure."""
-    backoff = RETRY_BACKOFF_SECONDS
-    for attempt in range(1, MAX_RETRIES + 1):
         try:
-            supabase_client.table("bronze_reports").insert(batch).execute()
-            return
+            supabase_client.table("bronze_reports").insert(records).execute()
         except Exception as e:
-            if attempt == MAX_RETRIES:
+            logger.error(f"Batch {batch_num} failed: {e}")
+            raise
+
+        total_rows += len(records)
+        total_batches += 1
+        logger.info(f"Batch {batch_num} written: {len(records):,} rows "
+                    f"(total: {total_rows:,})")
+
+        if DEV_SAMPLE_LIMIT and total_rows >= DEV_SAMPLE_LIMIT:
+            logger.info(f"DEV_SAMPLE_LIMIT reached ({DEV_SAMPLE_LIMIT:,}). Stopping.")
+            break
+
+    logger.info(f"BRONZE DONE — {total_rows:,} rows in {total_batches} batches")
+
+
+# ===================================== MAIN =====================================
+if __name__ == "__main__":
+    if not os.path.exists(SOURCE_FILE):
+        raise SystemExit(f"Error: source file not found at {SOURCE_FILE}")
+
+    client = get_supabase_client()
+    ingest(SOURCE_FILE, client)
+
