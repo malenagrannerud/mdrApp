@@ -1,8 +1,8 @@
 """medallion/analysis/eda.py
 
 Exploratory data analysis of MAUDE 2024. Run from the repo root.
-GOAL: understand the data BEFORE modelling. Each cell ends with a question
-      to answer in your own words (write the answers in the README).
+GOAL: understand the data BEFORE modelling. Each cell ends with a question to answer in your own words (write the answers in the README).
+
 """
 # %% 1. Load
 from pathlib import Path

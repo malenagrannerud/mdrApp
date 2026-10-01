@@ -1,0 +1,113 @@
+
+=== 1. What is a row? ===
+rows: 2,629,410 | unique report keys: 2,627,121 | unique device event keys: 10
+completely identical rows: 2,276
+
+=== 2. Missing values (%) ===
+MDR_REPORT_KEY                  0.00
+DEVICE_EVENT_KEY              100.00
+DATE_RECEIVED                   0.00
+GENERIC_NAME                    0.02
+MANUFACTURER_D_NAME             0.16
+DEVICE_REPORT_PRODUCT_CODE      0.00
+dtype: float64
+
+=== 3. Junk manufacturer names ===
+junk list: 1,039 | shorter than 2 chars: 15
+Most common values that look suspicious (short names):
+MANUFACTURER_D_NAME
+MPRI    34885
+UNK       537
+BD        113
+0HP        21
+SERF       18
+.          12
+000         5
+DSS         3
+BIOS        3
+REMI        3
+BARD        2
+I           2
+AIZU        2
+QFIX        1
+MERZ        1
+Name: count, dtype: int64
+
+=== 4. Same company, many spellings ===
+OLYMPUS: 43 different spellings, 55,957 rows. Top 5:
+MANUFACTURER_D_NAME
+AIZU OLYMPUS CO., LTD.                       24834
+SHIRAKAWA OLYMPUS CO., LTD.                  20768
+OLYMPUS WINTER & IBE GMBH                     7019
+AOMORI OLYMPUS CO., LTD.                      2330
+OLYMPUS WINTER & IBE GMBH BERLIN FACILITY      575
+MEDTRONIC: 99 different spellings, 274,262 rows. Top 5:
+MANUFACTURER_D_NAME
+MEDTRONIC PUERTO RICO OPERATIONS CO.    173167
+MEDTRONIC MINIMED                        48537
+MEDTRONIC SINGAPORE OPERATIONS            9583
+MEDTRONIC HEART VALVES DIVISION           7569
+MEDTRONIC, INC.                           6337
+ALCON: 20 different spellings, 11,719 rows. Top 5:
+MANUFACTURER_D_NAME
+ALCON RESEARCH, LLC - HOUSTON                     3034
+ALCON RESEARCH, LLC - HUNTINGTON                  2545
+ALCON RESEARCH, LLC - ALCON PRECISION DEVICE      2401
+ALCON RESEARCH, LLC - IRVINE TECHNOLOGY CENTER    1829
+ALCON LABORATORIES IRELAND LTD.                   1420
+BOSTON SCIENTIFIC: 27 different spellings, 64,829 rows. Top 5:
+MANUFACTURER_D_NAME
+BOSTON SCIENTIFIC CORPORATION                    56416
+BOSTON SCIENTIFIC NEUROMODULATION                 5909
+BOSTON SCIENTIFIC NEUROMODULATION CORPORATION     2040
+BOSTON SCIENTIFIC DE COSTA RICA S.R.L.             324
+BOSTON SCIENTIFIC CORP.                             44
+ABBOTT: 95 different spellings, 90,271 rows. Top 5:
+MANUFACTURER_D_NAME
+ABBOTT DIABETES CARE INC    39386
+ABBOTT MEDICAL              13700
+ABBOTT DIABETES CARE LTD    11550
+ABBOTT VASCULAR INC.         8430
+ABBOTT VASCULAR              7123
+
+=== 5. One product code, several names? ===
+codes: 2,206 | codes with more than 1 name: 1,402
+
+=== 6. Concentration ===
+DEVICE_REPORT_PRODUCT_CODE
+DZE    697107
+QBJ    347156
+QFG    273207
+OZP    129596
+BZD     68264
+FRN     57739
+FPA     47212
+QLG     35122
+LGW     35083
+FTR     30774
+Name: count, dtype: int64
+top 10 codes = 65.5 % of rows
+top 10 manufacturers = 55.0 % of rows
+
+=== 7. Is the first 20,000 rows a fair sample? ===
+Top 5 codes, whole file : ['DZE', 'QBJ', 'QFG', 'OZP', 'BZD']
+Top 5 codes, first 20k  : ['DZE', 'QBJ', 'QFG', 'OZP', 'BZD']
+Distinct manufacturers, first 20k: 513 | whole file: 5243
+
+=== 8. Time ===
+Sample date values: ['2024/01/01', '2024/01/01', '2024/01/01']
+dates parsed: 100.0 %
+DATE_RECEIVED
+2024-01    197596
+2024-02    193724
+2024-03    196119
+2024-04    209237
+2024-05    223475
+2024-06    199682
+2024-07    238541
+2024-08    235474
+2024-09    226036
+2024-10    243937
+2024-11    229327
+2024-12    236224
+Freq: M, Name: count, dtype: int64

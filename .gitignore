@@ -23,10 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 node_modules
-src/data/*.zip
-src/data/mdrfoi*.txt
+
+
 .env
-medallion/data/DEVICE2024.txt
+
 __pycache__/
 *.pyc
 *.pyo
@@ -45,5 +45,9 @@ htmlcov/
 
 
 
-medallion/data/mdrfoi*.txt
+
+
+# MAUDE raw data (large, downloaded manually, see PIPELINE.md)
 medallion/data/*.zip
+medallion/data/*.txt
+medallion/data/DEVICE2024.txt
