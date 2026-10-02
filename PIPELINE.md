@@ -25,7 +25,7 @@ Patient data-file (patientthru*.zip) : Information related to the patient(s) inv
 Text data-file (foitext*.zip) : Textual information from MEDWATCH Form Sections B5, H3, and H10
 Device data-file (device*.txt)
 
-### 2.1 EXPLORE DEVICE2024.txt
+#### 2.1 EXPLORE DEVICE2024.txt
 
 DOWNLOAD A RAW FILE
 ```bash
@@ -51,7 +51,7 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
 
 
-### 2.2 EDA - DEVICE2024.txt
+#### 2.2 EDA - DEVICE2024.txt
 
 Information related to the device involved
 
@@ -157,7 +157,7 @@ top 10 manufacturers = 55.0 % of rows
 - Lack of information about frequency of device use
 - To small sample to representable in the test phase 
 
-### 2.3 - ANALYSIS METHOD
+#### 2.3 - ANALYSIS METHOD
 Aggregation + ranking, since kategorical and numerical data types
 
 
@@ -206,7 +206,7 @@ medallion
 ┌─────────────────────────────────────────┐
 │ GOLD LAYER (Business & ML Ready)        │
 │ - High-performance materialized views   │
-│ - Analytical Star Schema                │
+│                                         │
 └─────────────────────────────────────────┘
        │
        |
@@ -219,7 +219,7 @@ medallion
 
 ### STEP 1 - LIST OF REQUIREMENTS
 
-### Bronze Layer
+#### Bronze Layer
 Principle: read everythong, do not modify data 
 
 | # | Rule | What | Why |
@@ -231,8 +231,7 @@ Principle: read everythong, do not modify data
 | B5 | Add metadata | `_source_file`, `_ingested_at` | Traceability and lineage |
 
 ---
-### Silver Layer
-
+#### Silver Layer
 | # | Rule | What | Why |
 |---|------|------|-----|
 | S1 | Deduplicate | Remove 31 identical rows on PK | Removes exact duplicates |
@@ -243,11 +242,13 @@ Principle: read everythong, do not modify data
 | S6 | Canonical product name | `product_code_dim` with most common `GENERIC_NAME` | 1,402 of 2,206 codes have >1 name |
 | S7 | Build mapping automatically	| manufacturer_parent keyword rules → manufacturer_mapping | Extensible without touching Silver logic |
 
+#	Rule	What	Why
+S8	Data Reconciliation	bronze_count = silver_count + rejected_count	Ensures zero row loss during processing
+S9	Quarantine Handling	Route the 0.001% non-unique PK rows to silver_rejected	Prevents pipeline crashes on unique indexes
+
 
 ---
-### Gold Layer
-
-
+#### Gold Layer
 | # | Rule | What | Why |
 |---|------|------|-----|
 | G1 | Aggregate per product code | `GROUP BY device_report_product_code` + `COUNT` | Answers Q1  |
@@ -256,6 +257,18 @@ Principle: read everythong, do not modify data
 | G4 | Filter high volume | `WHERE is_high_volume_code = TRUE` | Top 10 codes = 65.5 % of all rows |
 | G5 | Exclude junk | `WHERE manufacturer_is_junk = FALSE` | Correct rankings |
 | G6 | Label clearly | "Number of reports" — not "rate" | No denominator exists |
+
+
+G7	Downstream Protection	sum(total_reports) = silver_count	Guarantees aggregate integrity for BI layer
+G8	Business Assertion	total_reports > 0	Prevents logical anomalies in dashboards
+G9	Automated Circuit Breaker	Transactional ROLLBACK on G7/G8 failure + log to pipeline_runs	Stops corrupt data from publishing
+
+
+
+
+#	Rule	What	Why
+G10	Handle Missing Dimensions	COALESCE(manufacturer_normalized, 'UNKNOWN')	Prevents blank spaces in BI dashboards
+G11	Dynamic High Volume Volume	Materialize is_high_volume_code based on Pareto (Top 80% volume)	Replaces hardcoded top 10 with data-driven threshold
 ---
 
 
@@ -277,14 +290,15 @@ B1–B5 verification, manual read only
 
 
 ### STEP 4 — RUN SILVER
-Run `03_silver.sql` in Supabase. Should have fewer rows than `bronze_reports`, and no duplicates on PK 
+Run `03_silver.sql` in Supabase. This process cleanses, normalizes, and validates the data.
 
-#### Gatekepper before GOLD
-bronze = silver + rejected. Exception in refresh_silver_reports() 
+#### Gatekeeper before GOLD
+*   **Data Reconciliation Check:** Enforces that `bronze_count = silver_count + rejected_count`.
+*   **Failure Handling:** If this equation fails, or if `refresh_silver_reports()` encounters an unhandled duplicate, the batch transaction is rolled back and logged.
 
-#### Validation rate
-
-
+#### Validation Rate Metrics
+*   Tracks the percentage of healthy rows: `(silver_rows / bronze_rows) * 100`.
+*   An alert threshold is set at `< 95%` to catch sudden upstream API changes or corrupted source files.
 
 
 ### STEP 5 — RUN GOLD
@@ -298,8 +312,7 @@ Run `pipeline.sql`
 
 
 
-
-### FUTURE STEPS 
+## FUTURE STEPS 
 - dbt — formalize the gatekeepers as dbt tests (not_null, unique, relationships, custom sum checks). One dbt test command instead of manual SQL checks.
 - Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
 - Star schema in Gold for ad-hoc analysis.
