@@ -1,33 +1,37 @@
-# PIPELINE.md — ETL Pipeline: Medallion Architecture
 
-This document covers the analysis and pipeline behind the [Aegis Compliance](./README.md) dashboard. It contains 
+
+# PIPELINE.md — ETL Pipeline: Medallion Architecture
+This document covers the process behind the [Aegis Compliance](./README.md) dashboard. It contains 
 - STEPS IN CONDUCTING THE ANALYSIS and 
 - STEPS IN CONDUCTING THE PIPELINE
 
 
 ## STEPS IN CONDUCTING THE ANALYSIS
-
 ### STEP 1 - DEFINE THE QUESTION 
-
 The purpose is to answer
-- What type of medical device has a high rate of incident reports? What devices are connected to death or serious events?
-- What manufacturer are behind the most frequently reported products?
+| #  | Question | 
+|---|---|
+| Q1 | What type of medical device has a high rate of incident reports? |
+| Q2 | What manufacturers are behind the most frequently reported products? |
 
-**Aim:** Help PMS teams to detect what to focus on, for a product. 
+to help teams to detect what to focus on for a product. 
 
 
 ### STEP 2 — EXPLORE FILES
  FDA MAUDE : [-report-medical-device-problems/mdr-data-files#download](https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download)
 
 AVAILABLE FILES
-Master data-file  (mdrfoi*.zip) : Summary of all data files, event types, reporter
-Patient data-file (patientthru*.zip) : Information related to the patient(s) involved
-Text data-file (foitext*.zip) : Textual information from MEDWATCH Form Sections B5, H3, and H10
-Device data-file (device*.txt)
+
+| File | Description | 
+|---|---|
+| Master data-file  (mdrfoi*.zip) | Summary of all data files, event types, reporter |
+| Patient data-file (patientthru*.zip)| Information related to the patient(s) involved |
+| Text data-file (foitext*.zip) | Textual information from MEDWATCH Form Sections B5, H3, and H10|
+| Device data-file (device*.txt)| Information related to the device(s) involved |
 
 #### 2.1 EXPLORE DEVICE2024.txt
+2.1.1 DOWNLOAD THE RAW FILE
 
-DOWNLOAD A RAW FILE
 ```bash
 mkdir -p medallion/data
 cd medallion/data
@@ -36,7 +40,7 @@ unzip device2024.zip
 cd ../..
 ```
 
-EXPLORE AND SELECT HEADINGS
+2.1.2 EXPLORE AND SELECT HEADINGS
 
 ```bash
 head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
@@ -51,7 +55,7 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
 
 
-#### 2.2 EDA - DEVICE2024.txt
+#### 2.2 EXPLORATORY DATA ANALYSIS (EDA) - DEVICE2024.txt
 
 Information related to the device involved
 
@@ -66,10 +70,9 @@ unique MDR_REPORT_KEY: 2,627,121
 duplicated (MDR_REPORT_KEY, DEVICE_SEQUENCE_NO): 33
 duplicated (one row): 31
 ```
-
---> S1 Deduplicate 31 identical rows on PK
---> S2: PK is MDR_REPORT_KEY , DEVICE_SEQUENCE_NO
-
+- **S1:** PK is MDR_REPORT_KEY, DEVICE_SEQUENCE_NO
+- **S2:** Deduplicate 31 identical rows on primary key (PK)
+  
 ```
 === 2. Missing values (%) ===
 MDR_REPORT_KEY                0.00
@@ -79,7 +82,7 @@ MANUFACTURER_D_NAME           0.16
 DEVICE_REPORT_PRODUCT_CODE    0.00
 dtype: float64
 ```
---> S3: Handle missing GENERIC_NAME (0.02 %) and MANUFACTURER_D_NAME (0.16 %) — flag, do not impute.
+- **S3:** Handle missing GENERIC_NAME (0.02 %) and MANUFACTURER_D_NAME (0.16 %) — flag, do not impute.
 
 
 ```
@@ -104,8 +107,8 @@ QFIX        1
 MERZ        1
 Name: count, dtype: int64
 ```
---> S4: Explore MPRI 
---> S5: Flag rows with junk manufacturer names — manufacturer_is_junk = TRUE/FALSE. Keep rows in Silver, exclude from Gold rankings.
+- **S4:** Explore MPRI 
+- **S5:** Flag rows with junk manufacturer names — manufacturer_is_junk = TRUE/FALSE. Keep rows in Silver, exclude from Gold rankings.
 ```
 === 4. Same company, many spellings ===
 This is the variable MANUFACTURER_D_NAME
@@ -120,16 +123,14 @@ This is the variable MANUFACTURER_D_NAME
 - ALCON: 20 different spellings, 11,719 rows. Top 5:
 - BOSTON SCIENTIFIC: 27 different spellings, 64,829 rows. Top 5:
 - ABBOTT: 95 different spellings, 90,271 rows. Top 5:
-
-
 ```
---> S6: Normalize manufacturer names — add manufacturer_normalized column mapped to parent company via explicit mapping table.
+- **S6:** Normalize manufacturer names — add manufacturer_normalized column mapped to parent company via explicit mapping table.
 
 ```
 === 5. One product code, several names? ===
 codes: 2,206 | codes with more than 1 name: 1,402
 ```
---> S7: Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE.
+- **S7:** Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE.
 
 
 ```
@@ -234,15 +235,15 @@ Principle: read everythong, do not modify data
 #### Silver Layer
 | # | Rule | What | Why |
 |---|------|------|-----|
-| S1 | Deduplicate | Remove 31 identical rows on PK | Removes exact duplicates |
-| S2 | Primary key | `(MDR_REPORT_KEY, DEVICE_SEQUENCE_NO)` | Unique in 99.999 % of rows |
-| S3 | Flag missing values | has_missing_generic_name, has_missing_manufacturer | Preserves data integrity |
+| S1 | Primary key | `(MDR_REPORT_KEY, DEVICE_SEQUENCE_NO)` | Unique in 99.999 % of rows |
+| S2 | Deduplicate | Remove 31 identical rows on PK | Removes exact duplicates |
+| S3 | Flag missing values | `has_missing_generic_name`, `has_missing_manufacturer` | Preserves data integrity |
 | S4 | Flag junk manufacturers | `manufacturer_is_junk = TRUE/FALSE` | Excludes junk from Gold rankings |
 | S5 | Normalize manufacturers | `manufacturer_normalized` via mapping table | Medtronic has 99 spellings |
 | S6 | Canonical product name | `product_code_dim` with most common `GENERIC_NAME` | 1,402 of 2,206 codes have >1 name |
 | S7 | Build mapping automatically	| manufacturer_parent keyword rules → manufacturer_mapping | Extensible without touching Silver logic |
-|S8| Data Reconciliation |bronze_count = silver_count + rejected_count| Ensures zero row loss during processing|
-|S9|Quarantine Handling |Route the 0.001% non-unique PK rows to silver_rejected |Prevents pipeline crashes on unique indexes|
+| S8 | Data Reconciliation |bronze_count = silver_count + rejected_count| Ensures zero row loss during processing|
+| S9 | Quarantine Handling |Route the 0.001% non-unique PK rows to silver_rejected |Prevents pipeline crashes on unique indexes|
 
 
 ---
@@ -256,20 +257,17 @@ Principle: read everythong, do not modify data
 | G5 | Exclude junk | `WHERE manufacturer_is_junk = FALSE` | Correct rankings |
 | G6 | Label clearly | "Number of reports" — not "rate" | No denominator exists |
 | G7 |	Downstream Protection |	sum(total_reports) = silver_count|	Guarantees aggregate integrity for BI layer
-|G8|	Business Assertion|	total_reports > 0	|Prevents logical anomalies in dashboards
-|G9|	Automated Circuit Breaker |	Transactional ROLLBACK on G7/G8 failure + log to pipeline_runs	|Stops corrupt data from publishing|
-|G10|Handle Missing Dimensions| COALESCE(manufacturer_normalized, 'UNKNOWN')	Prevents blank spaces in BI dashboards|
-G11|Dynamic High Volume Volume|Materialize is_high_volume_code based on Pareto (Top 80% volume)|Replaces hardcoded top 10 with data-driven threshold|
-
+| G8 |	Business Assertion|	total_reports > 0	|Prevents logical anomalies in dashboards
+| G9 |	Automated Circuit Breaker |	Transactional ROLLBACK on G7/G8 failure + log to pipeline_runs	|Stops corrupt data from publishing|
+| G10 | Handle Missing Dimensions | COALESCE(manufacturer_normalized, 'UNKNOWN')	Prevents blank spaces in BI dashboards |
+| G11 | Dynamic High Volume | Materialize is_high_volume_code based on Pareto (Top 80% volume) | Replaces hardcoded top 10 with data-driven threshold |
 
 ---
-
 
 ### STEP 2 — CREATE TABLES 
 Run `01_create_tables.sql` in the Supabase SQL editor.
 
 Creates: bronze_reports, silver_reports, silver_rejected, product_code_dim, manufacturer_mapping, manufacturer_parent, product_stats, manufacturer_stats, all triggers and grants.
-
 
 ### STEP 3 — RUN BRONZE 
 ```bash
@@ -293,7 +291,6 @@ Run `03_silver.sql` in Supabase. This process cleanses, normalizes, and validate
 *   Tracks the percentage of healthy rows: `(silver_rows / bronze_rows) * 100`.
 *   An alert threshold is set at `< 95%` to catch sudden upstream API changes or corrupted source files.
 
-
 ### STEP 5 — RUN GOLD
 Run `04_gold.sql` in Supabase. Output: refresh_gold() and the two ranked views.
 Run `pipeline.sql`
@@ -310,6 +307,6 @@ Run `pipeline.sql`
 - Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
 - Star schema in Gold for ad-hoc analysis.
 - Representative sample: current 20 k rows are the first rows of the file, not randomly drawn.
+- AI analysis
 
-
-Note: No GDPR, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 
+Note: No GDPR since MAUDE data, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 
