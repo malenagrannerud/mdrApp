@@ -241,10 +241,8 @@ Principle: read everythong, do not modify data
 | S5 | Normalize manufacturers | `manufacturer_normalized` via mapping table | Medtronic has 99 spellings |
 | S6 | Canonical product name | `product_code_dim` with most common `GENERIC_NAME` | 1,402 of 2,206 codes have >1 name |
 | S7 | Build mapping automatically	| manufacturer_parent keyword rules → manufacturer_mapping | Extensible without touching Silver logic |
-
-#	Rule	What	Why
-S8	Data Reconciliation	bronze_count = silver_count + rejected_count	Ensures zero row loss during processing
-S9	Quarantine Handling	Route the 0.001% non-unique PK rows to silver_rejected	Prevents pipeline crashes on unique indexes
+|S8| Data Reconciliation |bronze_count = silver_count + rejected_count| Ensures zero row loss during processing|
+|S9|Quarantine Handling |Route the 0.001% non-unique PK rows to silver_rejected |Prevents pipeline crashes on unique indexes|
 
 
 ---
@@ -257,18 +255,13 @@ S9	Quarantine Handling	Route the 0.001% non-unique PK rows to silver_rejected	Pr
 | G4 | Filter high volume | `WHERE is_high_volume_code = TRUE` | Top 10 codes = 65.5 % of all rows |
 | G5 | Exclude junk | `WHERE manufacturer_is_junk = FALSE` | Correct rankings |
 | G6 | Label clearly | "Number of reports" — not "rate" | No denominator exists |
+| G7 |	Downstream Protection |	sum(total_reports) = silver_count|	Guarantees aggregate integrity for BI layer
+|G8|	Business Assertion|	total_reports > 0	|Prevents logical anomalies in dashboards
+|G9|	Automated Circuit Breaker |	Transactional ROLLBACK on G7/G8 failure + log to pipeline_runs	|Stops corrupt data from publishing|
+|G10|Handle Missing Dimensions| COALESCE(manufacturer_normalized, 'UNKNOWN')	Prevents blank spaces in BI dashboards|
+G11|Dynamic High Volume Volume|Materialize is_high_volume_code based on Pareto (Top 80% volume)|Replaces hardcoded top 10 with data-driven threshold|
 
 
-G7	Downstream Protection	sum(total_reports) = silver_count	Guarantees aggregate integrity for BI layer
-G8	Business Assertion	total_reports > 0	Prevents logical anomalies in dashboards
-G9	Automated Circuit Breaker	Transactional ROLLBACK on G7/G8 failure + log to pipeline_runs	Stops corrupt data from publishing
-
-
-
-
-#	Rule	What	Why
-G10	Handle Missing Dimensions	COALESCE(manufacturer_normalized, 'UNKNOWN')	Prevents blank spaces in BI dashboards
-G11	Dynamic High Volume Volume	Materialize is_high_volume_code based on Pareto (Top 80% volume)	Replaces hardcoded top 10 with data-driven threshold
 ---
 
 
