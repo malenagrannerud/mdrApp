@@ -258,13 +258,13 @@ Run `01_create_tables.sql` in the Supabase SQL editor.
 
 | Table | Role | Layer|
 |---|------|------|
-| bronze_reports | | Bronze | 
+| bronze_reports || Bronze | 
 | silver_reports || Silver | 
 | silver_rejected || Silver | 
 | product_code_dim || Silver  | 
 | manufacturer_mapping || Silver |
 | manufacturer_parent || Silver | 
-| product_stats || Gold| 
+| product_stats || Gold | 
 | manufacturer_stats || Gold | 
 
 
