@@ -31,7 +31,7 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 SOURCE_FILE = "medallion/data/DEVICE2024.txt"
 SOURCE_FILE_LABEL = "DEVICE2024.txt"   # B5: stored in source_file column
 BATCH_SIZE = 1000                      # rows per Supabase upsert
-DEV_SAMPLE_LIMIT = 20000               # rows to load; None = full file. Supabase would manage about 100 ingestions with 20 000 records 
+DEV_SAMPLE_LIMIT = 60000               # rows to load; None = full file. Supabase would manage about 100 ingestions with 20 000 records 
 
 # RULE B2: these 5 columns are kept.
 # Raw FDA column name -> bronze_reports column name

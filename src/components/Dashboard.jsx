@@ -7,18 +7,16 @@
  *   - Most reported manufacturers (G2)
  *
  * Reads from ranked views so that:
- *   - manufacturers exclude junk (G6)
- *   - manufacturers use normalized names (G7)
- *   - rows are sorted by rank (G4)
+ *   - junk manufacturers are excluded (G2)
+ *   - manufacturers use normalized names (S5)
+ *   - rank is computed at read time, not stored (G5)
  *
- * Labels say "Number of reports" — never "rate" (G8).
+ * Labels say "Number of device entries" — never "rate" (G6).
  */
 import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Loader } from 'lucide-react'
 import { supabase } from '../../medallion/supabase'
-
-const HIGH_VOLUME_ONLY = false   // set true to show only the top-10 volume codes (G5)
 
 function PBICard({ children, title, subtitle, className = '' }) {
   return (
@@ -59,23 +57,20 @@ export default function Dashboard() {
       setLoading(true)
       setError(null)
       try {
-        // G1: product categories, ranked, optionally filtered to high volume
-        let productsQuery = supabase
+        // G1: product categories, ranked. RULE G5: no high-volume flag.
+        const productsHook = await supabase
           .from('product_stats_ranked')
           .select('*')
           .order('rank', { ascending: true })
+          .order('product_code', { ascending: true })
           .limit(10)
 
-        if (HIGH_VOLUME_ONLY) {
-          productsQuery = productsQuery.eq('is_high_volume_code', true)
-        }
-        const productsHook = await productsQuery
-
-        // G2 / G6 / G7: manufacturers, ranked, junk already excluded by the view
+        // G2 / S5: manufacturers, ranked, junk already excluded by the view.
         const manufacturersHook = await supabase
           .from('manufacturer_stats_ranked')
           .select('*')
           .order('rank', { ascending: true })
+          .order('name', { ascending: true })
           .limit(10)
 
         // Observability: when was the data last refreshed?
@@ -89,6 +84,7 @@ export default function Dashboard() {
 
         if (productsHook.error) throw new Error(productsHook.error.message)
         if (manufacturersHook.error) throw new Error(manufacturersHook.error.message)
+        if (runHook.error) console.warn('pipeline_runs:', runHook.error.message)
 
         setProductData(productsHook.data)
         setManufacturerData(manufacturersHook.data)
@@ -134,7 +130,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PBICard
           title="Most reported medical device product categories to FDA 2024"
-          subtitle="Number of reports — not rate (no denominator exists)"
+          subtitle="Number of device entries — not rate (no denominator exists)"
         >
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -149,7 +145,7 @@ export default function Dashboard() {
                   interval={0}
                 />
                 <YAxis tickFormatter={fmt} tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(value) => [fmt(value), 'Number of reports']} />
+                <Tooltip formatter={(value) => [fmt(value), 'Number of device entries']} />
                 <Bar dataKey="total_reports" fill="#1e40af" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -173,7 +169,7 @@ export default function Dashboard() {
                   interval={0}
                 />
                 <YAxis tickFormatter={fmt} tick={{ fontSize: 10 }} />
-                <Tooltip formatter={(value) => [fmt(value), 'Number of reports']} />
+                <Tooltip formatter={(value) => [fmt(value), 'Number of device entries']} />
                 <Bar dataKey="total_reports" fill="#10b981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
