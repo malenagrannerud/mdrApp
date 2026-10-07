@@ -183,14 +183,19 @@ Rows are split into "ORCHESTRATION" OR "DBT" for future automation.
 
 DESIGN REQUIREMENTS 
 
-| # | Rule | What & why | Implemented in | Automation |
-|---|------|------------|----------------|------------|
-| B1 | Read file with correct format | Pipe-delimited, latin-1, `QUOTE_NONE` — wrong encoding corrupts names | | INGEST |
-| B2 | Keep all RELEVANT columns | Even empty ones | | DBT |
-| B3 | Keep all rows | No dedup, no filtering, keep bad lines — traceability, Silver decides | | DBT |
-| B4 | Read everything as `str` | No type conversion — avoid silent type errors | | INGEST |
-| B5 | Add metadata | `source_file`, `ingested_at` — traceability and lineage | | INGEST + DBT |
-| GKB | Gatekeeper before SILVER | Verify B1–B5 on the ingested batch — format, columns, row count, type, metadata. Manual read only — catches malformed Bronze before transformation | | ORCHESTRATION |
+#### BRONZE LAYER
+
+| ID | Rule | What & why | Implemented in | Test |
+|---|---|---|---|---|
+| B1 | Read file with correct format | Pipe-delimited, `latin-1`, `QUOTE_NONE`. Wrong encoding corrupts names. | `bronze_ingest.py::ingest` | `test_B1_latin1_names` |
+| B2 | Keep source columns as they are | **Deviation:** only 5 source columns are stored (free-tier limit). Production would store all, so Silver can be rebuilt without re-reading the file. | `bronze_ingest.py::COLUMN_MAP` | `02_bronze.sql` check B1 (columns filled) |
+| B3 | Append-only, keep every parsed row | No dedup, no filtering. Rows that cannot be parsed are counted and logged, not hidden. | `01_create_tables.sql` (triggers), `bronze_ingest.py` | `02_bronze.sql` check B4 (DELETE/UPDATE/TRUNCATE blocked) |
+| B4 | Store everything as text | No type conversion, so no silent type errors. | `bronze_ingest.py` (`dtype=str`), `01_create_tables.sql` | `test_B4_all_text` |
+| B5 | Add metadata | `source_file`, `inserted_at`: traceability and lineage. | `01_create_tables.sql`, `bronze_ingest.py` | `02_bronze.sql` check B3 (metadata filled) |
+| B6 | Idempotent ingest | Running the same file twice adds no duplicates. Each row traces back to its source line. | `01_create_tables.sql` (`UNIQUE (source_file, source_row_num)`), `bronze_ingest.py` (upsert, ignore duplicates) | `test_B6_double_run_same_count` |
+| GKB | Gatekeeper before Silver | Run B1–B6 checks after every ingest. Stop with an error if Bronze is empty or broken. | `02_bronze.sql` | Manual run now, CI later |
+
+**Later (not built):** dbt tests (`not_null`, `unique`), orchestration.
 
 ---
 
