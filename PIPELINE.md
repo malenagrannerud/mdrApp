@@ -1,7 +1,14 @@
 
 
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
-This document covers the process behind the [Aegis Compliance](./README.md) dashboard. It contains 
+This document covers the process behind the [Aegis Compliance](./README.md) dashboard. 
+
+![Post-market surveillance dashboard](./screenshots/dashboard.png)
+
+
+
+
+It contains 
 - I - STEPS IN CONDUCTING THE ANALYSIS &
 - II - STEPS IN CONDUCTING THE PIPELINE
 
@@ -13,13 +20,13 @@ The purpose is to answer
 | #  | Question | 
 |---|---|
 | Q1 | Which products have the most device reports in 2024? |
-| Q2 | Which manufacturers (parent companies) have the most device reports in 2024? |
+| Q2 | Which manufacturers have the most device reports in 2024? |
 
 to help teams to detect what to focus on for a product. 
 
 
-### STEP 2 - EXPLORE AVAILABLE FILES & STRUCTURE FROM THE TARGET DATABASE 
-FDA MAUDE : [-report-medical-device-problems/mdr-data-files#download](https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download)
+### STEP 2 - EXPLORE AVAILABLE FILES & STRUCTURE FROM THE DATABASE 
+See [FDA's MAUDE database](https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download)
 
 | File | Description | 
 |---|---|
