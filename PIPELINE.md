@@ -12,8 +12,8 @@ This document covers the process behind the [Aegis Compliance](./README.md) dash
 The purpose is to answer
 | #  | Question | 
 |---|---|
-| Q1 | What type of medical device has a high rate of incident reports? |
-| Q2 | What manufacturers are behind the most frequently reported products? |
+| Q1 | Which products have the most device reports in 2024? |
+| Q2 | Which manufacturers (parent companies) have the most device reports in 2024? |
 
 to help teams to detect what to focus on for a product. 
 
@@ -56,6 +56,8 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 
 
 #### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER DATA QUALITY REQUIREMENTS FOR SILVER 
+This EDA is on the full file, 2.6 M rows. 
+
 ```bash 
 python medallion/analysis/eda_device.py
 ```
@@ -117,7 +119,7 @@ top 10 codes = 65.5 % of rows | top 10 manufacturers = 55.0 % of rows
 - Inaccuracies in reports
 - Lack of verification that the device caused the reported event
 - Lack of information about frequency of device use
-- To small sample to represent the complete set
+- Nr of reports will be high where there are many products on the market, this is not risk
 
 
 #### 2.3 - ANALYSIS METHOD
@@ -181,9 +183,6 @@ Rows are split into "ORCHESTRATION" OR "DBT" for future automation.
 
 #### BRONZE LAYER
 
-DESIGN REQUIREMENTS 
-
-#### BRONZE LAYER
 
 | ID | Rule | What & why | Implemented in | Test |
 |---|---|---|---|---|
@@ -192,8 +191,12 @@ DESIGN REQUIREMENTS
 | B3 | Append-only, keep every parsed row | No dedup, no filtering. Rows that cannot be parsed are counted and logged, not hidden. | `01_create_tables.sql` (triggers), `bronze_ingest.py` | `02_bronze.sql` check B4 (DELETE/UPDATE/TRUNCATE blocked) |
 | B4 | Store everything as text | No type conversion, so no silent type errors. | `bronze_ingest.py` (`dtype=str`), `01_create_tables.sql` | `test_B4_all_text` |
 | B5 | Add metadata | `source_file`, `inserted_at`: traceability and lineage. | `01_create_tables.sql`, `bronze_ingest.py` | `02_bronze.sql` check B3 (metadata filled) |
-| B6 | Idempotent ingest | Running the same file twice adds no duplicates. Each row traces back to its source line. | `01_create_tables.sql` (`UNIQUE (source_file, source_row_num)`), `bronze_ingest.py` (upsert, ignore duplicates) | `test_B6_double_run_same_count` |
-| GKB | Gatekeeper before Silver | Run B1–B6 checks after every ingest. Stop with an error if Bronze is empty or broken. | `02_bronze.sql` | Manual run now, CI later |
+| B6 | Idempotent ingest| Running the same file twice adds no duplicates. | `01_create_tables.sql` (`UNIQUE (source_file, source_row_num)`), `bronze_ingest.py` (upsert, ignore duplicates) | `test_B6_double_run_same_count` |
+
+| ID | Gate | Must pass | If it fails | Implemented in | Test |
+|---|---|---|---|---|---|
+| GKB | Gatekeeper before Silver | B1–B6: columns filled, table not empty, metadata present, append-only, unique ids, no duplicates after rerun | Do not run Silver. | `02_bronze.sql` | Manual run (CI later) |
+
 
 **Later (not built):** dbt tests (`not_null`, `unique`), orchestration.
 
@@ -201,59 +204,44 @@ DESIGN REQUIREMENTS
 
 #### SILVER LAYER
 
-DATA QUALITY REQUIREMENTS
-All fututre automation: DBT
+| ID | Rule | What & why | Implemented in | Test |
+|---|---|---|---|---|
+| S1 | PK | See EDA 1. Rows without a key go to quarantine as `S1_missing_key`. | `01_create_tables.sql` (PK), `03b_silver.sql` | `test_S1_missing_key_rejected` |
+| S2 | Duplicate keys go to quarantine | Keep the row with the lowest bronze `id`, send the rest to `silver_rejected` as `S2_duplicate_key`. 33 duplicate keys in the full file, 31 are identical rows. For the 2 that differ, "lowest id" is an arbitrary but reproducible choice. | `03b_silver.sql` (`ROW_NUMBER`) | `test_S2_duplicate_quarantined` |
+| S3 | Missing values: NULL + flag, never impute | Missing `generic_name` and `manufacturer` are stored as `NULL` with `has_missing_generic_name` / `has_missing_manufacturer = TRUE`. Missing `product_code` (0.00 %) goes to quarantine as `S3_missing_product_code`.  | `01_create_tables.sql`, `03b_silver.sql` | `test_S3_missing_is_null_and_flagged` |
+| S4 | Flag junk manufacturers | `manufacturer_is_junk = TRUE` for `UNK`, `NI`, `0HP`, names under 2 characters, etc. Rows are kept, Gold excludes them. | `03b_silver.sql` (`tmp_junk`) | `test_S4_junk_flagged` |
+| S5 | Normalize manufacturers, deterministic | Keyword rules in `manufacturer_parent` build `manufacturer_mapping` from Bronze. If a name matches several parents, the **longest keyword wins**, then parent name A–Z. Medtronic has 99 spellings. MPRI (34,885 rows) is mapped to MEDTRONIC (**assumption, unverified**).| `03a_seed_manufacturers.sql`, `03b_silver.sql` | `test_S5_medtronic_inc_mapped`, `test_S5_no_false_positive` |
+| S6 | Canonical product name, deterministic | `product_code_dim` holds the most common non-NULL `generic_name` per code, ties broken A–Z. 1,402 of 2,206 codes have more than one name.| `03b_silver.sql` | `test_S6_one_name_per_code` |
+| S7 | Reconciliation | `bronze = silver + rejected`, otherwise error and rollback. No row is lost silently. | `03b_silver.sql` (`refresh_silver_reports`) | `test_S7_counts_add_up` |
 
-| # | Rule | What & why | Implemented in |
-|---|------|------------|----------------|
-| S1 | PK | `(MDR_REPORT_KEY, DEVICE_SEQUENCE_NO)` since unique in 99.999 % of rows | |
-| S2 | Deduplicate | Remove 31 identical rows on PK | |
-| S3 | Flag missing generic name | `has_missing_generic_name` to preserve data integrity — do not impute | |
-| S4 | Flag missing manufacturer | `has_missing_manufacturer` preserves data integrity — do not impute | |
-| S5 | Classify MPRI | Determine if MPRI (34,885 rows) is junk or valid | |
-| S6 | Flag junk manufacturers | `manufacturer_is_junk = TRUE/FALSE` to exclude junk from Gold | |
-| S7 | Normalize manufacturers | `manufacturer_normalized` via mapping table. Ex: Medtronic has 99 spellings | |
-| S8 | Canonical product name | `product_code_dim` with most common `GENERIC_NAME` — 1,402 of 2,206 codes have >1 name | |
+| ID | Gate | Must pass | If it fails | Implemented in | Test |
+|---|---|---|---|---|---|
+| GKS | Gatekeeper before Gold | S7: `bronze = silver + rejected`. Silver is not empty. | `RAISE EXCEPTION`, Silver and Gold are rolled back, a `failed` row is written to `pipeline_runs` | `03b_silver.sql`, `04_gold.sql` (guard), `06_pipeline.sql` | `test_GKS_reconciliation_failure_blocks_gold` |
 
 
-DESIGN REQUIREMENTS
-
-| # | Rule | What & why | Implemented in | Automation |
-|---|------|------------|----------------|------------|
-| S9 | Build mapping automatically | `manufacturer_parent` keyword rules → `manufacturer_mapping` — extensible without touching Silver logic | | DBT |
-| S10 | Data reconciliation | `bronze_count = silver_count + silver_rejected_count` — ensures zero row loss | | DBT |
-| S11 | Quarantine handling | Route the 0.001 % non-unique PK rows to `silver_rejected` — prevents pipeline crashes on unique indexes | | ORCHESTRATION |
-| GKS1 | Gatekeeper before GOLD | `bronze_count = silver_count + silver_rejected_count`, else throws loud error and stops — ensures zero row loss | | DBT |
-| GKS2 | Gatekeeper before GOLD | `refresh_silver_reports()` throws loud error and stops — stops unhandled exceptions from crashing the pipeline mid-write | | ORCHESTRATION |
 
 ---
 
 #### GOLD LAYER
 
-DATA QUALITY REQUIREMENTS
 
-| # | Rule | What & why | Implemented in | Automation |
-|---|------|------------|----------------|------------|
-| G1 | Aggregate per product code | `GROUP BY device_report_product_code` + `COUNT` — answers Q1 | | DBT |
-| G2 | Aggregate per manufacturer | `GROUP BY manufacturer_normalized` + `COUNT` — answers Q2 | | DBT |
-| G3 | Rank results | `RANK() OVER (ORDER BY total_reports DESC)` — enables "#1, #2, #3", not just a list | | DBT |
-| G4 | Filter high volume | `WHERE is_high_volume_code = TRUE` — top 10 codes = 65.5 % of all rows | | DBT |
-| G5 | Exclude junk | `WHERE manufacturer_is_junk = FALSE` — correct rankings | | DBT |
-| G6 | Label clearly | "Number of reports" — not "rate", no denominator exists | | DBT |
-| G7 | Downstream protection | `sum(total_reports) = silver_count` — guarantees aggregate integrity for BI layer | | DBT |
-| G8 | Business assertion | `total_reports > 0` — prevents logical anomalies in dashboards | | DBT |
-| G10 | Handle missing dimensions | `COALESCE(manufacturer_normalized, 'UNKNOWN')` — prevents blank spaces in BI dashboards | | DBT |
-| G11 | Dynamic high volume | Materialize `is_high_volume_code` based on Pareto (top 80 % volume) — replaces hardcoded top 10 with data-driven threshold | | DBT |
+| ID | Rule | What & why | Implemented in | Test |
+|---|---|---|---|---|
+| G1 | Count per product code | `COUNT(*)` per `product_code`, canonical name from S6 (label `MISSING NAME` if none). Answers Q1. | `04_gold.sql` | `test_G1_count_per_code` |
+| G2 | Count per manufacturer | `COUNT(*)` per `manufacturer_normalized`. Junk (S4) and NULL excluded. Answers Q2. | `04_gold.sql` | `test_G2_junk_excluded` |
+| G3 | Exact reconciliation | `sum(product_stats) = silver rows` and `sum(manufacturer_stats) = silver rows where not junk and manufacturer is not NULL`. | `04_gold.sql` | `test_G3_sums_match` |
+| G4 | Sanity check | `total_reports > 0` in every Gold row. | `04_gold.sql` | `test_G4_no_zero_rows` |
+| G5 | Rank in views | Rank is computed in the `*_ranked` views, not stored. The hardcoded top-10 flag is removed.  | `04_gold.sql` | `test_G5_rank_order` |
+| G6 | Label clearly | "Number of device entries", never "rate". No denominator exists, and one report can hold several devices. | `Dashboard.jsx` | Manual check |
+| G7 | Failed run is rolled back and logged | If Silver or Gold fails, both are undone and a `failed` row is written to `pipeline_runs`. | `06_pipeline.sql` | `test_G7_failed_run_logged` |
+| G8 | Least privilege | RLS enabled on all tables. `anon` can only `SELECT` Gold tables, views and `pipeline_runs`. Bronze and Silver are not readable. | `01_create_tables.sql` | `test_G8_anon_cannot_read_bronze` |
+
+**Later (not built):** dbt tests, orchestration, 95 % valid-rows threshold, rebuild of `manufacturer_mapping` and `product_code_dim` inside `run_pipeline()`.
 
 
-DESIGN REQUIREMENTS
-
-| # | Rule | What & why | Implemented in | Automation |
-|---|------|------------|----------------|------------|
-| GKG1 | Gatekeeper before DASHBOARD | `sum(total_reports) = silver_count`, else throws loud error and stops — ensures aggregate integrity | | DBT |
-| GKG2 | Gatekeeper before DASHBOARD | no `total_reports <= 0`, else throws loud error and stops — prevents logical anomalies | | DBT |
-| GKG3 | Gatekeeper before DASHBOARD | if GKG1 or GKG2 fails → rollback + log failed row to `pipeline_runs` — stops corrupt data from publishing | | ORCHESTRATION |
-| G9 | Automated circuit breaker | Transactional ROLLBACK triggered by GKG3 + log to `pipeline_runs` — stops corrupt data from publishing | | ORCHESTRATION |
+| ID | Gate | Must pass | If it fails | Implemented in | Test |
+|---|---|---|---|---|---|
+| GKG | Gold → Dashboard | G3: exact sums. G4: no zero rows. | `RAISE EXCEPTION`, rollback, the **previous Gold data stays** --> dashboard never shows corrupt numbers | `04_gold.sql`, `06_pipeline.sql` | `test_GKG_failed_gate_keeps_old_gold` |
 
 ---
 
@@ -261,16 +249,6 @@ DESIGN REQUIREMENTS
 ### STEP 2 — CREATE TABLES 
 Run `01_create_tables.sql` in the Supabase SQL editor.
 
-| Table | Role | Layer|
-|---|------|------|
-| bronze_reports || Bronze | 
-| silver_reports || Silver | 
-| silver_rejected || Silver | 
-| product_code_dim || Silver  | 
-| manufacturer_mapping || Silver |
-| manufacturer_parent || Silver | 
-| product_stats || Gold | 
-| manufacturer_stats || Gold | 
 
 
 ### STEP 3 — RUN BRONZE 
@@ -279,7 +257,6 @@ pip install -r medallion/python/requirements.txt
 python medallion/bronze_ingest.py
 ```
 **Expected:** `BRONZE DONE`, `bronze_reports` is populated in Supabase.
-
 
 
 ### STEP 4 — RUN SILVER
@@ -300,8 +277,9 @@ Run `pipeline.sql`
 - dbt — formalize the gatekeepers as dbt tests (not_null, unique, relationships, custom sum checks). One dbt test command instead of manual SQL checks.
 - Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
 - Star schema in Gold for ad-hoc analysis.
-- Representative sample: current 20 k rows are the first rows of the file, not randomly drawn.
+- Fill with the 2 M rows 
 - AI analysis
 - Risk analysis on requirements 
+- "Which products have an unusually high share of serious events (PRR)?"
 
 Note: No GDPR since MAUDE data, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 

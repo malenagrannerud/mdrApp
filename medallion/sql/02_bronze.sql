@@ -1,17 +1,16 @@
 /*
   02_bronze.sql
-  Author: Malena
-  Updated: 2026-10-01
+  Author: Malena | Updated: 2026-10-07
 
   WHAT:  Read-only checks that prove the bronze layer is healthy.
   WHY:   Bronze is the foundation. If it is wrong, silver and gold are wrong
          too, and you will not notice. Run this after every ingestion.
-         Each check maps to a rule (B1–B5) in PIPELINE.md.
+         Each check maps to a rule (B1-B6) in PIPELINE.md.
 
   This file changes NO data. Every check either returns numbers to read,
-  or fails loudly with an error message.
+  or fails loudly with an error message. It is the GKB gatekeeper:
+  Bronze -> Silver (MANUAL today).
 */
-
 
 -- ============================================================
 -- B1 - SCHEMA: are the important columns actually filled?

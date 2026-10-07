@@ -2,8 +2,12 @@
 
 FIRST STEP, BEFORE CREATING RULES FOR THE SILVER LAYER
 
-EDA of DEVICE2024.txt. Run from the repo root.
+EDA of the full DEVICE2024.txt. Run from the repo root.
 Each section answers one question. See answers in PIPELINE.md
+
+
+cd /workspaces/mdrApp
+python medallion/analysis/eda_device.py
 
 """
 import csv

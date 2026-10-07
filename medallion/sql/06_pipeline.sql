@@ -1,63 +1,51 @@
 /*
-  05_pipeline.sql
-  Author: Malena | Updated: 2026-10-01
+  06_pipeline.sql
+  Author: Malena | Updated: 2026-10-07
 
-  pipeline_runs (a log of every run) + run_pipeline() (one command
-         for everything: silver -> gold in one transaction).
-  WHY:   You should never have to remember "silver, then gold". One command,
-         fixed order, and every run is logged so you can answer
-         "when did it last run, and did the numbers add up?".
+ This file is a log file 
+    1 - Allows service_role to run the pipeline (silver + gold) in one transaction.
+    2 - Defines run_pipeline() which runs silver -> gold and logs the run in pipeline_runs.
 
-  Input:
-    - bronze_reports        (via refresh_silver_reports)
-    - silver_reports        (via refresh_gold)
-    - product_code_dim      (via refresh_gold)
 
-  Output:
-    - silver_reports        (via refresh_silver_reports)
-    - silver_rejected       (via refresh_silver_reports)
-    - product_code_dim      (built in 03b_silver.sql after the function)
-    - product_stats         (via refresh_gold)
-    - manufacturer_stats    (via refresh_gold)
-    - pipeline_runs         (this file)
+  RULES IMPLEMENTED
+    G7  Failed run is rolled back and logged
+    G8  Least privilege (RLS on pipeline_runs)
+    GKS Silver -> Gold gatekeeper (enforced in refresh_silver_reports)
+    GKG Gold -> Dashboard gatekeeper (enforced in refresh_gold)
 
-  Rules touched here:
-    GR3 — reconciliation is enforced inside refresh_silver_reports() and refresh_gold()
-    Observability — every run is logged with status, row counts and error message
+
+  DATA FLOW 
+    SELECT * FROM run_pipeline();
+       │
+       ├── refresh_silver_reports()
+       │      ├── DELETE silver_reports
+       │      ├── klassificera alla bronze-rader
+       │      ├── INSERT silver_rejected 
+       │      ├── INSERT silver_reports 
+       │      └── S7: bronze = silver + rejected? annars RAISE
+       │
+       ├── refresh_gold()
+       │      ├── DELETE product_stats, manufacturer_stats
+       │      ├── INSERT product_stats (G1)
+       │      ├── INSERT manufacturer_stats (G2)
+       │      ├── G3: sum = silver? annars RAISE
+       │      └── G4: total_reports > 0? annars RAISE
+       │
+       └── INSERT pipeline_runs (success eller failed)
+    
 */
 
+-- ============================================================
+-- Grants for service_role (function execution)
+-- ============================================================
+GRANT EXECUTE ON FUNCTION public.run_pipeline()           TO service_role;
+GRANT EXECUTE ON FUNCTION public.refresh_silver_reports() TO service_role;
+GRANT EXECUTE ON FUNCTION public.refresh_gold()           TO service_role;
+
 
 -- ============================================================
--- The run log (observability)
+-- The one command
 -- ============================================================
-CREATE TABLE IF NOT EXISTS pipeline_runs (
-  run_id                uuid PRIMARY KEY,
-  started_at            timestamptz NOT NULL,
-  finished_at           timestamptz NOT NULL DEFAULT now(),
-  status                text NOT NULL CHECK (status IN ('success', 'failed')),
-  rows_bronze           bigint,
-  rows_silver           bigint,
-  rows_rejected         bigint,
-  products_in_gold      bigint,
-  manufacturers_in_gold bigint,
-  error_message         text
-);
-
-CREATE INDEX IF NOT EXISTS idx_pipeline_runs_started_at
-    ON pipeline_runs (started_at DESC);
-
-ALTER TABLE pipeline_runs ENABLE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS "public read pipeline_runs" ON pipeline_runs;
-CREATE POLICY "public read pipeline_runs" ON pipeline_runs
-  FOR SELECT USING (true);
-
--- service_role needs full access (writes the log)
-GRANT SELECT, INSERT, UPDATE, DELETE ON public.pipeline_runs TO service_role;
-
--- anon reads the log for the dashboard's "Last run" panel
-GRANT SELECT ON public.pipeline_runs TO anon;
-
-
 -- ============================================================
 -- The one command
 -- ============================================================
@@ -110,7 +98,7 @@ $$ LANGUAGE plpgsql;
 
 
 -- ============================================================
--- Grants for service_role
+-- Grants for service_role (function execution)
 -- ============================================================
 GRANT EXECUTE ON FUNCTION public.run_pipeline()           TO service_role;
 GRANT EXECUTE ON FUNCTION public.refresh_silver_reports() TO service_role;

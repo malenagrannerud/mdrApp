@@ -3,13 +3,15 @@
 Tests for bronze_ingest.py. No database needed: a fake Supabase client
 stores rows in memory and enforces UNIQUE (source_file, source_row_num).
 
-Run: cd medallion/python && pytest -v
+Run: 
+cd /workspaces/mdrApp
+cd medallion/python && pytest -v
+
 Naming: test_<RULE ID>_<what it checks>, so rules can be traced to tests.
 """
+
 import logging
-
 import pytest
-
 import bronze_ingest
 
 # Test file: 5 data lines.

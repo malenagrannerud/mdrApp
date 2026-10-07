@@ -80,7 +80,6 @@ def ingest(source_file: str, supabase_client) -> None:
         sep="|",                          # RULE B1: pipe-delimited
         encoding="latin-1",               # RULE B1: wrong encoding corrupts names
         quoting=csv.QUOTE_NONE,           # RULE B1: do not interpret quotes
-        usecols=list(COLUMN_MAP.keys()),  # RULE B2: only the columns we keep
         dtype=str,                        # RULE B4: everything as text, no type conversion
         on_bad_lines=count_bad_line,      # RULE B3: count skipped lines
         engine="python",                  # required for a callable on_bad_lines
@@ -91,11 +90,15 @@ def ingest(source_file: str, supabase_client) -> None:
     total_batches = 0
 
     for batch_num, chunk in enumerate(reader, start=1):
+        # RULE B2: keep only the columns we need (after reading, so that
+        # lines with the wrong number of fields are still detected by B3)
+        chunk = chunk[list(COLUMN_MAP.keys())]
+
         chunk = chunk.rename(columns=COLUMN_MAP)
 
         # RULE B5: metadata for traceability (inserted_at is set by the database)
         chunk["source_file"] = SOURCE_FILE_LABEL
-
+        ...
         # RULE B6: row number makes each row identifiable, so a rerun is detected.
         # The database enforces UNIQUE (source_file, source_row_num).
         chunk["source_row_num"] = range(rows_read + 1, rows_read + len(chunk) + 1)

@@ -1,25 +1,13 @@
 /*
   03a_seed_manufacturers.sql
-  Author: Malena | Updated: 2026-10-01
+  Author: Malena | Updated: 2026-10-07
 
-  Parent-company keyword rules that drive auto-generation of
-  manufacturer_mapping in 03b_silver.sql.
+  Parent-company keyword rules that drive auto-generation of manufacturer_mapping in 03b_silver.sql.
 
-  HOW TO USE:
-    1. Run 01_create_tables.sql
-    2. Run this file (fills manufacturer_parent)
-    3. Run 03b_silver.sql (reads manufacturer_parent, rebuilds mapping)
-
-  TO EXTEND: add more rows below and re-run this file, then re-run 03b_silver.sql.
+  RULE S5: Normalize manufacturers, deterministic.
+  Keywords must not contain dots: normalize_mfr_name() strips them.
+  So 'ST JUDE', not 'ST. JUDE'; 'CR BARD', not 'C.R. BARD'; 'B BRAUN', not 'B. BRAUN'.
 */
-
-
--- ============================================================
--- Parent companies and their keyword patterns
--- ============================================================
--- Each keyword is matched case-insensitively against the normalized raw
--- name (see normalize_mfr_name() in 03b_silver.sql). A hit assigns the
--- whole row to the parent_name.
 
 TRUNCATE TABLE manufacturer_parent;
 
@@ -27,10 +15,12 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 -- ------------------------------------------------------------
 -- Big cardio / ortho / imaging
 -- ------------------------------------------------------------
+-- ASSUMPTION (unverified): MPRI = Medtronic Puerto Rico Operations.
+-- Covers ~34,885 rows. Verify against source before trusting Gold.
 ('MEDTRONIC',            ARRAY['MEDTRONIC','COVIDIEN','MPRI','US SURGICAL','TYCO','MEDIVANCE','MEDOS INTERNATIONAL','MICRO THERAPEUTICS','EV3','HEARTWARE','MDT POWERED']),
-('ABBOTT',               ARRAY['ABBOTT','ST JUDE','ST. JUDE','THORATEC','BIOSENSE WEBSTER','AMO PUERTO RICO']),
+('ABBOTT',               ARRAY['ABBOTT','ST JUDE','THORATEC','BIOSENSE WEBSTER','AMO PUERTO RICO']),
 ('JOHNSON & JOHNSON',    ARRAY['JOHNSON & JOHNSON','ETHICON','DEPUY','SYNTHES','ABIOMED','AURIS','CERENOVUS']),
-('BECTON DICKINSON',     ARRAY['BECTON','BARD','C.R. BARD','CR BARD','CAREFUSION','ALARIS','BARD PERIPHERAL','BARD ACCESS','BD SUZHOU','BD MEDICAL','BD INFUSION']),
+('BECTON DICKINSON',     ARRAY['BECTON','BARD','CR BARD','CAREFUSION','ALARIS','BARD PERIPHERAL','BARD ACCESS','BD SUZHOU','BD MEDICAL','BD INFUSION']),
 ('BOSTON SCIENTIFIC',    ARRAY['BOSTON SCIENTIFIC']),
 ('PHILIPS',              ARRAY['PHILIPS','RESPIRONICS']),
 ('GE HEALTHCARE',        ARRAY['GE HEALTHCARE','DATEX','OHMEDA','GE MEDICAL']),
@@ -121,7 +111,7 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 -- Infusion / vascular access
 -- ------------------------------------------------------------
 ('ICU MEDICAL',          ARRAY['ICU MEDICAL']),
-('B. BRAUN',             ARRAY['B BRAUN','B. BRAUN','BRAUN MELSUNGEN','BRAUN GMBH']),
+('B. BRAUN',             ARRAY['B BRAUN','BRAUN MELSUNGEN','BRAUN GMBH']),
 ('ARROW INTERNATIONAL',  ARRAY['ARROW INTERNATIONAL']),
 ('TELEFLEX',             ARRAY['TELEFLEX']),
 ('MEDLINE INDUSTRIES',   ARRAY['MEDLINE INDUSTRIES']),
@@ -217,13 +207,8 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 ('TERRAGENE',            ARRAY['TERRAGENE']),
 ('SANTA BARBARA',        ARRAY['SANTA BARBARA']);
 
--- ============================================================
--- Verify
--- ============================================================
+-- Verify: parents and keywords loaded
 SELECT
-    COUNT(*) FILTER (WHERE manufacturer_normalized = manufacturer_name) AS unmapped,
-    COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) AS mapped,
-    COUNT(*) AS total,
-    ROUND(100.0 * COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) / COUNT(*), 1) AS pct_mapped
-FROM silver_reports
-WHERE manufacturer_is_junk = FALSE;
+    COUNT(*)                       AS parents,
+    SUM(array_length(keywords, 1)) AS keywords
+FROM manufacturer_parent;
