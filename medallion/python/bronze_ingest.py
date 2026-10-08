@@ -3,15 +3,7 @@
 Author: Malena | Updated: 2026-10-01
 
 Description: Reads the raw FDA MAUDE file and loads it into the Supabase bronze_reports table.
-             
-Rules implemented here (see PIPELINE.md):
-    B1  Read file with correct format
-    B2  Keep source columns as they are (deviation: only 5 stored)
-    B3  Append-only, keep every parsed row, count skipped lines
-    B4  Store everything as text
-    B5  Add metadata (source_file, row number; inserted_at is set by the DB)
-    B6  Idempotent ingest (a rerun adds nothing)
-
+Rules implemented: B1 - B6. See PIPELINE.md for details.
 A rerun adds nothing. Raise DEV_SAMPLE_LIMIT to load more rows.
 
 """
@@ -33,8 +25,7 @@ SOURCE_FILE_LABEL = "DEVICE2024.txt"   # B5: stored in source_file column
 BATCH_SIZE = 1000                      # rows per Supabase upsert
 DEV_SAMPLE_LIMIT = 60000               # rows to load; None = full file. Supabase would manage about 100 ingestions with 20 000 records 
 
-# RULE B2: these 5 columns are kept.
-# Raw FDA column name -> bronze_reports column name
+# B2: these 5 columns are selected as "raw". Raw FDA column name -> bronze_reports column name
 COLUMN_MAP = {
     "MDR_REPORT_KEY":              "report_key",
     "DEVICE_SEQUENCE_NO":          "device_sequence_no",

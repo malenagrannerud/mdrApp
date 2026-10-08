@@ -57,23 +57,23 @@ export default function Dashboard() {
       setLoading(true)
       setError(null)
       try {
-        // G1: product categories, ranked. RULE G5: no high-volume flag.
+        // G1: product categories, sorted by the displayed column.
         const productsHook = await supabase
           .from('product_stats_ranked')
-          .select('*')
-          .order('rank', { ascending: true })
+          .select('product_code, generic_name, total_reports')
+          .order('total_reports', { ascending: false })
           .order('product_code', { ascending: true })
           .limit(10)
 
-        // G2 / S5: manufacturers, ranked, junk already excluded by the view.
+        // G2 / S5: manufacturers, junk already excluded by the view.
         const manufacturersHook = await supabase
           .from('manufacturer_stats_ranked')
-          .select('*')
-          .order('rank', { ascending: true })
+          .select('name, total_reports')
+          .order('total_reports', { ascending: false })
           .order('name', { ascending: true })
           .limit(10)
 
-        // Observability: when was the data last refreshed?
+        // OBSERVABILITY: when was the data last refreshed?
         const runHook = await supabase
           .from('pipeline_runs')
           .select('started_at, status, rows_silver')
@@ -128,10 +128,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <PBICard
-          title="Most reported medical device product categories to FDA 2024"
-          subtitle="Number of device entries — not rate (no denominator exists)"
-        >
+        <PBICard title="Most reported medical device product categories to FDA 2024">
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={productData} margin={{ top: 10, right: 10, left: 10, bottom: 50 }}>
@@ -152,10 +149,7 @@ export default function Dashboard() {
           </div>
         </PBICard>
 
-        <PBICard
-          title="Most reported manufacturers to FDA 2024"
-          subtitle="Normalized parent company — junk excluded"
-        >
+        <PBICard title="Most reported manufacturers to FDA 2024">
           <div className="w-full h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={manufacturerData} margin={{ top: 10, right: 10, left: 10, bottom: 50 }}>

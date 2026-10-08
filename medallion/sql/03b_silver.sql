@@ -5,8 +5,6 @@
   Reads bronze_reports and splits every row into silver_reports (valid)
   or silver_rejected (invalid, with a reason).
 
-  WHY:   Gold must only see trusted data. Bad rows are quarantined,
-         not deleted, so we can always explain why a row was excluded.
 
   THE KEY RULE (S7): bronze rows = silver rows + rejected rows.
          If the numbers do not match, data was lost silently.
@@ -59,7 +57,7 @@ FROM bronze_reports;
 
 
 -- ============================================================
--- RULE S5 preprocessing: normalize raw manufacturer names
+-- RULE S5 
 -- ============================================================
 -- WHY: Strips legal suffixes and punctuation so "Medtronic, Inc." and
 -- "MEDTRONIC" collapse to the same string before keyword matching.

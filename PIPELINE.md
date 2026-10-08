@@ -28,7 +28,7 @@ FDA MAUDE : [-report-medical-device-problems/mdr-data-files#download](https://ww
 | foitext*.zip | Text data-file: Textual information from MEDWATCH |
 | device*.txt | Device data-file: Information related to the device(s) involved |
 
-All are string format
+All are string format, pipeline delimited
 
 #### 2.1 EXPLORE TARGET FILE TO SELECT DATA FIELDS 
 
@@ -179,12 +179,12 @@ medallion
 
 
 ### STEP 1 - REQUIREMENTS ON EACH LAYER FOR TRACEABILITY 
-Rows are split into "ORCHESTRATION" OR "DBT" for future automation. 
+
 
 #### BRONZE LAYER
 
 
-| ID | Rule | What & why | Implemented in | Test |
+| ID | Requirement | Category | Implemented in | Verification |
 |---|---|---|---|---|
 | B1 | Read file with correct format | Pipe-delimited, `latin-1`, `QUOTE_NONE`. Wrong encoding corrupts names. | `bronze_ingest.py::ingest` | `test_B1_latin1_names` |
 | B2 | Keep source columns as they are | **Deviation:** only 5 source columns are stored (free-tier limit). Production would store all, so Silver can be rebuilt without re-reading the file. | `bronze_ingest.py::COLUMN_MAP` | `02_bronze.sql` check B1 (columns filled) |
@@ -193,7 +193,7 @@ Rows are split into "ORCHESTRATION" OR "DBT" for future automation.
 | B5 | Add metadata | `source_file`, `inserted_at`: traceability and lineage. | `01_create_tables.sql`, `bronze_ingest.py` | `02_bronze.sql` check B3 (metadata filled) |
 | B6 | Idempotent ingest| Running the same file twice adds no duplicates. | `01_create_tables.sql` (`UNIQUE (source_file, source_row_num)`), `bronze_ingest.py` (upsert, ignore duplicates) | `test_B6_double_run_same_count` |
 
-| ID | Gate | Must pass | If it fails | Implemented in | Test |
+| ID | Gate | Must pass | If it fails | Implemented in | Verification |
 |---|---|---|---|---|---|
 | GKB | Gatekeeper before Silver | B1–B6: columns filled, table not empty, metadata present, append-only, unique ids, no duplicates after rerun | Do not run Silver. | `02_bronze.sql` | Manual run (CI later) |
 
@@ -204,7 +204,7 @@ Rows are split into "ORCHESTRATION" OR "DBT" for future automation.
 
 #### SILVER LAYER
 
-| ID | Rule | What & why | Implemented in | Test |
+| ID | Rule | What & why | Implemented in | Verification |
 |---|---|---|---|---|
 | S1 | PK | See EDA 1. Rows without a key go to quarantine as `S1_missing_key`. | `01_create_tables.sql` (PK), `03b_silver.sql` | `test_S1_missing_key_rejected` |
 | S2 | Duplicate keys go to quarantine | Keep the row with the lowest bronze `id`, send the rest to `silver_rejected` as `S2_duplicate_key`. 33 duplicate keys in the full file, 31 are identical rows. For the 2 that differ, "lowest id" is an arbitrary but reproducible choice. | `03b_silver.sql` (`ROW_NUMBER`) | `test_S2_duplicate_quarantined` |
@@ -214,7 +214,7 @@ Rows are split into "ORCHESTRATION" OR "DBT" for future automation.
 | S6 | Canonical product name, deterministic | `product_code_dim` holds the most common non-NULL `generic_name` per code, ties broken A–Z. 1,402 of 2,206 codes have more than one name.| `03b_silver.sql` | `test_S6_one_name_per_code` |
 | S7 | Reconciliation | `bronze = silver + rejected`, otherwise error and rollback. No row is lost silently. | `03b_silver.sql` (`refresh_silver_reports`) | `test_S7_counts_add_up` |
 
-| ID | Gate | Must pass | If it fails | Implemented in | Test |
+| ID | Gate | Must pass | If it fails | Implemented in | Verification |
 |---|---|---|---|---|---|
 | GKS | Gatekeeper before Gold | S7: `bronze = silver + rejected`. Silver is not empty. | `RAISE EXCEPTION`, Silver and Gold are rolled back, a `failed` row is written to `pipeline_runs` | `03b_silver.sql`, `04_gold.sql` (guard), `06_pipeline.sql` | `test_GKS_reconciliation_failure_blocks_gold` |
 
@@ -225,7 +225,7 @@ Rows are split into "ORCHESTRATION" OR "DBT" for future automation.
 #### GOLD LAYER
 
 
-| ID | Rule | What & why | Implemented in | Test |
+| ID | Rule | What & why | Implemented in | Verification method |
 |---|---|---|---|---|
 | G1 | Count per product code | `COUNT(*)` per `product_code`, canonical name from S6 (label `MISSING NAME` if none). Answers Q1. | `04_gold.sql` | `test_G1_count_per_code` |
 | G2 | Count per manufacturer | `COUNT(*)` per `manufacturer_normalized`. Junk (S4) and NULL excluded. Answers Q2. | `04_gold.sql` | `test_G2_junk_excluded` |
@@ -239,7 +239,7 @@ Rows are split into "ORCHESTRATION" OR "DBT" for future automation.
 **Later (not built):** dbt tests, orchestration, 95 % valid-rows threshold, rebuild of `manufacturer_mapping` and `product_code_dim` inside `run_pipeline()`.
 
 
-| ID | Gate | Must pass | If it fails | Implemented in | Test |
+| ID | Gate | Must pass | If it fails | Implemented in | Verification |
 |---|---|---|---|---|---|
 | GKG | Gold → Dashboard | G3: exact sums. G4: no zero rows. | `RAISE EXCEPTION`, rollback, the **previous Gold data stays** --> dashboard never shows corrupt numbers | `04_gold.sql`, `06_pipeline.sql` | `test_GKG_failed_gate_keeps_old_gold` |
 
