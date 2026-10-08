@@ -6,8 +6,6 @@ This document covers the process behind the [Aegis Compliance](./README.md) dash
 ![Post-market surveillance dashboard](./screenshots/dashboard.png)
 
 
-
-
 It contains 
 - I - STEPS IN CONDUCTING THE ANALYSIS &
 - II - STEPS IN CONDUCTING THE PIPELINE

@@ -1,4 +1,4 @@
-
+   ![CI](https://github.com/malenagrannerud/mdrApp/actions/workflows/ci.yml/badge.svg)
 
 # Aegis Compliance App
 **A regulatory workflow and post-market surveillance tool for medical device manufacturers**, guiding cross-functional teams — regulatory affairs, quality, data, and leadership — through EU MDR compliance, ISO 13485 QMS setup, and real-world safety signal analysis. 
