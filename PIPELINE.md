@@ -195,7 +195,7 @@ medallion
 
 | ID | Gate | Must pass | If it fails | Implemented in | Verification |
 |---|---|---|---|---|---|
-| GKB | Gatekeeper before Silver | B1–B6: columns filled, table not empty, metadata present, append-only, unique ids, no duplicates after rerun | Do not run Silver. | `02_bronze.sql` | Manual run (CI later) |
+| GKB | Gatekeeper before Silver | B1–B6 | Do not run Silver. | `02_bronze.sql` | Manual run (CI later) |
 
 
 **Later (not built):** dbt tests (`not_null`, `unique`), orchestration.
@@ -216,7 +216,7 @@ medallion
 
 | ID | Gate | Must pass | If it fails | Implemented in | Verification |
 |---|---|---|---|---|---|
-| GKS | Gatekeeper before Gold | S7: `bronze = silver + rejected`. Silver is not empty. | `RAISE EXCEPTION`, Silver and Gold are rolled back, a `failed` row is written to `pipeline_runs` | `03b_silver.sql`, `04_gold.sql` (guard), `06_pipeline.sql` | `test_GKS_reconciliation_failure_blocks_gold` |
+| GKS | Gatekeeper before Gold | S7 | `RAISE EXCEPTION`, Silver and Gold are rolled back, a `failed` row is written to `pipeline_runs` | `03b_silver.sql`, `04_gold.sql` (guard), `06_pipeline.sql` | `test_GKS_reconciliation_failure_blocks_gold` |
 
 
 
