@@ -1,7 +1,14 @@
 
 
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
-This document covers the process behind the [Aegis Compliance](./README.md) dashboard. It contains 
+This document covers the process behind the [Aegis Compliance](./README.md) dashboard. 
+
+![Post-market surveillance dashboard](./screenshots/dashboard.png)
+
+
+
+
+It contains 
 - I - STEPS IN CONDUCTING THE ANALYSIS &
 - II - STEPS IN CONDUCTING THE PIPELINE
 
@@ -13,13 +20,13 @@ The purpose is to answer
 | #  | Question | 
 |---|---|
 | Q1 | Which products have the most device reports in 2024? |
-| Q2 | Which manufacturers (parent companies) have the most device reports in 2024? |
+| Q2 | Which manufacturers have the most device reports in 2024? |
 
 to help teams to detect what to focus on for a product. 
 
 
-### STEP 2 - EXPLORE AVAILABLE FILES & STRUCTURE FROM THE TARGET DATABASE 
-FDA MAUDE : [-report-medical-device-problems/mdr-data-files#download](https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download)
+### STEP 2 - EXPLORE AVAILABLE FILES & STRUCTURE FROM THE DATABASE 
+See [FDA's MAUDE database](https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download)
 
 | File | Description | 
 |---|---|
@@ -186,8 +193,8 @@ medallion
 
 | ID | Requirement | Category | Implemented in | Verification |
 |---|---|---|---|---|
-| B1 | Read file with correct format | Pipe-delimited, `latin-1`, `QUOTE_NONE`. Wrong encoding corrupts names. | `bronze_ingest.py::ingest` | `test_B1_latin1_names` |
-| B2 | Keep source columns as they are | **Deviation:** only 5 source columns are stored (free-tier limit). Production would store all, so Silver can be rebuilt without re-reading the file. | `bronze_ingest.py::COLUMN_MAP` | `02_bronze.sql` check B1 (columns filled) |
+| B1 | Read file with correct format | Pipe-delimited, `latin-1`, `QUOTE_NONE`. | `bronze_ingest.py` | `test_B1_latin1_names` |
+| B2 | Keep source columns as they are | | `bronze_ingest.py::COLUMN_MAP` | `02_bronze.sql` check B1 (columns filled) |
 | B3 | Append-only, keep every parsed row | No dedup, no filtering. Rows that cannot be parsed are counted and logged, not hidden. | `01_create_tables.sql` (triggers), `bronze_ingest.py` | `02_bronze.sql` check B4 (DELETE/UPDATE/TRUNCATE blocked) |
 | B4 | Store everything as text | No type conversion, so no silent type errors. | `bronze_ingest.py` (`dtype=str`), `01_create_tables.sql` | `test_B4_all_text` |
 | B5 | Add metadata | `source_file`, `inserted_at`: traceability and lineage. | `01_create_tables.sql`, `bronze_ingest.py` | `02_bronze.sql` check B3 (metadata filled) |
