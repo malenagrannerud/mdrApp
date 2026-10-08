@@ -27,35 +27,6 @@ export const QMS_DATA = [
       e: `
       This QMS roadmap provides deliverables to build a compliant Quality Management System (QMS), covering all clauses in ISO 13485.     
       
-
-      TIME DEPENDENCIES
-
-      Steps are grouped into three phases based on dependencies and parallel execution potential.
-   
-      Phase 1 — Foundation (Steps 1-3)
-      Can all start immediately. Builds document control, management framework, and resource infrastructure in parallel.
-   
-      Phase 2 — Product Realization & Operations (Steps 4-5)
-      Starts after Phase 1 is in place. Design control and operational processes run in parallel.
-    
-      Phase 3 — Oversight & Regulatory (Steps 6-7)
-      Starts after Phase 2 processes are operational. Measurement, CAPA, and regulatory affairs run in parallel.
-
-      
-      DOCUMENTATION HIERARCHY
-
-      Level 1. Quality Policy & Objectives
-      Defines the corporate commitment to quality and regulatory compliance, establishing measurable targets.
-   
-     Level 2. Quality Manual (QM)
-     Describes the scope of the QMS, system structure, and justifications for requirement exclusions. 
-    
-     Level 3. Standard Operating Procedure (SOP) & Work Instructions (WIs)
-     SOPs describe who does what and when, while WIs describes how to do specific tasks.
-
-    Level 4. Forms & Records
-    Provides evidence of actions, documenting what was done, when, and by whom to ensure full traceability.
-    
    `},
     { t: ' Resulting File Structure ', 
       e: `

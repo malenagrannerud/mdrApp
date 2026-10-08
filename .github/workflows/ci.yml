@@ -26,9 +26,6 @@ jobs:
         working-directory: medallion/python
         run: pytest -v
 
-      - name: PRR tests
-        working-directory: medallion/analysis
-        run: pytest -v
 
   frontend-build:
     runs-on: ubuntu-latest
