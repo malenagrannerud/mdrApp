@@ -24,7 +24,7 @@ jobs:
 
       - name: Bronze ingest tests (B1-B6)
         working-directory: medallion/python
-        run: pytest -v
+        run: pytest . -v
 
 
   frontend-build:
