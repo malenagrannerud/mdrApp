@@ -207,50 +207,56 @@ medallion
 
 **Later (not built):** dbt tests (`not_null`, `unique`), orchestration.
 
----
 
-#### SILVER LAYER
+# Requirements Traceability Matrix
 
-| ID | Rule | What & why | Implemented in | Verification |
-|---|---|---|---|---|
-| S1 | PK | See EDA 1. Rows without a key go to quarantine as `S1_missing_key`. | `01_create_tables.sql` (PK), `03b_silver.sql` | `test_S1_missing_key_rejected` |
-| S2 | Duplicate keys go to quarantine | Keep the row with the lowest bronze `id`, send the rest to `silver_rejected` as `S2_duplicate_key`. 33 duplicate keys in the full file, 31 are identical rows. For the 2 that differ, "lowest id" is an arbitrary but reproducible choice. | `03b_silver.sql` (`ROW_NUMBER`) | `test_S2_duplicate_quarantined` |
-| S3 | Missing values: NULL + flag, never impute | Missing `generic_name` and `manufacturer` are stored as `NULL` with `has_missing_generic_name` / `has_missing_manufacturer = TRUE`. Missing `product_code` (0.00 %) goes to quarantine as `S3_missing_product_code`.  | `01_create_tables.sql`, `03b_silver.sql` | `test_S3_missing_is_null_and_flagged` |
-| S4 | Flag junk manufacturers | `manufacturer_is_junk = TRUE` for `UNK`, `NI`, `0HP`, names under 2 characters, etc. Rows are kept, Gold excludes them. | `03b_silver.sql` (`tmp_junk`) | `test_S4_junk_flagged` |
-| S5 | Normalize manufacturers, deterministic | Keyword rules in `manufacturer_parent` build `manufacturer_mapping` from Bronze. If a name matches several parents, the **longest keyword wins**, then parent name A–Z. Medtronic has 99 spellings. MPRI (34,885 rows) is mapped to MEDTRONIC (**assumption, unverified**).| `03a_seed_manufacturers.sql`, `03b_silver.sql` | `test_S5_medtronic_inc_mapped`, `test_S5_no_false_positive` |
-| S6 | Canonical product name, deterministic | `product_code_dim` holds the most common non-NULL `generic_name` per code, ties broken A–Z. 1,402 of 2,206 codes have more than one name.| `03b_silver.sql` | `test_S6_one_name_per_code` |
-| S7 | Reconciliation | `bronze = silver + rejected`, otherwise error and rollback. No row is lost silently. | `03b_silver.sql` (`refresh_silver_reports`) | `test_S7_counts_add_up` |
+## Bronze
 
-| ID | Gate | Must pass | If it fails | Implemented in | Verification |
-|---|---|---|---|---|---|
-| GKS | Gatekeeper before Gold | S7 | `RAISE EXCEPTION`, Silver and Gold are rolled back, a `failed` row is written to `pipeline_runs` | `03b_silver.sql`, `04_gold.sql` (guard), `06_pipeline.sql` | `test_GKS_reconciliation_failure_blocks_gold` |
+| ID | Requirement | Test |
+|---|---|---|
+| B1 | File is read as pipe-delimited, `latin-1`, `QUOTE_NONE` | `test_B1_latin1_names` |
+| B2 | Source columns are stored unchanged (see D1) | `02_bronze.sql`: columns filled |
+| B3 | Append-only: every parsed row is kept, unparseable rows are counted and logged, UPDATE/DELETE/TRUNCATE are blocked | `02_bronze.sql`: blocking test |
+| B4 | All values are stored as text | `test_B4_all_text` |
+| B5 | Every row has `source_file` and `inserted_at` | `02_bronze.sql`: metadata filled |
+| B6 | Ingesting the same file twice adds no rows (`UNIQUE (source_file, source_row_num)`) | `test_B6_double_run_same_count` |
+| **GKB** | **Gate: Silver runs only if B1–B6 pass** | Manual run |
 
+## Silver
 
+| ID | Requirement | Test |
+|---|---|---|
+| S1 | Rows without a primary key value are rejected as `S1_missing_key` | `test_S1_missing_key_rejected` |
+| S2 | For duplicate keys, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `test_S2_duplicate_quarantined` |
+| S3 | Missing `generic_name` / `manufacturer` is stored as `NULL` with a flag, never imputed; missing `product_code` is rejected as `S3_missing_product_code` | `test_S3_missing_is_null_and_flagged` |
+| S4 | Junk manufacturers are flagged (`manufacturer_is_junk = TRUE`) and the row is kept | `test_S4_junk_flagged` |
+| S5 | Manufacturer names are normalized deterministically (longest keyword wins, then parent name A–Z) | `test_S5_medtronic_inc_mapped`, `test_S5_no_false_positive` |
+| S6 | Each product code has one canonical name (most common non-NULL, ties A–Z) | `test_S6_one_name_per_code` |
+| S7 | `bronze = silver + rejected`, otherwise error and rollback | `test_S7_counts_add_up` |
+| **GKS** | **Gate: Gold runs only if S7 passes. On failure: rollback and a `failed` row in `pipeline_runs`** | `test_GKS_reconciliation_failure_blocks_gold` |
 
----
+## Gold
 
-#### GOLD LAYER
+| ID | Requirement | Test |
+|---|---|---|
+| G1 | Count per `product_code` with canonical name (`MISSING NAME` if none) | `test_G1_count_per_code` |
+| G2 | Count per normalized manufacturer, excluding junk and NULL | `test_G2_junk_excluded` |
+| G3 | `sum(product_stats)` = silver rows; `sum(manufacturer_stats)` = silver rows that are not junk and not NULL | `test_G3_sums_match` |
+| G4 | `total_reports > 0` in every Gold row | `test_G4_no_zero_rows` |
+| G5 | Rank is computed in `*_ranked` views, not stored | `test_G5_rank_order` |
+| G6 | Dashboard says "Number of device entries", never "rate" | Manual check |
+| G7 | A failed Silver/Gold run is rolled back and logged in `pipeline_runs` | `test_G7_failed_run_logged` |
+| G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views and `pipeline_runs` | `test_G8_anon_cannot_read_bronze` |
+| **GKG** | **Gate: G3 and G4 must pass, otherwise rollback and the previous Gold data stays** | `test_GKG_failed_gate_keeps_old_gold` |
 
+## Deviations, assumptions and later work
 
-| ID | Rule | What & why | Implemented in | Verification method |
-|---|---|---|---|---|
-| G1 | Count per product code | `COUNT(*)` per `product_code`, canonical name from S6 (label `MISSING NAME` if none). Answers Q1. | `04_gold.sql` | `test_G1_count_per_code` |
-| G2 | Count per manufacturer | `COUNT(*)` per `manufacturer_normalized`. Junk (S4) and NULL excluded. Answers Q2. | `04_gold.sql` | `test_G2_junk_excluded` |
-| G3 | Exact reconciliation | `sum(product_stats) = silver rows` and `sum(manufacturer_stats) = silver rows where not junk and manufacturer is not NULL`. | `04_gold.sql` | `test_G3_sums_match` |
-| G4 | Sanity check | `total_reports > 0` in every Gold row. | `04_gold.sql` | `test_G4_no_zero_rows` |
-| G5 | Rank in views | Rank is computed in the `*_ranked` views, not stored. The hardcoded top-10 flag is removed.  | `04_gold.sql` | `test_G5_rank_order` |
-| G6 | Label clearly | "Number of device entries", never "rate". No denominator exists, and one report can hold several devices. | `Dashboard.jsx` | Manual check |
-| G7 | Failed run is rolled back and logged | If Silver or Gold fails, both are undone and a `failed` row is written to `pipeline_runs`. | `06_pipeline.sql` | `test_G7_failed_run_logged` |
-| G8 | Least privilege | RLS enabled on all tables. `anon` can only `SELECT` Gold tables, views and `pipeline_runs`. Bronze and Silver are not readable. | `01_create_tables.sql` | `test_G8_anon_cannot_read_bronze` |
-
-**Later (not built):** dbt tests, orchestration, 95 % valid-rows threshold, rebuild of `manufacturer_mapping` and `product_code_dim` inside `run_pipeline()`.
-
-
-| ID | Gate | Must pass | If it fails | Implemented in | Verification |
-|---|---|---|---|---|---|
-| GKG | Gold → Dashboard | G3: exact sums. G4: no zero rows. | `RAISE EXCEPTION`, rollback, the **previous Gold data stays** --> dashboard never shows corrupt numbers | `04_gold.sql`, `06_pipeline.sql` | `test_GKG_failed_gate_keeps_old_gold` |
-
----
+| ID | Type | Description |
+|---|---|---|
+| D1 | Deviation | Only 5 source columns are stored in Bronze (free-tier limit). Production would store all. |
+| A1 | Assumption (unverified) | MPRI is mapped to MEDTRONIC. |
+| A2 | Assumption | For duplicate keys with different content, "lowest id" is arbitrary but reproducible. |
+| L1 | Later | dbt tests, orchestration, 95 % valid-rows threshold, rebuild of `manufacturer_mapping` and `product_code_dim` inside `run_pipeline()`. |
 
 
 ### STEP 2 — CREATE TABLES 
