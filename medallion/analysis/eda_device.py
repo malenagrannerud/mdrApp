@@ -6,8 +6,8 @@ EDA of the full DEVICE2024.txt. Run from the repo root.
 Each section answers one question. See answers in PIPELINE.md
 
 
-cd /workspaces/mdrApp
-python medallion/analysis/eda_device.py
+RUN:    cd /workspaces/mdrApp
+        python medallion/analysis/eda_device.py
 
 """
 import csv

@@ -12,7 +12,7 @@
 
 ---
 ## Why this exists
-Getting a medical device to market — and keeping it there — means navigating two dense regulatory frameworks (EU MDR 2017/745, ISO 13485) and continuously monitoring post-market data for safety signals. In practice, this knowledge lives scattered across legal text, SOPs, and spreadsheets, and rarely talks to the *data* teams need for post-market surveillance.
+Placing a medical device to market — and keeping it there — means navigating regulatory frameworks and continuously monitoring post-market data for safety signals. In practice, this knowledge lives scattered across legal text, SOPs, and spreadsheets.
 
 Aegis Compliance brings these together in one place: the regulatory roadmap, the QMS structure, and a live dashboard built on real FDA adverse event data — so regulatory, quality, and data roles can work from the same picture.
 
@@ -25,14 +25,12 @@ Translates the EU 2017/745 regulation into a visual, navigable roadmap of the CE
 
 ### QMS Steps
 ![QMS Steps implementation guide](./screenshots/3.png)
-Maps the core requirements of ISO 13485:2016 into a step-by-step implementation guide, with a practical focus on SOPs and Work Instructions — a roadmap for startups and manufacturers building an audit-ready QMS from scratch.
+Maps the core requirements of ISO 13485:2016 into a step-by-step implementation guide, with a practical focus on SOPs — a roadmap for startups and manufacturers building an audit-ready QMS from scratch.
 
 ### Dashboard — Post-Market Surveillance
 ![Post-market surveillance dashboard showing top reported products](./screenshots/dashboard.png)
 
 A live dashboard built on a custom-engineered data pipeline (see [PIPELINE.md](./PIPELINE.md)) processing FDA MAUDE adverse event data — the kind of dataset manufacturers use to monitor their own products' safety trends over time.
-
-
 
 ---
 ## Tech stack
@@ -51,17 +49,7 @@ npm install
 npm run dev
 ```
 
-To rebuild the underlying dataset from scratch (ingest → clean → aggregate), follow the pipeline steps in [PIPELINE.md](./PIPELINE.md).
-
----
-## Roadmap
-
-**QA/RA**
-- [ ] Map dependencies between MDR and QMS documentation requirements
-- [ ] Add sample audit checklists
-- [ ] Clickable regulatory abbreviations with inline definitions
-
-
+To rebuild the underlying dataset (ingest → clean → aggregate), follow the steps in [PIPELINE.md](./PIPELINE.md).
 
 ---
 ## Contact
