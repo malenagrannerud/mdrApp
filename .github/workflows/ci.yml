@@ -15,17 +15,15 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: |
-            medallion/python/requirements.txt
-            medallion/analysis/requirements.txt
+          cache-dependency-path: medallion/python/requirements.txt
 
       - name: Install dependencies
         run: pip install -r medallion/python/requirements.txt -r medallion/analysis/requirements.txt
 
       - name: Bronze ingest tests (B1-B6)
-        working-directory: medallion/python
-        run: pytest . -v
-
+        run: |
+          cd medallion/python
+          pytest . -v
 
   frontend-build:
     runs-on: ubuntu-latest
