@@ -184,28 +184,7 @@ medallion
 
 ### STEP 1 - REQUIREMENTS ON EACH LAYER FOR TRACEABILITY 
 
-#### BRONZE LAYER
-
-| ID | Requirement | Category | Implemented in | Verification |
-|---|---|---|---|---|
-| B1 | Read file with correct format | Pipe-delimited, `latin-1`, `QUOTE_NONE`. | `bronze_ingest.py` | `test_B1_latin1_names` |
-| B2 | Keep source columns as they are | | `bronze_ingest.py::COLUMN_MAP` | `02_bronze.sql` check B1 (columns filled) |
-| B3 | Append-only, keep every parsed row | No dedup, no filtering. Rows that cannot be parsed are counted and logged, not hidden. | `01_create_tables.sql` (triggers), `bronze_ingest.py` | `02_bronze.sql` check B4 (DELETE/UPDATE/TRUNCATE blocked) |
-| B4 | Store everything as text | No type conversion, so no silent type errors. | `bronze_ingest.py` (`dtype=str`), `01_create_tables.sql` | `test_B4_all_text` |
-| B5 | Add metadata | `source_file`, `inserted_at`: traceability and lineage. | `01_create_tables.sql`, `bronze_ingest.py` | `02_bronze.sql` check B3 (metadata filled) |
-| B6 | Idempotent ingest| Running the same file twice adds no duplicates. | `01_create_tables.sql` (`UNIQUE (source_file, source_row_num)`), `bronze_ingest.py` (upsert, ignore duplicates) | `test_B6_double_run_same_count` |
-
-| ID | Gate | Must pass | If it fails | Implemented in | Verification |
-|---|---|---|---|---|---|
-| GKB | Gatekeeper before Silver | B1–B6 | Do not run Silver. | `02_bronze.sql` | Manual run (CI later) |
-
-
-**Later (not built):** dbt tests (`not_null`, `unique`), orchestration.
-
-
-# Requirements Traceability Matrix
-
-## Bronze
+#### Bronze
 
 | ID | Requirement | Test |
 |---|---|---|
@@ -217,7 +196,7 @@ medallion
 | B6 | Ingesting the same file twice adds no rows (`UNIQUE (source_file, source_row_num)`) | `test_B6_double_run_same_count` |
 | **GKB** | **Gate: Silver runs only if B1–B6 pass** | Manual run |
 
-## Silver
+#### Silver
 
 | ID | Requirement | Test |
 |---|---|---|
@@ -230,7 +209,7 @@ medallion
 | S7 | `bronze = silver + rejected`, otherwise error and rollback | `test_S7_counts_add_up` |
 | **GKS** | **Gate: Gold runs only if S7 passes. On failure: rollback and a `failed` row in `pipeline_runs`** | `test_GKS_reconciliation_failure_blocks_gold` |
 
-## Gold
+#### Gold
 
 | ID | Requirement | Test |
 |---|---|---|
@@ -244,7 +223,7 @@ medallion
 | G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views and `pipeline_runs` | `test_G8_anon_cannot_read_bronze` |
 | **GKG** | **Gate: G3 and G4 must pass, otherwise rollback and the previous Gold data stays** | `test_GKG_failed_gate_keeps_old_gold` |
 
-## Deviations, assumptions and later work
+#### Deviations, assumptions and later work
 
 | ID | Type | Description |
 |---|---|---|
