@@ -133,7 +133,7 @@ Aggregation + ranking, since kategorical and numerical data types
 
 
 ## II - STEPS IN CONDUCTING THE PIPELINE
-### RESULTING FILE STRUCTURE
+### FILE STRUCTURE
 ```
 medallion
 ├── data
@@ -182,12 +182,9 @@ medallion
 [ BI Dashboard ]          
 ```
 
-
 ### STEP 1 - REQUIREMENTS ON EACH LAYER FOR TRACEABILITY 
 
-
 #### BRONZE LAYER
-
 
 | ID | Requirement | Category | Implemented in | Verification |
 |---|---|---|---|---|
