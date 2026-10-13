@@ -38,8 +38,7 @@ SOURCE_FILE_LABEL = "DEVICE2024.txt"   # B5: stored in the source_file column
 CHUNK_SIZE = 50_000                    # rows per COPY statement
 LOG_EVERY_N_CHUNKS = 5
 
-# B2: only these raw columns are kept. Raw FDA column name -> bronze_reports column name
-COLUMN_MAP = {
+COLUMN_MAP = {                                              # B2
     "MDR_REPORT_KEY":              "report_key",
     "DEVICE_SEQUENCE_NO":          "device_sequence_no",
     "GENERIC_NAME":                "generic_name",
@@ -69,7 +68,6 @@ class BronzeRepository(Protocol):
     """The only two things ingest needs from the database."""
 
     def count_rows(self, source_file: str) -> int: ...
-
     def append(self, rows: Iterable[BronzeRow]) -> None: ...
 
 

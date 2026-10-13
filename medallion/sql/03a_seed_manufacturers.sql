@@ -4,9 +4,7 @@
 
   Parent-company keyword rules that drive auto-generation of manufacturer_mapping in 03b_silver.sql.
 
-  RULE S5: Normalize manufacturers, deterministic.
-  Keywords must not contain dots: normalize_mfr_name() strips them.
-  So 'ST JUDE', not 'ST. JUDE'; 'CR BARD', not 'C.R. BARD'; 'B BRAUN', not 'B. BRAUN'.
+  RULE S5
 */
 
 TRUNCATE TABLE manufacturer_parent;

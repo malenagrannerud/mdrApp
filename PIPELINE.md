@@ -57,7 +57,7 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
  
  
 #### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER DATA QUALITY REQUIREMENTS FOR SILVER 
-This EDA is on the full file, 2.6 M rows. 
+This EDA is on the file, 2.6 M rows. 
  
 ```bash 
 python medallion/analysis/eda_device.py
@@ -71,19 +71,23 @@ rows: 2,629,410 | unique MDR_REPORT_KEY: 2,627,121 | duplicated (MDR_REPORT_KEY,
 - PK is `MDR_REPORT_KEY, DEVICE_SEQUENCE_NO` — 33 duplicate PKs found, unique in 99.999 % of rows → **S1**
 - 31 of those are exact duplicates → **S2** Duplicates are quarantined, not deleted
   (kept row = lowest bronze `id`; the rest go to `silver_rejected`)
+
+
 2. MISSING VALUES (%) ? 
 ```
 MDR_REPORT_KEY: 0.00 | DEVICE_SEQUENCE_NO: 0.00 | GENERIC_NAME: 0.02 | MANUFACTURER_D_NAME: 0.16 | DEVICE_REPORT_PRODUCT_CODE: 0.00
 ```
 **Conclusion:** Handle missing
 - GENERIC_NAME (0.02 %) and MANUFACTURER_D_NAME (0.16 %) → NULL + flag, never impute **S3**
+
+
 3. JUNK MANUFAKTURER NAMES? 
 ```
 junk list: 1,065 | shorter than 2 chars: 15 | MPRI 34885 | UNK 537 | BD 113 | 0HP 21 | SERF 18 | . 12 | 000 5 | DSS 3 | BIOS 3 | REMI 3
 ```
 **Conclusion:**
 - Flag rows with junk manufacturer names **S4**
-- Classify MPRI as junk or valid → assumption **A1** (mapped to MEDTRONIC, unverified)
+- MPRI is mapped to MEDTRONIC
 - Junk markers such as `N/A`, `NA` and `NONE` must reach silver as text, not as NULL → **B4**
   
 4. SAME COMPANY, MANY SPELLINGS (TOP 5) ? 
@@ -100,14 +104,7 @@ codes: 2,206 | codes with more than 1 name: 1,402
 ```
 **Conclusion:** Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE **S6**
  
- 
- 
-6. CONCENTRATION?
-``` 
-top 10 codes = 65.5 % of rows | top 10 manufacturers = 55.0 % of rows
-```
-**Conclusion:** Add all 2 M rows of data for future steps
-(done: the full file runs locally, see D2)
+
  
  
 #### DATA LIMITATIONS

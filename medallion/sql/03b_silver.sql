@@ -22,38 +22,9 @@
     - product_code_dim
 
   RULES IMPLEMENTED HERE:
-    RULE S1  Primary key
-    RULE S2  Duplicate keys go to quarantine
-    RULE S3  Missing values: NULL + flag, never impute
-    RULE S4  Flag junk manufacturers
-    RULE S5  Normalize manufacturers, deterministic
-    RULE S6  Canonical product name, deterministic
-    RULE S7  Reconciliation
-    RULE GKS Silver -> Gold gatekeeper (S7 + silver not empty)
+    RULE S1 - RULE S7 
+    RULE GKS S
 */
-
-
--- ============================================================
--- STEP 0: LOOK BEFORE YOU CLEAN (read-only)
--- ============================================================
-SELECT report_key, device_sequence_no, COUNT(*) AS times_seen
-FROM bronze_reports
-GROUP BY report_key, device_sequence_no
-HAVING COUNT(*) > 1
-ORDER BY times_seen DESC
-LIMIT 20;
-
-SELECT COUNT(*) AS junk_manufacturer_count
-FROM bronze_reports
-WHERE UPPER(TRIM(manufacturer_raw)) IN
-      ('NI','UNK','*','N/A','NA','UNKNOWN','NO INFORMATION','?','NONE','NO MATCH','NO DATA')
-   OR length(TRIM(manufacturer_raw)) < 2;
-
-SELECT
-    COUNT(*) FILTER (WHERE manufacturer_raw IS NULL) AS missing_manufacturer_count,
-    COUNT(*) FILTER (WHERE product_code_raw   IS NULL) AS missing_product_code_count,
-    COUNT(*) FILTER (WHERE generic_name       IS NULL) AS missing_generic_name_count
-FROM bronze_reports;
 
 
 -- ============================================================
@@ -264,33 +235,3 @@ WHERE product_code IS NOT NULL
 GROUP BY product_code, generic_name
 ORDER BY product_code, COUNT(*) DESC, generic_name;
 
-
--- ============================================================
--- STEP 6: verify (read-only)
--- ============================================================
--- S7: bronze = silver + rejected
--- SELECT
---     (SELECT COUNT(*) FROM bronze_reports)  AS bronze_rows,
---     (SELECT COUNT(*) FROM silver_reports)  AS silver_rows,
---     (SELECT COUNT(*) FROM silver_rejected) AS rejected_rows;
---
--- S2: how many duplicates and other reasons?
--- SELECT rejection_reason, COUNT(*) FROM silver_rejected GROUP BY 1 ORDER BY 2 DESC;
---
--- S5: how much is mapped?
--- SELECT
---     COUNT(*) FILTER (WHERE manufacturer_normalized = manufacturer_name) AS unmapped,
---     COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) AS mapped,
---     COUNT(*) AS total,
---     ROUND(100.0 * COUNT(*) FILTER (WHERE manufacturer_normalized <> manufacturer_name) / COUNT(*), 1) AS pct_mapped
--- FROM silver_reports
--- WHERE manufacturer_is_junk = FALSE;
---
--- S5: top unmapped (to extend manufacturer_parent keywords)
--- SELECT manufacturer_name, COUNT(*) AS rows
--- FROM silver_reports
--- WHERE manufacturer_is_junk = FALSE
---   AND manufacturer_normalized = manufacturer_name
--- GROUP BY manufacturer_name
--- ORDER BY rows DESC
--- LIMIT 50;
