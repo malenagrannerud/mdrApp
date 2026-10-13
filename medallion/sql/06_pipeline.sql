@@ -36,14 +36,6 @@
 */
 
 -- ============================================================
--- Grants for service_role (function execution)
--- ============================================================
-GRANT EXECUTE ON FUNCTION public.run_pipeline()           TO service_role;
-GRANT EXECUTE ON FUNCTION public.refresh_silver_reports() TO service_role;
-GRANT EXECUTE ON FUNCTION public.refresh_gold()           TO service_role;
-
-
--- ============================================================
 -- The one command
 -- ============================================================
 -- ============================================================

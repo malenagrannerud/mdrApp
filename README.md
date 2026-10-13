@@ -37,7 +37,7 @@ A live dashboard built on a custom-engineered data pipeline (see [PIPELINE.md](.
 | Layer | Tools |
 |---|---|
 | Frontend | React |
-| Data pipeline | Python, SQL, Pydantic |
+| Data pipeline | Python, SQL |
 | Database | PostgreSQL (Supabase) |
 | Deployment | Vercel |
 

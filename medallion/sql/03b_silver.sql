@@ -63,21 +63,18 @@ FROM bronze_reports;
 -- "MEDTRONIC" collapse to the same string before keyword matching.
 CREATE OR REPLACE FUNCTION normalize_mfr_name(raw text)
 RETURNS text AS $$
-BEGIN
-    RETURN UPPER(
+    SELECT UPPER(
         TRIM(
             regexp_replace(
                 regexp_replace(
-                    regexp_replace(raw,
-                        '[,\.]', '', 'g'),
+                    regexp_replace(raw, '[,\.]', '', 'g'),
                     '\s+(INC|LLC|LTD|CO|CORP|CORPORATION|GMBH|AG|SA|AB|BV|NV|PLC|SRL|LP|LLP|PC|PLLC)$',
                     '', 'i'),
                 '\s+', ' ', 'g'
             )
         )
     );
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
+$$ LANGUAGE sql IMMUTABLE PARALLEL SAFE;
 
 
 -- ============================================================
@@ -228,19 +225,19 @@ TRUNCATE TABLE manufacturer_mapping;
 INSERT INTO manufacturer_mapping (raw_name, normalized_name)
 SELECT DISTINCT ON (normalize_mfr_name(raw_name)) raw_name, parent_name
 FROM (
-    SELECT b.manufacturer_raw AS raw_name,
+    SELECT n.raw_name,
            p.parent_name,
            MAX(length(kw)) AS kw_len
-    FROM bronze_reports b
+    FROM (SELECT DISTINCT manufacturer_raw AS raw_name
+          FROM bronze_reports
+          WHERE manufacturer_raw IS NOT NULL
+            AND length(TRIM(manufacturer_raw)) >= 2) n
     CROSS JOIN manufacturer_parent p
     CROSS JOIN LATERAL unnest(p.keywords) AS kw
-    WHERE b.manufacturer_raw IS NOT NULL
-      AND length(TRIM(b.manufacturer_raw)) >= 2
-      AND normalize_mfr_name(b.manufacturer_raw) LIKE '%' || kw || '%'
-    GROUP BY b.manufacturer_raw, p.parent_name
+    WHERE normalize_mfr_name(n.raw_name) LIKE '%' || kw || '%'
+    GROUP BY n.raw_name, p.parent_name
 ) m
 ORDER BY normalize_mfr_name(raw_name), kw_len DESC, parent_name;
-
 
 -- ============================================================
 -- RUN THE FUNCTION

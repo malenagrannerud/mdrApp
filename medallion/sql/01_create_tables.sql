@@ -65,7 +65,7 @@ CREATE TRIGGER enforce_bronze_no_truncate
     FOR EACH STATEMENT
     EXECUTE FUNCTION prevent_bronze_mutation();
 
-
+CREATE INDEX IF NOT EXISTS idx_bronze_mfr_raw ON bronze_reports (manufacturer_raw);
 -- ============================================================
 -- SILVER LAYER: cleaned data + quarantine
 -- ============================================================

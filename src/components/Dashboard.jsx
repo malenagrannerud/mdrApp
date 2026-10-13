@@ -17,6 +17,7 @@ import { useState, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Loader } from 'lucide-react'
 import { supabase } from '../../medallion/supabase'
+import DataQualityPanel from './DataQualityPanel'
 
 function PBICard({ children, title, subtitle, className = '' }) {
   return (
@@ -57,6 +58,9 @@ export default function Dashboard() {
       setLoading(true)
       setError(null)
       try {
+
+        if (!supabase) throw new Error('Supabase is not configured (see .env.example)')
+
         // G1: product categories, sorted by the displayed column.
         const productsHook = await supabase
           .from('product_stats_ranked')
@@ -119,6 +123,7 @@ export default function Dashboard() {
     <div className="p-6 bg-gray-50 min-h-screen font-sans">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">PMS Dashboard</h1>
+       // <DataQualityPanel />
         {lastRun && (
           <p className="text-sm text-gray-500 mt-1">
             Last run: {new Date(lastRun.started_at).toLocaleString('sv-SE')} ·{' '}
