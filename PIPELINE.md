@@ -1,5 +1,4 @@
 
-
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 This document covers the process behind the [Aegis Compliance](./README.md) dashboard. 
 
@@ -60,8 +59,8 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
 
 
-#### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER DATA QUALITY REQUIREMENTS FOR SILVER 
-This EDA is on the full file, 2.6 M rows. 
+#### 2.2 EDA ON DEVICE2024.txt TO DISCOVER REQUIREMENTS FOR SILVER 
+This exploratory data analysis (EDA) is on the full file, 2.6 M rows. 
 
 ```bash 
 python medallion/analysis/eda_device.py
@@ -73,17 +72,18 @@ rows: 2,629,410 | unique MDR_REPORT_KEY: 2,627,121 | duplicated (MDR_REPORT_KEY,
 ```
 **Conclusion:**
 - PK is `MDR_REPORT_KEY, DEVICE_SEQUENCE_NO` — 33 duplicate PKs found, unique in 99.999 % of rows → **S1**
-- 31 of those are exact duplicates → **S2** Remove 31 identical rows on PK
+- 31 of those are exact duplicates → **S2** Remove 31 identical rows on PK 
+  (kept row = lowest bronze `id`; the rest go to `silver_rejected`)
 
 
 
-2. MISSING VALUES (%) ? 
+2. MISSING VALUES (%)? 
 ```
 MDR_REPORT_KEY: 0.00 | DEVICE_SEQUENCE_NO: 0.00 | GENERIC_NAME: 0.02 | MANUFACTURER_D_NAME: 0.16 | DEVICE_REPORT_PRODUCT_CODE: 0.00
 ```
 **Conclusion:** Handle missing
-- GENERIC_NAME (0.02 %) **S3** and
-- MANUFACTURER_D_NAME (0.16 %) **S4**
+- GENERIC_NAME (0.02 %) and MANUFACTURER_D_NAME (0.16 %) → NULL + flag, never impute **S3** 
+
 
 
 3. JUNK MANUFAKTURER NAMES? 
@@ -91,16 +91,16 @@ MDR_REPORT_KEY: 0.00 | DEVICE_SEQUENCE_NO: 0.00 | GENERIC_NAME: 0.02 | MANUFACTU
 junk list: 1,065 | shorter than 2 chars: 15 | MPRI 34885 | UNK 537 | BD 113 | 0HP 21 | SERF 18 | . 12 | 000 5 | DSS 3 | BIOS 3 | REMI 3
 ```
 **Conclusion:**
-- Classify MPRI as junk or valid  **S5**
-- Flag rows with junk manufacturer names **S6**
+- Flag rows with junk manufacturer names **S4**  <!-- ÄNDRAT: S6 -> S4 -->
+- Classify MPRI as junk or valid → assumption **A1** (mapped to MEDTRONIC, unverified)  
 
   
 
-4. SAME COMPANY, MANY SPELLINGS (TOP 5) ? 
+4. SAME COMPANY, MANY SPELLINGS (TOP 5)? 
 ```
 OLYMPUS: 43 different spellings, 55,957 rows | MEDTRONIC: 99 different spellings, 274,262 rows | ALCON: 20 different spellings, 11,719 rows | BOSTON SCIENTIFIC: 27 different spellings, 64,829 rows | ABBOTT: 95 different spellings, 90,271 rows
 ```
-**Conclusion:** Normalize manufacturer names **S7**
+**Conclusion:** Normalize manufacturer names **S5** 
 
 
 
@@ -108,7 +108,7 @@ OLYMPUS: 43 different spellings, 55,957 rows | MEDTRONIC: 99 different spellings
 ```
 codes: 2,206 | codes with more than 1 name: 1,402
 ```
-**Conclusion:** Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE **S8**
+**Conclusion:** Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE **S6**  
 
 
 
@@ -117,6 +117,7 @@ codes: 2,206 | codes with more than 1 name: 1,402
 top 10 codes = 65.5 % of rows | top 10 manufacturers = 55.0 % of rows
 ```
 **Conclusion:** Add all 2 M rows of data for future steps
+(done: the full file runs locally, see D2) 
 
 
 #### DATA LIMITATIONS
@@ -151,32 +152,36 @@ medallion
     ├── 03a_seed_manufacturers.sql
     ├── 03b_silver.sql
     ├── 04_gold.sql
-    └── 05_pipeline.sql             
+    ├── 06_pipeline.sql
+    └── 07_verify_silver_gold.sql
 ```
 
 ### Pipeline Architecture & Data Flow
 ```
 [ Source file ] 
        │
-       ▼ (Ingestion via Python)
+       ▼ (Ingestion via Python, COPY)
 ┌─────────────────────────────────────────┐
 │ BRONZE LAYER (Raw & Immutable)          │
-│ - Append-only storage in Supabase       │
+│ - Append-only storage in local Postgres │
 │ - Tracks ingestion metadata             │
 └─────────────────────────────────────────┘
        │
        ▼ (Transformation & DQ via SQL)
 ┌───────────────────────────────────────────┐
 │ SILVER LAYER (Cleaned & Normalized)       │
-│ - Deduplication & Type Casting            │
+│ - Deduplication & Normalization           │
 │ - Junk filtering ──> [ Quarantine Table ] │
 └───────────────────────────────────────────┘
        │
-       ▼ (Aggregation & Feature Engineering)
+       ▼ (Aggregation)
 ┌─────────────────────────────────────────┐
 │ GOLD LAYER (Business & ML Ready)        │
-│ - High-performance materialized views   │
+│ - Aggregated tables + ranked views      │
 └─────────────────────────────────────────┘
+       │
+       ▼ (publish gold only)
+[ Supabase ]
        │
        ▼                   
 [ BI Dashboard ]          
@@ -193,61 +198,66 @@ medallion
 | B3 | Append-only: every parsed row is kept, unparseable rows are counted and logged, UPDATE/DELETE/TRUNCATE are blocked | `02_bronze.sql`: blocking test |
 | B4 | All values are stored as text | `test_B4_all_text` |
 | B5 | Every row has `source_file` and `inserted_at` | `02_bronze.sql`: metadata filled |
-| B6 | Ingesting the same file twice adds no rows (`UNIQUE (source_file, source_row_num)`) | `test_B6_double_run_same_count` |
+| B6 | Ingesting the same file twice adds no rows (`UNIQUE (source_file, source_row_num)`). With COPY a rerun is rejected as a whole. | `test_B6_double_run_same_count` |
 | **GKB** | **Gate: Silver runs only if B1–B6 pass** | Manual run |
 
 #### Silver
 
 | ID | Requirement | Test |
 |---|---|---|
-| S1 | Rows without a primary key value are rejected as `S1_missing_key` | `test_S1_missing_key_rejected` |
-| S2 | For duplicate keys, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `test_S2_duplicate_quarantined` |
-| S3 | Missing `generic_name` / `manufacturer` is stored as `NULL` with a flag, never imputed; missing `product_code` is rejected as `S3_missing_product_code` | `test_S3_missing_is_null_and_flagged` |
-| S4 | Junk manufacturers are flagged (`manufacturer_is_junk = TRUE`) and the row is kept | `test_S4_junk_flagged` |
-| S5 | Manufacturer names are normalized deterministically (longest keyword wins, then parent name A–Z) | `test_S5_medtronic_inc_mapped`, `test_S5_no_false_positive` |
-| S6 | Each product code has one canonical name (most common non-NULL, ties A–Z) | `test_S6_one_name_per_code` |
-| S7 | `bronze = silver + rejected`, otherwise error and rollback | `test_S7_counts_add_up` |
-| **GKS** | **Gate: Gold runs only if S7 passes. On failure: rollback and a `failed` row in `pipeline_runs`** | `test_GKS_reconciliation_failure_blocks_gold` |
+| S1 | Rows without a primary key value are rejected as `S1_missing_key` | `verify_pipeline()` S1 |
+| S2 | For duplicate keys, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `verify_pipeline()` S2 |
+| S3 | Missing `generic_name` / `manufacturer` is stored as `NULL` with a flag, never imputed; missing `product_code` is rejected as `S3_missing_product_code` | `verify_pipeline()` S3a, S3b |
+| S4 | Junk manufacturers are flagged (`manufacturer_is_junk = TRUE`) and the row is kept | `verify_pipeline()` S4 |
+| S5 | Manufacturer names are normalized deterministically (longest keyword wins, then parent name A–Z). The mapping is built over distinct raw names, not over all rows. | `verify_pipeline()` S5 |
+| S6 | Each product code has one canonical name (most common non-NULL, ties A–Z) | `verify_pipeline()` S6 |
+| S7 | `bronze = silver + rejected`, otherwise error and rollback | `verify_pipeline()` S7 |
+| **GKS** | **Gate: Gold runs only if S7 passes. On failure: rollback and a `failed` row in `pipeline_runs`** | `verify_pipeline()` G7 |
 
 #### Gold
 
 | ID | Requirement | Test |
 |---|---|---|
-| G1 | Count per `product_code` with canonical name (`MISSING NAME` if none) | `test_G1_count_per_code` |
-| G2 | Count per normalized manufacturer, excluding junk and NULL | `test_G2_junk_excluded` |
-| G3 | `sum(product_stats)` = silver rows; `sum(manufacturer_stats)` = silver rows that are not junk and not NULL | `test_G3_sums_match` |
-| G4 | `total_reports > 0` in every Gold row | `test_G4_no_zero_rows` |
-| G5 | Rank is computed in `*_ranked` views, not stored | `test_G5_rank_order` |
+| G1 | Count per `product_code` with canonical name (`MISSING NAME` if none) | `verify_pipeline()` G3a |
+| G2 | Count per normalized manufacturer, excluding junk and NULL | `verify_pipeline()` G3b |
+| G3 | `sum(product_stats)` = silver rows; `sum(manufacturer_stats)` = silver rows that are not junk and not NULL | `verify_pipeline()` G3a, G3b |
+| G4 | `total_reports > 0` in every Gold row | `verify_pipeline()` G4 |
+| G5 | Rank is computed in `*_ranked` views, not stored | `verify_pipeline()` G5 |
 | G6 | Dashboard says "Number of device entries", never "rate" | Manual check |
-| G7 | A failed Silver/Gold run is rolled back and logged in `pipeline_runs` | `test_G7_failed_run_logged` |
-| G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views and `pipeline_runs` | `test_G8_anon_cannot_read_bronze` |
-| **GKG** | **Gate: G3 and G4 must pass, otherwise rollback and the previous Gold data stays** | `test_GKG_failed_gate_keeps_old_gold` |
+| G7 | A failed Silver/Gold run is rolled back and logged in `pipeline_runs` | `verify_pipeline()` G7 |
+| G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views and `pipeline_runs` | `verify_pipeline()` G8a, G8b, G8c |
+| **GKG** | **Gate: G3 and G4 must pass, otherwise rollback and the previous Gold data stays** | Enforced in `refresh_gold()`; `verify_pipeline()` G3a, G3b, G4 |
+
+
 
 #### Deviations, assumptions and later work
 
 | ID | Type | Description |
 |---|---|---|
-| D1 | Deviation | Only 5 source columns are stored in Bronze (free-tier limit). Production would store all. |
+| D1 | Deviation | Only 5 source columns are stored in Bronze. Production would store all. |
+| D2 | Deviation | Bronze and Silver run on a local Postgres (free-tier limit on Supabase). Only Gold, `product_code_dim` and `pipeline_runs` are published to Supabase. |
 | A1 | Assumption (unverified) | MPRI is mapped to MEDTRONIC. |
 | A2 | Assumption | For duplicate keys with different content, "lowest id" is arbitrary but reproducible. |
 | L1 | Later | dbt tests, orchestration, 95 % valid-rows threshold, rebuild of `manufacturer_mapping` and `product_code_dim` inside `run_pipeline()`. |
 
 
 ### STEP 2 — CREATE TABLES 
-Run `01_create_tables.sql` in the Supabase SQL editor.
+Run `01_create_tables.sql` and `03a_seed_manufacturers.sql` in the local Postgres (create roles `anon` and `service_role` first so the GRANT/RLS lines run). Run `01_create_tables.sql` in the Supabase SQL editor too, since Gold is published there.
+
 
 
 
 ### STEP 3 — RUN BRONZE 
 ```bash
 pip install -r medallion/python/requirements.txt
-python medallion/bronze_ingest.py
+python medallion/python/bronze_ingest.py
 ```
-**Expected:** `BRONZE DONE`, `bronze_reports` is populated in Supabase.
+**Expected:** `BRONZE DONE`, `bronze_reports` is populated in the local Postgres.
+
 
 
 ### STEP 4 — RUN SILVER
-Run `03_silver.sql` in Supabase. This process cleanses, normalizes, and validates the data.
+Run `03b_silver.sql` locally. This process cleanses, normalizes, and validates the data.
 
 #### Validation Rate Metrics
 *   Tracks the percentage of healthy rows: `(silver_rows / bronze_rows) * 100`.
@@ -255,8 +265,11 @@ Run `03_silver.sql` in Supabase. This process cleanses, normalizes, and validate
 
 
 ### STEP 5 — RUN GOLD
-Run `04_gold.sql` in Supabase. Output: refresh_gold() and the two ranked views.
-Run `pipeline.sql`
+Run `04_gold.sql` locally. Output: refresh_gold() and the two ranked views.
+Run `06_pipeline.sql`, then `SELECT * FROM run_pipeline();`
+Run `07_verify_silver_gold.sql`, then `SELECT * FROM verify_pipeline() WHERE NOT passed;` (empty = healthy).
+Publish Gold (`product_stats`, `manufacturer_stats`, `product_code_dim`, `pipeline_runs`) to Supabase with `pg_dump --data-only`.
+
 
 
 
@@ -264,9 +277,8 @@ Run `pipeline.sql`
 - dbt — formalize the gatekeepers as dbt tests (not_null, unique, relationships, custom sum checks). One dbt test command instead of manual SQL checks.
 - Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
 - Star schema in Gold for ad-hoc analysis.
-- Fill with the 2 M rows 
 - AI analysis
 - Risk analysis on requirements 
 - "Which products have an unusually high share of serious events (PRR)?"
 
-Note: No GDPR since MAUDE data, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 
+Note: No GDPR since MAUDE data, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info.
