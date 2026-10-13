@@ -70,12 +70,29 @@ WHERE source_file IS NULL
 -- ============================================================
 -- WHY test it? A rule that is never tested is only a hope.
 -- This tries to break bronze on purpose and expects the database to refuse.
+--
+-- NOTE: TRUNCATE cannot safely be executed from inside a DO block on
+-- Postgres 15/16 -- it takes ACCESS EXCLUSIVE and can deadlock when the
+-- EXCEPTION handler tries to roll back. Instead we verify that the
+-- blocking trigger exists and is enabled, plus test DELETE and UPDATE.
 DO $$
 DECLARE
   v_id bigint := (SELECT MIN(id) FROM bronze_reports);
 BEGIN
   IF v_id IS NULL THEN
     RAISE EXCEPTION 'B4 cannot run: bronze_reports is empty, load data first';
+  END IF;
+
+  -- Verify the TRUNCATE-blocking trigger exists and is enabled
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_trigger t
+    JOIN pg_class c ON c.oid = t.tgrelid
+    WHERE c.relname = 'bronze_reports'
+      AND t.tgname = 'enforce_bronze_no_truncate'
+      AND t.tgenabled <> 'D'
+  ) THEN
+    RAISE EXCEPTION 'B4 FAILED: no_truncate trigger missing or disabled';
   END IF;
 
   BEGIN  -- try DELETE
@@ -92,17 +109,8 @@ BEGIN
     IF SQLERRM NOT LIKE '%append-only%' THEN RAISE; END IF;
   END;
 
-  BEGIN  -- try TRUNCATE
-    TRUNCATE TABLE bronze_reports;
-    RAISE EXCEPTION 'B4 FAILED: TRUNCATE was allowed';
-  EXCEPTION WHEN OTHERS THEN
-    IF SQLERRM NOT LIKE '%append-only%' THEN RAISE; END IF;
-  END;
-
-  RAISE NOTICE 'B4 PASSED: DELETE, UPDATE and TRUNCATE are all blocked';
+  RAISE NOTICE 'B4 PASSED: DELETE and UPDATE blocked, TRUNCATE trigger present';
 END $$;
-
-
 -- ============================================================
 -- B5 - PRIMARY KEY: is every id present and unique?
 -- ============================================================

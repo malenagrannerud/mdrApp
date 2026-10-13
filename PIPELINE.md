@@ -116,6 +116,7 @@ top 10 codes = 65.5 % of rows | top 10 manufacturers = 55.0 % of rows
 - Lack of verification that the device caused the reported event
 - Lack of information about frequency of device use
 - Nr of reports will be high where there are many products on the market, this is not risk
+
 #### 2.3 - ANALYSIS METHOD
 Aggregation + ranking, since kategorical and numerical data types
  
@@ -245,16 +246,7 @@ src
 | Result of every verification check at publish | `quality_checks` |
 | Rows per layer, % valid rows (threshold 95 %), checks passed | Dashboard: `DataQualityPanel.jsx` |
  
-#### Deviations, assumptions and later work
- 
-| ID | Type | Description |
-|---|---|---|
-| D1 | Deviation | Only 5 source columns are stored in Bronze. Production would store all. |
-| D2 | Deviation | Bronze and Silver run on a local Postgres (free-tier limit on Supabase). Only Gold, `product_code_dim`, `pipeline_runs` and `quality_checks` are published to Supabase. |
-| A1 | Assumption | MPRI is mapped to MEDTRONIC. |
-| A2 | Assumption | For duplicate keys with different content, "lowest id" is arbitrary but reproducible. |
-| L1 | Later | dbt tests, orchestration, 95 % valid-rows threshold as a hard gate (today it is shown on the dashboard), rebuild of `manufacturer_mapping` and `product_code_dim` inside `run_pipeline()`. |
- 
+
  
 ### STEP 2 — SET UP THE DATABASES
 Local Postgres (docker or apt), then:
@@ -263,9 +255,9 @@ cp medallion/.env.example medallion/.env      # fill in LOCAL_DATABASE_URL and S
 pip install -r medallion/python/requirements.txt
 medallion/scripts/db_setup.sh $LOCAL_URL      # roles anon/service_role, 01, 03a, 08
 ```
+
 Supabase: run `01_create_tables.sql`, `08_quality_checks.sql` and `04_gold.sql` once in the SQL editor (04 creates the ranked views the dashboard reads).
 Use the Supabase **Session pooler** connection string.
- 
  
  
 ### STEP 3 — RUN BRONZE 
@@ -290,6 +282,8 @@ Runs `02_bronze.sql` (GKB), `03b_silver.sql`, `04_gold.sql`, `06_pipeline.sql`, 
 #### Validation Rate Metrics
 *   Tracks the percentage of healthy rows: `(silver_rows / bronze_rows) * 100`.
 *   An alert threshold is set at `< 95%` to catch sudden upstream API changes or corrupted source files. Shown on the dashboard.
+
+
 ### STEP 5 — PUBLISH GOLD
 ```bash
 python medallion/python/publish_gold.py
@@ -298,15 +292,15 @@ python medallion/python/publish_gold.py
  
 ### STEP 6 — DASHBOARD
 Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (root `.env` and Vercel). The Data quality panel and the two charts read from Supabase.
- 
- 
+
  
 ## FUTURE STEPS 
 - dbt — formalize the gatekeepers as dbt tests (not_null, unique, relationships, custom sum checks). One dbt test command instead of manual SQL checks.
 - Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
 - Star schema in Gold for ad-hoc analysis.
 - AI analysis
-- Risk analysis on requirements 
 - "Which products have an unusually high share of serious events (PRR)?"
+
+
 Note: No GDPR since MAUDE data, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 
  

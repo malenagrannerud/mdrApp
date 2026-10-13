@@ -123,13 +123,9 @@ export default function Dashboard() {
     <div className="p-6 bg-gray-50 min-h-screen font-sans">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">PMS Dashboard</h1>
-       // <DataQualityPanel />
-        {lastRun && (
-          <p className="text-sm text-gray-500 mt-1">
-            Last run: {new Date(lastRun.started_at).toLocaleString('sv-SE')} ·{' '}
-            {fmt(lastRun.rows_silver)} rows in silver
-          </p>
-        )}
+        <DataQualityPanel />
+       
+    
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
