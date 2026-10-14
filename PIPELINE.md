@@ -60,45 +60,46 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```bash 
 python medallion/analysis/eda_device.py
 ```
- 
-2.2.1 WHAT IS A ROW?  
-```
-rows: 2,629,410 | unique MDR_REPORT_KEY: 2,627,121 | duplicated (MDR_REPORT_KEY, DEVICE_SEQUENCE_NO): 33 | duplicated (one row): 31 
-```
-**Conclusion:** 
-- S1: Primary key is `MDR_REPORT_KEY, DEVICE_SEQUENCE_NO` — unique in 99.999 % of rows.
-- S2: Duplicates - Keep the lowest bronze `id`; the rest go to a quaranteen table
 
-2.2.2 MISSING VALUES 
-```
-MDR_REPORT_KEY: 0.00% | DEVICE_SEQUENCE_NO: 0.00% | GENERIC_NAME: 0.02% | MANUFACTURER_D_NAME: 0.16% | DEVICE_REPORT_PRODUCT_CODE: 0.00%
-```
-**Conclusion:** 
-S3: Handle missing GENERIC_NAME and MANUFACTURER_D_NAME. 
+SUMMARY (for details, see medallion/analysis/eda_device.txt )
 
+```
+ === 1. Duplicates on primary key ===
+rows: 2,629,410
+unique MDR_REPORT_KEY: 2,627,121
+unique DEVICE_SEQUENCE_NO: 2,629,373
+duplicated (MDR_REPORT_KEY, DEVICE_SEQUENCE_NO): 33
+duplicated (the whole row): 31
+```
+```
+=== 2. Missing values (%) ===
+MDR_REPORT_KEY: 0.00 | DEVICE_SEQUENCE_NO: 0.00 | GENERIC_NAME: 0.02 | MANUFACTURER_D_NAME: 0.16 | DEVICE_REPORT_PRODUCT_CODE: 0.00
+```
+```
+=== 3. Junk MANUFACTURER_D_NAME = ===
+junk list: 1,065 | shorter than 2 chars: 15
 
-2.2.3 JUNK MANUFACTURER_NAMES COUNT
+Short MANUFACTURER_D_NAME 
+MPRI: 34885 | UNK: 537 | BD: 113 | 0HP: 21 | SERF: 18 | .: 12 | 000: 5 | DSS: 3 | BIOS: 3
 ```
-junk list:1,065 | MPRI: 34885 | UNK: 537 | BD: 113 | 0HP: 21 | SERF: 18 | >2 chars: 15 | .: 12 | 000: 5 |
 ```
-**Conclusion:**
-- S4: Flag rows with junk manufacturer names 
-- S5: Mapp MPRI to MEDTRONIC
-  
-2.2.4 SAME COMPANY, MANY SPELLINGS (TOP 5) ? 
+=== 4. Variants of MANUFACTURER_D_NAME ===
+OLYMPUS: 43 spellings, 55,957 rows
+MEDTRONIC: 99 spellings, 274,262 rows
+ALCON: 20 spellings, 11,719 rows
+BOSTON SCIENTIFIC: 27 spellings, 64,829 rows
+ABBOTT: 95 spellings, 90,271 rows
 ```
-OLYMPUS: 43 different spellings, 55,957 rows | MEDTRONIC: 99 different spellings, 274,262 rows | ALCON: 20 different spellings, 11,719 rows | BOSTON SCIENTIFIC: 27 different spellings, 64,829 rows | ABBOTT: 95 different spellings, 90,271 rows
 ```
-**Conclusion:** 
-S5: Normalize manufacturer names 
- 
-2.2.5 ONE PRODUCT CODE, SEVERAL NAMES? 
-```
+=== 5. One PRODUCT_CODE, several GENERIC_NAMES? ===
 codes: 2,206 | codes with more than 1 name: 1,402
 ```
-**Conclusion** 
-S6: Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE 
- 
+```
+=== 6. Concentration of PRODUCT_CODE'S (COUNTS) ===
+DZE: 697107 | QBJ: 347156 | QFG: 273207 | OZP: 129596 | BZD: 68264 | FRN: 57739
+top 30 codes = 77.7% of rows
+top 20 manufacturers = 68.3% of rows
+```
 
 #### DATA LIMITATIONS
 - Under-reporting of events
@@ -106,6 +107,7 @@ S6: Build canonical product name — product_code_dim with the most common GENER
 - Lack of verification that the device caused the reported event
 - Lack of information about frequency of device use
 - Nr of reports will be high where there are many products on the market, this is not risk
+
 
 #### 2.3 - ANALYSIS METHOD
 Aggregation + ranking, since categorical and numerical data types
@@ -170,9 +172,9 @@ src
 │ - Aggregated tables + ranked views      │
 └─────────────────────────────────────────┘
        │
-       ▼ (verify_pipeline(): all checks pass? GKD)
-       ▼ (publish_gold.py: gold only, reconciled, one transaction)
-[ Supabase ]  ← also receives quality_checks (snapshot of verify_pipeline)
+       ▼ 
+     
+[ Supabase ]  
        │
        ▼                   
 [ BI Dashboard + Data quality panel ]          
@@ -184,40 +186,38 @@ src
  
 | ID | Requirement | Test |
 |---|---|---|
-| B1 | File is read as pipe-delimited, `latin-1`, `QUOTE_NONE` | `test_B1_latin1_names` |
-| B2 | The 5 mapped source columns are kept unchanged. A changed source header fails loudly. | `test_B2_only_mapped_columns_are_stored`, `test_B2_empty_value_stays_null`, `test_B2_missing_source_column_fails_loudly`, `02_bronze.sql`: columns filled |
-| B3 | Append-only: every parsed row is kept, unparseable rows are counted and logged, UPDATE/DELETE/TRUNCATE are blocked | `test_B3_every_parsed_row_is_kept`, `test_B3_bad_lines_are_counted_and_logged`, `02_bronze.sql`: blocking test |
-| B4 | All values are stored as text. Empty field becomes `NULL` and `N/A` stay as text. | `test_B4_all_text`, `test_B4_junk_markers_are_not_turned_into_null` |
+| B1 | Pipe-delimited reading, `latin-1`, `QUOTE_NONE` | `test_B1_latin1_names` |
+| B2 | Five headers are unchanged. A changed header fails loudly. | `test_B2_only_mapped_columns_are_stored`, `test_B2_empty_value_stays_null`, `test_B2_missing_source_column_fails_loudly`, `02_bronze.sql`: columns filled |
+| B3 | Append-only: parsed rows are kept, unparseable rows are counted and logged, UPDATE/DELETE/TRUNCATE are blocked | `test_B3_every_parsed_row_is_kept`, `test_B3_bad_lines_are_counted_and_logged`, `02_bronze.sql`: blocking test |
+| B4 | Values are stored as text. Empty field becomes `NULL` and `N/A` stay as text. | `test_B4_all_text`, `test_B4_junk_markers_are_not_turned_into_null` |
 | B5 | Every row has `source_file`, `source_row_num` and `inserted_at` | `test_B5_metadata_and_row_numbers`, `02_bronze.sql`: metadata filled |
 | B6 | A rerun is detected, logged and adds nothing; and `UNIQUE (source_file, source_row_num)` is the backstop. | `test_B6_double_run_same_count` |
-| **GKB** | **Gate keeper: Silver runs only if B1–B6 pass** | `db_run.sh` runs `02_bronze.sql` first and stops on error |
+| **GKB** | Gate keeper: Silver runs only if B1–B6 pass | `db_run.sh` runs `02_bronze.sql` first and stops on error |
  
 #### Silver
  
 | ID | Requirement | Test |
 |---|---|---|
 | S1 | Rows without a PK are rejected as `S1_missing_key` | `verify_pipeline()` |
-| S2 | For duplicate keys, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `verify_pipeline()` |
+| S2 | For duplicate PK, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `verify_pipeline()` |
 | S3 | Missing `generic_name` / `manufacturer` is stored as `NULL` with a flag, never imputed; missing `product_code` is rejected as `S3_missing_product_code` | `verify_pipeline()` |
-| S4 | Junk manufacturers are flagged (`manufacturer_is_junk = TRUE`) and the row is kept | `verify_pipeline()` S4 |
-| S5 | Manufacturer names are normalized deterministically (longest keyword wins, then parent name A–Z). The mapping is built over distinct raw names, not over all rows. | `verify_pipeline()` S5 |
-| S6 | Each product code has one canonical name (most common non-NULL, ties A–Z) | `verify_pipeline()` S6 |
-| S7 | `bronze = silver + rejected`, otherwise error and rollback | `verify_pipeline()` S7 |
-| **GKS** | **Gate: Gold runs only if S7 passes. On failure: rollback and a `failed` row in `pipeline_runs`** | `verify_pipeline()` G7 |
+| S4 | Junk manufacturers are flagged (`manufacturer_is_junk = TRUE`) and the row is kept | `verify_pipeline()`|
+| S5 | Manufacturer names are normalized deterministically (longest keyword wins, then parent name A–Z). The mapping is built over distinct raw names, not over all rows. | `verify_pipeline()` |
+| S6 | Each product code has one canonical name (most common non-NULL, ties A–Z) | `verify_pipeline()` |
+| **GKS** | Gate keeper: `bronze = silver + rejected`, otherwise error and rollback | `verify_pipeline()` |
+
  
 #### Gold
  
 | ID | Requirement | Test |
 |---|---|---|
-| G1 | Count per `product_code` with canonical name (`MISSING NAME` if none) | `verify_pipeline()` G3a |
-| G2 | Count per normalized manufacturer, excluding junk and NULL | `verify_pipeline()` G3b |
-| G3 | `sum(product_stats)` = silver rows; `sum(manufacturer_stats)` = silver rows that are not junk and not NULL | `verify_pipeline()` G3a, G3b |
-| G4 | `total_reports > 0` in every Gold row | `verify_pipeline()` G4 |
-| G5 | Rank is computed in `*_ranked` views, not stored | `verify_pipeline()` G5 |
-| G6 | Dashboard says "Number of device entries", never "rate" | Manual check |
-| G7 | A failed Silver/Gold run is rolled back and logged in `pipeline_runs` | `verify_pipeline()` G7 |
-| G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views, `pipeline_runs` and `quality_checks` | `verify_pipeline()` G8a, G8b, G8c |
-| **GKG** | **Gate: G3 and G4 must pass, otherwise rollback and the previous Gold data stays** | Enforced in `refresh_gold()`; `verify_pipeline()` G3a, G3b, G4 |
+| G1 | Count per `product_code` with canonical name (`MISSING NAME` if none) | `verify_pipeline()` |
+| G2 | Count per normalized manufacturer, excluding junk and NULL | `verify_pipeline()` |
+| G5 | Rank is computed in `*_ranked` views, not stored | `verify_pipeline()` |
+| G7 | A failed Silver/Gold run is rolled back and logged in `pipeline_runs` | `verify_pipeline()` |
+| G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views, `pipeline_runs` and `quality_checks` | `verify_pipeline()` |
+| **GKG** | `sum(product_stats)`=silver rows; `sum(manufacturer_stats)`=silver rows that are not junk and not NULL.`verify_pipeline()`. `total_reports > 0` in every Gold row. Else rollback and the previous Gold data stays  | Enforced in `refresh_gold()`; `verify_pipeline()` |
+ 
  
 #### Observability
 | ID | Requirement | Test |
@@ -233,7 +233,7 @@ Local Postgres (docker or apt), then:
 ```bash
 cp medallion/.env.example medallion/.env      # fill in LOCAL_DATABASE_URL and SUPABASE_DB_URL
 pip install -r medallion/python/requirements.txt
-medallion/scripts/db_setup.sh $LOCAL_URL      # roles anon/service_role, 01, 03a, 08
+medallion/scripts/db_setup.sh $LOCAL_URL      # roles anon/service_role
 ```
 
 Supabase: run `01_create_tables.sql`, `08_quality_checks.sql` and `04_gold.sql` once in the SQL editor (04 creates the ranked views the dashboard reads).
