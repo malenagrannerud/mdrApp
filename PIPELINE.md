@@ -150,34 +150,32 @@ src
  
 ### Pipeline Architecture & Data Flow
 ```
-[ Source file ] 
-       │
-       ▼ (bronze_ingest.py)
-┌─────────────────────────────────────────┐
-│ BRONZE LAYER (Raw & Immutable)          │
-│ - Append-only storage in local Postgres │
-│ - Tracks ingestion metadata             │
-└─────────────────────────────────────────┘
-       │
-       ▼ (Transformation & DQ via SQL)
-┌───────────────────────────────────────────┐
-│ SILVER LAYER (Cleaned & Normalized)       │
-│ - Deduplication & Normalization           │
-│ - Junk filtering ──> [ Quarantine Table ] │
-└───────────────────────────────────────────┘
-       │
-       ▼ (Aggregation)
-┌─────────────────────────────────────────┐
-│ GOLD LAYER (Business & ML Ready)        │
-│ - Aggregated tables + ranked views      │
-└─────────────────────────────────────────┘
-       │
-       ▼ 
-     
-[ Supabase ]  
-       │
-       ▼                   
-[ BI Dashboard + Data quality panel ]          
+ DEVICE2024.txt
+      │  bronze_ingest.py
+      ▼
+ ┌────────────┐
+ │  BRONZE    │  raw, append-only
+ └─────┬──────┘
+       │  Gate keeper tests before SILVER
+       ▼
+ ┌────────────┐   
+ │  SILVER    │──────────────► silver_rejected 
+ └─────┬──────┘
+       │  Gate keeper tests before GOLD (S7 reconciliation, silver not empty)
+       ▼
+ ┌────────────┐
+ │  GOLD      │  product_stats, manufacturer_stats, ranked views
+ └─────┬──────┘
+       │  GKG  (G3 reconciliation, G4 sanity)
+       ▼
+   run_pipeline() logs the run in pipeline_runs
+       │  GKD  (every verify_pipeline() check passed)
+       ▼  publish_gold.py
+ ┌────────────┐
+ │  SUPABASE  │  gold only
+ └─────┬──────┘
+       ▼
+  Dashboard + Data quality panel      
 ```
  
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  
@@ -229,56 +227,22 @@ src
  
 
 ### STEP 2 — SET UP THE DATABASES
-Local Postgres (docker or apt), then:
-```bash
-cp medallion/.env.example medallion/.env      # fill in LOCAL_DATABASE_URL and SUPABASE_DB_URL
-pip install -r medallion/python/requirements.txt
-medallion/scripts/db_setup.sh $LOCAL_URL      # roles anon/service_role
-```
+cp .env.example .env                 # fill in the values
+pip install -r python/requirements.txt
+pytest python                        # tests, no database needed
 
-Supabase: run `01_create_tables.sql`, `08_quality_checks.sql` and `04_gold.sql` once in the SQL editor (04 creates the ranked views the dashboard reads).
-Use the Supabase **Session pooler** connection string.
- 
- 
-### STEP 3 — RUN BRONZE 
-Trial first, in a throwaway database:
-```bash
-LOCAL_DATABASE_URL=$PG/trial python medallion/python/bronze_ingest.py --limit 200000
-```
-Then the full file:
-```bash
-nohup python medallion/python/bronze_ingest.py > ingest.log 2>&1 &
-tail -f ingest.log
-```
-**Expected:** `BRONZE DONE`, `bronze_reports` is populated in the local Postgres.
- 
- 
-### STEP 4 — RUN SILVER AND GOLD
-```bash
-medallion/scripts/db_run.sh $LOCAL_URL
-```
-Runs `02_bronze.sql` (GKB), `03b_silver.sql`, `04_gold.sql`, `06_pipeline.sql`, `07_verify_silver_gold.sql`, then `run_pipeline()` and `verify_pipeline()`. Exit code 1 if any check fails.
- 
-#### Validation Rate Metrics
-*   Tracks the percentage of healthy rows: `(silver_rows / bronze_rows) * 100`.
-*   An alert threshold is set at `< 95%` to catch sudden upstream API changes or corrupted source files. Shown on the dashboard.
+scripts/setup.sh $LOCAL_URL          # runs sql 01, 02
+python python/ingest.py              # bronze
+scripts/run.sh $LOCAL_URL            # runs sql 03 to 06: gates, silver, gold, checks
+python python/publish.py             # to Supabase
 
-
-### STEP 5 — PUBLISH GOLD
-```bash
-python medallion/python/publish_gold.py
-```
-**Expected:** `GKD passed`, one `published table=...` line per table, `PUBLISH DONE`.
- 
-### STEP 6 — DASHBOARD
-Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (root `.env` and Vercel). The Data quality panel and the two charts read from Supabase.
+cd dashboard && npm install && npm run dev
 
  
 ## FUTURE STEPS 
-- dbt — formalize the gatekeepers as dbt tests (not_null, unique, relationships, custom sum checks). One dbt test command instead of manual SQL checks.
-- Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
+- dbt: turn the gates into dbt tests. GKB: not_null, unique, row count. GKS: unique_combination_of_columns, not_null(product_code), accepted_values(rejection_reason), S7 and S4 as singular tests. GKG: G3 and G4 as singular tests. dbt build skips everything downstream of a failed test, which is what a gate should do.
+- CI job with a Postgres service container, a small fixture and negative tests.
+- Silver: join mdrfoi and patient files to add severity (death, injury, malfunction).
 - "Which products have an unusually high share of serious events (PRR)?"
 
-
-Note: No GDPR since MAUDE data, else use encode(digest(column_name, 'sha256'), 'hex') etc to remove sensitive info. 
- 
+Note: MAUDE data is public and contains no personal data. For other sources, hash sensitive columns, e.g. encode(digest(col, 'sha256'), 'hex').

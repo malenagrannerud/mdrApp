@@ -30,20 +30,11 @@ Maps the core requirements of ISO 13485:2016 into a step-by-step implementation 
 ### Dashboard — Post-Market Surveillance
 ![Post-market surveillance dashboard showing top reported products](./screenshots/dashboard.png)
 
-A live dashboard built on a custom-engineered data pipeline (see [PIPELINE.md](./PIPELINE.md)) processing FDA MAUDE adverse event data — the kind of dataset manufacturers use to monitor their own products' safety trends over time.
-
----
-## Tech stack
-| Layer | Tools |
-|---|---|
-| Frontend | React |
-| Data pipeline | Python, SQL |
-| Database | PostgreSQL (Supabase) |
-| Deployment | Vercel |
+A live dashboard built on a custom-engineered data pipeline (see [PIPELINE.md](./PIPELINE.md)) 
 
 
----
-## Running it locally
+
+## Running the app locally
 ```bash
 npm install
 npm run dev
