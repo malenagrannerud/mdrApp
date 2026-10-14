@@ -55,7 +55,7 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
  
  
-#### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER REQUIREMENTS FOR SILVER 
+#### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER REQUIREMENTS
  
 ```bash 
 python medallion/analysis/eda_device.py
@@ -218,7 +218,7 @@ src
 | G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views, `pipeline_runs` and `quality_checks` | `verify_pipeline()` |
 | **GKG** | `sum(product_stats)`=silver rows; `sum(manufacturer_stats)`=silver rows that are not junk and not NULL.`verify_pipeline()`. `total_reports > 0` in every Gold row. Else rollback and the previous Gold data stays  | Enforced in `refresh_gold()`; `verify_pipeline()` |
  
- 
+
 #### Observability
 | ID | Requirement | Test |
 |---|---|---|
@@ -277,8 +277,6 @@ Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (root `.env` and Vercel). T
 ## FUTURE STEPS 
 - dbt — formalize the gatekeepers as dbt tests (not_null, unique, relationships, custom sum checks). One dbt test command instead of manual SQL checks.
 - Silver: enrich with mdrfoi.txt and patient.txt via JOIN — adds severity per report (death / injury / malfunction).
-- Star schema in Gold for ad-hoc analysis.
-- AI analysis
 - "Which products have an unusually high share of serious events (PRR)?"
 
 
