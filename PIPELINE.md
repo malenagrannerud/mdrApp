@@ -119,29 +119,36 @@ Aggregation + ranking, since categorical and numerical data types
 ```
              
 
-medallion
-├── supabase.js
-├── data
-│   └── DEVICE2024.txt
-├── analysis
-│   └── eda_device.py
-├── python
-│   ├── bronze_ingest.py
-│   ├── publish_gold.py
-│   ├── test_bronze_ingest.py
-│   └── requirements.txt
-├── scripts
-│   ├── db_setup.sh
-│   └── db_run.sh
-└── sql
-    ├── 01_create_tables.sql
-    ├── 02_bronze.sql
-    ├── 03a_seed_manufacturers.sql
-    ├── 03b_silver.sql
-    ├── 04_gold.sql
-    ├── 06_pipeline.sql
-    ├── 07_verify_silver_gold.sql
-    └── 08_quality_checks.sql
+
+├── .github
+│   └── workflows
+│       └── ci.yml
+├── medallion
+│   ├── analysis
+│   │   ├── eda_device.py
+│   │   └── eda_device_output.txt
+│   ├── data
+│   │   └── DEVICE2024.txt
+│   ├── python
+│   │   ├── .bronze_ingest.py.swp
+│   │   ├── bronze_ingest.py
+│   │   ├── publish_gold.py
+│   │   ├── requirements.txt
+│   │   └── test_bronze_ingest.py
+│   ├── scripts
+│   │   ├── db_run.sh
+│   │   └── db_setup.sh
+│   ├── sql
+│   │   ├── 01_create_tables.sql
+│   │   ├── 02_bronze.sql
+│   │   ├── 03a_seed_manufacturers.sql
+│   │   ├── 03b_silver.sql
+│   │   ├── 04_gold.sql
+│   │   ├── 06_pipeline.sql
+│   │   ├── 07_verify_silver_gold.sql
+│   │   └── 08_quality_checks.sql
+│   ├── .env
+│   └── supabase.js
 src
 └── components
     ├── Dashboard.jsx
