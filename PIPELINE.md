@@ -117,9 +117,9 @@ Aggregation + ranking, since categorical and numerical data types
 ## II - STEPS IN CONDUCTING THE PIPELINE
 ### FILE STRUCTURE
 ```
-.env.example                      (frontend: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)
+             
+
 medallion
-├── .env.example                  (pipeline: LOCAL_DATABASE_URL, SUPABASE_DB_URL)
 ├── supabase.js
 ├── data
 │   └── DEVICE2024.txt
