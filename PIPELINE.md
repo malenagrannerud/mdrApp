@@ -1,5 +1,6 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 This document covers the process behind the [Aegis Compliance](./README.md) dashboard. 
+**Live demo:** [mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
  
 ![Post-market surveillance dashboard](./screenshots/dashboard.png)
  
@@ -184,23 +185,22 @@ Aggregation + ranking, since categorical and numerical data types
  
 
 ### STEP 2 — RUN THE PIPELINE
-cp .env.example .env                 # fill in the values
-pip install -r python/requirements.txt
-pytest python                        # tests, no database needed
+```bash
+# medallion/.env needs LOCAL_DATABASE_URL and SUPABASE_DB_URL
+set -a && source medallion/.env && set +a
+pip install -r medallion/python/requirements.txt
+pytest medallion/python                                     # no database needed
 
-scripts/setup.sh $LOCAL_URL          # runs sql 01, 02
-python python/ingest.py              # bronze
-scripts/run.sh $LOCAL_URL            # runs sql 03 to 06: gates, silver, gold, checks
-python python/publish.py             # to Supabase
+medallion/scripts/db_setup.sh "$LOCAL_DATABASE_URL"         # sql 01, 03a, 08
+python medallion/python/bronze_ingest.py                    # bronze
+medallion/scripts/db_run.sh "$LOCAL_DATABASE_URL"           # sql 02, 03b, 04, 06, 07 + verify
+python medallion/python/publish_gold.py                     # gold to Supabase
 
-cd dashboard && npm install && npm run dev
-
-
-
+npm install && npm run dev                                  # dashboard
+```
 
 ### FILE STRUCTURE
 ```
-
 ├── .github
 │   └── workflows
 │       └── ci.yml
@@ -211,7 +211,6 @@ cd dashboard && npm install && npm run dev
 │   ├── data
 │   │   └── DEVICE2024.txt
 │   ├── python
-│   │   ├── .bronze_ingest.py.swp
 │   │   ├── bronze_ingest.py
 │   │   ├── publish_gold.py
 │   │   ├── requirements.txt
@@ -228,7 +227,6 @@ cd dashboard && npm install && npm run dev
 │   │   ├── 06_pipeline.sql
 │   │   ├── 07_verify_silver_gold.sql
 │   │   └── 08_quality_checks.sql
-│   ├── .env
 │   └── supabase.js
 src
 └── components
@@ -237,7 +235,7 @@ src
 ```
  
 ## FUTURE STEPS 
-- dbt: turn the gates into dbt tests. GKB: not_null, unique, row count. GKS: unique_combination_of_columns, not_null(product_code), accepted_values(rejection_reason), S7 and S4 as singular tests. GKG: G3 and G4 as singular tests. dbt build skips everything downstream of a failed test, which is what a gate should do.
+- dbt: turn the gates into dbt tests. 
 - CI job with a Postgres service container, a small fixture and negative tests.
 - Silver: join mdrfoi and patient files to add severity (death, injury, malfunction).
 - "Which products have an unusually high share of serious events (PRR)?"
