@@ -3,12 +3,12 @@ This document covers the process behind the [Aegis Compliance](./README.md) dash
  
 ![Post-market surveillance dashboard](./screenshots/dashboard.png)
  
- 
-It contains 
+This documentation contains 
 - I - STEPS IN CONDUCTING THE ANALYSIS &
 - II - STEPS IN CONDUCTING THE PIPELINE
+
+  
 ## I - STEPS IN CONDUCTING THE ANALYSIS
- 
 ### STEP 1 - DEFINE THE RESEARCH QUESTION 
 The purpose is to answer
 | #  | Question | 
@@ -16,22 +16,21 @@ The purpose is to answer
 | Q1 | Which products have the most device reports in 2024? |
 | Q2 | Which manufacturers have the most device reports in 2024? |
  
-to help teams to detect what to focus on for a product. 
  
  
-### STEP 2 - EXPLORE AVAILABLE FILES & STRUCTURE FROM THE DATABASE 
+### STEP 2 - EXPLORE AVAILABLE FILES FROM THE DATABASE 
 See [FDA's MAUDE database](https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download)
  
-| File | Description | 
+| Available Files | Description | 
 |---|---|
-| mdrfoi*.zip | Master data-file: Summary of all data files, event types, reporter |
-| patientthru*.zip | Patient data-file: Information related to the patient(s) involved |
-| foitext*.zip | Text data-file: Textual information from MEDWATCH |
-| device*.txt | Device data-file: Information related to the device(s) involved |
+| mdrfoi*.zip | Master data: Summary of all data files, event types, reporters |
+| patientthru*.zip | Patient data: Information related to the patient(s) involved |
+| foitext*.zip | Text data: Textual information from MEDWATCH |
+| device*.txt | Device data: Information related to the device(s) involved |
  
-All are string format, pipeline delimited
+All are strings and pipeline delimited. Device data will be used in this analysis. 
  
-#### 2.1 EXPLORE TARGET FILE TO SELECT DATA FIELDS 
+#### 2.1 EXPLORE THE TARGET FILE TO SELECT DATA FIELDS 
  
 2.1.1 DOWNLOAD THE RAW FILE
 ```bash
@@ -47,7 +46,7 @@ cd ../..
 head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 ```
  
-| Column | Role | 
+| Column Headers | Description | 
 |---|---|
 | `MDR_REPORT_KEY` | Links this file to other MAUDE files. Can be duplicated.| 
 | `DEVICE_SEQUENCE_NO`| Unique per unit in a report|
@@ -56,57 +55,51 @@ head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
  
  
-#### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER DATA QUALITY REQUIREMENTS FOR SILVER 
-This EDA is on the file, 2.6 M rows. 
+#### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER REQUIREMENTS FOR SILVER 
  
 ```bash 
 python medallion/analysis/eda_device.py
 ```
  
-1. WHAT IS A ROW?  
+2.2.1 WHAT IS A ROW?  
 ```
 rows: 2,629,410 | unique MDR_REPORT_KEY: 2,627,121 | duplicated (MDR_REPORT_KEY, DEVICE_SEQUENCE_NO): 33 | duplicated (one row): 31 
 ```
-**Conclusion:**
-- PK is `MDR_REPORT_KEY, DEVICE_SEQUENCE_NO` — 33 duplicate PKs found, unique in 99.999 % of rows → **S1**
-- 31 of those are exact duplicates → **S2** Duplicates are quarantined, not deleted
-  (kept row = lowest bronze `id`; the rest go to `silver_rejected`)
+**Conclusion:** 
+- S1: Primary key is `MDR_REPORT_KEY, DEVICE_SEQUENCE_NO` — unique in 99.999 % of rows.
+- S2: Duplicates - Keep the lowest bronze `id`; the rest go to a quaranteen table
 
-
-2. MISSING VALUES (%) ? 
+2.2.2 MISSING VALUES 
 ```
-MDR_REPORT_KEY: 0.00 | DEVICE_SEQUENCE_NO: 0.00 | GENERIC_NAME: 0.02 | MANUFACTURER_D_NAME: 0.16 | DEVICE_REPORT_PRODUCT_CODE: 0.00
+MDR_REPORT_KEY: 0.00% | DEVICE_SEQUENCE_NO: 0.00% | GENERIC_NAME: 0.02% | MANUFACTURER_D_NAME: 0.16% | DEVICE_REPORT_PRODUCT_CODE: 0.00%
 ```
-**Conclusion:** Handle missing
-- GENERIC_NAME (0.02 %) and MANUFACTURER_D_NAME (0.16 %) → NULL + flag, never impute **S3**
+**Conclusion:** 
+S3: Handle missing GENERIC_NAME and MANUFACTURER_D_NAME. 
 
 
-3. JUNK MANUFAKTURER NAMES? 
+2.2.3 JUNK MANUFACTURER_NAMES COUNT
 ```
-junk list: 1,065 | shorter than 2 chars: 15 | MPRI 34885 | UNK 537 | BD 113 | 0HP 21 | SERF 18 | . 12 | 000 5 | DSS 3 | BIOS 3 | REMI 3
+junk list:1,065 | MPRI: 34885 | UNK: 537 | BD: 113 | 0HP: 21 | SERF: 18 | >2 chars: 15 | .: 12 | 000: 5 |
 ```
 **Conclusion:**
-- Flag rows with junk manufacturer names **S4**
-- MPRI is mapped to MEDTRONIC
-- Junk markers such as `N/A`, `NA` and `NONE` must reach silver as text, not as NULL → **B4**
+- S4: Flag rows with junk manufacturer names 
+- S5: Mapp MPRI to MEDTRONIC
   
-4. SAME COMPANY, MANY SPELLINGS (TOP 5) ? 
+2.2.4 SAME COMPANY, MANY SPELLINGS (TOP 5) ? 
 ```
 OLYMPUS: 43 different spellings, 55,957 rows | MEDTRONIC: 99 different spellings, 274,262 rows | ALCON: 20 different spellings, 11,719 rows | BOSTON SCIENTIFIC: 27 different spellings, 64,829 rows | ABBOTT: 95 different spellings, 90,271 rows
 ```
-**Conclusion:** Normalize manufacturer names **S5**
+**Conclusion:** 
+S5: Normalize manufacturer names 
  
- 
- 
-5. ONE PRODUCT CODE, SEVERAL NAMES? 
+2.2.5 ONE PRODUCT CODE, SEVERAL NAMES? 
 ```
 codes: 2,206 | codes with more than 1 name: 1,402
 ```
-**Conclusion:** Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE **S6**
+**Conclusion** 
+S6: Build canonical product name — product_code_dim with the most common GENERIC_NAME per DEVICE_REPORT_PRODUCT_CODE 
  
 
- 
- 
 #### DATA LIMITATIONS
 - Under-reporting of events
 - Inaccuracies in reports
@@ -115,7 +108,7 @@ codes: 2,206 | codes with more than 1 name: 1,402
 - Nr of reports will be high where there are many products on the market, this is not risk
 
 #### 2.3 - ANALYSIS METHOD
-Aggregation + ranking, since kategorical and numerical data types
+Aggregation + ranking, since categorical and numerical data types
  
  
  
@@ -157,7 +150,7 @@ src
 ```
 [ Source file ] 
        │
-       ▼ (bronze_ingest.py, COPY, one transaction)
+       ▼ (bronze_ingest.py)
 ┌─────────────────────────────────────────┐
 │ BRONZE LAYER (Raw & Immutable)          │
 │ - Append-only storage in local Postgres │
@@ -185,27 +178,27 @@ src
 [ BI Dashboard + Data quality panel ]          
 ```
  
-### STEP 1 - REQUIREMENTS ON EACH LAYER FOR TRACEABILITY 
+### STEP 1 - REQUIREMENTS ON EACH LAYER  
  
 #### Bronze
  
 | ID | Requirement | Test |
 |---|---|---|
 | B1 | File is read as pipe-delimited, `latin-1`, `QUOTE_NONE` | `test_B1_latin1_names` |
-| B2 | Source columns are stored unchanged (see D1). Only the 5 mapped columns are kept. A changed source header fails loudly. | `test_B2_only_mapped_columns_are_stored`, `test_B2_empty_value_stays_null`, `test_B2_missing_source_column_fails_loudly`, `02_bronze.sql`: columns filled |
+| B2 | The 5 mapped source columns are kept unchanged. A changed source header fails loudly. | `test_B2_only_mapped_columns_are_stored`, `test_B2_empty_value_stays_null`, `test_B2_missing_source_column_fails_loudly`, `02_bronze.sql`: columns filled |
 | B3 | Append-only: every parsed row is kept, unparseable rows are counted and logged, UPDATE/DELETE/TRUNCATE are blocked | `test_B3_every_parsed_row_is_kept`, `test_B3_bad_lines_are_counted_and_logged`, `02_bronze.sql`: blocking test |
-| B4 | All values are stored as text. Only an empty field becomes NULL; junk values such as `N/A` stay as text. | `test_B4_all_text`, `test_B4_junk_markers_are_not_turned_into_null` |
+| B4 | All values are stored as text. Empty field becomes `NULL` and `N/A` stay as text. | `test_B4_all_text`, `test_B4_junk_markers_are_not_turned_into_null` |
 | B5 | Every row has `source_file`, `source_row_num` and `inserted_at` | `test_B5_metadata_and_row_numbers`, `02_bronze.sql`: metadata filled |
-| B6 | Ingesting the same file twice adds no rows. A rerun is detected, logged and adds nothing; the whole load is one transaction, and `UNIQUE (source_file, source_row_num)` is the backstop. | `test_B6_double_run_same_count` |
-| **GKB** | **Gate: Silver runs only if B1–B6 pass** | `db_run.sh` runs `02_bronze.sql` first and stops on error |
+| B6 | A rerun is detected, logged and adds nothing; and `UNIQUE (source_file, source_row_num)` is the backstop. | `test_B6_double_run_same_count` |
+| **GKB** | **Gate keeper: Silver runs only if B1–B6 pass** | `db_run.sh` runs `02_bronze.sql` first and stops on error |
  
 #### Silver
  
 | ID | Requirement | Test |
 |---|---|---|
-| S1 | Rows without a primary key value are rejected as `S1_missing_key` | `verify_pipeline()` S1 |
-| S2 | For duplicate keys, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `verify_pipeline()` S2 |
-| S3 | Missing `generic_name` / `manufacturer` is stored as `NULL` with a flag, never imputed; missing `product_code` is rejected as `S3_missing_product_code` | `verify_pipeline()` S3a, S3b |
+| S1 | Rows without a PK are rejected as `S1_missing_key` | `verify_pipeline()` |
+| S2 | For duplicate keys, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `verify_pipeline()` |
+| S3 | Missing `generic_name` / `manufacturer` is stored as `NULL` with a flag, never imputed; missing `product_code` is rejected as `S3_missing_product_code` | `verify_pipeline()` |
 | S4 | Junk manufacturers are flagged (`manufacturer_is_junk = TRUE`) and the row is kept | `verify_pipeline()` S4 |
 | S5 | Manufacturer names are normalized deterministically (longest keyword wins, then parent name A–Z). The mapping is built over distinct raw names, not over all rows. | `verify_pipeline()` S5 |
 | S6 | Each product code has one canonical name (most common non-NULL, ties A–Z) | `verify_pipeline()` S6 |
@@ -226,25 +219,15 @@ src
 | G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views, `pipeline_runs` and `quality_checks` | `verify_pipeline()` G8a, G8b, G8c |
 | **GKG** | **Gate: G3 and G4 must pass, otherwise rollback and the previous Gold data stays** | Enforced in `refresh_gold()`; `verify_pipeline()` G3a, G3b, G4 |
  
-#### Publish
- 
+#### Observability
 | ID | Requirement | Test |
 |---|---|---|
-| P1 | Only Gold, `product_code_dim`, `pipeline_runs` and `quality_checks` are published to Supabase | `publish_gold.py::GOLD_TABLES` |
-| P2 | Row counts and sums are equal locally and on Supabase before commit, otherwise rollback | `publish_gold.py::publish` (reconciliation) |
-| **GKD** | **Gate: nothing is published unless every `verify_pipeline()` check passed** | `publish_gold.py::publish` |
- 
-#### Observability
- 
-| What | Where |
-|---|---|
-| Ingest progress, skipped lines, rows per second, duration | `bronze_ingest.py` log |
-| One row per pipeline run (counts, status, error) | `pipeline_runs` |
-| Result of every verification check at publish | `quality_checks` |
-| Rows per layer, % valid rows (threshold 95 %), checks passed | Dashboard: `DataQualityPanel.jsx` |
+|O1| Ingest progress, skipped lines, rows per second, duration | `bronze_ingest.py` log |
+|O2| One row per pipeline run (counts, status, error) | `pipeline_runs` |
+|O3| Result of every verification check at publish | `quality_checks` |
+|O4| Rows per layer, % valid rows (threshold 95 %), checks passed | Dashboard: `DataQualityPanel.jsx` |
  
 
- 
 ### STEP 2 — SET UP THE DATABASES
 Local Postgres (docker or apt), then:
 ```bash
