@@ -28,23 +28,11 @@ See [FDA's MAUDE database](https://www.fda.gov/medical-devices/medical-device-re
 | foitext*.zip | Text data: Textual information from MEDWATCH |
 | device*.txt | Device data: Information related to the device(s) involved |
  
-All are strings and pipeline delimited. Device data will be used in this analysis. 
+- All are strings and pipeline delimited. 
+- Device data will be used in this analysis. 
  
-#### 2.1 EXPLORE THE TARGET FILE TO SELECT DATA FIELDS 
  
-2.1.1 DOWNLOAD THE RAW FILE
-```bash
-mkdir -p medallion/data
-cd medallion/data
-curl -O https://www.accessdata.fda.gov/MAUDE/ftparea/device2024.zip
-unzip device2024.zip
-cd ../..
-```
- 
-2.1.2 SELECT DATA FIELDS
-```bash
-head -n 1 medallion/data/DEVICE2024.txt | tr '|' '\n'
-```
+#### 2.1 SELECT DATA FIELDS
  
 | Column Headers | Description | 
 |---|---|
@@ -115,45 +103,7 @@ Aggregation + ranking, since categorical and numerical data types
  
  
 ## II - STEPS IN CONDUCTING THE PIPELINE
-### FILE STRUCTURE
-```
-             
 
-
-├── .github
-│   └── workflows
-│       └── ci.yml
-├── medallion
-│   ├── analysis
-│   │   ├── eda_device.py
-│   │   └── eda_device_output.txt
-│   ├── data
-│   │   └── DEVICE2024.txt
-│   ├── python
-│   │   ├── .bronze_ingest.py.swp
-│   │   ├── bronze_ingest.py
-│   │   ├── publish_gold.py
-│   │   ├── requirements.txt
-│   │   └── test_bronze_ingest.py
-│   ├── scripts
-│   │   ├── db_run.sh
-│   │   └── db_setup.sh
-│   ├── sql
-│   │   ├── 01_create_tables.sql
-│   │   ├── 02_bronze.sql
-│   │   ├── 03a_seed_manufacturers.sql
-│   │   ├── 03b_silver.sql
-│   │   ├── 04_gold.sql
-│   │   ├── 06_pipeline.sql
-│   │   ├── 07_verify_silver_gold.sql
-│   │   └── 08_quality_checks.sql
-│   ├── .env
-│   └── supabase.js
-src
-└── components
-    ├── Dashboard.jsx
-    └── DataQualityPanel.jsx
-```
  
 ### Pipeline Architecture & Data Flow
 ```
@@ -233,7 +183,7 @@ src
 |O4| Rows per layer, % valid rows (threshold 95 %), checks passed | Dashboard: `DataQualityPanel.jsx` |
  
 
-### STEP 2 — SET UP THE DATABASES
+### STEP 2 — RUN THE PIPELINE
 cp .env.example .env                 # fill in the values
 pip install -r python/requirements.txt
 pytest python                        # tests, no database needed
@@ -245,6 +195,46 @@ python python/publish.py             # to Supabase
 
 cd dashboard && npm install && npm run dev
 
+
+
+
+### FILE STRUCTURE
+```
+
+├── .github
+│   └── workflows
+│       └── ci.yml
+├── medallion
+│   ├── analysis
+│   │   ├── eda_device.py
+│   │   └── eda_device_output.txt
+│   ├── data
+│   │   └── DEVICE2024.txt
+│   ├── python
+│   │   ├── .bronze_ingest.py.swp
+│   │   ├── bronze_ingest.py
+│   │   ├── publish_gold.py
+│   │   ├── requirements.txt
+│   │   └── test_bronze_ingest.py
+│   ├── scripts
+│   │   ├── db_run.sh
+│   │   └── db_setup.sh
+│   ├── sql
+│   │   ├── 01_create_tables.sql
+│   │   ├── 02_bronze.sql
+│   │   ├── 03a_seed_manufacturers.sql
+│   │   ├── 03b_silver.sql
+│   │   ├── 04_gold.sql
+│   │   ├── 06_pipeline.sql
+│   │   ├── 07_verify_silver_gold.sql
+│   │   └── 08_quality_checks.sql
+│   ├── .env
+│   └── supabase.js
+src
+└── components
+    ├── Dashboard.jsx
+    └── DataQualityPanel.jsx
+```
  
 ## FUTURE STEPS 
 - dbt: turn the gates into dbt tests. GKB: not_null, unique, row count. GKS: unique_combination_of_columns, not_null(product_code), accepted_values(rejection_reason), S7 and S4 as singular tests. GKG: G3 and G4 as singular tests. dbt build skips everything downstream of a failed test, which is what a gate should do.
