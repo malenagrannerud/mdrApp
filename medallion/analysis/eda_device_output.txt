@@ -1,20 +1,21 @@
+=== 1. Duplicates on primary key ===
+rows: 2,629,410
+unique MDR_REPORT_KEY: 2,627,121
+unique DEVICE_SEQUENCE_NO: 2,629,373
+duplicated (MDR_REPORT_KEY, DEVICE_SEQUENCE_NO): 33
+duplicated (the whole row): 31
 
-=== 1. What is a row? ===
-rows: 2,629,410 | unique report keys: 2,627,121 | unique device event keys: 10
-completely identical rows: 2,276
-
-=== 2. Missing values (%) ===
-MDR_REPORT_KEY                  0.00
-DEVICE_EVENT_KEY              100.00
-DATE_RECEIVED                   0.00
-GENERIC_NAME                    0.02
-MANUFACTURER_D_NAME             0.16
-DEVICE_REPORT_PRODUCT_CODE      0.00
+=== 2. Missing values in columns (%) ===
+MDR_REPORT_KEY                0.00
+DEVICE_SEQUENCE_NO            0.00
+GENERIC_NAME                  0.02
+MANUFACTURER_D_NAME           0.16
+DEVICE_REPORT_PRODUCT_CODE    0.00
 dtype: float64
 
-=== 3. Junk manufacturer names ===
-junk list: 1,039 | shorter than 2 chars: 15
-Most common values that look suspicious (short names):
+=== 3. Junk MANUFACTURER_D_NAME = ===
+junk list: 1,065 | shorter than 2 chars: 15
+Manufacturers with short names:
 MANUFACTURER_D_NAME
 MPRI    34885
 UNK       537
@@ -33,7 +34,7 @@ QFIX        1
 MERZ        1
 Name: count, dtype: int64
 
-=== 4. Same company, many spellings ===
+=== 4. Variants of MANUFACTURER_D_NAME ===
 OLYMPUS: 43 different spellings, 55,957 rows. Top 5:
 MANUFACTURER_D_NAME
 AIZU OLYMPUS CO., LTD.                       24834
@@ -70,10 +71,10 @@ ABBOTT DIABETES CARE LTD    11550
 ABBOTT VASCULAR INC.         8430
 ABBOTT VASCULAR              7123
 
-=== 5. One product code, several names? ===
+=== 5. One PRODUCT_CODE, several GENERIC_NAMES? ===
 codes: 2,206 | codes with more than 1 name: 1,402
 
-=== 6. Concentration ===
+=== 6. Concentration of PRODUCT_CODES ===
 DEVICE_REPORT_PRODUCT_CODE
 DZE    697107
 QBJ    347156
@@ -85,29 +86,26 @@ FPA     47212
 QLG     35122
 LGW     35083
 FTR     30774
+DTB     25714
+LWS     25224
+PQF     22394
+NVN     22038
+CBK     20339
+OZD     18592
+LZG     18230
+OYC     17620
+MKJ     15113
+MGB     13762
+GDW     13282
+FET     13154
+DSQ     13048
+NAY     12872
+MVK     12585
+FDF     12129
+OZO     11816
+NIK     11713
+NPT     11045
+JWH     10851
 Name: count, dtype: int64
-top 10 codes = 65.5 % of rows
-top 10 manufacturers = 55.0 % of rows
-
-=== 7. Is the first 20,000 rows a fair sample? ===
-Top 5 codes, whole file : ['DZE', 'QBJ', 'QFG', 'OZP', 'BZD']
-Top 5 codes, first 20k  : ['DZE', 'QBJ', 'QFG', 'OZP', 'BZD']
-Distinct manufacturers, first 20k: 513 | whole file: 5243
-
-=== 8. Time ===
-Sample date values: ['2024/01/01', '2024/01/01', '2024/01/01']
-dates parsed: 100.0 %
-DATE_RECEIVED
-2024-01    197596
-2024-02    193724
-2024-03    196119
-2024-04    209237
-2024-05    223475
-2024-06    199682
-2024-07    238541
-2024-08    235474
-2024-09    226036
-2024-10    243937
-2024-11    229327
-2024-12    236224
-Freq: M, Name: count, dtype: int64
+top 30 codes = 77.7 % of rows
+top 20 manufacturers = 68.3 % of rows
