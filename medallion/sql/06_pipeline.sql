@@ -13,34 +13,13 @@
     GKS Silver -> Gold gatekeeper (enforced in refresh_silver_reports)
     GKG Gold -> Dashboard gatekeeper (enforced in refresh_gold)
 
-
-  DATA FLOW 
-    SELECT * FROM run_pipeline();
-       │
-       ├── refresh_silver_reports()
-       │      ├── DELETE silver_reports
-       │      ├── klassificera alla bronze-rader
-       │      ├── INSERT silver_rejected 
-       │      ├── INSERT silver_reports 
-       │      └── S7: bronze = silver + rejected? annars RAISE
-       │
-       ├── refresh_gold()
-       │      ├── DELETE product_stats, manufacturer_stats
-       │      ├── INSERT product_stats (G1)
-       │      ├── INSERT manufacturer_stats (G2)
-       │      ├── G3: sum = silver? annars RAISE
-       │      └── G4: total_reports > 0? annars RAISE
-       │
-       └── INSERT pipeline_runs (success eller failed)
     
 */
 
 -- ============================================================
 -- The one command
 -- ============================================================
--- ============================================================
--- The one command
--- ============================================================
+
 DROP FUNCTION IF EXISTS run_pipeline();
 
 CREATE OR REPLACE FUNCTION run_pipeline()

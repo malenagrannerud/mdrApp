@@ -1,6 +1,7 @@
 /*
   03a_seed_manufacturers.sql
-  Author: Malena | Updated: 2026-10-07
+  Author: Malena | Updated: 2026-10-15
+  Parent = current owner of the brand/legal entity (acquisitions up to 2025).
 
   Parent-company keyword rules that drive auto-generation of manufacturer_mapping in SILVER
 
@@ -15,56 +16,51 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 -- ------------------------------------------------------------
 -- ASSUMPTION (unverified): MPRI = Medtronic Puerto Rico Operations.
 -- Covers ~34,885 rows. Verify against source before trusting Gold.
-('MEDTRONIC',            ARRAY['MEDTRONIC','COVIDIEN','MPRI','US SURGICAL','TYCO','MEDIVANCE','MEDOS INTERNATIONAL','MICRO THERAPEUTICS','EV3','HEARTWARE','MDT POWERED']),
-('ABBOTT',               ARRAY['ABBOTT','ST JUDE','THORATEC','BIOSENSE WEBSTER','AMO PUERTO RICO']),
-('JOHNSON & JOHNSON',    ARRAY['JOHNSON & JOHNSON','ETHICON','DEPUY','SYNTHES','ABIOMED','AURIS','CERENOVUS']),
-('BECTON DICKINSON',     ARRAY['BECTON','BARD','CR BARD','CAREFUSION','ALARIS','BARD PERIPHERAL','BARD ACCESS','BD SUZHOU','BD MEDICAL','BD INFUSION']),
-('BOSTON SCIENTIFIC',    ARRAY['BOSTON SCIENTIFIC']),
-('PHILIPS',              ARRAY['PHILIPS','RESPIRONICS']),
+('MEDTRONIC',            ARRAY['MEDTRONIC','COVIDIEN','MPRI','US SURGICAL','TYCO','MICRO THERAPEUTICS','EV3','HEARTWARE','MDT POWERED',
+                                'WARSAW ORTHOPEDIC','MITG','RF SURGICAL','SOFRADIM','DAVIS & GECK','COMPANION MEDICAL']),
+('ABBOTT',               ARRAY['ABBOTT','ST JUDE','THORATEC']),
+('JOHNSON & JOHNSON',    ARRAY['JOHNSON & JOHNSON','ETHICON','DEPUY','SYNTHES','ABIOMED','AURIS','CERENOVUS',
+                                'BIOSENSE WEBSTER','AMO PUERTO RICO','MEDOS INTERNATIONAL','MENTOR','MEGADYNE','NEURAVI']),
+('BECTON DICKINSON',     ARRAY['BECTON','BARD','CR BARD','CAREFUSION','ALARIS','BARD PERIPHERAL','BARD ACCESS','BD SUZHOU','BD MEDICAL','BD INFUSION','MEDIVANCE']),
+('BOSTON SCIENTIFIC',    ARRAY['BOSTON SCIENTIFIC','SILK ROAD MEDICAL','BAYLIS MEDICAL']),
+('PHILIPS',              ARRAY['PHILIPS','RESPIRONICS','VOLCANO CORPORATION','VOLCANO']),
 ('GE HEALTHCARE',        ARRAY['GE HEALTHCARE','DATEX','OHMEDA','GE MEDICAL']),
-('SIEMENS HEALTHINEERS', ARRAY['SIEMENS','VARIAN','VACUUM']),
+('SIEMENS HEALTHINEERS', ARRAY['SIEMENS','VARIAN']),
 ('BIOTRONIK',            ARRAY['BIOTRONIK']),
 ('EDWARDS LIFESCIENCES', ARRAY['EDWARDS LIFESCIENCE']),
-('DATASCOPE',            ARRAY['DATASCOPE']),
-('LIVANOVA',             ARRAY['LIVANOVA','SORIN']),
-('PHYSIO-CONTROL',       ARRAY['PHYSIO-CONTROL']),
-('ZOLL',                 ARRAY['ZOLL']),
-('CARDIAC SCIENCE',      ARRAY['CARDIAC SCIENCE']),
+('LIVANOVA',             ARRAY['LIVANOVA','SORIN','CYBERONICS']),
+('ZOLL',                 ARRAY['ZOLL','CARDIAC SCIENCE']),
 ('DEFIBTECH',            ARRAY['DEFIBTECH']),
 ('W.L. GORE',            ARRAY['W L GORE','WL GORE','GORE & ASSOCIATES']),
 ('MERIT MEDICAL',        ARRAY['MERIT MEDICAL']),
-('TERUMO',               ARRAY['TERUMO']),
+('TERUMO',               ARRAY['TERUMO','MICROVENTION','BOLTON MEDICAL']),
 ('MICROPORT',            ARRAY['MICROPORT']),
 
 -- ------------------------------------------------------------
 -- Ortho / dental / implants
 -- ------------------------------------------------------------
-('STRAUMANN',            ARRAY['STRAUMANN','NOBEL BIOCARE','ANTHOGYR','JJGC','INSTITUT STRAUMANN']),
+('STRAUMANN',            ARRAY['STRAUMANN','ANTHOGYR','JJGC','INSTITUT STRAUMANN']),
+('ENVISTA',              ARRAY['NOBEL BIOCARE','IMPLANT DIRECT','SYBRON']),
 ('ZIMMER BIOMET',        ARRAY['ZIMMER','BIOMET']),
-('DENTSPLY',             ARRAY['DENTSPLY','IMPLANT DIRECT','SYBRON']),
+('DENTSPLY',             ARRAY['DENTSPLY','TULSA DENTAL','MAILLEFER','VDW GMBH','VDW']),
 ('ARTHREX',              ARRAY['ARTHREX']),
 ('BIOHORIZONS',          ARRAY['BIOHORIZONS']),
-('SMITH & NEPHEW',       ARRAY['SMITH & NEPHEW','SMITH AND NEPHEW']),
+('SMITH & NEPHEW',       ARRAY['SMITH & NEPHEW','SMITH AND NEPHEW','ARTHROCARE','BLUE BELT']),
 ('PALTOP',               ARRAY['PALTOP']),
 ('STAAR SURGICAL',       ARRAY['STAAR SURGICAL']),
 ('EXACTECH',             ARRAY['EXACTECH']),
-('STRYKER',              ARRAY['STRYKER','TORNIER','MOOG MEDICAL','MAKO SURGICAL']),
+('STRYKER',              ARRAY['STRYKER','TORNIER','MOOG MEDICAL','MAKO SURGICAL','PHYSIO-CONTROL']),
 ('ALTATEC',              ARRAY['ALTATEC']),
 ('INTRA-LOCK',           ARRAY['INTRA-LOCK']),
 ('KEYSTONE DENTAL',      ARRAY['KEYSTONE DENTAL']),
 ('MEDARTIS',             ARRAY['MEDARTIS']),
-('AESCULAP',             ARRAY['AESCULAP']),
-('ENCORE MEDICAL',       ARRAY['ENCORE MEDICAL']),
+('ENOVIS',               ARRAY['ENOVIS','ENCORE MEDICAL','LIMACORPORATE','DJO']),
 ('TREACE MEDICAL',       ARRAY['TREACE MEDICAL']),
 ('SPATZ',                ARRAY['SPATZ']),
 ('ACUMED',               ARRAY['ACUMED']),
-('SEASPINE',             ARRAY['SEASPINE']),
+('ORTHOFIX',             ARRAY['ORTHOFIX','SEASPINE']),
 ('ONKOS SURGICAL',       ARRAY['ONKOS SURGICAL']),
-('LIMACORPORATE',        ARRAY['LIMACORPORATE']),
-('WARSAW ORTHOPEDICS',   ARRAY['WARSAW ORTHOPEDICS']),
 ('ACCESS DENTAL LAB',    ARRAY['ACCESS DENTAL']),
-('TULSA DENTAL',         ARRAY['TULSA DENTAL']),
-('ARTHROCARE',           ARRAY['ARTHROCARE']),
 ('ZEST ANCHORS',         ARRAY['ZEST ANCHORS','ZEST']),
 
 -- ------------------------------------------------------------
@@ -75,7 +71,6 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 ('INSULET',              ARRAY['INSULET']),
 ('ROCHE',                ARRAY['ROCHE DIABETES','ROCHE DIAGNOSTICS']),
 ('SENSEONICS',           ARRAY['SENSEONICS']),
-('COMPANION MEDICAL',    ARRAY['COMPANION MEDICAL']),
 ('ASCENSIA',             ARRAY['ASCENSIA']),
 ('LIFESCAN',             ARRAY['LIFESCAN']),
 ('NOVO NORDISK',         ARRAY['NOVO NORDISK']),
@@ -84,77 +79,63 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 -- ------------------------------------------------------------
 -- Ophthalmology
 -- ------------------------------------------------------------
-('ALCON',                ARRAY['ALCON']),
-('OLYMPUS',              ARRAY['OLYMPUS','AIZU OLYMPUS','SHIRAKAWA OLYMPUS','AOMORI OLYMPUS']),
+('ALCON',                ARRAY['ALCON','WAVELIGHT','IVANTIS']),
+('OLYMPUS',              ARRAY['OLYMPUS','AIZU OLYMPUS','SHIRAKAWA OLYMPUS','AOMORI OLYMPUS','GYRUS ACMI']),
 ('BAUSCH',               ARRAY['BAUSCH']),
-('WAVELIGHT',            ARRAY['WAVELIGHT']),
 ('RAYNER',               ARRAY['RAYNER INTRAOCULAR','RAYNER']),
 
 -- ------------------------------------------------------------
 -- Respiratory / anesthesia
 -- ------------------------------------------------------------
-('SMITHS MEDICAL',       ARRAY['SMITHS MEDICAL','SMITHS HEALTHCARE']),
 ('VYAIRE',               ARRAY['VYAIRE']),
 ('HAMILTON MEDICAL',     ARRAY['HAMILTON MEDICAL']),
 ('THOMMEN MEDICAL',      ARRAY['THOMMEN MEDICAL']),
-('MAQUET',               ARRAY['MAQUET']),
-('GETINGE',              ARRAY['GETINGE']),
+('GETINGE',              ARRAY['GETINGE','MAQUET','DATASCOPE','PULSION MEDICAL']),
 ('DRÄGER',               ARRAY['DRAEGER','DRAGER','DRAEGERWERK']),
 ('RESMED',               ARRAY['RESMED']),
 ('FRESENIUS',            ARRAY['FRESENIUS','FRESENIUS VIAL']),
-('HILL-ROM',             ARRAY['HILL-ROM','BATESVILLE']),
 ('ARJOHUNTLEIGH',        ARRAY['ARJOHUNTLEIGH','ARJO']),
 
 -- ------------------------------------------------------------
 -- Infusion / vascular access
 -- ------------------------------------------------------------
-('ICU MEDICAL',          ARRAY['ICU MEDICAL']),
-('B. BRAUN',             ARRAY['B BRAUN','BRAUN MELSUNGEN','BRAUN GMBH']),
-('ARROW INTERNATIONAL',  ARRAY['ARROW INTERNATIONAL']),
-('TELEFLEX',             ARRAY['TELEFLEX']),
+('ICU MEDICAL',          ARRAY['ICU MEDICAL','SMITHS MEDICAL','SMITHS HEALTHCARE']),
+('B. BRAUN',             ARRAY['B BRAUN','BRAUN MELSUNGEN','BRAUN GMBH','AESCULAP']),
+('TELEFLEX',             ARRAY['TELEFLEX','ARROW INTERNATIONAL','ESSENTIAL MEDICAL']),
 ('MEDLINE INDUSTRIES',   ARRAY['MEDLINE INDUSTRIES']),
 
 -- ------------------------------------------------------------
 -- Surgery / endoscopy / urology
 -- ------------------------------------------------------------
 ('COOK MEDICAL',         ARRAY['COOK INC','COOK MEDICAL','COOK IRELAND','COOK BIOTECH','WILLIAM COOK']),
-('DAVIS & GECK',         ARRAY['DAVIS & GECK']),
 ('INTUITIVE SURGICAL',   ARRAY['INTUITIVE SURGICAL']),
-('ADVANCED BIONICS',     ARRAY['ADVANCED BIONICS']),
-('COCHLEAR',             ARRAY['COCHLEAR']),
+('SONOVA',               ARRAY['SONOVA','ADVANCED BIONICS']),
+('COCHLEAR',             ARRAY['COCHLEAR','OTICON MEDICAL','NEURELEC']),
 ('SIENTRA',              ARRAY['SIENTRA']),
 ('COLOPLAST',            ARRAY['COLOPLAST']),
 ('CONCORD MANUFACTURING',ARRAY['CONCORD MANUFACTURING']),
-('SOFRADIM',             ARRAY['SOFRADIM']),
-('ABBVIE',               ARRAY['ABBVIE','ALLERGAN','MENTOR']),
-('BAXTER',               ARRAY['BAXTER']),
-('GYRUS ACMI',           ARRAY['GYRUS ACMI']),
+('ABBVIE',               ARRAY['ABBVIE','ALLERGAN','LIFECELL']),
+('BAXTER',               ARRAY['BAXTER','HILL-ROM','BATESVILLE']),
 ('LUMENIS',              ARRAY['LUMENIS']),
 ('RICHARD WOLF',         ARRAY['RICHARD WOLF']),
 ('VERATHON MEDICAL',     ARRAY['VERATHON']),
 ('BOVIE MEDICAL',        ARRAY['BOVIE MEDICAL','BOVIE']),
-('MEGADYNE MEDICAL',     ARRAY['MEGADYNE']),
 ('OSCOR',                ARRAY['OSCOR']),
-('NEVRO',                ARRAY['NEVRO']),
-('MITG',                 ARRAY['MITG','RF SURGICAL']),
+('GLOBUS MEDICAL',       ARRAY['GLOBUS MEDICAL','NEVRO']),
 ('KENDALL',              ARRAY['KENDALL GAMMATRON','KENDALL']),
-('LAKE REGION MEDICAL',  ARRAY['LAKE REGION MEDICAL']),
+('INTEGER',              ARRAY['INTEGER HOLDINGS','LAKE REGION MEDICAL','GREATBATCH']),
 ('MEDICAL COMPONENTS',   ARRAY['MEDICAL COMPONENTS']),
 ('PERFUSION SYSTEMS',    ARRAY['PERFUSION SYSTEMS']),
 ('SCHILLER',             ARRAY['SCHILLER']),
 ('MIRADRY',              ARRAY['MIRADRY']),
-('BLUE BELT TECHNOLOGIES', ARRAY['BLUE BELT']),
-('ACCLARENT',            ARRAY['ACCLARENT']),
 ('CORDIS',               ARRAY['CORDIS']),
-('APIFIX',               ARRAY['APIFIX']),
+('ORTHOPEDIATRICS',      ARRAY['ORTHOPEDIATRICS','APIFIX']),
 ('REMOTE DIAGNOSTIC',    ARRAY['REMOTE DIAGNOSTIC']),
-('BAYLIS MEDICAL',       ARRAY['BAYLIS MEDICAL']),
-('CARDIVA MEDICAL',      ARRAY['CARDIVA MEDICAL']),
+('HAEMONETICS',          ARRAY['HAEMONETICS','CARDIVA MEDICAL']),
 ('STRAIGHT SMILE',       ARRAY['STRAIGHT SMILE']),
 ('IRHYTHM',              ARRAY['IRHYTHM']),
 ('BMC MEDICAL',          ARRAY['BMC MEDICAL']),
-('PULSION MEDICAL',      ARRAY['PULSION MEDICAL']),
-('BLOCK DRUG',           ARRAY['BLOCK DRUG']),
+('HALEON',               ARRAY['HALEON','BLOCK DRUG']),
 ('GN HEARING',           ARRAY['GN HEARING']),
 ('OK BIOTECH',           ARRAY['OK BIOTECH']),
 ('BETA BIONICS',         ARRAY['BETA BIONICS']),
@@ -166,8 +147,7 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 -- Diagnostics / lab / imaging
 -- ------------------------------------------------------------
 ('AGILENT',              ARRAY['AGILENT']),
-('ORTHO-CLINICAL DIAGNOSTICS', ARRAY['ORTHO-CLINICAL','ORTHO CLINICAL']),
-('QUIDELORTHO',          ARRAY['QUIDELORTHO','QUIDEL']),
+('QUIDELORTHO',          ARRAY['QUIDELORTHO','QUIDEL','ORTHO-CLINICAL','ORTHO CLINICAL']),
 ('NIHON KOHDEN',         ARRAY['NIHON KOHDEN']),
 ('NATUS MEDICAL',        ARRAY['NATUS MEDICAL']),
 
@@ -175,33 +155,22 @@ INSERT INTO manufacturer_parent (parent_name, keywords) VALUES
 -- Neuro / vascular
 -- ------------------------------------------------------------
 ('PENUMBRA',             ARRAY['PENUMBRA']),
-('MICROVENTION',         ARRAY['MICROVENTION']),
-('SILK ROAD MEDICAL',    ARRAY['SILK ROAD MEDICAL']),
-('NEURAVI',              ARRAY['NEURAVI']),
-('CYBERONICS',           ARRAY['CYBERONICS']),
-('BOLTON MEDICAL',       ARRAY['BOLTON MEDICAL']),
-('VOLCANO',              ARRAY['VOLCANO CORPORATION','VOLCANO']),
 ('LEMAITRE VASCULAR',    ARRAY['LEMAITRE VASCULAR']),
 ('CORCYM',               ARRAY['CORCYM']),
 
 -- ------------------------------------------------------------
 -- Other
 -- ------------------------------------------------------------
-('INTEGRA LIFESCIENCES', ARRAY['INTEGRA LIFESCIENCE']),
+('INTEGRA LIFESCIENCES', ARRAY['INTEGRA LIFESCIENCE','ACCLARENT']),
 ('CARDINAL HEALTH',      ARRAY['CARDINAL HEALTH']),
 ('STERIS',               ARRAY['STERIS']),
 ('MED-EL',               ARRAY['MED-EL']),
-('OTICON MEDICAL',       ARRAY['OTICON MEDICAL','OTICON','NEURELEC']),
+('DEMANT',               ARRAY['OTICON']),
 ('AVANOS MEDICAL',       ARRAY['AVANOS MEDICAL','AVANOS']),
 ('CHRISTOPH MIETHKE',    ARRAY['CHRISTOPH MIETHKE','MIETHKE']),
 ('INSPIRE MEDICAL',      ARRAY['INSPIRE MEDICAL']),
 ('NALU MEDICAL',         ARRAY['NALU MEDICAL']),
-('LIFECELL',             ARRAY['LIFECELL']),
-('ESSENTIAL MEDICAL',    ARRAY['ESSENTIAL MEDICAL']),
 ('SALUDA MEDICAL',       ARRAY['SALUDA MEDICAL']),
-('MAILLEFER',            ARRAY['MAILLEFER']),
-('IVANTIS',              ARRAY['IVANTIS']),
-('VDW',                  ARRAY['VDW GMBH','VDW']),
 ('TERRAGENE',            ARRAY['TERRAGENE']),
 ('SANTA BARBARA',        ARRAY['SANTA BARBARA']);
 
