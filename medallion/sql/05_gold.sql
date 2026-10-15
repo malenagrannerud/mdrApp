@@ -1,16 +1,15 @@
 /*
-  04_gold.sql
-  Author: Malena | Updated: 2026-10-07
+  05_gold.sql
+  Author: Malena | Updated: 2026-10-15
 
   Creates refresh_gold() and two dashboard views.
 
-  RULES IMPLEMENTED HERE:
-    RULE G1  Count per product code
-    RULE G2  Count per manufacturer
-    RULE G3  Exact reconciliation
-    RULE G4  Sanity check (total_reports > 0)
-    RULE G5  Rank in views (not stored)
-    RULE GKG Gold -> Dashboard gatekeeper
+  RULES IMPLEMENTED HERE (IDs as in PIPELINE.md):
+    GKG1  Reconciliation: sum(product_stats) = silver rows
+    GKG2  Reconciliation: sum(manufacturer_stats) = non-junk, named silver rows
+  Also:
+    Q1/Q2 Count per product code and per manufacturer
+    Sanity check (total_reports > 0) and rank in views (not stored)
 */
 
 
@@ -26,7 +25,7 @@ DECLARE
     v_products     bigint;
     v_manufacturer bigint;
 BEGIN
-    -- RULE GKS guard: never build gold on an empty silver
+    -- GUARD: never build gold on an empty silver
     SELECT COUNT(*) INTO v_silver FROM silver_reports;
     IF v_silver = 0 THEN
         RAISE EXCEPTION 'Gold aborted: silver_reports is empty';
@@ -36,7 +35,7 @@ BEGIN
     DELETE FROM manufacturer_stats;
 
     -- --------------------------------------------------------
-    -- RULE G1: One row per product_code (the PK)
+    -- Q1: One row per product_code (the PK)
     -- --------------------------------------------------------
     INSERT INTO product_stats (product_code, generic_name, total_reports)
     SELECT
@@ -50,7 +49,7 @@ BEGIN
     GROUP BY s.product_code, d.canonical_generic_name;
 
     -- --------------------------------------------------------
-    -- RULE G2: One row per manufacturer (junk and NULL excluded)
+    -- Q2: One row per manufacturer (junk and NULL excluded)
     -- --------------------------------------------------------
     INSERT INTO manufacturer_stats (name, total_reports)
     SELECT
@@ -62,27 +61,27 @@ BEGIN
     GROUP BY manufacturer_normalized;
 
     -- --------------------------------------------------------
-    -- RULE G3: Exact reconciliation
+    -- RULE GKG1 + GKG2: Exact reconciliation
     -- --------------------------------------------------------
     SELECT COALESCE(SUM(total_reports), 0) INTO v_products     FROM product_stats;
     SELECT COALESCE(SUM(total_reports), 0) INTO v_manufacturer FROM manufacturer_stats;
 
     IF v_products <> v_silver THEN
-        RAISE EXCEPTION 'G3 FAILED (products): silver=% but sum=%', v_silver, v_products;
+        RAISE EXCEPTION 'GKG1 FAILED (products): silver=% but sum=%', v_silver, v_products;
     END IF;
 
     IF v_manufacturer <> (SELECT COUNT(*) FROM silver_reports
                           WHERE manufacturer_is_junk = FALSE
                             AND manufacturer_normalized IS NOT NULL) THEN
-        RAISE EXCEPTION 'G3 FAILED (manufacturers): sum=% does not match silver', v_manufacturer;
+        RAISE EXCEPTION 'GKG2 FAILED (manufacturers): sum=% does not match silver', v_manufacturer;
     END IF;
 
     -- --------------------------------------------------------
-    -- RULE G4: Sanity check
+    -- SANITY: every gold row has total_reports > 0
     -- --------------------------------------------------------
     IF EXISTS (SELECT 1 FROM product_stats WHERE total_reports <= 0)
     OR EXISTS (SELECT 1 FROM manufacturer_stats WHERE total_reports <= 0) THEN
-        RAISE EXCEPTION 'G4 FAILED: a gold row has total_reports <= 0';
+        RAISE EXCEPTION 'SANITY FAILED: a gold row has total_reports <= 0';
     END IF;
 
     RETURN QUERY SELECT
@@ -93,7 +92,7 @@ $$ LANGUAGE plpgsql;
 
 
 -- ============================================================
--- RULE G5: Views (rank computed at read time, not stored)
+-- Views: rank computed at read time, not stored
 -- ============================================================
 DROP VIEW IF EXISTS product_stats_ranked;
 CREATE VIEW product_stats_ranked AS

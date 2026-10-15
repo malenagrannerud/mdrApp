@@ -1,10 +1,14 @@
 /*
   06_pipeline.sql
-  Author: Malena | Updated: 2026-10-07
+  Author: Malena | Updated: 2026-10-15
 
  This file is a log file 
     1 - Allows service_role to run the pipeline (silver + gold) in one transaction.
     2 - Defines run_pipeline() which runs silver -> gold and logs the run in pipeline_runs.
+
+  RULES IMPLEMENTED HERE (IDs as in PIPELINE.md):
+    G1  Every run is logged in pipeline_runs (success or failed)
+    G2  A failed run is rolled back and logged with its error (manual test)
 
 
     

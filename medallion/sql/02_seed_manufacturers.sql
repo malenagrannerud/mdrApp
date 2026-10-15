@@ -1,11 +1,11 @@
 /*
-  03a_seed_manufacturers.sql
+  02_seed_manufacturers.sql
   Author: Malena | Updated: 2026-10-15
   Parent = current owner of the brand/legal entity (acquisitions up to 2025).
 
   Parent-company keyword rules that drive auto-generation of manufacturer_mapping in SILVER
 
-  RULE S5
+  RULE S4
 */
 
 TRUNCATE TABLE manufacturer_parent;

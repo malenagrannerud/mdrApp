@@ -137,56 +137,44 @@ Aggregation + ranking, since categorical and numerical data types
 ```
  
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  
- 
 
-
-#### Bronze
-
-## Requirements and tests
 
 - One requirement = one test = one ID. Gatekeeper tests (GK) come last in each layer.
 - The next layer is built only if all gatekeeper tests of the previous layer pass.
 
-### Bronze
+#### Bronze
 
-| ID | Requirement | Acceptance criterion | Test | Status |
-|---|---|---|---|---|
-| B1 | Read pipe-delimited `latin-1`, quotes as plain text | A name with `Å` is stored unchanged | `test_B1_latin1_names` | Exists |
-| B2 | Store only the five mapped columns | Every row has exactly the mapped columns + metadata | `test_B2_only_mapped_columns` | Exists |
-| B3 | A changed source header fails loudly | A missing source column raises an error naming the column | `test_B3_missing_column_fails` | New |
-| B4 | Malformed lines are counted, logged and not stored | Skipped count = malformed lines in the file | `test_B4_bad_lines_counted` | Exists |
-| B5 | All values are stored as text | Key `00123` keeps its leading zeros | `test_B5_all_text` | Exists |
-| B6 | An empty field becomes `NULL`, never imputed | Empty `generic_name` is `NULL`, not `""` | `test_B6_empty_is_null` | Exists |
-| B7 | Junk markers stay as text | Manufacturer `N/A` is stored as `"N/A"`, not `NULL` | `test_B7_junk_markers_kept` | New + code fix |
-| B8 | Every row is traceable to file and line | `source_file` is set; `source_row_num` runs 1..n without gaps | `test_B8_traceable_rows` | Exists |
-| B9 | A rerun adds nothing | Second run with the same limit: row count unchanged | `test_B9_rerun_adds_nothing` | Exists |
-| B10 | A higher sample limit adds only the new rows | Load 2 rows, then 5: total = 5, no duplicates | `test_B10_higher_limit_adds_new_rows` | New |
-| B11 | Bronze is append-only | `DELETE` and `UPDATE` are refused; `TRUNCATE` trigger is enabled | `02_bronze.sql` | Manual |
-| **GKB1** | Every source column is mapped | Each of the 5 columns has at least one non-`NULL` value | `02_bronze.sql` | Manual |
-| **GKB2** | Every row has metadata | 0 rows with `NULL` `source_file`, `source_row_num` or `inserted_at` | `02_bronze.sql` | Manual |
+| ID | Requirement | Why | Test |
+|---|---|---|---|
+| B1 | Read pipe-delimited `latin-1`, quotes as plain text | Wrong encoding corrupts manufacturer names | `test_B1_latin1_names` |
+| B2 | A changed source header fails loudly | FDA can change the file format; a wrong mapping must not load silently | `test_B2_missing_column_fails` |
+| B3 | Malformed lines are counted and logged, never hidden | No silent data loss | `test_B3_bad_lines_counted` |
+| B4 | Values are stored raw: text only, leading zeros and junk markers (`N/A`) kept; only an empty field becomes `NULL` | Bronze is the untouched source of truth | `test_B4_values_stored_raw` |
+| B5 | Every row is traceable to file and line | Any number on the dashboard can be traced back to the source | `test_B5_traceable_rows` |
+| B6 | A rerun adds nothing | Idempotent ingest: safe to run again | `test_B6_rerun_adds_nothing` |
+| B7 | Bronze is append-only | Raw data can never be changed after load | `03_bronze.sql` (manual) |
+| **GKB1** | Every source column is mapped | Catches a wrong file or mapping on real data | `03_bronze.sql` (manual) |
 
-### Silver
+#### Silver
 
-| ID | Requirement | Acceptance criterion | Test | Status |
-|---|---|---|---|---|
-| S1 | Invalid rows are quarantined with a reason, never dropped | Missing key, duplicate key (lowest bronze `id` kept) and missing product code each appear in quarantine with their reason | `verify_pipeline()` `S1` | Exists (as `S2`, duplicates only) |
-| S2 | Missing name or manufacturer: `NULL` + flag, never imputed | Flags match the data in every row | `verify_pipeline()` `S2` | Exists (as `S3b`) |
-| S3 | Junk manufacturers are flagged and kept | 0 junk names without `manufacturer_is_junk = TRUE` | `verify_pipeline()` `S3` | Exists (as `S4`) |
-| S4 | Manufacturer names map to the correct parent company | A fixed reference list (e.g. `NOBEL BIOCARE → ENVISTA`, `MAQUET → GETINGE`) maps as expected | `verify_pipeline()` `S4` | New |
-| S5 | Each product code has one canonical name | 0 named product codes missing in `product_code_dim` | `verify_pipeline()` `S5` | Exists (as `S6`) |
-| **GKS1** | `product_code` is never `NULL` in silver | 0 silver rows with `NULL` `product_code` | `verify_pipeline()` `GKS1` | Exists (as `S3a`) |
-| **GKS2** | Reconciliation: bronze = silver + quarantine | `bronze = silver + rejected` for the current run | `verify_pipeline()` `GKS2` | Exists (as `S7`) |
+| ID | Requirement | Why | Test |
+|---|---|---|---|
+| S1 | Invalid rows are quarantined with a reason, never dropped | EDA: 33 duplicate keys | `verify_pipeline()` `S1` |
+| S2 | Missing name or manufacturer: `NULL` + flag, never imputed | EDA: 0.16 % missing manufacturer | `verify_pipeline()` `S2` |
+| S3 | Junk manufacturer names are flagged and kept | EDA: 1,065 junk names (`UNK`, `NI`, …) | `verify_pipeline()` `S3` |
+| S4 | Manufacturer names map to the correct parent company | EDA: up to 99 spellings per manufacturer; protects Q2 | `verify_pipeline()` `S4` |
+| S5 | Each product code has one canonical name | EDA: 1,402 codes with more than one name; protects Q1 | `verify_pipeline()` `S5` |
+| **GKS1** | Reconciliation: bronze = silver + quarantine | Proves no row was lost between layers | `verify_pipeline()` `GKS1` |
 
-### Gold
+#### Gold
 
-| ID | Requirement | Acceptance criterion | Test | Status |
-|---|---|---|---|---|
-| G1 | Every run is logged; the latest run succeeded and matches silver | Latest `pipeline_runs` row is `success` and `rows_silver` = silver count | `verify_pipeline()` `G1` | Exists (as `G7`) |
-| G2 | A failed run is rolled back and logged | Forced failure: `status = 'failed'` with error message, previous gold unchanged | `run_pipeline()` | Manual |
-| G3 | The public `anon` role cannot read raw data | No `SELECT` for `anon` on bronze, silver or quarantine | `verify_pipeline()` `G3` | Exists (as `G8a`) |
-| G4 | Row level security is on for all pipeline tables | RLS enabled on 9 of 9 tables | `verify_pipeline()` `G4` | Exists (as `G8c`) |
-| **GKG1** | Reconciliation: products | `SUM(product_stats.total_reports)` = silver rows | `verify_pipeline()` `GKG1` | Exists (as `G3a`) |
-| **GKG2** | Reconciliation: manufacturers, junk and `NULL` excluded | `SUM(manufacturer_stats.total_reports)` = non-junk, named silver rows | `verify_pipeline()` `GKG2` | Exists (as `G3b`) |
+| ID | Requirement | Why | Test |
+|---|---|---|---|
+| G1 | Every run is logged; the latest run succeeded | The dashboard shows only data from a successful run | `verify_pipeline()` `G1` |
+| G2 | The public `anon` role cannot read raw data | Least privilege: only gold is public | `verify_pipeline()` `G2` |
+| **GKG1** | Reconciliation: products | Protects the answer to Q1 | `verify_pipeline()` `GKG1` |
+| **GKG2** | Reconciliation: manufacturers, junk and `NULL` excluded | Protects the answer to Q2 | `verify_pipeline()` `GKG2` |
+
 #### Observability
 | ID | Requirement | Test |
 |---|---|---|
@@ -230,11 +218,5 @@ FILE STRUCTURE
 ```
 
 
- 
-## FUTURE STEPS 
-- dbt: turn the gates into dbt tests. 
-- CI job with a Postgres service container, a small fixture and negative tests.
-- Silver: join mdrfoi and patient files to add severity (death, injury, malfunction).
-- "Which products have an unusually high share of serious events (PRR)?"
 
 Note: MAUDE data is public and contains no personal data. For other sources, hash sensitive columns, e.g. encode(digest(col, 'sha256'), 'hex').

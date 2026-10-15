@@ -9,17 +9,19 @@
   SAFE:  Can be run many times. "IF NOT EXISTS" --> existing tables and
          their data are left.
 
-  RULES IMPLEMENTED IN THIS FILE:
-    B5  Add metadata (source_file, inserted_at)
-    S1  Primary key (report_key, device_sequence_no)
-    S3  Missing values: NULL + flag, never impute
-    S4  Flag junk manufacturers
-    S5  Normalize manufacturers, deterministic (mapping + parent tables)
-    S6  Canonical product name (product_code_dim)
-    G1  product_stats table
-    G2  manufacturer_stats table
-    G7  pipeline_runs table
-    G8  Least privilege (RLS + REVOKE + policies)
+  RULES IMPLEMENTED IN THIS FILE (IDs as in PIPELINE.md):
+    B8   Metadata: source_file, source_row_num, inserted_at
+    B9   UNIQUE (source_file, source_row_num): a rerun adds nothing
+    B10  Same UNIQUE: a higher sample limit adds only new rows
+    B11  Bronze is append-only (UPDATE/DELETE/TRUNCATE triggers)
+    S1   Primary key (report_key, device_sequence_no) + quarantine table
+    S2   Missing values: NULL + flag, never imputed
+    S3   Flag junk manufacturers
+    S4   Manufacturer mapping + parent keyword tables
+    S5   Canonical product name (product_code_dim)
+    G1   pipeline_runs log
+    G3   anon cannot read bronze, silver or quarantine (REVOKE)
+    G4   RLS on all pipeline tables
 */
 
 
@@ -36,10 +38,10 @@ CREATE TABLE IF NOT EXISTS bronze_reports (
   manufacturer_raw    text,
 
   source_file         text NOT NULL,
-  source_row_num      bigint,                      -- B6: idempotent ingest
+  source_row_num      bigint,                      -- B8: line in the source file
   inserted_at         timestamptz NOT NULL DEFAULT now(),
 
-  UNIQUE (source_file, source_row_num)             -- B6: idempotent ingest
+  UNIQUE (source_file, source_row_num)             -- B9, B10: idempotent ingest
 );
 
 CREATE INDEX IF NOT EXISTS idx_bronze_report_key    ON bronze_reports (report_key);
@@ -73,15 +75,15 @@ CREATE TABLE IF NOT EXISTS silver_reports (
   report_key          text NOT NULL,
   device_sequence_no  text NOT NULL,
 
-  generic_name        text,                        -- RULE S3: NULL tillåtet
-  product_code        text,                        -- RULE S3: NULL tillåtet
+  generic_name        text,                        -- RULE S2: NULL allowed
+  product_code        text,                        -- NULL never stored: S1 quarantines it (GKS1)
 
   manufacturer_name       text,
   manufacturer_normalized text,
-  manufacturer_is_junk    boolean NOT NULL DEFAULT false,   -- RULE S4
+  manufacturer_is_junk    boolean NOT NULL DEFAULT false,   -- RULE S3
 
-  has_missing_generic_name boolean NOT NULL DEFAULT false,  -- RULE S3
-  has_missing_manufacturer boolean NOT NULL DEFAULT false,  -- RULE S3
+  has_missing_generic_name boolean NOT NULL DEFAULT false,  -- RULE S2
+  has_missing_manufacturer boolean NOT NULL DEFAULT false,  -- RULE S2
 
   run_id uuid,
   _silver_updated_at timestamptz NOT NULL DEFAULT now(),
@@ -115,7 +117,7 @@ CREATE INDEX IF NOT EXISTS idx_silver_rejected_run_id ON silver_rejected (run_id
 
 
 -- ------------------------------------------------------------
--- RULE S6: Canonical product name
+-- RULE S5: Canonical product name
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS product_code_dim (
   product_code           text PRIMARY KEY,
@@ -123,7 +125,7 @@ CREATE TABLE IF NOT EXISTS product_code_dim (
 );
 
 -- ------------------------------------------------------------
--- RULE S5: Explicit manufacturer mapping
+-- RULE S4: Explicit manufacturer mapping
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS manufacturer_mapping (
   raw_name        text PRIMARY KEY,
@@ -131,7 +133,7 @@ CREATE TABLE IF NOT EXISTS manufacturer_mapping (
 );
 
 -- ------------------------------------------------------------
--- RULE S5: Parent-company keyword table
+-- RULE S4: Parent-company keyword table
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS manufacturer_parent (
   parent_name text PRIMARY KEY,
@@ -150,7 +152,7 @@ ALTER TABLE silver_reports  ADD COLUMN IF NOT EXISTS has_missing_generic_name bo
 ALTER TABLE silver_reports  ADD COLUMN IF NOT EXISTS has_missing_manufacturer boolean NOT NULL DEFAULT false;
 ALTER TABLE bronze_reports  ADD COLUMN IF NOT EXISTS source_row_num bigint;
 
--- RULE S3
+-- RULE S2
 ALTER TABLE silver_reports ALTER COLUMN generic_name DROP NOT NULL;
 ALTER TABLE silver_reports ALTER COLUMN product_code DROP NOT NULL;
 
@@ -171,7 +173,7 @@ CREATE TABLE IF NOT EXISTS manufacturer_stats (
 
 
 -- ============================================================
--- RULE G7: Pipeline run log
+-- RULE G1: Pipeline run log
 -- ============================================================
 CREATE TABLE IF NOT EXISTS pipeline_runs (
   run_id                uuid PRIMARY KEY,
@@ -191,7 +193,7 @@ CREATE INDEX IF NOT EXISTS idx_pipeline_runs_started_at
 
 
 -- ============================================================
--- RULE G8: Least privilege
+-- RULE G3, G4: Least privilege
 -- ============================================================
 ALTER TABLE bronze_reports        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE silver_reports        ENABLE ROW LEVEL SECURITY;
@@ -217,18 +219,18 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON public.manufacturer_mapping TO service_r
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.manufacturer_parent  TO service_role;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.pipeline_runs        TO service_role;
 
--- anon får bara SELECT på Gold (via policy, eftersom RLS är på)
+-- anon may only SELECT gold (through policies, because RLS is on)
 GRANT SELECT ON public.product_stats        TO anon;
 GRANT SELECT ON public.manufacturer_stats   TO anon;
 GRANT SELECT ON public.product_code_dim     TO anon;
 GRANT SELECT ON public.pipeline_runs        TO anon;
 
--- RULE G8: anon får INTE läsa Bronze eller Silver
+-- RULE G3: anon may NOT read bronze or silver
 REVOKE ALL ON bronze_reports, silver_reports, silver_rejected,
               manufacturer_mapping, manufacturer_parent
        FROM anon;
 
--- RULE G8: SELECT-policy för anon på Gold-tabeller
+-- RULE G4: SELECT policies for anon on gold tables
 DROP POLICY IF EXISTS anon_read_product_stats      ON product_stats;
 DROP POLICY IF EXISTS anon_read_manufacturer_stats ON manufacturer_stats;
 DROP POLICY IF EXISTS anon_read_product_code_dim   ON product_code_dim;
@@ -261,7 +263,7 @@ CREATE TABLE IF NOT EXISTS quality_checks (
   checked_at  timestamptz NOT NULL DEFAULT now()
 );
 
--- RULE G8: least privilege. anon may only read.
+-- RULE G4: least privilege. anon may only read.
 ALTER TABLE quality_checks ENABLE ROW LEVEL SECURITY;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.quality_checks TO service_role;
