@@ -14,12 +14,13 @@ import logging
 import pytest
 import bronze_ingest
 
-# Test file: 5 data lines.
+# Test file: 6 data lines.
 #   line 1: Swedish characters in a name         (B1)
 #   line 2: key with leading zeros               (B4)
 #   line 3: empty generic_name                   (B2/B4: stays NULL)
 #   line 4: too many fields = malformed          (B3: counted, skipped)
 #   line 5: normal row
+#   line 6: manufacturer "N/A" is a junk VALUE (B7: must stay text, not NULL)
 # The extra column EXTRA is not in COLUMN_MAP    (B2: must not be stored)
 HEADER = ("MDR_REPORT_KEY|DEVICE_SEQUENCE_NO|GENERIC_NAME|"
           "DEVICE_REPORT_PRODUCT_CODE|MANUFACTURER_D_NAME|EXTRA")
@@ -29,8 +30,9 @@ LINES = [
     "3|1||FRN|NI|z",
     "4|1|A|B|C|D|E|F",
     "5|1|VALVE|LGW|ABBOTT|w",
+    "6|1|STENT|ABC|N/A|v",
 ]
-GOOD_ROWS = 4
+GOOD_ROWS = 5
 BAD_ROWS = 1
 
 
@@ -114,7 +116,7 @@ def test_B4_all_text(loaded):
 def test_B5_metadata_and_row_numbers(loaded):
     assert {r["source_file"] for r in loaded.rows.values()} == {bronze_ingest.SOURCE_FILE_LABEL}
     numbers = sorted(r["source_row_num"] for r in loaded.rows.values())
-    assert numbers == list(range(1, GOOD_ROWS + 1))  # 1..4, no gaps, across chunks
+    assert numbers == list(range(1, GOOD_ROWS + 1))  # 1..5, no gaps, across chunks
 
 
 def test_B6_double_run_same_count(source_file):
@@ -123,3 +125,8 @@ def test_B6_double_run_same_count(source_file):
     first = len(client.rows)
     bronze_ingest.ingest(source_file, client)
     assert len(client.rows) == first == GOOD_ROWS
+
+
+def test_B7_junk_markers_kept(loaded):
+    # "N/A" is a junk VALUE that silver flags (S3). It must not become NULL.
+    assert by_key(loaded, "6")["manufacturer_raw"] == "N/A"

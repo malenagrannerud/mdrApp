@@ -112,25 +112,25 @@ Aggregation + ranking, since categorical and numerical data types
       │  bronze_ingest.py
       ▼
  ┌────────────┐
- │  BRONZE    │  raw, append-only
+ │  BRONZE    │  
  └─────┬──────┘
        │  Gate keeper tests before SILVER
        ▼
  ┌────────────┐   
  │  SILVER    │──────────────► silver_rejected 
  └─────┬──────┘
-       │  Gate keeper tests before GOLD (S7 reconciliation, silver not empty)
+       │  Gate keeper tests before GOLD 
        ▼
  ┌────────────┐
- │  GOLD      │  product_stats, manufacturer_stats, ranked views
+ │  GOLD      │  
  └─────┬──────┘
-       │  GKG  (G3 reconciliation, G4 sanity)
+       │  Gate keeper tests before Dashboard  
        ▼
    run_pipeline() logs the run in pipeline_runs
-       │  GKD  (every verify_pipeline() check passed)
-       ▼  publish_gold.py
+       │  
+       ▼  
  ┌────────────┐
- │  SUPABASE  │  gold only
+ │  SUPABASE  │  
  └─────┬──────┘
        ▼
   Dashboard + Data quality panel      
@@ -138,43 +138,55 @@ Aggregation + ranking, since categorical and numerical data types
  
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  
  
+
+
 #### Bronze
- 
-| ID | Requirement | Test |
-|---|---|---|
-| B1 | Pipe-delimited reading, `latin-1`, `QUOTE_NONE` | `test_B1_latin1_names` |
-| B2 | Five headers are unchanged. A changed header fails loudly. | `test_B2_only_mapped_columns_are_stored`, `test_B2_empty_value_stays_null`, `test_B2_missing_source_column_fails_loudly`, `02_bronze.sql`: columns filled |
-| B3 | Append-only: parsed rows are kept, unparseable rows are counted and logged, UPDATE/DELETE/TRUNCATE are blocked | `test_B3_every_parsed_row_is_kept`, `test_B3_bad_lines_are_counted_and_logged`, `02_bronze.sql`: blocking test |
-| B4 | Values are stored as text. Empty field becomes `NULL` and `N/A` stay as text. | `test_B4_all_text`, `test_B4_junk_markers_are_not_turned_into_null` |
-| B5 | Every row has `source_file`, `source_row_num` and `inserted_at` | `test_B5_metadata_and_row_numbers`, `02_bronze.sql`: metadata filled |
-| B6 | A rerun is detected, logged and adds nothing; and `UNIQUE (source_file, source_row_num)` is the backstop. | `test_B6_double_run_same_count` |
-| **GKB** | Gate keeper: Silver runs only if B1–B6 pass | `db_run.sh` runs `02_bronze.sql` first and stops on error |
- 
-#### Silver
- 
-| ID | Requirement | Test |
-|---|---|---|
-| S1 | Rows without a PK are rejected as `S1_missing_key` | `verify_pipeline()` |
-| S2 | For duplicate PK, keep the row with the lowest bronze `id`; reject the rest as `S2_duplicate_key` | `verify_pipeline()` |
-| S3 | Missing `generic_name` / `manufacturer` is stored as `NULL` with a flag, never imputed; missing `product_code` is rejected as `S3_missing_product_code` | `verify_pipeline()` |
-| S4 | Junk manufacturers are flagged (`manufacturer_is_junk = TRUE`) and the row is kept | `verify_pipeline()`|
-| S5 | Manufacturer names are normalized deterministically (longest keyword wins, then parent name A–Z). The mapping is built over distinct raw names, not over all rows. | `verify_pipeline()` |
-| S6 | Each product code has one canonical name (most common non-NULL, ties A–Z) | `verify_pipeline()` |
-| **GKS** | Gate keeper: `bronze = silver + rejected`, otherwise error and rollback | `verify_pipeline()` |
 
- 
-#### Gold
- 
-| ID | Requirement | Test |
-|---|---|---|
-| G1 | Count per `product_code` with canonical name (`MISSING NAME` if none) | `verify_pipeline()` |
-| G2 | Count per normalized manufacturer, excluding junk and NULL | `verify_pipeline()` |
-| G5 | Rank is computed in `*_ranked` views, not stored | `verify_pipeline()` |
-| G7 | A failed Silver/Gold run is rolled back and logged in `pipeline_runs` | `verify_pipeline()` |
-| G8 | RLS on all tables; `anon` can only `SELECT` Gold tables, views, `pipeline_runs` and `quality_checks` | `verify_pipeline()` |
-| **GKG** | `sum(product_stats)`=silver rows; `sum(manufacturer_stats)`=silver rows that are not junk and not NULL.`verify_pipeline()`. `total_reports > 0` in every Gold row. Else rollback and the previous Gold data stays  | Enforced in `refresh_gold()`; `verify_pipeline()` |
- 
+## Requirements and tests
 
+- One requirement = one test = one ID. Gatekeeper tests (GK) come last in each layer.
+- The next layer is built only if all gatekeeper tests of the previous layer pass.
+
+### Bronze
+
+| ID | Requirement | Acceptance criterion | Test | Status |
+|---|---|---|---|---|
+| B1 | Read pipe-delimited `latin-1`, quotes as plain text | A name with `Å` is stored unchanged | `test_B1_latin1_names` | Exists |
+| B2 | Store only the five mapped columns | Every row has exactly the mapped columns + metadata | `test_B2_only_mapped_columns` | Exists |
+| B3 | A changed source header fails loudly | A missing source column raises an error naming the column | `test_B3_missing_column_fails` | New |
+| B4 | Malformed lines are counted, logged and not stored | Skipped count = malformed lines in the file | `test_B4_bad_lines_counted` | Exists |
+| B5 | All values are stored as text | Key `00123` keeps its leading zeros | `test_B5_all_text` | Exists |
+| B6 | An empty field becomes `NULL`, never imputed | Empty `generic_name` is `NULL`, not `""` | `test_B6_empty_is_null` | Exists |
+| B7 | Junk markers stay as text | Manufacturer `N/A` is stored as `"N/A"`, not `NULL` | `test_B7_junk_markers_kept` | New + code fix |
+| B8 | Every row is traceable to file and line | `source_file` is set; `source_row_num` runs 1..n without gaps | `test_B8_traceable_rows` | Exists |
+| B9 | A rerun adds nothing | Second run with the same limit: row count unchanged | `test_B9_rerun_adds_nothing` | Exists |
+| B10 | A higher sample limit adds only the new rows | Load 2 rows, then 5: total = 5, no duplicates | `test_B10_higher_limit_adds_new_rows` | New |
+| B11 | Bronze is append-only | `DELETE` and `UPDATE` are refused; `TRUNCATE` trigger is enabled | `02_bronze.sql` | Manual |
+| **GKB1** | Every source column is mapped | Each of the 5 columns has at least one non-`NULL` value | `02_bronze.sql` | Manual |
+| **GKB2** | Every row has metadata | 0 rows with `NULL` `source_file`, `source_row_num` or `inserted_at` | `02_bronze.sql` | Manual |
+
+### Silver
+
+| ID | Requirement | Acceptance criterion | Test | Status |
+|---|---|---|---|---|
+| S1 | Invalid rows are quarantined with a reason, never dropped | Missing key, duplicate key (lowest bronze `id` kept) and missing product code each appear in quarantine with their reason | `verify_pipeline()` `S1` | Exists (as `S2`, duplicates only) |
+| S2 | Missing name or manufacturer: `NULL` + flag, never imputed | Flags match the data in every row | `verify_pipeline()` `S2` | Exists (as `S3b`) |
+| S3 | Junk manufacturers are flagged and kept | 0 junk names without `manufacturer_is_junk = TRUE` | `verify_pipeline()` `S3` | Exists (as `S4`) |
+| S4 | Manufacturer names map to the correct parent company | A fixed reference list (e.g. `NOBEL BIOCARE → ENVISTA`, `MAQUET → GETINGE`) maps as expected | `verify_pipeline()` `S4` | New |
+| S5 | Each product code has one canonical name | 0 named product codes missing in `product_code_dim` | `verify_pipeline()` `S5` | Exists (as `S6`) |
+| **GKS1** | `product_code` is never `NULL` in silver | 0 silver rows with `NULL` `product_code` | `verify_pipeline()` `GKS1` | Exists (as `S3a`) |
+| **GKS2** | Reconciliation: bronze = silver + quarantine | `bronze = silver + rejected` for the current run | `verify_pipeline()` `GKS2` | Exists (as `S7`) |
+
+### Gold
+
+| ID | Requirement | Acceptance criterion | Test | Status |
+|---|---|---|---|---|
+| G1 | Every run is logged; the latest run succeeded and matches silver | Latest `pipeline_runs` row is `success` and `rows_silver` = silver count | `verify_pipeline()` `G1` | Exists (as `G7`) |
+| G2 | A failed run is rolled back and logged | Forced failure: `status = 'failed'` with error message, previous gold unchanged | `run_pipeline()` | Manual |
+| G3 | The public `anon` role cannot read raw data | No `SELECT` for `anon` on bronze, silver or quarantine | `verify_pipeline()` `G3` | Exists (as `G8a`) |
+| G4 | Row level security is on for all pipeline tables | RLS enabled on 9 of 9 tables | `verify_pipeline()` `G4` | Exists (as `G8c`) |
+| **GKG1** | Reconciliation: products | `SUM(product_stats.total_reports)` = silver rows | `verify_pipeline()` `GKG1` | Exists (as `G3a`) |
+| **GKG2** | Reconciliation: manufacturers, junk and `NULL` excluded | `SUM(manufacturer_stats.total_reports)` = non-junk, named silver rows | `verify_pipeline()` `GKG2` | Exists (as `G3b`) |
 #### Observability
 | ID | Requirement | Test |
 |---|---|---|
@@ -185,34 +197,18 @@ Aggregation + ranking, since categorical and numerical data types
  
 
 ### STEP 2 — RUN THE PIPELINE
-```bash
-# medallion/.env needs LOCAL_DATABASE_URL and SUPABASE_DB_URL
-set -a && source medallion/.env && set +a
-pip install -r medallion/python/requirements.txt
-pytest medallion/python                                     # no database needed
 
-medallion/scripts/db_setup.sh "$LOCAL_DATABASE_URL"         # sql 01, 03a, 08
-python medallion/python/bronze_ingest.py                    # bronze
-medallion/scripts/db_run.sh "$LOCAL_DATABASE_URL"           # sql 02, 03b, 04, 06, 07 + verify
-python medallion/python/publish_gold.py                     # gold to Supabase
+FILE STRUCTURE
 
-npm install && npm run dev                                  # dashboard
 ```
-
-### FILE STRUCTURE
-```
-├── .github
-│   └── workflows
-│       └── ci.yml
+├── PIPELINE.md
+├── ingest.log
 ├── medallion
 │   ├── analysis
 │   │   ├── eda_device.py
 │   │   └── eda_device_output.txt
-│   ├── data
-│   │   └── DEVICE2024.txt
 │   ├── python
 │   │   ├── bronze_ingest.py
-│   │   ├── publish_gold.py
 │   │   ├── requirements.txt
 │   │   └── test_bronze_ingest.py
 │   ├── scripts
@@ -220,19 +216,20 @@ npm install && npm run dev                                  # dashboard
 │   │   └── db_setup.sh
 │   ├── sql
 │   │   ├── 01_create_tables.sql
-│   │   ├── 02_bronze.sql
-│   │   ├── 03a_seed_manufacturers.sql
-│   │   ├── 03b_silver.sql
-│   │   ├── 04_gold.sql
+│   │   ├── 02_seed_manufacturers.sql
+│   │   ├── 03_bronze.sql
+│   │   ├── 04_silver.sql
+│   │   ├── 05_gold.sql
 │   │   ├── 06_pipeline.sql
-│   │   ├── 07_verify_silver_gold.sql
-│   │   └── 08_quality_checks.sql
+│   │   └── 07_verify_silver_gold.sql
 │   └── supabase.js
-src
-└── components
-    ├── Dashboard.jsx
-    └── DataQualityPanel.jsx
+├── src
+│   ├── components
+│   │   ├── Dashboard.jsx
+│   │   ├── DataQualityPanel.jsx
 ```
+
+
  
 ## FUTURE STEPS 
 - dbt: turn the gates into dbt tests. 

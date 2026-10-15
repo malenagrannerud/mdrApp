@@ -7,12 +7,6 @@
     2 - Defines run_pipeline() which runs silver -> gold and logs the run in pipeline_runs.
 
 
-  RULES IMPLEMENTED
-    G7  Failed run is rolled back and logged
-    G8  Least privilege (RLS on pipeline_runs)
-    GKS Silver -> Gold gatekeeper (enforced in refresh_silver_reports)
-    GKG Gold -> Dashboard gatekeeper (enforced in refresh_gold)
-
     
 */
 

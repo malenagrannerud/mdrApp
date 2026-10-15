@@ -72,6 +72,8 @@ def ingest(source_file: str, supabase_client) -> None:
         encoding="latin-1",               # RULE B1: wrong encoding corrupts names
         quoting=csv.QUOTE_NONE,           # RULE B1: do not interpret quotes
         dtype=str,                        # RULE B4: everything as text, no type conversion
+        keep_default_na=False,            # RULE B7: "N/A", "NA", "NULL" are junk VALUES, not missing
+        na_values=[""],                   # RULE B6: only an empty field becomes NULL
         on_bad_lines=count_bad_line,      # RULE B3: count skipped lines
         engine="python",                  # required for a callable on_bad_lines
         chunksize=BATCH_SIZE,
