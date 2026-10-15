@@ -113,6 +113,15 @@ checks AS (
                 WHERE run_id = (SELECT run_id FROM latest)) AS r
     ) x
 
+
+
+
+
+
+
+
+
+
     -- ---------- GOLD ----------
     UNION ALL
     SELECT 'G3a', 'sum(product_stats) = silver rows',

@@ -210,12 +210,6 @@ FROM (
 ) m
 ORDER BY normalize_mfr_name(raw_name), kw_len DESC, parent_name;
 
--- ============================================================
--- RUN THE FUNCTION
--- ============================================================
--- Must run AFTER the mapping exists so silver_reports picks it up.
-SELECT * FROM refresh_silver_reports();
-
 
 -- ============================================================
 -- RULE S6: build product_code_dim (canonical name per code)

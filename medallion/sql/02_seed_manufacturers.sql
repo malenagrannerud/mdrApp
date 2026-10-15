@@ -2,7 +2,7 @@
   03a_seed_manufacturers.sql
   Author: Malena | Updated: 2026-10-07
 
-  Parent-company keyword rules that drive auto-generation of manufacturer_mapping in 03b_silver.sql.
+  Parent-company keyword rules that drive auto-generation of manufacturer_mapping in SILVER
 
   RULE S5
 */
