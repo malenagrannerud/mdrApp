@@ -135,12 +135,10 @@ Aggregation, since categorical and numerical data types
  
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  
 
-
 - One requirement = one test = one ID.
 - Gatekeeper tests (GK) come last in each layer.
 - The next layer is built only if all gatekeeper tests of the previous layer pass.
 - All other failed tests are reported, not blocking
-
 
 #### Database configuration checks
 Run once before the pipeline
