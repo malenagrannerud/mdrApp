@@ -140,45 +140,51 @@ Aggregation, since categorical and numerical data types
 - Gatekeeper tests (GK) come last in each layer.
 - The next layer is built only if all gatekeeper tests of the previous layer pass.
 
-#### Bronze
 
-| ID | Requirement | Why | Test |
+#### Database configuration checks
+Runned one time before the pipeline
+
+| ID | Requirement | Why | Test Location |
 |---|---|---|---|
-| B1 | Read pipe-delimited `latin-1`, quotes as plain text | Wrong encoding corrupts manufacturer names | `test_B1_latin1_names` |
-| B2 | A changed source header fails loudly | FDA can change the file format; a wrong mapping must not load silently | `test_B2_missing_column_fails` |
-| B3 | Malformed lines are counted and logged, never hidden | No silent data loss | `test_B3_bad_lines_counted` |
-| B4 | Values are stored raw: text only, leading zeros and junk markers (`N/A`) kept; only an empty field becomes `NULL` | Bronze is the untouched source of truth | `test_B4_values_stored_raw` |
-| B5 | Every row is traceable to file and line | Any number on the dashboard can be traced back to the source | `test_B5_traceable_rows` |
-| B6 | A rerun adds nothing | Idempotent ingest: safe to run again | `test_B6_rerun_adds_nothing` |
-| B7 | Bronze is append-only | Raw data can never be changed after load | `03_bronze.sql` (manual) |
-| **GKB1** | Every source column is mapped | Catches a wrong file or mapping on real data | `03_bronze.sql` (manual) |
+| DB1 | The public `anon` role cannot read raw data | Least privilege: only gold is public | `verify_pipeline()`|
+| DB2 | Bronze is append-only | Raw data can never be changed after load | `verify_pipeline()` |
+
+#### Bronze
+| ID | Requirement | Why | Test Location |
+|---|---|---|---|
+| B1 | Read pipe-delimited `latin-1`, quotes as plain text | Wrong encoding corrupts manufacturer names | `test_bronze_ingest.py` |
+| B2 | A changed source header fails loudly | FDA can change the file format; a wrong mapping must not load silently | `test_bronze_ingest.py` |
+| B3 | Malformed lines are counted and logged, never hidden | No silent data loss | `test_bronze_ingest.py` |
+| B4 | Values are stored raw: text only, leading zeros and junk markers (`N/A`) kept; only an empty field becomes `NULL` | Bronze is the untouched source of truth | `test_bronze_ingest.py` |
+| B5 | Every row is traceable to file and line | Any number on the dashboard can be traced back to the source | `test_bronze_ingest.py` |
+| B6 | A rerun adds nothing | Idempotent ingest: safe to run again | `test_bronze_ingest.py` |
+| **GKB1** | Every source column is mapped | Catches a wrong file or mapping on real data | `test_bronze_ingest.py` |
 
 #### Silver
 
-| ID | Requirement | Why | Test |
+| ID | Requirement | Why | Test Location |
 |---|---|---|---|
-| S1 | Invalid rows are quarantined with a reason, never dropped | EDA: 33 duplicate keys | `verify_pipeline()` `S1` |
-| S2 | Missing name or manufacturer: `NULL` + flag, never imputed | EDA: 0.16 % missing manufacturer | `verify_pipeline()` `S2` |
-| S3 | Junk manufacturer names are flagged and kept | EDA: 1,065 junk names (`UNK`, `NI`, …) | `verify_pipeline()` `S3` |
-| S4 | Manufacturer names map to the correct parent company | EDA: up to 99 spellings per manufacturer; protects Q2 | `verify_pipeline()` `S4` |
-| S5 | Each product code has one canonical name | EDA: 1,402 codes with more than one name; protects Q1 | `verify_pipeline()` `S5` |
-| **GKS1** | Reconciliation: bronze = silver + quarantine | Proves no row was lost between layers | `verify_pipeline()` `GKS1` |
+| S1 | Invalid rows are quarantined with a reason, never dropped | EDA: 33 duplicate keys | `04_silver.sql` |
+| S2 | Missing name or manufacturer: `NULL` + flag, never imputed | EDA: 0.16 % missing manufacturer | `04_silver.sql`|
+| S3 | Junk manufacturer names are flagged and kept | EDA: 1,065 junk names (`UNK`, `NI`, …) | `04_silver.sql`  |
+| S4 | Manufacturer names map to the correct parent company | EDA: up to 99 spellings per manufacturer; protects Q2 | `04_silver.sql` |
+| S5 | Each product code has one canonical name | EDA: 1,402 codes with more than one name; protects Q1 | `04_silver.sql` |
+| **GKS1** | Reconciliation: bronze = silver + quarantine | Proves no row was lost between layers | `04_silver.sql`|
 
 #### Gold
 
-| ID | Requirement | Why | Test |
+| ID | Requirement | Why | Test Location |
 |---|---|---|---|
-| G1 | Every run is logged; the latest run succeeded | The dashboard shows only data from a successful run | `verify_pipeline()` `G1` |
-| G2 | The public `anon` role cannot read raw data | Least privilege: only gold is public | `verify_pipeline()` `G2` |
-| **GKG1** | Reconciliation: products | Protects the answer to Q1 | `verify_pipeline()` `GKG1` |
-| **GKG2** | Reconciliation: manufacturers, junk and `NULL` excluded | Protects the answer to Q2 | `verify_pipeline()` `GKG2` |
+| G1 | Every run is logged; the latest run succeeded | The dashboard shows only data from a successful run | `05_gold.sql`|
+| **GKG1** | Reconciliation: products | Protects the answer to Q1 | `05_gold.sql` |
+| **GKG2** | Reconciliation: manufacturers, junk and `NULL` excluded | Protects the answer to Q2 | `05_gold.sql` |
 
 #### Observability
-| ID | Requirement | Test |
+| ID | Requirement | Test Location |
 |---|---|---|
 |O1| Ingest progress, skipped lines, rows per second, duration | `bronze_ingest.py` log |
 |O2| One row per pipeline run (counts, status, error) | `pipeline_runs` |
-|O3| Result of every verification check at publish | `quality_checks` |
+|O3| Result of every verification check at publish | `db_run.sh` |
 |O4| Rows per layer, % valid rows (threshold 95 %), checks passed | Dashboard: `DataQualityPanel.jsx` |
  
 
