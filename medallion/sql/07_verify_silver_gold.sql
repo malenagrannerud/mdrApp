@@ -2,12 +2,10 @@
   07_verify_silver_gold.sql
   Author: Malena | Created: 2026-10-08 | Updated: 2026-10-15
 
-  DESCRIPTION: Read-only checks that prove the silver and gold layers obey their rules.
+  Read-only checks that prove the silver and gold layers obey their rules.
                One check = one requirement ID, exactly as in PIPELINE.md.
                Requirement tests first, gatekeeper tests (GK) last in each layer.
 
-    SILVER: S1, S2, S3, S4, S5, GKS1, GKS2
-    GOLD:   G1, G3, G4, GKG1, GKG2      (G2 is a manual test of run_pipeline())
 
   HOW TO:   Step 1: Paste this code in SQL and run (creates the function).
             Step 2: Run SELECT * FROM verify_pipeline();

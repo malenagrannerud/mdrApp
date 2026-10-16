@@ -97,8 +97,7 @@ top 20 manufacturers = 68.3% of rows
 - Nr of reports will be high where there are many products on the market, this is not "risk"
 
 #### 2.3 - ANALYSIS METHOD
-Aggregation, since categorical and numerical data types
- 
+Count reports per product code (Q1) and per parent manufacturer (Q2), ranked by count. Junk and NULL manufacturers are excluded from Q2.
  
  
 ## II - STEPS IN CONDUCTING THE PIPELINE
@@ -108,34 +107,27 @@ Aggregation, since categorical and numerical data types
  DEVICE2024.txt
       │  bronze_ingest.py
       ▼
- ┌────────────┐
- │  BRONZE    │  
- └─────┬──────┘
-       │  Gate keeper tests before SILVER
-       ▼
- ┌────────────┐   
- │  SILVER    │──────────────► silver_rejected 
- └─────┬──────┘
-       │  Gate keeper tests before GOLD 
-       ▼
- ┌────────────┐
- │  GOLD      │  
- └─────┬──────┘
-       │  Gate keeper tests before Dashboard  
-       ▼
-   run_pipeline() logs the run in pipeline_runs
-       │  
-       ▼  
- ┌────────────┐
- │  SUPABASE  │  
- └─────┬──────┘
-       ▼
-  Dashboard + Data quality panel      
+┌─ SUPABASE (Postgres) ─────────────────────────┐
+│  ┌──────────┐                                 │
+│  │  BRONZE  │                                 │
+│  └────┬─────┘                                 │
+│       ▼ Gate keeper before SILVER             │
+│  ┌──────────┐                                 │
+│  │  SILVER  │──► quarantine (silver_rejected) │
+│  └────┬─────┘                                 │
+│       ▼ Gate keeper before GOLD               │
+│  ┌──────────┐                                 │
+│  │   GOLD   │                                 │
+│  └────┬─────┘                                 │
+│       ▼  Gate keeper before dashboard         │
+└───────┬───────────────────────────────────────┘
+        ▼
+  Dashboard + Data quality panel (O4)    
 ```
  
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  
 
-- One requirement = one test = one ID.
+- Every requirement traces back to Q1, Q2 or an EDA finding, and forward to one test.
 - Gatekeeper tests (GK) come last in each layer.
 - The next layer is built only if all gatekeeper tests of the previous layer pass.
 - All other failed tests are reported, not blocking
@@ -204,11 +196,11 @@ pip install -r medallion/python/requirements.txt
 # 1. Create roles, tables and manufacturer rules. Safe to rerun.
 medallion/scripts/db_setup.sh "$DATABASE_URL"
  
-# 2. Load the raw file into bronze (B1-B10). A rerun adds nothing.
+# 2. Load the raw file into bronze. A rerun adds nothing.
 python medallion/python/bronze_ingest.py
  
-# 3. Bronze checks -> silver -> gold -> verify_pipeline().
-#    Exits with code 1 if any check fails: do not publish.
+# 3. Bronze check -> silver -> gold -> verify_pipeline().
+#    Saves all results in quality_checks; exits 1 if any check failed.
 medallion/scripts/db_run.sh "$DATABASE_URL"
 ```
  
@@ -225,7 +217,7 @@ FILE STRUCTURE
 │   ├── analysis
 │   │   ├── eda_device.py
 │   │   └── eda_device_output.txt
-│   ├── data                          # DEVICE2024.txt 
+│   ├── data                          
 │   ├── python
 │   │   ├── bronze_ingest.py
 │   │   ├── requirements.txt
@@ -246,7 +238,7 @@ FILE STRUCTURE
 │   ├── components
 │   │   ├── Dashboard.jsx
 │   │   ├── DataQualityPanel.jsx
-    └── ...                           # MDR and QMS guides
+    └── ...                           
 ```
 
 
