@@ -139,15 +139,16 @@ Aggregation, since categorical and numerical data types
 - One requirement = one test = one ID.
 - Gatekeeper tests (GK) come last in each layer.
 - The next layer is built only if all gatekeeper tests of the previous layer pass.
+- All other failed tests are reported, not blocking
 
 
 #### Database configuration checks
-Runned one time before the pipeline
+Run once before the pipeline
 
 | ID | Requirement | Why | Test Location |
 |---|---|---|---|
-| DB1 | The public `anon` role cannot read raw data | Least privilege: only gold is public | `verify_pipeline()`|
-| DB2 | Bronze is append-only | Raw data can never be changed after load | `verify_pipeline()` |
+| DB1 | The public `anon` role cannot read raw data | Least privilege: only gold is public | `01_create_tables.sql`|
+| DB2 | Bronze is append-only | Raw data can never be changed after load | `01_create_tables.sql` |
 
 #### Bronze
 | ID | Requirement | Why | Test Location |
@@ -158,7 +159,7 @@ Runned one time before the pipeline
 | B4 | Values are stored raw: text only, leading zeros and junk markers (`N/A`) kept; only an empty field becomes `NULL` | Bronze is the untouched source of truth | `test_bronze_ingest.py` |
 | B5 | Every row is traceable to file and line | Any number on the dashboard can be traced back to the source | `test_bronze_ingest.py` |
 | B6 | A rerun adds nothing | Idempotent ingest: safe to run again | `test_bronze_ingest.py` |
-| **GKB1** | Every source column is mapped | Catches a wrong file or mapping on real data | `test_bronze_ingest.py` |
+| **GKB1** | Every source column is mapped | Catches a wrong file or mapping on real data | `03_bronze.sql` |
 
 #### Silver
 
@@ -175,7 +176,6 @@ Runned one time before the pipeline
 
 | ID | Requirement | Why | Test Location |
 |---|---|---|---|
-| G1 | Every run is logged; the latest run succeeded | The dashboard shows only data from a successful run | `05_gold.sql`|
 | **GKG1** | Reconciliation: products | Protects the answer to Q1 | `05_gold.sql` |
 | **GKG2** | Reconciliation: manufacturers, junk and `NULL` excluded | Protects the answer to Q2 | `05_gold.sql` |
 
@@ -184,7 +184,7 @@ Runned one time before the pipeline
 |---|---|---|
 |O1| Ingest progress, skipped lines, rows per second, duration | `bronze_ingest.py` log |
 |O2| One row per pipeline run (counts, status, error) | `pipeline_runs` |
-|O3| Result of every verification check at publish | `db_run.sh` |
+|O3| Result of every verification check after a run | `db_run.sh` |
 |O4| Rows per layer, % valid rows (threshold 95 %), checks passed | Dashboard: `DataQualityPanel.jsx` |
  
 
