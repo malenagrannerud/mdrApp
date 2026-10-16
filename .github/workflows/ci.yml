@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r medallion/python/requirements.txt
 
-      - name: Bronze ingest tests (B1-B6)
+      - name: Bronze ingest tests (B1-B10)
         working-directory: medallion/python
         run: pytest . -v
 
