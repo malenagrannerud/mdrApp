@@ -50,8 +50,7 @@ See [FDA's MAUDE database](https://www.fda.gov/medical-devices/medical-device-re
 python medallion/analysis/eda_device.py
 ```
 
-SUMMARY (for details, see medallion/analysis/eda_device.txt )
-
+SUMMARY (for details, see [medallion/analysis/eda_device_output.txt](./medallion/analysis/eda_device_output.txt))
 ```
  === 1. Duplicates on primary key ===
 rows: 2,629,410
@@ -62,7 +61,7 @@ duplicated (the whole row): 31
 ```
 ```
 === 2. Missing values (%) ===
-MDR_REPORT_KEY: 0.00 | DEVICE_SEQUENCE_NO: 0.00 | GENERIC_NAME: 0.02 | MANUFACTURER_D_NAME: 0.16 | DEVICE_REPORT_PRODUCT_CODE: 0.00
+MDR_REPORT_KEY: 0.00 | DEVICE_SEQUENCE_NO: 0.00 | GENERIC_NAME: 0.02 | MANUFACTURER_D_NAME: 0.16 | DEVICE_REPORT_PRODUCT_CODE: 0.00 | 
 ```
 ```
 === 3. Junk MANUFACTURER_D_NAME = ===
@@ -95,17 +94,15 @@ top 20 manufacturers = 68.3% of rows
 - Inaccuracies in reports
 - Lack of verification that the device caused the reported event
 - Lack of information about frequency of device use
-- Nr of reports will be high where there are many products on the market, this is not risk
-
+- Nr of reports will be high where there are many products on the market, this is not "risk"
 
 #### 2.3 - ANALYSIS METHOD
-Aggregation + ranking, since categorical and numerical data types
+Aggregation, since categorical and numerical data types
  
  
  
 ## II - STEPS IN CONDUCTING THE PIPELINE
 
- 
 ### Pipeline Architecture & Data Flow
 ```
  DEVICE2024.txt
@@ -139,7 +136,8 @@ Aggregation + ranking, since categorical and numerical data types
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  
 
 
-- One requirement = one test = one ID. Gatekeeper tests (GK) come last in each layer.
+- One requirement = one test = one ID.
+- Gatekeeper tests (GK) come last in each layer.
 - The next layer is built only if all gatekeeper tests of the previous layer pass.
 
 #### Bronze
@@ -186,22 +184,51 @@ Aggregation + ranking, since categorical and numerical data types
 
 ### STEP 2 — RUN THE PIPELINE
 
+
+Run all commands from the repo root.
+ 
+**Prerequisites**
+- Python 3.12 and `psql` (PostgreSQL client)
+- A Postgres database: a Supabase project, or a local Postgres for development
+- `DEVICE2024.txt` from [FDA's MAUDE database](https://www.fda.gov/medical-devices/medical-device-reporting-mdr-how-report-medical-device-problems/mdr-data-files#download), unzipped into `medallion/data/`
+- `medallion/.env` with `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (used by the ingest)
+```bash
+# 0. Install dependencies and run the bronze unit tests 
+pip install -r medallion/python/requirements.txt
+(cd medallion/python && pytest -v)
+ 
+# 1. Create roles, tables and manufacturer rules. Safe to rerun.
+medallion/scripts/db_setup.sh "$DATABASE_URL"
+ 
+# 2. Load the raw file into bronze (B1-B10). A rerun adds nothing.
+python medallion/python/bronze_ingest.py
+ 
+# 3. Bronze checks -> silver -> gold -> verify_pipeline().
+#    Exits with code 1 if any check fails: do not publish.
+medallion/scripts/db_run.sh "$DATABASE_URL"
+```
+ 
+`$DATABASE_URL` is the Postgres connection string, e.g. `postgresql://user:password@host:5432/postgres`.
+Expected last line of step 3: `ALL CHECKS PASSED`.
+ 
+
 FILE STRUCTURE
 
 ```
 ├── PIPELINE.md
-├── ingest.log
+├── .github/workflows/ci.yml          # Runs bronze tests & the frontend build on every push
 ├── medallion
 │   ├── analysis
 │   │   ├── eda_device.py
 │   │   └── eda_device_output.txt
+│   ├── data                          # DEVICE2024.txt 
 │   ├── python
 │   │   ├── bronze_ingest.py
 │   │   ├── requirements.txt
 │   │   └── test_bronze_ingest.py
 │   ├── scripts
-│   │   ├── db_run.sh
-│   │   └── db_setup.sh
+│   │   ├── db_run.sh                 # Step 1
+│   │   └── db_setup.sh               # Step 3
 │   ├── sql
 │   │   ├── 01_create_tables.sql
 │   │   ├── 02_seed_manufacturers.sql
@@ -215,6 +242,7 @@ FILE STRUCTURE
 │   ├── components
 │   │   ├── Dashboard.jsx
 │   │   ├── DataQualityPanel.jsx
+    └── ...                           # MDR and QMS guides
 ```
 
 
