@@ -122,7 +122,7 @@ Count reports per product code (Q1) and per parent manufacturer (Q2), ranked by 
 │       ▼  Gate keeper before dashboard         │
 └───────┬───────────────────────────────────────┘
         ▼
-  Dashboard + Data quality panel (O4)    
+  Dashboard + Data quality panel  
 ```
  
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  
@@ -173,7 +173,7 @@ Run once before the pipeline
 | ID | Requirement | Test Location |
 |---|---|---|
 |O1| Ingest progress, skipped lines, rows per second, duration | `bronze_ingest.py` log |
-|O2| One row per pipeline run (counts, status, error) | `pipeline_runs` |
+|O2| One row per pipeline run (counts, status, error) | `pipeline.sql` |
 |O3| Result of every verification check after a run | `db_run.sh` |
 |O4| Rows per layer, % valid rows (threshold 95 %), checks passed | Dashboard: `DataQualityPanel.jsx` |
  
