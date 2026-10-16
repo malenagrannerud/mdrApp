@@ -13,10 +13,10 @@ export PGOPTIONS="-c work_mem=256MB -c statement_timeout=0"
 run_file() { echo "== $1"; psql "$DB_URL" -v ON_ERROR_STOP=1 -f "${SQL_DIR}/$1"; }
 run_sql()  { psql "$DB_URL" -v ON_ERROR_STOP=1 -c "$1"; }
 
-run_file 02_bronze.sql                 # GKB: bronze checks
-run_sql "ANALYZE bronze_reports;"      # fresh statistics for the big silver joins
-run_file 03b_silver.sql
-run_file 04_gold.sql
+run_file 03_bronze.sql                 
+run_sql "ANALYZE bronze_reports;"      
+run_file 04_silver.sql
+run_file 05_gold.sql
 run_file 06_pipeline.sql
 run_file 07_verify_silver_gold.sql
 
