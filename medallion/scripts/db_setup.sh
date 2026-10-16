@@ -15,7 +15,7 @@ BEGIN
   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'service_role') THEN CREATE ROLE service_role NOLOGIN; END IF;
 END \$\$;"
 
-for file in 01_create_tables 03a_seed_manufacturers 08_quality_checks; do
+for file in 01_create_tables 02_seed_manufacturers; do
   echo "== applying ${file}.sql"
   psql_run -f "${SQL_DIR}/${file}.sql"
 done
