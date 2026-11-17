@@ -1,38 +1,87 @@
 /*
-  04_silver.sql
+  01_silver.sql
   Author: Malena | Updated: 2026-10-15
 
-  Reads bronze_reports and splits every row into silver_reports (valid)
-  or silver_rejected (invalid, with a reason).
+  Reads data from bronze_ingest.py and splits every row into silver_reports (valid data)
+  or silver_rejected (invalid data, with a reason).
 
+  Step 1: Input: Raw data from bronze_ingest.py to silver_raw
+  Step 2: Data cleaning
+  Step 3: Standardized formats
+  Step 4: Data is joined if > 1 input file
+  Step 5: Cleaned data is stored in silver_reports and unused in silver_quaranteen
+
+Rules: 
+| S1 | Data cleaning (remove junk, handle duplicates, handle missing values etc)
+| S2 | Standardize formats (For example UTC dates, company names) 
+| S3 | Join data sets (consolidated customer/product view - NOT YET) 
+
+
+FATTAR EJ ÄN
+  - manufacturer_mapping       (built when this file runs)
+  - refresh_silver_reports(),  called by run_pipeline(), builds
+      product_code_dim
 
   THE KEY RULE (GKS2): bronze rows = silver rows + rejected rows.
          If the numbers do not match, data was lost silently.
          The function then fails and undoes everything.
 
-  Input:
-    - bronze_reports
-    - manufacturer_mapping
-    - manufacturer_parent
-
-  Output:
-    - manufacturer_mapping       (built when this file runs)
-    - refresh_silver_reports(),  called by run_pipeline(), builds
-      silver_reports, silver_rejected and product_code_dim
-
-  RULES IMPLEMENTED HERE (IDs as in PIPELINE.md):
-    S1   Invalid rows are quarantined with a reason
-    S2   Missing name/manufacturer: NULL + flag, never imputed
-    S3   Junk manufacturers are flagged and kept
-    S4   Manufacturer names map to a parent company
-    S5   One canonical name per product code
-    GKS1 product_code is never NULL in silver (via S1)
-    GKS2 Reconciliation: bronze = silver + rejected
 */
 
 
 -- ============================================================
--- RULE S4: normalize names before keyword matching
+-- SILVER RAW DATA: raw data, exactly as it arrived
+-- ============================================================
+CREATE TABLE IF NOT EXISTS silver_raw (
+  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+  report_key          text,
+  device_sequence_no  text,
+  generic_name        text,
+  product_code_raw    text,
+  manufacturer_raw    text,                   
+  inserted_at         timestamptz NOT NULL DEFAULT now(),
+       
+);
+
+CREATE INDEX IF NOT EXISTS idx_bronze_report_key    ON bronze_reports (report_key);
+CREATE INDEX IF NOT EXISTS idx_bronze_device_seq_no ON bronze_reports (device_sequence_no);
+CREATE INDEX IF NOT EXISTS idx_bronze_source_file   ON bronze_reports (source_file);
+
+CREATE OR REPLACE FUNCTION prevent_bronze_mutation()
+RETURNS TRIGGER AS $$
+BEGIN
+    RAISE EXCEPTION 'bronze_reports is append-only: % operations are not permitted', TG_OP;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS enforce_bronze_immutability ON bronze_reports;
+CREATE TRIGGER enforce_bronze_immutability
+    BEFORE UPDATE OR DELETE ON bronze_reports
+    FOR EACH ROW
+    EXECUTE FUNCTION prevent_bronze_mutation();
+
+DROP TRIGGER IF EXISTS enforce_bronze_no_truncate ON bronze_reports;
+CREATE TRIGGER enforce_bronze_no_truncate
+    BEFORE TRUNCATE ON bronze_reports
+    FOR EACH STATEMENT
+    EXECUTE FUNCTION prevent_bronze_mutation();
+
+CREATE INDEX IF NOT EXISTS idx_bronze_mfr_raw ON bronze_reports (manufacturer_raw);
+
+
+
+
+-- ============================================================
+-- | S1 | Data cleaning (remove junk, handle duplicates, handle missing values etc)
+-- ============================================================
+
+
+
+
+
+-- ============================================================
+-- Standardize manufacturer_names before keyword matching
 -- ============================================================
 -- WHY: Strips legal suffixes and punctuation so "Medtronic, Inc." and
 -- "MEDTRONIC" collapse to the same string before keyword matching.
@@ -125,7 +174,7 @@ BEGIN
     FROM mapped mp;
 
     -- --------------------------------------------------------
-    -- Rows that cannot be used go to quarantine
+    -- Observability: Rows that cannot be used go to quarantine
     -- --------------------------------------------------------
     INSERT INTO silver_rejected (run_id, bronze_id, report_key, device_sequence_no,
                                  generic_name, product_code, manufacturer_name,
@@ -209,7 +258,7 @@ $$ LANGUAGE plpgsql;
 
 
 -- ============================================================
--- RULE S4: auto-generate manufacturer_mapping from manufacturer_parent
+-- | S2 | Standardize formats : manufacturer_names
 -- ============================================================
 -- WHY longest keyword wins?
 --   A raw name can match several parents if keywords overlap

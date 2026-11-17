@@ -1,5 +1,5 @@
 /*
-  07_verify_silver_gold.sql
+  04_verify_silver_gold.sql
   Author: Malena | Created: 2026-10-08 | Updated: 2026-10-15
 
   Read-only checks that prove the silver and gold layers obey their rules.

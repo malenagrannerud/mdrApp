@@ -1,5 +1,5 @@
 /*
-  05_gold.sql
+  02_gold.sql
   Author: Malena | Updated: 2026-10-15
 
   Creates refresh_gold() and two dashboard views.

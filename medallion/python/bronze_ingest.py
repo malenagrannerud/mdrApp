@@ -2,19 +2,23 @@
 
 Author: Malena | Updated: 2026-10-01
 
-Automated pipeline to batch ingest a raw file into a scalable storage area. 
-Goal: To upload batches of raw data without changing the file. A timestamp is added. 
-OBS! Onlys selected columns are stored due to space restrictions. 
+Automated pipeline to batch ingest a raw file into a scalable storage area.
+Goal: To upload batches of raw data without changing the file. A timestamp is added.
+OBS! Only selected columns are stored due to space restrictions.
 
+Rules:
 
-Rules implemented: B1 - B3
+| B1 | No data changed. The archive is immutable | `test_bronze_ingest.py` |
+| B2 | Data is saved in original format | `test_bronze_ingest.py` |
+| B3 | Each row has a timestamp | `test_bronze_ingest.py` |
+
 A rerun adds nothing. Raise DEV_SAMPLE_LIMIT to load more rows.
-
 """
 
 import os
 import csv
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -25,11 +29,9 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 # ===================================== CONFIGURATION =====================================
 SOURCE_FILE = "medallion/data/DEVICE2024.txt"
-SOURCE_FILE_LABEL = "DEVICE2024.txt"   # Stored in source_file column
-BATCH_SIZE = 1000                      # rows per Supabase upsert
-DEV_SAMPLE_LIMIT = 60000               # Raise it to add more rows. Max ca 200 000 before Supabase free tier is exceeded. Set to None to load all rows.
+BATCH_SIZE = 1000
+DEV_SAMPLE_LIMIT = 60000
 
-# B2: only these 5 columns are stored. Raw FDA column name -> bronze_reports column name
 COLUMN_MAP = {
     "MDR_REPORT_KEY":              "report_key",
     "DEVICE_SEQUENCE_NO":          "device_sequence_no",
@@ -62,59 +64,35 @@ def get_supabase_client():
 # ===================================== INGEST =====================================
 def ingest(source_file: str, supabase_client) -> None:
     """Streams the source file into bronze_reports in batches."""
-
-    # RULE B4: malformed lines are counted and logged, never hidden.
-    skipped = {"count": 0}
-
-    def count_bad_line(fields):
-        skipped["count"] += 1
-        return None  # None = skip the line
-
+    # RULE B2: Read raw text in original format without type conversion or NA parsing
     reader = pd.read_csv(
         source_file,
-        sep="|",                          # RULE B1: pipe-delimited
-        encoding="latin-1",               # RULE B1: wrong encoding corrupts names
-        quoting=csv.QUOTE_NONE,           # RULE B1: do not interpret quotes
-        dtype=str,                        # RULE B5: everything as text, no type conversion
-        keep_default_na=False,            # RULE B7: "N/A", "NA", "NULL" are junk VALUES, not missing
-        na_values=[""],                   # RULE B6: only an empty field becomes NULL
-        on_bad_lines=count_bad_line,      # RULE B4: count skipped lines
-        engine="python",                  # required for a callable on_bad_lines
+        sep="|",
+        quoting=csv.QUOTE_NONE,
+        dtype=str,
+        keep_default_na=False,
         chunksize=BATCH_SIZE,
     )
 
-    rows_read = 0      # position in the parsed file, used as source_row_num
+    rows_read = 0
     total_batches = 0
 
     for batch_num, chunk in enumerate(reader, start=1):
-        # RULE B2: keep only the five mapped columns (after reading, so that
-        # lines with the wrong number of fields are still detected by B4).
-        # RULE B3: a missing source column raises KeyError here (fails loudly).
-        chunk = chunk[list(COLUMN_MAP.keys())]
+        chunk = chunk[list(COLUMN_MAP.keys())].rename(columns=COLUMN_MAP)
 
-        chunk = chunk.rename(columns=COLUMN_MAP)
+        # Row number ensures a rerun adds nothing (even on empty/duplicate rows)
+        chunk["row_num"] = range(rows_read + 1, rows_read + len(chunk) + 1)
 
-        # RULE B8: metadata for traceability (inserted_at is set by the database)
-        chunk["source_file"] = SOURCE_FILE_LABEL
-        ...
-        # RULE B8 + B9: row number makes each row traceable and identifiable, so a rerun is detected.
-        # The database enforces UNIQUE (source_file, source_row_num).
-        chunk["source_row_num"] = range(rows_read + 1, rows_read + len(chunk) + 1)
+        # RULE B3: Each row has a timestamp
+        chunk["ingested_at"] = datetime.now(timezone.utc).isoformat()
 
-        # pandas turns None back into NaN in to_dict(), and JSON cannot hold NaN.
-        # So we clean each row AFTER to_dict(). Empty values become NULL (B6: no imputing).
         records = chunk.to_dict(orient="records")
-        records = [
-            {k: (None if pd.isna(v) else v) for k, v in row.items()}
-            for row in records
-        ]
 
         try:
-            # RULE B11: only inserts, never update or delete (the DB triggers enforce this too).
-            # RULE B9 + B10: rows that already exist are ignored, so a rerun adds nothing.
+            # RULE B1: Immutable archive — ignore duplicates so existing rows never change
             supabase_client.table("bronze_reports").upsert(
                 records,
-                on_conflict="source_file,source_row_num",
+                on_conflict="row_num",
                 ignore_duplicates=True,
             ).execute()
         except Exception as e:
@@ -123,20 +101,15 @@ def ingest(source_file: str, supabase_client) -> None:
 
         rows_read += len(records)
         total_batches += 1
-        logger.info(f"Batch {batch_num} processed: {len(records):,} rows "
-                    f"(total read: {rows_read:,})")
+        logger.info(
+            f"Batch {batch_num} processed: {len(records):,} rows "
+            f"(total read: {rows_read:,})"
+        )
 
         if DEV_SAMPLE_LIMIT and rows_read >= DEV_SAMPLE_LIMIT:
             logger.info(f"DEV_SAMPLE_LIMIT reached ({DEV_SAMPLE_LIMIT:,}). Stopping.")
             break
-
-    # RULE B4: report skipped lines
-    logger.info(f"Skipped (malformed) lines: {skipped['count']:,}")
     logger.info(f"BRONZE DONE: {rows_read:,} rows read in {total_batches} batches")
-    logger.info("Next: run 03_bronze.sql (B11, GKB1, GKB2) before running Silver")
-
-
-
 
 # ===================================== MAIN =====================================
 if __name__ == "__main__":

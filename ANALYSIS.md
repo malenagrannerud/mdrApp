@@ -4,7 +4,7 @@ This document covers the data analysis behind the [Aegis Compliance](./README.md
 ![Post-market surveillance dashboard](./screenshots/dashboard.png)
  
 
-### STEP 1 - DEFINE THE RESEARCH QUESTION 
+### STEP 1 - DEFINE USE CASES
 The purpose is to answer
 | #  | Question | 
 |---|---|
@@ -27,19 +27,17 @@ See [FDA's MAUDE database](https://www.fda.gov/medical-devices/medical-device-re
 - Device data will be used in this analysis. 
  
  
-#### 2.1 SELECT DATA FIELDS
- 
+#### 2.1 EXPLORE DATA FIELDS
 | Column Headers | Description | 
 |---|---|
-| `MDR_REPORT_KEY` | Links this file to other MAUDE files. Can be duplicated.| 
-| `DEVICE_SEQUENCE_NO`| Unique per unit in a report|
+| `MDR_REPORT_KEY` | Links this file to other MAUDE files. Can be duplicated | 
+| `DEVICE_SEQUENCE_NO`| Unique per unit in a report |
 | `GENERIC_NAME`  | The generic common name of the medical device | 
 | `DEVICE_REPORT_PRODUCT_CODE` | FDA product classification code (3 letters) | 
 | `MANUFACTURER_D_NAME` | Company that manufactured the device | 
  
  
 #### 2.2 EXPLORATORY DATA ANALYSIS (EDA) TO DISCOVER REQUIREMENTS
- 
 ```bash 
 python medallion/analysis/eda_device.py
 ```

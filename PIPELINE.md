@@ -123,13 +123,10 @@ FILE STRUCTURE
 │   │   ├── db_run.sh                 # Step 1
 │   │   └── db_setup.sh               # Step 3
 │   ├── sql
-│   │   ├── 01_create_tables.sql
-│   │   ├── 02_seed_manufacturers.sql
-│   │   ├── 03_bronze.sql
-│   │   ├── 04_silver_layer.sql
-│   │   ├── 05_gold.sql
-│   │   ├── 06_pipeline.sql
-│   │   └── 07_verify_silver_gold.sql
+│   │   ├── 01_silver.sql
+│   │   ├── 02_gold.sql
+│   │   ├── 03_pipeline.sql
+│   │   └── 04_verify_silver_gold.sql
 │   └── supabase.js
 ├── src
 │   ├── components
