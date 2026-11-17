@@ -1,4 +1,4 @@
-This document covers the process behind the [Aegis Compliance](./README.md) dashboard. 
+This document covers the data analysis behind the [Aegis Compliance](./README.md) dashboard. 
 **Live demo:** [mdr-qms-steps.vercel.app](https://mdr-qms-steps.vercel.app/)
  
 ![Post-market surveillance dashboard](./screenshots/dashboard.png)
