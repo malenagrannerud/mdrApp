@@ -1,35 +1,42 @@
 # PIPELINE.md — ETL Pipeline: Medallion Architecture
 
 ```
- APIs, IoT sensors, Transactional data bases
-      │  
-      ▼
-┌──────────┐                                 
-│  BRONZE LAYER - keep data raw for groud truth
-       No data changed (immutable archive).
-       Original format (JSON, CSV, parquet).
-       Timestamped (Permanent historical record).                                 
-└────┬─────┘                                 
-     ▼
-Scalable storage area (Here: Supabase)
-     ▼        
-┌──────────┐                                 
-│  SILVER LAYER - cleansed source of truth
-    Data cleaning (remove junk, handle duplicates, handle missing values)
-    Standardize formats (For example UTC dates)
-    Join data sets (consolidated customer/product view)
-
-└────┬─────┘                                 
-     ▼            
-┌──────────┐                                 
-│   GOLD LAYER - Refined and business ready data
-     Tailored for use cases
-     Optimized structures
-     Fast performing                                 
-└────┬─────┘
-     ▼        
-
-  Dashboard + Data quality panel  
+  SOURCES
+  APIs · IoT sensors · Transactional databases · Files
+        │
+        ▼
+┌─────────────────────────────────────────────────────────┐
+  BRONZE LAYER · Raw data, ground truth
+  ─────────────────────────────────────────────────────────
+  • No data changed (immutable archive)
+  • Original format kept (JSON, CSV, Parquet)
+  • Timestamped (permanent historical record)
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+        Scalable storage (here: Supabase / Postgres)
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────┐
+  SILVER LAYER · Cleansed source of truth
+  ─────────────────────────────────────────────────────────
+  • Data cleaning: remove junk, handle duplicates,
+    handle missing values
+  • Standardize formats (for example UTC dates)
+  • Join data sets (consolidated customer/product view)
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────┐
+  GOLD LAYER · Refined, business-ready data
+  ─────────────────────────────────────────────────────────
+  • Tailored for specific use cases
+  • Optimized structures
+  • Fast performing
+└────────────────────────┬────────────────────────────────┘
+                         │
+                         ▼
+        Dashboard + Data quality panel
 ```
  
 ### STEP 1 - REQUIREMENTS ON EACH LAYER  

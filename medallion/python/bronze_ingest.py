@@ -2,8 +2,12 @@
 
 Author: Malena | Updated: 2026-10-01
 
-Description: Reads the raw FDA MAUDE file and loads it into the Supabase bronze_reports table.
-Rules implemented: B1 - B10 (B11 is enforced by the database). See PIPELINE.md.
+Automated pipeline to batch ingest a raw file into a scalable storage area. 
+Goal: To upload batches of raw data without changing the file. A timestamp is added. 
+OBS! Onlys selected columns are stored due to space restrictions. 
+
+
+Rules implemented: B1 - B3
 A rerun adds nothing. Raise DEV_SAMPLE_LIMIT to load more rows.
 
 """
@@ -21,9 +25,9 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 # ===================================== CONFIGURATION =====================================
 SOURCE_FILE = "medallion/data/DEVICE2024.txt"
-SOURCE_FILE_LABEL = "DEVICE2024.txt"   # B8: stored in source_file column
+SOURCE_FILE_LABEL = "DEVICE2024.txt"   # Stored in source_file column
 BATCH_SIZE = 1000                      # rows per Supabase upsert
-DEV_SAMPLE_LIMIT = 60000               # B10: raise it to add more rows. Max ca 200 000 before Supabase free tier is exceeded. Set to None to load all rows.
+DEV_SAMPLE_LIMIT = 60000               # Raise it to add more rows. Max ca 200 000 before Supabase free tier is exceeded. Set to None to load all rows.
 
 # B2: only these 5 columns are stored. Raw FDA column name -> bronze_reports column name
 COLUMN_MAP = {
