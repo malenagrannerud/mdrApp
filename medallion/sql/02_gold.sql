@@ -2,14 +2,11 @@
   02_gold.sql
   Author: Malena | Updated: 2026-10-15
 
+  STEP 1: Input: silver_reports
+
+
   Creates refresh_gold() and two dashboard views.
 
-  RULES IMPLEMENTED HERE (IDs as in PIPELINE.md):
-    GKG1  Reconciliation: sum(product_stats) = silver rows
-    GKG2  Reconciliation: sum(manufacturer_stats) = non-junk, named silver rows
-  Also:
-    Q1/Q2 Count per product code and per manufacturer
-    Sanity check (total_reports > 0) and rank in views (not stored)
 */
 
 
@@ -61,7 +58,7 @@ BEGIN
     GROUP BY manufacturer_normalized;
 
     -- --------------------------------------------------------
-    -- RULE GKG1 + GKG2: Exact reconciliation
+    -- Exact reconciliation
     -- --------------------------------------------------------
     SELECT COALESCE(SUM(total_reports), 0) INTO v_products     FROM product_stats;
     SELECT COALESCE(SUM(total_reports), 0) INTO v_manufacturer FROM manufacturer_stats;

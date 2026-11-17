@@ -8,7 +8,7 @@
   Step 1: Input: Raw data from bronze_ingest.py to silver_raw
   Step 2: Data cleaning
   Step 3: Standardized formats
-  Step 4: Data is joined if > 1 input file
+  Step 4: Data is joined FUTURE STEP
   Step 5: Cleaned data is stored in silver_reports and unused in silver_quaranteen
 
 Rules: 
