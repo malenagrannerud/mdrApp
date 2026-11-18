@@ -5,87 +5,129 @@
   Cleans and standardizes data and splits every row into silver_reports (valid data)
   or silver_rejected (invalid data, with a reason).
 
-  
+  FUNCTIONS
+  Helper functions:  normalize_mfr_name()
+  Functions: refresh_silver_reports() runs the steps in order
+
+  STEPS
   Step 1: Data cleaning on bronze_reports
-  Step 2: Standardized formats on bronze_reports
+  Step 2: Standardize formats on bronze_reports
   Step 3: Data from different sources is joined FUTURE STEP
   Step 4: Cleaned standardized data is stored in silver_reports 
           and unused in silver_quaranteen
 
-Rules: 
+Rules:
 | S1 | Data cleaning (remove junk, handle duplicates, handle missing values etc)
-| S2 | Standardize formats (For example UTC dates, company names) 
-| S3 | Join data sets (consolidated customer/product view - NOT YET) 
+| S2 | Standardize formats (For example UTC dates, company names)
+| S3 | Join data sets (consolidated customer/product view - NOT YET)
 
 
-FATTAR EJ ÄN
-  - manufacturer_mapping       (built when this file runs)
-  - refresh_silver_reports(),  called by run_pipeline(), builds
-      product_code_dim
+ HOW SILVER READS BRONZE
+  bronze_reports holds every line of a file as one text value (raw), the header as
+  line 1 (row_num = 1). Splitting a line into fields is interpretation, so it happens here:
+  - the view bronze_device finds each needed column BY NAME in the header line of each
+    file, so files with another column order work, and a repeated column name gives the
+    first one;
+  - the delimiter is | (MAUDE). Files that do not have all five columns are not device
+    data and are left out of silver (the input check reports them with a NOTICE);
+  - a value is the text between the delimiters, unchanged. An empty field is '' (as in bronze).
+  "bronze rows" in the key rule above means the data rows (row_num > 1) of those files.
 
-  THE KEY RULE (GKS2): bronze rows = silver rows + rejected rows.
-         If the numbers do not match, data was lost silently.
-         The function then fails and undoes everything.
 
+  THE KEY RULE: bronze rows = silver rows + rejected rows.
 */
 
 
--- ============================================================
--- SILVER RAW DATA: raw data, exactly as it arrived
--- ============================================================
-CREATE TABLE IF NOT EXISTS silver_raw (
-  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-  report_key          text,
-  device_sequence_no  text,
-  generic_name        text,
-  product_code_raw    text,
-  manufacturer_raw    text,                   
-  inserted_at         timestamptz NOT NULL DEFAULT now(),
-       
+-- SETUP A: index on bronze_reports. Finds the header line of every file without reading the whole table
+CREATE INDEX IF NOT EXISTS idx_bronze_header ON bronze_reports (source_file) WHERE row_num = 1;
+
+-- SETUP B: silver tables (created here, kept between runs)
+CREATE TABLE IF NOT EXISTS silver_reports (
+  run_id                   uuid        NOT NULL,
+  report_key               text        NOT NULL,
+  device_sequence_no       text        NOT NULL,
+  generic_name             text,
+  product_code             text        NOT NULL,
+  manufacturer_name        text,
+  manufacturer_normalized  text,
+  manufacturer_is_junk     boolean     NOT NULL,
+  has_missing_generic_name boolean     NOT NULL,
+  has_missing_manufacturer boolean     NOT NULL,
+  _silver_updated_at       timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (report_key, device_sequence_no)
 );
 
-CREATE INDEX IF NOT EXISTS idx_silver_report_key    ON silver_raw (report_key);
-CREATE INDEX IF NOT EXISTS idx_silver_device_seq_no ON silver_raw (device_sequence_no);
-CREATE INDEX IF NOT EXISTS idx_silver_source_file   ON silver_raw (source_file);
+-- SETUP C: Quarantine table: one row per rejected bronze row, per run, with the reason. It points back to bronze with (source_file, row_num).
+CREATE TABLE IF NOT EXISTS silver_rejected (
+  run_id             uuid        NOT NULL,
+  source_file        text        NOT NULL,
+  row_num            bigint      NOT NULL,
+  report_key         text,
+  device_sequence_no text,
+  generic_name       text,
+  product_code       text,
+  manufacturer_name  text,
+  rejection_reason   text        NOT NULL,
+  rejected_at        timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (run_id, source_file, row_num)
+);
 
-CREATE OR REPLACE FUNCTION prevent_silver_mutation()
-RETURNS TRIGGER AS $$
-BEGIN
-    RAISE EXCEPTION 'silver_raw is append-only: % operations are not permitted', TG_OP;
-END;
-$$ LANGUAGE plpgsql;
+CREATE TABLE IF NOT EXISTS product_code_dim (
+  product_code           text PRIMARY KEY,
+  canonical_generic_name text NOT NULL
+);
 
-DROP TRIGGER IF EXISTS enforce_silver_immutability ON silver_raw;
-CREATE TRIGGER enforce_silver_immutability
-    BEFORE UPDATE OR DELETE ON silver_raw
-    FOR EACH ROW
-    EXECUTE FUNCTION prevent_silver_mutation();
+CREATE TABLE IF NOT EXISTS manufacturer_mapping (
+  raw_name        text PRIMARY KEY,
+  normalized_name text NOT NULL
+);
 
-DROP TRIGGER IF EXISTS enforce_bronze_no_truncate ON bronze_reports;
-CREATE TRIGGER enforce_bronze_no_truncate
-    BEFORE TRUNCATE ON bronze_reports
-    FOR EACH STATEMENT
-    EXECUTE FUNCTION prevent_silver_mutation();
-
-CREATE INDEX IF NOT EXISTS idx_silver_mfr_raw ON silver_raw (manufacturer_raw);
-
-
-
-
--- ============================================================
--- | S1 | Data cleaning (remove junk, handle duplicates, handle missing values etc)
--- ============================================================
-
-
-
+ALTER TABLE silver_reports       ENABLE ROW LEVEL SECURITY;
+ALTER TABLE silver_rejected      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE product_code_dim     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE manufacturer_mapping ENABLE ROW LEVEL SECURITY;
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON silver_reports, silver_rejected, product_code_dim, manufacturer_mapping TO service_role;
 
 
 -- ============================================================
--- Standardize manufacturer_names before keyword matching
+-- SETUP C: bronze_device = the five device columns, split out of raw
 -- ============================================================
--- WHY: Strips legal suffixes and punctuation so "Medtronic, Inc." and
--- "MEDTRONIC" collapse to the same string before keyword matching.
+-- WHY a view and not a table? Nothing is copied or stored twice, and it always matches bronze.
+-- WHY security_invoker? RLS on bronze_reports then applies to whoever reads the view.
+CREATE OR REPLACE VIEW bronze_device WITH (security_invoker = true) AS
+WITH header AS (
+    SELECT source_file, string_to_array(raw, '|') AS cols
+    FROM bronze_reports
+    WHERE row_num = 1
+),
+pos AS (
+    SELECT source_file,
+           array_position(cols, 'MDR_REPORT_KEY')             AS p_key,
+           array_position(cols, 'DEVICE_SEQUENCE_NO')         AS p_seq,
+           array_position(cols, 'GENERIC_NAME')               AS p_name,
+           array_position(cols, 'DEVICE_REPORT_PRODUCT_CODE') AS p_code,
+           array_position(cols, 'MANUFACTURER_D_NAME')        AS p_mfr
+    FROM header
+)
+SELECT b.source_file,
+       b.row_num,
+       split_part(b.raw, '|', p.p_key)  AS report_key,
+       split_part(b.raw, '|', p.p_seq)  AS device_sequence_no,
+       split_part(b.raw, '|', p.p_name) AS generic_name,
+       split_part(b.raw, '|', p.p_code) AS product_code_raw,
+       split_part(b.raw, '|', p.p_mfr)  AS manufacturer_raw
+FROM bronze_reports b
+JOIN pos p ON p.source_file = b.source_file
+WHERE b.row_num > 1
+  AND p.p_key IS NOT NULL AND p.p_seq  IS NOT NULL AND p.p_name IS NOT NULL
+  AND p.p_code IS NOT NULL AND p.p_mfr IS NOT NULL;
+
+GRANT SELECT ON bronze_device TO service_role;
+
+-- -----------------------------------------------------------------------
+
 CREATE OR REPLACE FUNCTION normalize_mfr_name(raw text)
 RETURNS text AS $$
     SELECT UPPER(
@@ -101,131 +143,138 @@ RETURNS text AS $$
     );
 $$ LANGUAGE sql IMMUTABLE PARALLEL SAFE;
 
-
--- ============================================================
--- THE CLEANING FUNCTION
--- ============================================================
+-- -----------------------------------------------------------------------
 DROP FUNCTION IF EXISTS refresh_silver_reports();
 
 CREATE OR REPLACE FUNCTION refresh_silver_reports()
 RETURNS TABLE(o_run_id uuid, o_bronze bigint, o_written bigint, o_rejected bigint) AS $$
 DECLARE
     v_run_id   uuid := gen_random_uuid();
+    v_junk     text[] := ARRAY['NI','UNK','*','N/A','NA','UNKNOWN','NO INFORMATION',
+                               'NO MATCH','NO DATA','NONE','?','0HP','000'];
+   
     v_bronze   bigint;
     v_written  bigint;
     v_rejected bigint;
 BEGIN
+-- -----------------------------------------------------------------------
+-- STEPS
+
+
+    -- ========================================================
+    -- STEP 1: CLEAN (S1). Give every bronze row ONE label and flag junk and missing values.
+    -- ========================================================
+    -- WHY ROW_NUMBER() and not DISTINCT ON?
+    --   RULE S1 says duplicates must go to silver_rejected, not be silently dropped.
+    --   ROW_NUMBER() lets us label rn > 1 as 'S2_duplicate_key' so they appear in the
+    --   quarantine table. rn = 1 is the first row (file name, then line number), which is kept.
+    -- RULE S1: missing generic_name and manufacturer stay NULL, never imputed. Flags mark them.
+    CREATE TEMP TABLE tmp_cleaned ON COMMIT DROP AS
+    SELECT
+        r.source_file, r.row_num,
+        r.report_key, r.device_sequence_no,
+        r.generic_name, r.product_code_raw, r.manufacturer_raw,
+        CASE
+            -- missing key
+            WHEN NULLIF(TRIM(r.report_key), '') IS NULL
+              OR NULLIF(TRIM(r.device_sequence_no), '') IS NULL
+                THEN 'S1_missing_key'
+            -- duplicate key, the first row is kept
+            WHEN r.rn > 1
+                THEN 'S2_duplicate_key'
+            -- missing product code (GKS1)
+            WHEN NULLIF(TRIM(r.product_code_raw), '') IS NULL
+                THEN 'S3_missing_product_code'
+            ELSE NULL
+        END AS rejection_reason,
+        (NULLIF(TRIM(r.manufacturer_raw), '') IS NULL
+         OR UPPER(TRIM(r.manufacturer_raw)) = ANY (v_junk)
+         OR length(TRIM(r.manufacturer_raw)) < 2)         AS manufacturer_is_junk,
+        (NULLIF(TRIM(r.generic_name), '') IS NULL)        AS has_missing_generic_name,
+        (NULLIF(TRIM(r.manufacturer_raw), '') IS NULL)    AS has_missing_manufacturer
+    FROM (
+        SELECT d.*,
+               ROW_NUMBER() OVER (PARTITION BY d.report_key, d.device_sequence_no
+                                  ORDER BY d.source_file, d.row_num) AS rn
+        FROM bronze_device d
+    ) r;
+
+    -- ========================================================
+    -- STEP 2: STANDARDIZE (S2). Trim and company names.
+    -- ========================================================
+    -- Company names. WHY longest keyword wins?
+    --   A raw name can match several parents if keywords overlap (e.g. 'BARD' for BD and
+    --   'BARD PERIPHERAL' for BD). Without a tie-break, the database would pick randomly
+    --   and the same input could give different outputs on different runs.
+    -- WHY here? The mapping is rebuilt on every run, so it always matches the current bronze.
+    DELETE FROM manufacturer_mapping;
+
+    INSERT INTO manufacturer_mapping (raw_name, normalized_name)
+    SELECT DISTINCT ON (normalize_mfr_name(raw_name)) raw_name, parent_name
+    FROM (
+        SELECT n.raw_name,
+               p.parent_name,
+               MAX(length(kw)) AS kw_len
+        FROM (SELECT DISTINCT manufacturer_raw AS raw_name
+              FROM tmp_cleaned
+              WHERE length(TRIM(manufacturer_raw)) >= 2) n
+        CROSS JOIN manufacturer_parent p
+        CROSS JOIN LATERAL unnest(p.keywords) AS kw
+        WHERE normalize_mfr_name(n.raw_name) LIKE '%' || kw || '%'
+        GROUP BY n.raw_name, p.parent_name
+    ) m
+    ORDER BY normalize_mfr_name(raw_name), kw_len DESC, parent_name;
+
+    -- Trimmed values, and the parent company where the name is known (else the trimmed name).
+    CREATE TEMP TABLE tmp_standardized ON COMMIT DROP AS
+    SELECT
+        c.*,
+        NULLIF(TRIM(c.generic_name), '')      AS generic_name_std,
+        NULLIF(TRIM(c.product_code_raw), '')  AS product_code_std,
+        NULLIF(TRIM(c.manufacturer_raw), '')  AS manufacturer_name_std,
+        COALESCE(m.normalized_name, NULLIF(TRIM(c.manufacturer_raw), '')) AS manufacturer_normalized
+    FROM tmp_cleaned c
+    LEFT JOIN manufacturer_mapping m
+           ON normalize_mfr_name(c.manufacturer_raw) = normalize_mfr_name(m.raw_name);
+
+    -- ========================================================
+    -- STEP 3: JOIN (S3). FUTURE STEP: data from different sources is joined here.
+    -- ========================================================
+
+    -- ========================================================
+    -- STEP 4: STORE. Quarantine, silver, one name per product code, reconciliation.
+    -- ========================================================
+    -- Rows that cannot be used go to quarantine, with their raw values and the reason.
+    INSERT INTO silver_rejected (run_id, source_file, row_num, report_key, device_sequence_no,
+                                 generic_name, product_code, manufacturer_name, rejection_reason)
+    SELECT v_run_id, source_file, row_num, report_key, device_sequence_no,
+           generic_name, product_code_raw, manufacturer_raw, rejection_reason
+    FROM tmp_standardized
+    WHERE rejection_reason IS NOT NULL;
+
+    GET DIAGNOSTICS v_rejected = ROW_COUNT;
 
     -- WHY DELETE and not TRUNCATE? TRUNCATE takes an ACCESS EXCLUSIVE lock,
     -- which conflicts with the open result set of a RETURNS TABLE function.
     DELETE FROM silver_reports;
 
-    CREATE TEMP TABLE tmp_junk ON COMMIT DROP AS
-    SELECT unnest(ARRAY['NI','UNK','*','N/A','NA','UNKNOWN','NO INFORMATION',
-                        'NO MATCH','NO DATA','NONE','?','0HP','000']) AS marker;
-
-    -- --------------------------------------------------------
-    -- RULE S1: Give every bronze row ONE label
-    -- --------------------------------------------------------
-    -- WHY ROW_NUMBER() and not DISTINCT ON?
-    --   RULE S1 says duplicates must go to silver_rejected, not be
-    --   silently dropped. ROW_NUMBER() lets us label rn > 1 as
-    --   'S2_duplicate_key' so they appear in the quarantine table.
-    --   rn = 1 is the row with the lowest bronze id, which is kept.
-    CREATE TEMP TABLE tmp_classified ON COMMIT DROP AS
-    WITH
-    ranked AS (
-        SELECT
-            id, report_key, device_sequence_no,
-            generic_name, product_code_raw, manufacturer_raw,
-            ROW_NUMBER() OVER (
-                PARTITION BY report_key, device_sequence_no
-                ORDER BY id
-            ) AS rn
-        FROM bronze_reports
-    ),
-    mapped AS (
-        SELECT r.*,
-               COALESCE(m.normalized_name,
-                        NULLIF(TRIM(r.manufacturer_raw), '')) AS manufacturer_norm
-        FROM ranked r
-        LEFT JOIN manufacturer_mapping m
-               ON normalize_mfr_name(r.manufacturer_raw) = normalize_mfr_name(m.raw_name)
-    )
-    SELECT
-        mp.id AS bronze_id,
-        mp.report_key, mp.device_sequence_no,
-        mp.generic_name, mp.product_code_raw,
-        mp.manufacturer_raw, mp.manufacturer_norm,
-        mp.rn,
-        CASE
-            -- S1: missing key
-            WHEN mp.report_key IS NULL OR NULLIF(TRIM(mp.report_key), '') IS NULL
-                THEN 'S1_missing_key'
-            WHEN mp.device_sequence_no IS NULL OR NULLIF(TRIM(mp.device_sequence_no), '') IS NULL
-                THEN 'S1_missing_key'
-            -- S1: duplicate key, the lowest bronze id is kept
-            WHEN mp.rn > 1
-                THEN 'S2_duplicate_key'
-            -- S1 + GKS1: missing product code
-            WHEN NULLIF(TRIM(mp.product_code_raw), '') IS NULL
-                THEN 'S3_missing_product_code'
-            ELSE NULL
-        END AS rejection_reason
-    FROM mapped mp;
-
-    -- --------------------------------------------------------
-    -- Observability: Rows that cannot be used go to quarantine
-    -- --------------------------------------------------------
-    INSERT INTO silver_rejected (run_id, bronze_id, report_key, device_sequence_no,
-                                 generic_name, product_code, manufacturer_name,
-                                 rejection_reason)
-    SELECT v_run_id, bronze_id, report_key, device_sequence_no,
-           generic_name, product_code_raw, manufacturer_raw, rejection_reason
-    FROM tmp_classified
-    WHERE rejection_reason IS NOT NULL;
-
-    GET DIAGNOSTICS v_rejected = ROW_COUNT;
-
-    -- --------------------------------------------------------
-    -- RULE S2 + S3: Everything else goes to silver (with flags)
-    -- --------------------------------------------------------
-    -- RULE S2: missing generic_name and manufacturer stay NULL, never
-    -- imputed. Flags mark them instead.
     INSERT INTO silver_reports (
-        run_id,
-        report_key, device_sequence_no,
-        generic_name, product_code,
+        run_id, report_key, device_sequence_no, generic_name, product_code,
         manufacturer_name, manufacturer_normalized, manufacturer_is_junk,
         has_missing_generic_name, has_missing_manufacturer
     )
-    SELECT
-        v_run_id,
-        report_key,
-        device_sequence_no,
-        NULLIF(TRIM(generic_name), ''),
-        NULLIF(TRIM(product_code_raw), ''),
-        NULLIF(TRIM(manufacturer_raw), ''),
-        manufacturer_norm,
-        (manufacturer_raw IS NULL
-         OR UPPER(TRIM(manufacturer_raw)) IN (SELECT marker FROM tmp_junk)
-         OR length(TRIM(manufacturer_raw)) < 2) AS manufacturer_is_junk,
-        (generic_name IS NULL OR NULLIF(TRIM(generic_name), '') IS NULL)         AS has_missing_generic_name,
-        (manufacturer_raw IS NULL OR NULLIF(TRIM(manufacturer_raw), '') IS NULL) AS has_missing_manufacturer
-    FROM tmp_classified
+    SELECT v_run_id, report_key, device_sequence_no, generic_name_std, product_code_std,
+           manufacturer_name_std, manufacturer_normalized, manufacturer_is_junk,
+           has_missing_generic_name, has_missing_manufacturer
+    FROM tmp_standardized
     WHERE rejection_reason IS NULL;
 
     GET DIAGNOSTICS v_written = ROW_COUNT;
 
-    -- --------------------------------------------------------
-    -- RULE S5: build product_code_dim (canonical name per code)
-    -- --------------------------------------------------------
+    -- RULE S5: one canonical name per product code.
     -- WHY here? It must be built from the silver rows just written.
-    --   Built outside the function it would be empty on the first run
-    --   and one run behind after that.
-    -- WHY generic_name as the third sort key?
-    --   Two names with the same count would otherwise be picked randomly.
-    --   A-Z tie-break makes the result reproducible (S5).
+    -- WHY generic_name as the third sort key? Two names with the same count would otherwise
+    --   be picked randomly. The A-Z tie-break makes the result reproducible.
     DELETE FROM product_code_dim;
 
     INSERT INTO product_code_dim (product_code, canonical_generic_name)
@@ -238,10 +287,8 @@ BEGIN
     GROUP BY product_code, generic_name
     ORDER BY product_code, COUNT(*) DESC, generic_name;
 
-    -- --------------------------------------------------------
-    -- RULE GKS2: RECONCILIATION
-    -- --------------------------------------------------------
-    SELECT COUNT(*) INTO v_bronze FROM bronze_reports;
+    -- Verify nothing is lost between bronze and silver.
+    SELECT COUNT(*) INTO v_bronze FROM bronze_device;
 
     IF v_bronze <> v_written + v_rejected THEN
         RAISE EXCEPTION 'GKS2 failed: bronze=% but silver=% + rejected=%',
@@ -256,37 +303,3 @@ BEGIN
     RETURN QUERY SELECT v_run_id, v_bronze, v_written, v_rejected;
 END;
 $$ LANGUAGE plpgsql;
-
-
--- ============================================================
--- | S2 | Standardize formats : manufacturer_names
--- ============================================================
--- WHY longest keyword wins?
---   A raw name can match several parents if keywords overlap
---   (e.g. 'BARD' for BD and 'BARD PERIPHERAL' for BD). Without a
---   tie-break, the database would pick randomly and the same input
---   could give different outputs on different runs.
-TRUNCATE TABLE manufacturer_mapping;
-
-INSERT INTO manufacturer_mapping (raw_name, normalized_name)
-SELECT DISTINCT ON (normalize_mfr_name(raw_name)) raw_name, parent_name
-FROM (
-    SELECT n.raw_name,
-           p.parent_name,
-           MAX(length(kw)) AS kw_len
-    FROM (SELECT DISTINCT manufacturer_raw AS raw_name
-          FROM bronze_reports
-          WHERE manufacturer_raw IS NOT NULL
-            AND length(TRIM(manufacturer_raw)) >= 2) n
-    CROSS JOIN manufacturer_parent p
-    CROSS JOIN LATERAL unnest(p.keywords) AS kw
-    WHERE normalize_mfr_name(n.raw_name) LIKE '%' || kw || '%'
-    GROUP BY n.raw_name, p.parent_name
-) m
-ORDER BY normalize_mfr_name(raw_name), kw_len DESC, parent_name;
-
-
--- ============================================================
--- NOTE: RULE S5 (product_code_dim) is built INSIDE refresh_silver_reports(),
--- right after silver is written, so it always matches the current silver.
--- ============================================================

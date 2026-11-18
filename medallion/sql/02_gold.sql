@@ -2,17 +2,34 @@
   02_gold.sql
   Author: Malena | Updated: 2026-10-15
 
-  STEP 1: Input: silver_reports
+| G1 | See use cases and build SQL queries to tailor it | `05_gold.sql` |
+| G2 | Create optimized structures (star schemas, aggregation) | `05_gold.sql` |
+| G3 | Read optimized tables for dashboards | `05_gold.sql` |
 
-
-  Creates refresh_gold() and two dashboard views.
+  Functions:refresh_gold() - runs steps 
+  two dashboard views.
 
 */
 
+-- ---------------------------------------------------------
+-- Create tables 
+CREATE TABLE IF NOT EXISTS product_stats (
+    product_code  text PRIMARY KEY,
+    generic_name  text,
+    total_reports integer
+);
 
--- ============================================================
--- FUNCTION: refresh_gold()
--- ============================================================
+CREATE TABLE IF NOT EXISTS manufacturer_stats (
+    name          text PRIMARY KEY,
+    total_reports integer
+);
+
+ALTER TABLE product_stats      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE manufacturer_stats ENABLE ROW LEVEL SECURITY;
+GRANT SELECT, INSERT, UPDATE, DELETE ON product_stats, manufacturer_stats TO service_role;
+
+-- ---------------------------------------------------------
+
 DROP FUNCTION IF EXISTS refresh_gold();
 
 CREATE OR REPLACE FUNCTION refresh_gold()
@@ -31,9 +48,8 @@ BEGIN
     DELETE FROM product_stats;
     DELETE FROM manufacturer_stats;
 
-    -- --------------------------------------------------------
-    -- Q1: One row per product_code (the PK)
-    -- --------------------------------------------------------
+    -- --------------------------------------------------------------------
+    -- G1: Q1-One row per product_code (the PK)
     INSERT INTO product_stats (product_code, generic_name, total_reports)
     SELECT
         s.product_code,
@@ -45,9 +61,8 @@ BEGIN
     LEFT JOIN product_code_dim d ON d.product_code = s.product_code
     GROUP BY s.product_code, d.canonical_generic_name;
 
-    -- --------------------------------------------------------
-    -- Q2: One row per manufacturer (junk and NULL excluded)
-    -- --------------------------------------------------------
+    -- --------------------------------------------------------------------
+    -- G1: Q2- One row per manufacturer 
     INSERT INTO manufacturer_stats (name, total_reports)
     SELECT
         manufacturer_normalized AS name,
@@ -57,9 +72,8 @@ BEGIN
       AND manufacturer_is_junk = FALSE
     GROUP BY manufacturer_normalized;
 
-    -- --------------------------------------------------------
+    -- --------------------------------------------------------------------
     -- Exact reconciliation
-    -- --------------------------------------------------------
     SELECT COALESCE(SUM(total_reports), 0) INTO v_products     FROM product_stats;
     SELECT COALESCE(SUM(total_reports), 0) INTO v_manufacturer FROM manufacturer_stats;
 

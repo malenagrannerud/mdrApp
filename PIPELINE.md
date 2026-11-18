@@ -53,17 +53,17 @@ Gatekeeper tests (GK) come last in each layer. The next layer is built only if a
 #### Silver
 | ID | Requirement | Test Location |
 |---|---|---|
-| S1 | Data cleaning (remove junk, handle duplicates, handle missing values)| `04_silver.sql` |
-| S2 | Standardize formats (For example UTC dates, company names) | `04_silver.sql`|
-| S3 | Join data sets (consolidated customer/product view) | `04_silver.sql`  |
+| S1 | Data cleaning (remove junk, handle duplicates, handle missing values)| `01_silver.sql` |
+| S2 | Standardize formats (For example UTC dates, company names) | `01_silver.sql`|
+| S3 | Join data sets (consolidated customer/product view) | `01_silver.sql`  |
 
 
 #### Gold
 | ID | Requirement | Test Location |
 |---|---|---|
-| G1 | See use cases   | `05_gold.sql` |
-| G2 | Optimized structures (star schemas, aggregation) | `05_gold.sql` |
-| G3 | Read optimized tables for dashboards | `05_gold.sql` |
+| G1 | See use cases   | `02_gold.sql` |
+| G2 | Optimized structures (star schemas, aggregation) | `02_gold.sql` |
+| G3 | Read optimized tables for dashboards | `02_gold.sql` |
 
 
 #### Observability

@@ -15,7 +15,7 @@ Usage:
     A rerun adds nothing. A rerun with a higher ROWS adds only the new lines.
 
 Table bronze_reports (one row per line of a file):
-    source_file text, row_num bigint, raw_line text, ingested_at timestamptz
+    source_file text, row_num bigint, raw text, ingested_at timestamptz
     primary key (source_file, row_num)
 
 Design choices
@@ -36,6 +36,8 @@ Limits
   with an error.
 - On any error the load stops. Lines loaded before it stay (the archive is append-only);
   fix the cause and rerun.
+
+  RUN: python medallion/python/bronze_ingest.py medallion/data/DEVICE2024.txt=1000
 """
 
 import argparse
@@ -97,7 +99,7 @@ def build_rows(lines: list[tuple[int, str]], source_name: str) -> list[dict]:
     """One bronze row per line: file, line number, the line as it is, timestamp."""
     stamp = datetime.now(timezone.utc).isoformat()  # B3: every row has a timestamp
     return [
-        {"source_file": source_name, "row_num": number, "raw_line": text, "ingested_at": stamp}
+        {"source_file": source_name, "row_num": number, "raw": text, "ingested_at": stamp}
         for number, text in lines
     ]
 

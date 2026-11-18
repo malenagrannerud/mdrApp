@@ -56,7 +56,7 @@ def db():
 
 def lines(db, name):
     """The stored lines of one file, in line order."""
-    return [v["raw_line"] for k, v in sorted(db.store.items()) if k[0] == name]
+    return [v["raw"] for k, v in sorted(db.store.items()) if k[0] == name]
 
 
 # ============================== B1 ==============================
@@ -125,8 +125,8 @@ def test_b2_every_line_is_stored_exactly_as_it_is_in_the_file(sample_raw_file, d
 def test_b2_row_num_is_the_line_number_and_the_header_is_line_1(sample_raw_file, db):
     ingest(str(sample_raw_file), db)
 
-    assert db.store[("DEVICE2024.txt", 1)]["raw_line"].startswith("MDR_REPORT_KEY")
-    assert db.store[("DEVICE2024.txt", 4)]["raw_line"] == ""  # the blank line is line 4
+    assert db.store[("DEVICE2024.txt", 1)]["raw"].startswith("MDR_REPORT_KEY")
+    assert db.store[("DEVICE2024.txt", 4)]["raw"] == ""  # the blank line is line 4
 
 
 @pytest.mark.parametrize("terminator", ["\n", "\r\n", "\r"])
