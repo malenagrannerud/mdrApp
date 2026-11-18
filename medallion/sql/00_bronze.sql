@@ -1,20 +1,18 @@
 /*
-  00_bronze.sql
-  Author: Malena | Updated: 2026-11-18
+00_bronze.sql
+Author: Malena | Updated: 2026-11-18
 
-  Creates bronze_reports, the table the ingest loads into, and makes it append-only.
-  Run once, before bronze_ingest.py. It is safe to run again: it never drops or changes data.
+Run once, before bronze_ingest.py. 
+
+Input: -
+Output: Table bronze_reports for raw data.Makes data it append-only.
+Re run: Safe t never drops or changes data.
 
 Rules:
 | B1 | No data changed. The archive is immutable
 | B2 | Data is saved in original format
 | B3 | Each row has a timestamp
 
-  One row per line of a file:
-    source_file  which file the line comes from
-    row_num      the line number in the file (the header is line 1)
-    raw          the line exactly as it is in the file
-    ingested_at  when the row was loaded (B3)
 */
 
 -- ============================================================
