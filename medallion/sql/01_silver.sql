@@ -6,9 +6,9 @@
   or silver_rejected (invalid data, with a reason).
 
   Step 1: Input: Raw data from bronze_ingest.py to silver_raw
-  Step 2: Data cleaning
-  Step 3: Standardized formats
-  Step 4: Data is joined FUTURE STEP
+  Step 2: Data cleaning on silver_raw 
+  Step 3: Standardized formats on silver_raw
+  Step 4: Data from different sources is joined FUTURE STEP
   Step 5: Cleaned data is stored in silver_reports and unused in silver_quaranteen
 
 Rules: 
@@ -44,30 +44,30 @@ CREATE TABLE IF NOT EXISTS silver_raw (
        
 );
 
-CREATE INDEX IF NOT EXISTS idx_bronze_report_key    ON bronze_reports (report_key);
-CREATE INDEX IF NOT EXISTS idx_bronze_device_seq_no ON bronze_reports (device_sequence_no);
-CREATE INDEX IF NOT EXISTS idx_bronze_source_file   ON bronze_reports (source_file);
+CREATE INDEX IF NOT EXISTS idx_silver_report_key    ON silver_raw (report_key);
+CREATE INDEX IF NOT EXISTS idx_silver_device_seq_no ON silver_raw (device_sequence_no);
+CREATE INDEX IF NOT EXISTS idx_silver_source_file   ON silver_raw (source_file);
 
-CREATE OR REPLACE FUNCTION prevent_bronze_mutation()
+CREATE OR REPLACE FUNCTION prevent_silver_mutation()
 RETURNS TRIGGER AS $$
 BEGIN
-    RAISE EXCEPTION 'bronze_reports is append-only: % operations are not permitted', TG_OP;
+    RAISE EXCEPTION 'silver_raw is append-only: % operations are not permitted', TG_OP;
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS enforce_bronze_immutability ON bronze_reports;
-CREATE TRIGGER enforce_bronze_immutability
-    BEFORE UPDATE OR DELETE ON bronze_reports
+DROP TRIGGER IF EXISTS enforce_silver_immutability ON silver_raw;
+CREATE TRIGGER enforce_silver_immutability
+    BEFORE UPDATE OR DELETE ON silver_raw
     FOR EACH ROW
-    EXECUTE FUNCTION prevent_bronze_mutation();
+    EXECUTE FUNCTION prevent_silver_mutation();
 
 DROP TRIGGER IF EXISTS enforce_bronze_no_truncate ON bronze_reports;
 CREATE TRIGGER enforce_bronze_no_truncate
     BEFORE TRUNCATE ON bronze_reports
     FOR EACH STATEMENT
-    EXECUTE FUNCTION prevent_bronze_mutation();
+    EXECUTE FUNCTION prevent_silver_mutation();
 
-CREATE INDEX IF NOT EXISTS idx_bronze_mfr_raw ON bronze_reports (manufacturer_raw);
+CREATE INDEX IF NOT EXISTS idx_silver_mfr_raw ON silver_raw (manufacturer_raw);
 
 
 
