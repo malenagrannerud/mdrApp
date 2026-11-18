@@ -5,19 +5,18 @@ Author: Malena | Updated: 2026-11-18
 Run once, before bronze_ingest.py. 
 
 Input: -
-Output: Table bronze_reports for raw data.Makes data it append-only.
-Re run: Safe t never drops or changes data.
+Output: 
+    - Table bronze_reports for raw data. Makes data it append-only.
 
 Rules:
 | B1 | No data changed. The archive is immutable
 | B2 | Data is saved in original format
 | B3 | Each row has a timestamp
 
+Re run: Safe t never drops or changes data.
 */
 
--- ============================================================
--- TABLE
--- ============================================================
+-- Table bronze_reports -----------------------------------
 CREATE TABLE IF NOT EXISTS bronze_reports (
     source_file  text        NOT NULL,
     row_num      bigint      NOT NULL,
@@ -25,14 +24,11 @@ CREATE TABLE IF NOT EXISTS bronze_reports (
     ingested_at  timestamptz NOT NULL,
     PRIMARY KEY (source_file, row_num)
 );
-
 ALTER TABLE bronze_reports ENABLE ROW LEVEL SECURITY;
-
 GRANT SELECT, INSERT ON public.bronze_reports TO service_role;
+-- ---------------------------------------------------------
 
--- ============================================================
--- B1
--- ============================================================
+-- Rule B1 -------------------------------------------------
 CREATE OR REPLACE FUNCTION prevent_bronze_mutation()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -51,3 +47,4 @@ CREATE TRIGGER enforce_bronze_no_truncate
     BEFORE TRUNCATE ON bronze_reports
     FOR EACH STATEMENT
     EXECUTE FUNCTION prevent_bronze_mutation();
+-- ---------------------------------------------------------
