@@ -4,18 +4,16 @@ Verifies the bronze rules in PIPELINE.md:
 - B1: No data changed. The archive is immutable.
 - B2: Data is saved in original format.
 - B3: Each row has a timestamp.
-Plus how files are read: encoding, delimiter and the number of rows to load.
+Plus the number of rows to load, the log and the command line.
 
 Run from the repo root or from medallion/python: pytest -v
 """
 
 import hashlib
+import logging
 from datetime import datetime
 from unittest.mock import MagicMock
 
-import logging
-
-import pandas as pd
 import pytest
 import bronze_ingest
 from bronze_ingest import ingest, split_arg
@@ -23,12 +21,13 @@ from bronze_ingest import ingest, split_arg
 
 @pytest.fixture
 def sample_raw_file(tmp_path):
-    """Pipe file with empty fields, 'NA', leading zeros, quotes and an extra column."""
+    """Pipe file with quotes, empty fields, 'NA', leading zeros, a blank line and a repeated column name."""
     content = (
-        "MDR_REPORT_KEY|DEVICE_SEQUENCE_NO|GENERIC_NAME|EXTRA\n"
-        '0012345|01|"STENT, CORONARY"|x\n'
+        "MDR_REPORT_KEY|GENERIC_NAME|GENERIC_NAME|EXTRA\n"
+        '0012345|"STENT, CORONARY"|NA|x\n'
         "|||\n"
-        "0099999|02|NA|\n"
+        "\n"
+        " 0099999 |a;b,c\td|too|many|fields\n"
     )
     path = tmp_path / "DEVICE2024.txt"
     path.write_text(content, encoding="utf-8")
@@ -55,8 +54,9 @@ def db():
     return client
 
 
-def raw_rows(db, name):
-    return [v["raw"] for k, v in sorted(db.store.items()) if k[0] == name]
+def lines(db, name):
+    """The stored lines of one file, in line order."""
+    return [v["raw_line"] for k, v in sorted(db.store.items()) if k[0] == name]
 
 
 # ============================== B1 ==============================
@@ -74,7 +74,7 @@ def test_b1_rerun_adds_nothing_and_changes_nothing(sample_raw_file, db):
 
     ingest(str(sample_raw_file), db)  # new timestamps are made, but must not be stored
 
-    assert len(db.store) == 3
+    assert len(db.store) == 5
     assert db.store == first
 
 
@@ -87,21 +87,57 @@ def test_b1_second_file_is_added_without_touching_the_first(sample_raw_file, tmp
     first = {k: dict(v) for k, v in db.store.items()}
     ingest(str(other), db)
 
-    assert len(db.store) == 4
+    assert len(db.store) == 7
     assert all(db.store[k] == v for k, v in first.items())
-    assert db.store[("other.csv", 1)]["raw"] == {"a": "1", "b": "2"}
+    assert lines(db, "other.csv") == ["a,b", "1,2"]
+
+
+def test_b1_a_later_higher_limit_adds_only_the_new_lines(tmp_path, db):
+    """RULE B1: Raising the number of rows adds the rest and leaves the earlier rows unchanged."""
+    path = tmp_path / "f.csv"
+    path.write_text("a\n" + "\n".join(str(n) for n in range(1, 6)) + "\n", encoding="utf-8")
+
+    ingest(str(path), db, limit=2)
+    after_two = {k: dict(v) for k, v in db.store.items()}
+    assert len(db.store) == 3  # header + 2 data rows
+
+    ingest(str(path), db, limit=4)
+
+    assert len(db.store) == 5
+    assert all(db.store[k] == v for k, v in after_two.items())
 
 
 # ============================== B2 ==============================
-def test_b2_data_saved_in_original_format(sample_raw_file, db):
-    """RULE B2: Raw strings, empty values, 'NA', quotes, leading zeros and extra columns are preserved."""
+def test_b2_every_line_is_stored_exactly_as_it_is_in_the_file(sample_raw_file, db):
+    """RULE B2: Quotes, empty fields, 'NA', leading zeros, spaces, any delimiter, blank lines,
+    repeated column names and lines with too many fields are all stored character for character."""
     ingest(str(sample_raw_file), db)
-    rows = raw_rows(db, "DEVICE2024.txt")
 
-    assert rows[0] == {"MDR_REPORT_KEY": "0012345", "DEVICE_SEQUENCE_NO": "01",
-                       "GENERIC_NAME": '"STENT, CORONARY"', "EXTRA": "x"}
-    assert rows[1] == {"MDR_REPORT_KEY": "", "DEVICE_SEQUENCE_NO": "", "GENERIC_NAME": "", "EXTRA": ""}
-    assert rows[2]["GENERIC_NAME"] == "NA"  # not turned into NaN/None
+    assert lines(db, "DEVICE2024.txt") == [
+        "MDR_REPORT_KEY|GENERIC_NAME|GENERIC_NAME|EXTRA",
+        '0012345|"STENT, CORONARY"|NA|x',
+        "|||",
+        "",
+        " 0099999 |a;b,c\td|too|many|fields",
+    ]
+
+
+def test_b2_row_num_is_the_line_number_and_the_header_is_line_1(sample_raw_file, db):
+    ingest(str(sample_raw_file), db)
+
+    assert db.store[("DEVICE2024.txt", 1)]["raw_line"].startswith("MDR_REPORT_KEY")
+    assert db.store[("DEVICE2024.txt", 4)]["raw_line"] == ""  # the blank line is line 4
+
+
+@pytest.mark.parametrize("terminator", ["\n", "\r\n", "\r"])
+def test_b2_only_the_line_terminator_is_left_out(tmp_path, db, terminator):
+    """RULE B2: LF, CRLF and CR end a line; nothing else is removed."""
+    path = tmp_path / "f.txt"
+    path.write_bytes(f"a|b{terminator} x |y {terminator}".encode("utf-8"))
+
+    ingest(str(path), db)
+
+    assert lines(db, "f.txt") == ["a|b", " x |y "]
 
 
 @pytest.mark.parametrize("encoding", ["utf-8", "utf-8-sig", "utf-16", "cp1252"])
@@ -112,56 +148,26 @@ def test_b2_any_encoding_gives_the_same_characters(tmp_path, db, encoding):
 
     ingest(str(path), db)
 
-    assert raw_rows(db, "f.txt") == [{"NAME": "CATHÉTER €", "MFR": "GMBH Ä"}]
+    assert lines(db, "f.txt") == ["NAME|MFR", "CATHÉTER €|GMBH Ä"]
 
 
-def test_b2_latin1_file_with_bytes_undefined_in_cp1252(tmp_path, db):
-    """RULE B2: A file that is neither UTF-8 nor Windows-1252 is still read, byte for byte (Latin-1)."""
+def test_b2_file_that_is_neither_utf8_nor_cp1252_is_read_byte_for_byte(tmp_path, db):
+    """RULE B2: Latin-1 accepts every byte, so such a file is still read without loss."""
     path = tmp_path / "f.txt"
     path.write_bytes(b"NAME|MFR\nA\x81B|C\n")  # 0x81 is undefined in cp1252
 
     ingest(str(path), db)
 
-    assert raw_rows(db, "f.txt") == [{"NAME": "A\x81B", "MFR": "C"}]
+    assert lines(db, "f.txt") == ["NAME|MFR", "A\x81B|C"]
 
 
-@pytest.mark.parametrize("sep", ["|", ",", ";", "\t"])
-def test_b2_delimiter_is_detected(tmp_path, db, sep):
-    """Delimiter detection: | , ; and tab, also when the text contains the other delimiters."""
-    others = "".join(d for d in "|,;\t" if d != sep)  # the text contains every other delimiter
+def test_b2_encoding_can_be_given(tmp_path, db):
     path = tmp_path / "f.txt"
-    path.write_text(
-        sep.join(["id", "name", "note"]) + "\n"
-        + sep.join(["1", "a" + others + "b", "x"]) + "\n"
-        + sep.join(["2", "c", "y"]) + "\n",
-        encoding="utf-8",
-    )
+    path.write_bytes("a\nÄ\n".encode("cp1252"))
 
-    ingest(str(path), db)
+    ingest(str(path), db, encoding="latin-1")
 
-    assert raw_rows(db, "f.txt") == [{"id": "1", "name": "a" + others + "b", "note": "x"},
-                                     {"id": "2", "name": "c", "note": "y"}]
-
-
-def test_b2_comma_file_with_quoted_commas_keeps_fields_together(tmp_path, db):
-    """Delimiter detection: a quoted field that contains the delimiter is not split."""
-    path = tmp_path / "f.csv"
-    path.write_text('id,name,city\n1,"Smith, John",Oslo\n2,"Doe, Jane",Rome\n', encoding="utf-8")
-
-    ingest(str(path), db)
-
-    assert raw_rows(db, "f.csv") == [{"id": "1", "name": "Smith, John", "city": "Oslo"},
-                                     {"id": "2", "name": "Doe, Jane", "city": "Rome"}]
-
-
-def test_b2_stray_quotes_in_a_pipe_file_are_kept(tmp_path, db):
-    """RULE B2: Inch marks and stray quotes in a pipe file are data, not quoting."""
-    path = tmp_path / "f.txt"
-    path.write_text('id|name|size\n1|5" pipe|6" cable\n', encoding="utf-8")
-
-    ingest(str(path), db)
-
-    assert raw_rows(db, "f.txt") == [{"id": "1", "name": '5" pipe', "size": '6" cable'}]
+    assert lines(db, "f.txt") == ["a", "Ä"]
 
 
 # ============================== B3 ==============================
@@ -169,64 +175,39 @@ def test_b3_each_row_has_timestamp(sample_raw_file, db):
     """RULE B3: Every row has a valid, timezone-aware timestamp."""
     ingest(str(sample_raw_file), db)
 
-    assert len(db.store) == 3
+    assert len(db.store) == 5
     for row in db.store.values():
         assert datetime.fromisoformat(row["ingested_at"]).tzinfo is not None
 
 
 # ============================== number of rows ==============================
-def test_limit_loads_exactly_that_many_rows_and_a_later_higher_limit_adds_the_rest(tmp_path, db):
-    """Per-file row limit: exact, and raising it later adds only the new rows (B1: old rows unchanged)."""
+def test_limit_loads_the_header_and_exactly_that_many_data_rows(tmp_path, db):
     path = tmp_path / "f.csv"
-    path.write_text("a\n" + "\n".join(str(n) for n in range(1, 6)) + "\n", encoding="utf-8")
+    path.write_text("a\n1\n2\n3\n4\n", encoding="utf-8")
 
-    assert ingest(str(path), db, limit=2) == 2
-    after_two = {k: dict(v) for k, v in db.store.items()}
-    assert len(db.store) == 2
+    assert ingest(str(path), db, limit=2) == 3
 
-    ingest(str(path), db, limit=4)
-
-    assert len(db.store) == 4
-    assert all(db.store[k] == v for k, v in after_two.items())
+    assert lines(db, "f.csv") == ["a", "1", "2"]
 
 
-# ============================== nothing is dropped silently ==============================
-def test_b2_blank_lines_are_kept_as_empty_rows(tmp_path, db):
-    """RULE B2: Blank lines are data rows too, so row_num = line number - 1."""
-    path = tmp_path / "f.txt"
-    path.write_text("a|b\n1|2\n\n3|4\n", encoding="utf-8")
+def test_no_limit_loads_every_line(tmp_path, db):
+    path = tmp_path / "f.csv"
+    path.write_text("a\n" + "\n".join(str(n) for n in range(2500)) + "\n", encoding="utf-8")
 
-    ingest(str(path), db)
-
-    assert raw_rows(db, "f.txt") == [{"a": "1", "b": "2"}, {"a": "", "b": ""}, {"a": "3", "b": "4"}]
+    assert ingest(str(path), db) == 2501  # more than one batch
 
 
-def test_b2_duplicate_column_names_stop_the_load(tmp_path, db):
-    """RULE B2: Duplicate headers cannot be stored unchanged, so the load stops before anything is stored."""
-    path = tmp_path / "f.txt"
-    path.write_text("a|a|b\n1|2|3\n", encoding="utf-8")
+# ============================== log and command line ==============================
+def test_o1_summary_logs_lines_duration_and_speed(sample_raw_file, db, caplog):
+    """O1: Every file ends with the number of lines, duration and lines per second in the log."""
+    with caplog.at_level(logging.INFO, logger="bronze_ingest"):
+        ingest(str(sample_raw_file), db)
 
-    with pytest.raises(ValueError, match="duplicate column names"):
-        ingest(str(path), db)
-
-    assert db.store == {}
-
-
-def test_malformed_line_stops_the_load_and_keeps_earlier_rows(tmp_path, db, monkeypatch, caplog):
-    """A line with too many fields stops the load loudly; rows loaded before it stay."""
-    monkeypatch.setattr(bronze_ingest, "BATCH_SIZE", 2)
-    path = tmp_path / "f.txt"
-    path.write_text("a|b\n1|2\n3|4\n5|6\n7|8|9\n", encoding="utf-8")
-
-    with caplog.at_level(logging.ERROR, logger="bronze_ingest"):
-        with pytest.raises(pd.errors.ParserError):
-            ingest(str(path), db)
-
-    assert len(db.store) == 2  # the first batch was loaded
-    assert "load stopped after 2 rows" in caplog.text
+    assert "DEVICE2024.txt: done, 5 lines in" in caplog.text
+    assert "lines/s" in caplog.text
 
 
-def test_upload_error_is_logged_with_rows_loaded_so_far(sample_raw_file, caplog):
+def test_upload_error_is_logged_with_lines_loaded_so_far(sample_raw_file, caplog):
     client = MagicMock()
     client.table.return_value.upsert.return_value.execute.side_effect = RuntimeError("network down")
 
@@ -234,17 +215,28 @@ def test_upload_error_is_logged_with_rows_loaded_so_far(sample_raw_file, caplog)
         with pytest.raises(RuntimeError):
             ingest(str(sample_raw_file), client)
 
-    assert "load stopped after 0 rows" in caplog.text
+    assert "load stopped after 0 lines" in caplog.text
 
 
-# ============================== observability and command line ==============================
-def test_o1_summary_logs_rows_duration_and_speed(sample_raw_file, db, caplog):
-    """O1: Every file ends with rows, duration and rows per second in the log."""
-    with caplog.at_level(logging.INFO, logger="bronze_ingest"):
-        ingest(str(sample_raw_file), db)
+def test_lines_loaded_before_an_error_stay(tmp_path, db, monkeypatch):
+    monkeypatch.setattr(bronze_ingest, "BATCH_SIZE", 2)
+    path = tmp_path / "f.csv"
+    path.write_text("a\n1\n2\n3\n4\n", encoding="utf-8")
+    real_upsert = db.table.return_value.upsert.side_effect
+    calls = []
 
-    assert "DEVICE2024.txt: done, 3 rows in" in caplog.text
-    assert "rows/s" in caplog.text
+    def fail_on_second_batch(rows, **kwargs):
+        calls.append(rows)
+        if len(calls) == 2:
+            raise RuntimeError("network down")
+        return real_upsert(rows, **kwargs)
+
+    db.table.return_value.upsert.side_effect = fail_on_second_batch
+
+    with pytest.raises(RuntimeError):
+        ingest(str(path), db)
+
+    assert lines(db, "f.csv") == ["a", "1"]  # the first batch stays
 
 
 def test_missing_environment_variables_give_a_clear_message(monkeypatch):
@@ -266,8 +258,8 @@ def test_main_loads_each_file_with_its_own_row_count(tmp_path, db, monkeypatch):
 
     bronze_ingest.main([f"{first}=2", str(second), "--limit", "1"])
 
-    assert len(raw_rows(db, "a.csv")) == 2  # =2 wins over --limit
-    assert len(raw_rows(db, "b.csv")) == 1  # --limit applies to files without =ROWS
+    assert lines(db, "a.csv") == ["x", "1", "2"]  # =2 wins over --limit
+    assert lines(db, "b.csv") == ["x", "1"]       # --limit applies to files without =ROWS
 
 
 def test_main_stops_before_loading_anything_if_a_file_is_missing(tmp_path, db, monkeypatch):

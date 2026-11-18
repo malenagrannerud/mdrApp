@@ -2,14 +2,15 @@
   01_silver.sql
   Author: Malena | Updated: 2026-10-15
 
-  Reads data from bronze_ingest.py and splits every row into silver_reports (valid data)
+  Cleans and standardizes data and splits every row into silver_reports (valid data)
   or silver_rejected (invalid data, with a reason).
 
-  Step 1: Input: Raw data from bronze_ingest.py to silver_raw
-  Step 2: Data cleaning on silver_raw 
-  Step 3: Standardized formats on silver_raw
-  Step 4: Data from different sources is joined FUTURE STEP
-  Step 5: Cleaned data is stored in silver_reports and unused in silver_quaranteen
+  
+  Step 1: Data cleaning on bronze_reports
+  Step 2: Standardized formats on bronze_reports
+  Step 3: Data from different sources is joined FUTURE STEP
+  Step 4: Cleaned standardized data is stored in silver_reports 
+          and unused in silver_quaranteen
 
 Rules: 
 | S1 | Data cleaning (remove junk, handle duplicates, handle missing values etc)
